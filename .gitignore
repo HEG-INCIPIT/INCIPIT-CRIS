@@ -1,4 +1,4 @@
 .DS_Store
 env/
 fuseki/dataset/
-INCIPIT_CRIS/__pycache__/
+INCIPIT_CRIS/INCIPIT_CRIS/__pycache__/
