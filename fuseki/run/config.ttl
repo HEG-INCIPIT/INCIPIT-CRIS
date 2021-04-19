@@ -7,6 +7,10 @@
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix vivo:    <http://vivoweb.org/ontology/core#> .
+@prefix foaf:    <http://xmlns.com/foaf/> .
+@prefix vcard:   <https://www.w3.org/2006/vcard/ns#> .
+@prefix ark:     <http://ark.ch/> .
 
 [] rdf:type fuseki:Server ;
    # Example::
