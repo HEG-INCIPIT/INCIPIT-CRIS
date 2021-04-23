@@ -18,5 +18,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sparqlTriplestore/pannel', include('sparqlTriplestore.urls')),
+    path('personnes/', include('INCIPIT_CRIS_app.urls')),
 ]

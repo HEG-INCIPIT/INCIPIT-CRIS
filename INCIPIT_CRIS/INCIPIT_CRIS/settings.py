@@ -31,7 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'sparqlTriplestore.apps.SparqltriplestoreConfig',
+    'INCIPIT_CRIS_app.apps.IncipitCrisAppConfig',
+    'arketype_API.apps.ArketypeApiConfig',
+    'sparql_triplestore.apps.SparqlTriplestoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
