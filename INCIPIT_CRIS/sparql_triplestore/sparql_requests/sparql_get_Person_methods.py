@@ -4,7 +4,7 @@ from ..triplestore_JSON_responses_parser import Triplestore_JSON_responses_parse
 class Sparql_get_Person_methods:
     """
     A class used to do sparql GET requests to the triplestore
-    
+
     Attributes
     ----------
     url_endpoint : str
@@ -77,5 +77,3 @@ class Sparql_get_Person_methods:
 
         self.sparql.setQuery(sparql_request)
         return Triplestore_JSON_responses_parser.parse_check_person_ark(self.sparql.query().response.read())
-
-

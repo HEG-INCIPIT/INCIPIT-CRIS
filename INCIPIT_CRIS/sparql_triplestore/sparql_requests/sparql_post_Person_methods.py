@@ -3,7 +3,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON, POST, DIGEST
 class Sparql_post_Person_methods:
     """
     A class used to do sparql POST requests to the triplestore
-    
+
     Attributes
     ----------
     url_endpoint : str
@@ -19,7 +19,7 @@ class Sparql_post_Person_methods:
 
     Methods
     -------
-    
+
     """
 
     url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
