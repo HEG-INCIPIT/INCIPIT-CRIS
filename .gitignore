@@ -1,5 +1,5 @@
 .DS_Store
 env/
 fuseki/dataset/
-__pycache__/*
-migrations/*
+INCIPIT_CRIS/**/__pycache__/
+INCIPIT_CRIS/**/migrations/
