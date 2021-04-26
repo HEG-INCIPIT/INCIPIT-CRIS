@@ -58,5 +58,5 @@ class Sparql_post_Person_methods:
         return self.sparql.query().response.read()
 
 if __name__ == "__main__":
-    sparql = Sparql_post_methods()
+    sparql = Sparql_post_Person_methods()
     print(sparql.init_person("ark/0000", "David", "nogueiras"))
