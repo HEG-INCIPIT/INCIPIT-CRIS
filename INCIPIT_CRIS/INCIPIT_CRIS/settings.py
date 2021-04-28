@@ -125,3 +125,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# User model reference
+AUTH_USER_MODEL = 'INCIPIT_CRIS_app.User'
