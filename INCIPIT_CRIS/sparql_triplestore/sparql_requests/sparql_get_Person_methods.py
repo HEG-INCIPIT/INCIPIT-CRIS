@@ -1,6 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from ..triplestore_JSON_responses_parser import Triplestore_JSON_responses_parser
 
+
 class Sparql_get_Person_methods:
     """
     A class used to do sparql GET requests to the triplestore
@@ -41,7 +42,7 @@ class Sparql_get_Person_methods:
 
     def get_persons(self):
         """
-        Get information of persons : ark, given name, family name
+        Get basic information of persons : ark, given name, family name
         And return a list for each person
         """
 
@@ -59,6 +60,29 @@ class Sparql_get_Person_methods:
         self.sparql.setQuery(sparql_request)
 
         return Triplestore_JSON_responses_parser.parse_get_persons(self.sparql.query().response.read())
+
+    def get_data_person(self, ark_pid):
+        """
+        Get all the information of a person : ark, given name, family name, ...
+        And return a list with all elements
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?given_name ?family_name ?email ?telephone ?description WHERE
+            {{
+                <{ark_research}> schema:givenName ?given_name .
+                <{ark_research}> schema:familyName ?family_name .
+                OPTIONAL {{ <{ark_research}> schema:email ?email }}
+                OPTIONAL {{ <{ark_research}> schema:telephone ?telephone }}
+                OPTIONAL {{ <{ark_research}> schema:description ?description }}
+            }}
+        """.format(prefix=self.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return Triplestore_JSON_responses_parser.parse_get_data_person(self.sparql.query().response.read())
 
     def check_person_ark(self, ark_pid):
         """

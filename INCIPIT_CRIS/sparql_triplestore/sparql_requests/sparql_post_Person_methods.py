@@ -46,17 +46,10 @@ class Sparql_post_Person_methods:
             INSERT DATA {{
                 <{ark_id}> a schema:Person ;
                     schema:givenName '{given_name}' ;
-                    schema:familyName '{family_name}' ;
-                    schema:email '' ;
-                    schema:telephone '' ;
-                    schema:description '' .
+                    schema:familyName '{family_name}' .
             }}
         """.format(prefix=self.prefix, ark_id=ark_id, given_name=given_name, family_name=family_name)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
-
-if __name__ == "__main__":
-    sparql = Sparql_post_Person_methods()
-    print(sparql.init_person("ark/0000", "David", "nogueiras"))
