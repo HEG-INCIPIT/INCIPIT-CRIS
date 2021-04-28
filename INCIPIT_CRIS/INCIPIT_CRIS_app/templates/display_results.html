@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        {% for result in sparql_request %}
+            <p><a href="{% url "person_display" result.0 %}">{{ result.2 }} {{ result.1 }}</a></p>
+        {% endfor %}
+    </body>
+</html>
