@@ -14,6 +14,6 @@ def person_display(request, ark_request):
     sparql_request_check_person_ark = Sparql_get_Person_methods().check_person_ark(ark_request)
     if(sparql_request_check_person_ark):
         data_person = Sparql_get_Person_methods().get_data_person(ark_request)
-        return render(request, 'display_person_profile.html')
+        return render(request, 'display_person_profile.html', data_person)
     
     return render(request, 'page_404.html')

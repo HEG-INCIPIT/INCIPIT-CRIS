@@ -7,9 +7,21 @@ class UserAdmin(BaseUserAdmin):
 
     add_fieldsets = (
         (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'first_name', 'last_name', 'ark_pid', 'password1', 'password2')
+            'fields': ('username', 'email', 'first_name', 'last_name', 'ark_pid', 'password1', 'password2')
         }),
     )
+    fieldsets = (
+        (None, {'fields': ('username', 'password', 'ark_pid')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+
 
     list_display = ['ark_pid', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff']
+
+    def __init__(self, *args, **kwargs):
+        super(BaseUserAdmin,self).__init__(*args, **kwargs)
+        BaseUserAdmin.list_display = list(BaseUserAdmin.list_display)
+
+admin.register(UserAdmin)

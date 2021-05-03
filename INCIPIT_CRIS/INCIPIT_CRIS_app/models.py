@@ -13,7 +13,11 @@ class User(AbstractUser):
     ark_pid = models.CharField(blank=True, max_length=100)
 
     def save(self, *args, **kwargs):
-        self.ark_pid = Ark().ark_creation()
+        if(self.ark_pid == ''):
+            self.ark_pid = Ark().ark_creation()
         sparql = Sparql_post_Person_methods()
         sparql.init_person(self.ark_pid, self.first_name, self.last_name)
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.ark_pid
