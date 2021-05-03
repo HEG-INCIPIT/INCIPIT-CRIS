@@ -16,7 +16,7 @@ class User(AbstractUser):
         if(self.ark_pid == ''):
             self.ark_pid = Ark().ark_creation()
         sparql = Sparql_post_Person_methods()
-        sparql.init_person(self.ark_pid, self.first_name, self.last_name)
+        sparql.init_person(self.ark_pid, self.first_name, self.last_name, self.email)
         super().save(*args, **kwargs)
 
     def __str__(self):

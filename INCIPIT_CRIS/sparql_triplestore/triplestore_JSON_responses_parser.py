@@ -43,5 +43,4 @@ class Triplestore_JSON_responses_parser:
         else:
             dict_data['description'] = ''
 
-        print(dict_data)
         return dict_data

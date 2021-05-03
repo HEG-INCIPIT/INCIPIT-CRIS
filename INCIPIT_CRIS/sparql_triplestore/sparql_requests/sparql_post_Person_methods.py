@@ -38,7 +38,7 @@ class Sparql_post_Person_methods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def init_person(self, ark_id, given_name, family_name):
+    def init_person(self, ark_id, given_name, family_name, email):
 
         sparql_request = """
             {prefix}
@@ -46,9 +46,10 @@ class Sparql_post_Person_methods:
             INSERT DATA {{
                 <{ark_id}> a schema:Person ;
                     schema:givenName '{given_name}' ;
-                    schema:familyName '{family_name}' .
+                    schema:familyName '{family_name}' ;
+                    schema:email '{email}' .
             }}
-        """.format(prefix=self.prefix, ark_id=ark_id, given_name=given_name, family_name=family_name)
+        """.format(prefix=self.prefix, ark_id=ark_id, given_name=given_name, family_name=family_name, email=email)
 
         self.sparql.setQuery(sparql_request)
 
