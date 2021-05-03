@@ -64,7 +64,7 @@ class Sparql_get_Person_methods:
     def get_data_person(self, ark_pid):
         """
         Get all the information of a person : ark, given name, family name, ...
-        And return a list with all elements
+        And return a dictionnary with all elements
         """
 
         sparql_request = """

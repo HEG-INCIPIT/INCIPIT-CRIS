@@ -20,12 +20,13 @@ class Triplestore_JSON_responses_parser:
 
     def parse_get_data_person(sparql_query_answer):
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        print(json.loads(sparql_query_answer))
         dict_data = {
             'given_name': loaded_json['given_name']['value'],
             'family_name': loaded_json['family_name']['value'],
             'email': loaded_json['email']['value'],
             'telephone': loaded_json['telephone']['value'],
-            'description': loaded_json['description']['value'],
+            'description': loaded_json['description']['value']
         }
         print(dict_data)
         return dict_data
