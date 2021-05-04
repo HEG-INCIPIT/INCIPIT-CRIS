@@ -7,10 +7,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
     </head>
     <body>
+        {% include 'main/base.html' %}
 
-    {% include 'main/base.html' %}
-
-    HELLO THERE
-
+        {% for result in sparql_request %}
+            <p><a href="{% url "person_display" result.0 %}">{{ result.2 }} {{ result.1 }}</a></p>
+        {% endfor %}
     </body>
 </html>
