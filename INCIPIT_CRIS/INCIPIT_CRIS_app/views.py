@@ -11,7 +11,7 @@ def persons_research(request):
         'sparql_request': sparql_request
     }
 
-    return render(request, 'display_results.html', context)
+    return render(request, 'person/display_person_results.html', context)
 
 def person_display(request, ark_request):
     sparql_request_check_person_ark = Sparql_get_Person_methods().check_person_ark(ark_request)
@@ -20,6 +20,6 @@ def person_display(request, ark_request):
         context = {
             'data_person': data_person
         }
-        return render(request, 'display_person_profile.html', context)
+        return render(request, 'person/display_person_profile.html', context)
     
     return render(request, 'page_404.html')
