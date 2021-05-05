@@ -1,4 +1,4 @@
-<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+<nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="/">
             INCIPIT-CRIS
@@ -13,28 +13,29 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item" href="personnes/">
+            <a class="navbar-item" href="/personnes/">
                 Personnes
             </a>
 
-            <a class="navbar-item" href="articles/">
+            <a class="navbar-item" href="/articles/">
                 Articles
             </a>
         </div>
 
         <div class="navbar-end">
             {% if user.is_authenticated %}
+                <a class="navbar-item" href="/personnes/edition/{{user.ark_pid}}">Editer mon profil</a>
                 <a class="navbar-item" href="/personnes/{{user.ark_pid}}">{{ user.first_name }} {{ user.last_name }}</a>
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary" href="logout/">
+                        <a class="button is-primary" href="/logout/">
                             Déconnexion
                         </a>
                     </div>
                 {% else %}
                     <div class="navbar-item">
                         <div class="buttons">
-                            <a class="button is-primary" href="login/">
+                            <a class="button is-primary" href="/login/">
                                 Connexion
                             </a>
                         </div>
