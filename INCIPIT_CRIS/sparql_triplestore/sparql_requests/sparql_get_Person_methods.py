@@ -4,7 +4,7 @@ from ..triplestore_JSON_responses_parser import Triplestore_JSON_responses_parse
 
 class Sparql_get_Person_methods:
     """
-    A class used to do sparql GET requests to the triplestore
+    A class used to do sparql GET requests about a Person to the triplestore
 
     Attributes
     ----------
