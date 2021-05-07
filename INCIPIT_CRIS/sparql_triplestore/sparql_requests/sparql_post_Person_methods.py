@@ -2,7 +2,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON, POST, DIGEST
 
 class Sparql_post_Person_methods:
     """
-    A class used to do sparql POST requests to the triplestore
+    A class used to do sparql POST requests about a Person to the triplestore
 
     Attributes
     ----------
@@ -44,13 +44,36 @@ class Sparql_post_Person_methods:
             {prefix}
 
             INSERT DATA {{
+                <{ark_id}ARK> a schema:PropertyValue ;
+                    schema:propertyID 'ARK' ;
+                    schema:value "{ark_id}" .
+                
                 <{ark_id}> a schema:Person ;
-                    schema:givenName '{given_name}' ;
-                    schema:familyName '{family_name}' ;
-                    schema:email '{email}' .
+                    schema:givenName "{given_name}" ;
+                    schema:familyName "{family_name}" ;
+                    schema:email "{email}" ;
+                    schema:description \"\"\"\"\"\";
+                    schema:telephone \"\"\"\"\"\";
+                    schema:identifier <{ark_id}ARK> .
             }}
         """.format(prefix=self.prefix, ark_id=ark_id, given_name=given_name, family_name=family_name, email=email)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
+
+    def update_person_string_leaf(self, ark_id, predicat, new_string, old_string):
+
+        sparql_request = """
+            {prefix}
+
+            DELETE {{ <{ark_id}> schema:{predicat} \"\"\"{old_string}\"\"\" }}
+            INSERT {{ <{ark_id}> schema:{predicat} \"\"\"{new_string}\"\"\" }}
+            WHERE
+            {{
+                <{ark_id}> schema:{predicat} \"\"\"{old_string}\"\"\"
+            }}
+
+        """.format(prefix=self.prefix, ark_id=ark_id, predicat=predicat, old_string=old_string, new_string=new_string)
+
+        self.sparql.setQuery(sparql_request)
