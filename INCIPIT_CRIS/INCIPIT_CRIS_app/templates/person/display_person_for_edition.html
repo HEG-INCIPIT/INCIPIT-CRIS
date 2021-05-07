@@ -1,0 +1,11 @@
+{% extends "person/display_person_profile.html" %}
+
+{% block person_information %}
+    {{ message }}
+    <p>Person</p>
+    <p>Prénom : {{ data_person.given_name }}</p>
+    <p>Nom : {{ data_person.family_name }}</p>
+    <p>Email : {{ data_person.email }}</p>
+    <p>Téléphone : {{ data_person.telephone }} <a href="/personnes/edition/profil/telephone/{{user.ark_pid}}">modifer</a></p>
+    <p>Description : {{ data_person.description }} <a href="/personnes/edition/profil/description/{{user.ark_pid}}">modifer</a></p>
+{% endblock %}
