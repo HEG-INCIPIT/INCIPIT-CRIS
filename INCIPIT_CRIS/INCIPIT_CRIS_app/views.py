@@ -1,8 +1,8 @@
 from django.forms.forms import Form
 from django.shortcuts import render, redirect
 from .forms import DescriptionForm, TelephoneForm
-from sparql_triplestore.sparql_requests.sparql_get_Person_methods import Sparql_get_Person_methods
-from sparql_triplestore.sparql_requests.sparql_post_Person_methods import Sparql_post_Person_methods
+from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import Sparql_get_Person_methods
+from sparql_triplestore.sparql_requests.person.sparql_post_Person_methods import Sparql_post_Person_methods
 
 def index(request):
     return render(request, 'main/index.html')

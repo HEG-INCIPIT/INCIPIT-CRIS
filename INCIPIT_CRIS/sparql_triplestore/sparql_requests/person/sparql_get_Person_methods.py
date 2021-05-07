@@ -1,5 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
-from ..triplestore_JSON_responses_parser import Triplestore_JSON_responses_parser
+from sparql_triplestore.triplestore_JSON_responses_parser import Triplestore_JSON_responses_parser
 
 
 class Sparql_get_Person_methods:

@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from arketype_API.ark import Ark
-from sparql_triplestore.sparql_requests.sparql_post_Person_methods import Sparql_post_Person_methods
-from sparql_triplestore.sparql_requests.sparql_get_Person_methods import Sparql_get_Person_methods
+from sparql_triplestore.sparql_requests.person.sparql_post_Person_methods import Sparql_post_Person_methods
+from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import Sparql_get_Person_methods
 
 class User(AbstractUser):
     user = models.CharField(max_length=255)
