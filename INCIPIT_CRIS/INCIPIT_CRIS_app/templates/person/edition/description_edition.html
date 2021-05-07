@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    </head>
+    <body>
+
+        {% include 'main/base.html' %}
+
+        <form action="/personnes/edition/profil/{{form.url_post_redirect}}/{{user.ark_pid}}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Modifier">
+        </form>
+    </body>
+</html>
