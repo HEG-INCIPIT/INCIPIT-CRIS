@@ -2,11 +2,12 @@ from django import forms
 from django.core.validators import RegexValidator
 
 number_phone_regex = RegexValidator(r"^[0-9]*$", "Le numéro de téléphone doit contenir uniquement des chiffres")
+description_regex = RegexValidator(r"""[^".{3,}]""", "Vous ne pouvez pas mettre trois guillemets de suite")
 
 class DescriptionForm(forms.Form):
     url_post_redirect = "description"
     old_description = ""
-    description = forms.CharField(label='Description ', max_length=300, required=False)
+    description = forms.CharField(label='Description ', max_length=300, required=False, validators=[description_regex])
 
     def __init__(self, *args, **kwargs):
         my_arg = ''
