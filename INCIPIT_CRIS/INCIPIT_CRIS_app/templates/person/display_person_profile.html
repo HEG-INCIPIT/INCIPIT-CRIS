@@ -10,11 +10,13 @@
 
         {% include 'main/base.html' %}
 
+        {% block person_information %}
         <p>Person</p>
         <p>Prénom : {{ data_person.given_name }}</p>
         <p>Nom : {{ data_person.family_name }}</p>
         <p>Email : {{ data_person.email }}</p>
         <p>Téléphone : {{ data_person.telephone }}</p>
         <p>Description : {{ data_person.description }}</p>
+        {% endblock %}
     </body>
 </html>
