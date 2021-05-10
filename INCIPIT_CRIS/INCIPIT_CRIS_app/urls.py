@@ -10,4 +10,5 @@ urlpatterns = [
     path('personnes/<path:ark_pid>', views.person_display, name='person_display'),
 
     path('articles/', views.articles_research, name='article_research'),
+    path('articles/creation', views.articles_creation, name='articles_creation'),
 ]
