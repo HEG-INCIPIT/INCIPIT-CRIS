@@ -7,6 +7,10 @@ from sparql_triplestore.sparql_requests.person.sparql_post_Person_methods import
 def index(request):
     return render(request, 'main/index.html')
 
+##################################################
+# Person
+##################################################
+
 def persons_research(request):
     sparql_request = Sparql_get_Person_methods().get_persons()
     context = {
@@ -85,14 +89,17 @@ def person_profile_edition_display(request, part_of_profile_to_modify, ark_pid):
             # Check the request method
             if (request.method == 'POST'):
                 if (form.is_valid()):
-                    context = {
-                        'message': "Vous pouvez éditer votre profil",
-                        'data_person': data_person
-                    }
+                    
                     Sparql_post_Person_methods().update_person_string_leaf(ark_pid, part_of_profile_to_modify, form.cleaned_data[part_of_profile_to_modify], data_person[part_of_profile_to_modify])
                     return redirect(person_edition_display, ark_pid=ark_pid)
+
+            context = {
+                'form': form, 
+                'button_value': 'Modifier', 
+                'url_to_return': '/personnes/edition/profil/{}/{}'.format(form.url_post_redirect, request.user.ark_pid)
+            }
             # return the form to be completed
-            return render(request, 'person/edition/description_edition.html', {'form': form})
+            return render(request, 'forms/classic_form_display.html', context)
 
         else:
             # Check why the person cannot modify the profile and display the error
@@ -108,3 +115,24 @@ def person_profile_edition_display(request, part_of_profile_to_modify, ark_pid):
         return render(request, 'page_info.html', context)
     
     return render(request, 'page_404.html')
+
+
+##################################################
+# Articles
+##################################################
+
+def articles_research(request):
+    sparql_request = Sparql_get_Person_methods().get_persons()
+    context = {
+        'sparql_request': sparql_request
+    }
+
+    return render(request, 'person/display_person_results.html', context)
+
+
+def articles_creation(request):
+    sparql_request = Sparql_get_Person_methods().get_persons()
+    context = {
+        'sparql_request': sparql_request
+    }
+    return render(request, 'person/display_person_results.html', context)

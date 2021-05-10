@@ -10,10 +10,10 @@
 
         {% include 'main/base.html' %}
 
-        <form action="/personnes/edition/profil/{{form.url_post_redirect}}/{{user.ark_pid}}" method="post">
+        <form action="{{ url_to_return }}" method="post">
             {% csrf_token %}
             {{ form }}
-            <input type="submit" value="Modifier">
+            <input type="submit" value="{{ button_value }}">
         </form>
     </body>
 </html>
