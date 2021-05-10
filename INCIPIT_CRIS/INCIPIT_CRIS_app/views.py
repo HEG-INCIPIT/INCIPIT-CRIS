@@ -96,7 +96,7 @@ def person_profile_edition_display(request, part_of_profile_to_modify, ark_pid):
             context = {
                 'form': form, 
                 'button_value': 'Modifier', 
-                'url_to_return': '/personnes/edition/profil/{}/{}'.format(form.url_post_redirect, request.user.ark_pid)
+                'url_to_return': '/personnes/edition/profil/{}/{}'.format(part_of_profile_to_modify, request.user.ark_pid)
             }
             # return the form to be completed
             return render(request, 'forms/classic_form_display.html', context)
