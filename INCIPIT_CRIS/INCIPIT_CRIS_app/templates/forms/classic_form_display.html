@@ -12,7 +12,7 @@
 
         <form action="{{ url_to_return }}" method="post">
             {% csrf_token %}
-            {{ form }}
+            {{ form|linebreaks }}
             <input type="submit" value="{{ button_value }}">
         </form>
     </body>
