@@ -76,7 +76,6 @@ class Sparql_post_Person_methods:
 
         """.format(prefix=self.prefix, ark_id=ark_id, predicat=predicat, old_string=old_string, new_string=new_string)
 
-        print(sparql_request)
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
