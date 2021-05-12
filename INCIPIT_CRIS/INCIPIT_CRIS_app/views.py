@@ -1,8 +1,11 @@
 from django.forms.forms import Form
 from django.shortcuts import render, redirect
-from .forms import DescriptionForm, TelephoneForm
+from .forms import *
+from arketype_API.ark import Ark
 from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import Sparql_get_Person_methods
 from sparql_triplestore.sparql_requests.person.sparql_post_Person_methods import Sparql_post_Person_methods
+from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods import Sparql_get_articles_methods
+from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import Sparql_post_articles_methods
 
 def index(request):
     return render(request, 'main/index.html')
@@ -122,17 +125,40 @@ def person_profile_edition_display(request, part_of_profile_to_modify, ark_pid):
 ##################################################
 
 def articles_research(request):
-    sparql_request = Sparql_get_Person_methods().get_persons()
+    sparql_request = Sparql_get_articles_methods().get_articles()
     context = {
         'sparql_request': sparql_request
     }
 
-    return render(request, 'person/display_person_results.html', context)
+    return render(request, 'articles/display_articles_results.html', context)
 
+def articles_display(request, ark_pid):
+    return render(request, 'page_404.html')
 
 def articles_creation(request):
-    sparql_request = Sparql_get_Person_methods().get_persons()
-    context = {
-        'sparql_request': sparql_request
-    }
-    return render(request, 'person/display_person_results.html', context)
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if (request.user.is_authenticated):
+        # Check the request method
+        if (request.method == 'POST'):
+            form = ArticleCreationForm(request.POST)
+            if (form.is_valid()):
+                if(form.cleaned_data['ark_pid'] == ''):
+                    form.ark_pid = Ark().ark_creation()
+                Sparql_post_articles_methods().create_article(form.cleaned_data['ark_pid'], form.cleaned_data['name'], form.cleaned_data['abstract'], form.cleaned_data['date_published'], form.cleaned_data['creator'])
+                return redirect(index)
+        form = ArticleCreationForm()
+        context = {
+            'form': form, 
+            'button_value': 'Créer', 
+            'url_to_return': '/articles/creation/'
+        }
+        # return the form to be completed
+        return render(request, 'forms/classic_form_display.html', context)
+
+    else:
+        context = {
+            'message': "Connectez-vous pour pourvoir créer des articles"
+            }
+    
+        return render(request, 'page_info.html', context)
