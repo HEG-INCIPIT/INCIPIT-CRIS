@@ -9,6 +9,8 @@ urlpatterns = [
     path('personnes/edition/<path:ark_pid>', views.person_edition_display, name='person_edition_display'),
     path('personnes/<path:ark_pid>', views.person_display, name='person_display'),
 
-    path('articles/', views.articles_research, name='article_research'),
-    path('articles/creation', views.articles_creation, name='articles_creation'),
+    path('articles/', views.articles_research, name='articles_research'),
+    path('articles/creation/', views.articles_creation, name='articles_creation'),
+    path('articles/<path:ark_pid>', views.articles_display, name='articles_display'),
+    
 ]
