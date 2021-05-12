@@ -39,25 +39,25 @@ class Sparql_post_articles_methods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def create_article(self, ark_id, name, abstract, datePublished, creator):
+    def create_article(self, ark_pid, name, abstract, datePublished, creator):
 
         sparql_request = """
             {prefix}
 
             INSERT DATA {{
-                <{ark_id}ARK> a schema:PropertyValue ;
+                <{ark_pid}ARK> a schema:PropertyValue ;
                     schema:propertyID 'ARK' ;
-                    schema:value "{ark_id}" .
+                    schema:value "{ark_pid}" .
 
-                <{ark_id}> a schema:ScholarlyArticle ;
-                    schema:name "{name}" ;
-                    schema:abstract "{abstract}" ;
+                <{ark_pid}> a schema:ScholarlyArticle ;
+                    schema:name \"\"\"{name}\"\"\" ;
+                    schema:abstract \"\"\"{abstract}\"\"\" ;
                     schema:datePublished "{datePublished}"^^xsd:date ;
                     schema:author <{creator}> ;
-                    schema:identifier <{ark_id}ARK> .
+                    schema:identifier <{ark_pid}ARK> .
 
             }}
-        """.format(prefix=self.prefix, ark_id=ark_id, name=name, abstract=abstract, datePublished=datePublished, creator=creator)
+        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, abstract=abstract, datePublished=datePublished, creator=creator)
 
         self.sparql.setQuery(sparql_request)
 

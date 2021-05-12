@@ -1,4 +1,5 @@
 from django.forms.forms import Form
+from .models import *
 from django.shortcuts import render, redirect
 from .forms import *
 from arketype_API.ark import Ark
@@ -130,9 +131,19 @@ def articles_research(request):
         'sparql_request': sparql_request
     }
 
-    return render(request, 'articles/display_articles_results.html', context)
+    return render(request, 'article/display_articles_results.html', context)
 
 def articles_display(request, ark_pid):
+    # Verify in triplestore if the ark_pid correspond to a person
+    print(User.objects.filter()) # for development purposes
+    sparql_request_check_article_ark = Sparql_get_articles_methods().check_article_ark(ark_pid)
+    if(sparql_request_check_article_ark):
+        data_article = Sparql_get_articles_methods().get_data_article(ark_pid)
+        context = {
+            'data_article': data_article
+        }
+        return render(request, 'article/display_article_profile.html', context)
+    
     return render(request, 'page_404.html')
 
 def articles_creation(request):

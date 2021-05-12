@@ -61,10 +61,57 @@ class Sparql_get_Person_methods:
 
         return Triplestore_JSON_responses_parser.parse_get_persons(self.sparql.query().response.read())
 
+    def get_full_name_person(self, ark_pid):
+        """
+        Get the full name of a person format
+        Return a dict with given name and family name
+        """
+        sparql_request = """
+            {prefix}
+
+            SELECT ?given_name ?family_name WHERE
+            {{
+                <{ark_research}> schema:givenName ?given_name .
+                <{ark_research}> schema:familyName ?family_name .
+            }}
+        """.format(prefix=self.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return Triplestore_JSON_responses_parser.parse_get_full_name_person(self.sparql.query().response.read())
+
+
+    def get_articles_person(self, ark_pid):
+        """
+        Get all the articles for who the person is an author
+        Return an array with tuples (identifier, dictionnary)
+        """
+        from ..articles.sparql_get_articles_methods import Sparql_get_articles_methods
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?article WHERE
+            {{
+                ?article schema:author <{ark_research}> .
+            }}
+        """.format(prefix=self.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_articles = []
+
+        for article in Triplestore_JSON_responses_parser.parse_get_articles_person(self.sparql.query().response.read()):
+            data_article = Sparql_get_articles_methods().get_data_article(article)
+            array_articles.append((article, data_article))
+
+        return array_articles
+
+
     def get_data_person(self, ark_pid):
         """
         Get all the information of a person : ark, given name, family name, ...
-        And return a dictionnary with all elements
+        Return a dictionnary with all elements
         """
 
         sparql_request = """
@@ -82,7 +129,12 @@ class Sparql_get_Person_methods:
 
         self.sparql.setQuery(sparql_request)
 
-        return Triplestore_JSON_responses_parser.parse_get_data_person(self.sparql.query().response.read())
+        articles = Sparql_get_Person_methods().get_articles_person(ark_pid)
+        data_person = Triplestore_JSON_responses_parser.parse_get_data_person(self.sparql.query().response.read())
+        data_person['articles'] = articles
+
+        return data_person
+
 
     def check_person_ark(self, ark_pid):
         """

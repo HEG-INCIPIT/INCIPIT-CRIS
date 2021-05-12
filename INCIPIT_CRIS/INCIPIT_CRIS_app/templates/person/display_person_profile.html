@@ -11,12 +11,20 @@
         {% include 'main/base.html' %}
 
         {% block person_information %}
-        <p>Person</p>
-        <p>Prénom : {{ data_person.given_name }}</p>
-        <p>Nom : {{ data_person.family_name }}</p>
-        <p>Email : {{ data_person.email }}</p>
-        <p>Téléphone : {{ data_person.telephone }}</p>
-        <p>Description : {{ data_person.description }}</p>
+            <p>Person</p>
+            <p>Prénom : {{ data_person.given_name }}</p>
+            <p>Nom : {{ data_person.family_name }}</p>
+            <p>Email : {{ data_person.email }}</p>
+            <p>Téléphone : {{ data_person.telephone }}</p>
+            <p>Description : {{ data_person.description }}</p>
+        {% endblock %}
+        {% block person_articles %}
+            Articles :
+            {% for article in data_person.articles %}
+                <p>
+                    <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                </p>
+            {% endfor %}
         {% endblock %}
     </body>
 </html>

@@ -7,7 +7,7 @@ class Triplestore_JSON_responses_parser:
     """
 
     ##################################################
-    # Articles
+    # Person
     ##################################################
 
     def parse_get_persons(sparql_query_answer):
@@ -16,6 +16,21 @@ class Triplestore_JSON_responses_parser:
         for json_data in loaded_json:
             array_data_parsed.append([json_data['person']['value'], json_data['given_name']['value'], json_data['family_name']['value']])
         return array_data_parsed
+
+    def parse_get_full_name_person(sparql_query_answer):
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        dict_data = {
+            'given_name': loaded_json['given_name']['value'],
+            'family_name': loaded_json['family_name']['value'],
+        }
+        return dict_data
+
+    def parse_get_articles_person(sparql_query_answer):
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+        array_articles = []
+        for article in loaded_json:
+            array_articles.append(article['article']['value'])
+        return array_articles
 
     def parse_check_person_ark(sparql_query_answer):
         loaded_json = json.loads(sparql_query_answer)['results']['bindings']
@@ -51,7 +66,7 @@ class Triplestore_JSON_responses_parser:
         return dict_data
 
     ##################################################
-    # Articles
+    # Article
     ##################################################
 
     def parse_get_articles(sparql_query_answer):
@@ -60,3 +75,27 @@ class Triplestore_JSON_responses_parser:
         for json_data in loaded_json:
             array_data_parsed.append([json_data['article']['value'], json_data['name']['value']])
         return array_data_parsed
+
+    def parse_check_article_ark(sparql_query_answer):
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+        if (len(loaded_json) > 0):
+            return True
+        return False
+
+    def parse_get_authors_article(sparql_query_answer):
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+        array_authors = []
+        for author in loaded_json:
+            array_authors.append(author['author']['value'])
+        return array_authors
+
+
+    def parse_get_data_article(sparql_query_answer):
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        dict_data = {
+            'name': loaded_json['name']['value'],
+            'abstract': loaded_json['abstract']['value'],
+            'datePublished': loaded_json['datePublished']['value'][:10],
+        }
+
+        return dict_data

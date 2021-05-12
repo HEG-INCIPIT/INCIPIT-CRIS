@@ -9,3 +9,12 @@
     <p>Téléphone : {{ data_person.telephone }} <a href="/personnes/edition/profil/telephone/{{user.ark_pid}}">modifer</a></p>
     <p>Description : {{ data_person.description }} <a href="/personnes/edition/profil/description/{{user.ark_pid}}">modifer</a></p>
 {% endblock %}
+
+{% block person_articles %}
+    Articles :
+    {% for article in data_person.articles %}
+        <p>
+            <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a> <a>modifier</a>
+        </p>
+    {% endfor %}
+{% endblock %}

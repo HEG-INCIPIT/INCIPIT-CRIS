@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    </head>
+    <body>
+
+        {% include 'main/base.html' %}
+
+        {% block article_information %}
+            <p>Article</p>
+            <p>Nom : {{ data_article.name }}</p>
+            <p>abstract : {{ data_article.abstract }}</p>
+            <p>Date de publication : {{ data_article.datePublished }}</p>
+            <p>Auteur(s) : </p>
+            {% for author in data_article.authors %}
+                <p>
+                    <a href="/personnes/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+                </p>
+            {% endfor %}
+        {% endblock %}
+    </body>
+</html>
