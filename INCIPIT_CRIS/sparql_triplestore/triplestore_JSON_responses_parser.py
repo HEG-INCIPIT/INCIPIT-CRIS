@@ -5,6 +5,11 @@ class Triplestore_JSON_responses_parser:
     A class used to parse the JSON response of the triplestore
 
     """
+
+    ##################################################
+    # Articles
+    ##################################################
+
     def parse_get_persons(sparql_query_answer):
         loaded_json = json.loads(sparql_query_answer)['results']['bindings']
         array_data_parsed = []
@@ -44,3 +49,14 @@ class Triplestore_JSON_responses_parser:
             dict_data['description'] = ''
 
         return dict_data
+
+    ##################################################
+    # Articles
+    ##################################################
+
+    def parse_get_articles(sparql_query_answer):
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+        array_data_parsed = []
+        for json_data in loaded_json:
+            array_data_parsed.append([json_data['article']['value'], json_data['name']['value']])
+        return array_data_parsed
