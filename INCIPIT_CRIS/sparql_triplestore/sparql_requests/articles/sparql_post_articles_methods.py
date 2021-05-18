@@ -73,8 +73,7 @@ class Sparql_post_articles_methods:
             }}
         """.format(prefix=self.prefix, ark_pid=ark_pid, author=author)
 
-        print(sparql_request)
-
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
+        
