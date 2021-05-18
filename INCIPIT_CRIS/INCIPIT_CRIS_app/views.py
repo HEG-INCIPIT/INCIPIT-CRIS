@@ -2,6 +2,7 @@ from django.forms.forms import Form
 from .models import *
 from django.shortcuts import render, redirect
 from .forms import *
+import re
 from arketype_API.ark import Ark
 from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import Sparql_get_Person_methods
 from sparql_triplestore.sparql_requests.person.sparql_post_Person_methods import Sparql_post_Person_methods
@@ -103,7 +104,7 @@ def person_profile_edition_display(request, part_of_profile_to_modify, ark_pid):
                 'url_to_return': '/personnes/edition/profil/{}/{}'.format(part_of_profile_to_modify, request.user.ark_pid)
             }
             # return the form to be completed
-            return render(request, 'forms/classic_form_display.html', context)
+            return render(request, 'forms/person/person_profil_edition.html', context)
 
         else:
             # Check why the person cannot modify the profile and display the error
@@ -135,7 +136,6 @@ def articles_research(request):
 
 def articles_display(request, ark_pid):
     # Verify in triplestore if the ark_pid correspond to a person
-    print(User.objects.filter()) # for development purposes
     sparql_request_check_article_ark = Sparql_get_articles_methods().check_article_ark(ark_pid)
     if(sparql_request_check_article_ark):
         data_article = Sparql_get_articles_methods().get_data_article(ark_pid)
@@ -154,18 +154,28 @@ def articles_creation(request):
         if (request.method == 'POST'):
             form = ArticleCreationForm(request.POST)
             if (form.is_valid()):
-                if(form.cleaned_data['ark_pid'] == ''):
-                    form.ark_pid = Ark().ark_creation()
-                Sparql_post_articles_methods().create_article(form.cleaned_data['ark_pid'], form.cleaned_data['name'], form.cleaned_data['abstract'], form.cleaned_data['date_published'], form.cleaned_data['creator'])
+                authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
+                ark_pid = form.cleaned_data['ark_pid']
+                if(ark_pid == ''):
+                    ark_pid = Ark().ark_creation()
+                Sparql_post_articles_methods().create_article(ark_pid, form.cleaned_data['name'], form.cleaned_data['abstract'], form.cleaned_data['date_published'])
+                for author in authors:
+                    Sparql_post_articles_methods().add_author_to_article(ark_pid, author.split()[2])
                 return redirect(index)
-        form = ArticleCreationForm()
+        else:
+            form = ArticleCreationForm()
+        persons_info = Sparql_get_Person_methods().get_persons()
+        persons = []
+        for basic_info_person in persons_info:
+            persons.append('''{} {}, {}'''.format(basic_info_person[1], basic_info_person[2], basic_info_person[0]))
         context = {
             'form': form, 
             'button_value': 'Créer', 
-            'url_to_return': '/articles/creation/'
+            'url_to_return': '/articles/creation/',
+            'persons': persons
         }
         # return the form to be completed
-        return render(request, 'forms/classic_form_display.html', context)
+        return render(request, 'forms/article/article_creation.html', context)
 
     else:
         context = {
