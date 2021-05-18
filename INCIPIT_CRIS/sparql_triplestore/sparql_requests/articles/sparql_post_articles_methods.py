@@ -39,7 +39,7 @@ class Sparql_post_articles_methods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def create_article(self, ark_pid, name, abstract, datePublished, creator):
+    def create_article(self, ark_pid, name, abstract, datePublished):
 
         sparql_request = """
             {prefix}
@@ -53,11 +53,27 @@ class Sparql_post_articles_methods:
                     schema:name \"\"\"{name}\"\"\" ;
                     schema:abstract \"\"\"{abstract}\"\"\" ;
                     schema:datePublished "{datePublished}"^^xsd:date ;
-                    schema:author <{creator}> ;
                     schema:identifier <{ark_pid}ARK> .
 
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, abstract=abstract, datePublished=datePublished, creator=creator)
+        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, abstract=abstract, datePublished=datePublished)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+    def add_author_to_article(self, ark_pid, author):
+
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{ark_pid}> schema:author <{author}> .
+
+            }}
+        """.format(prefix=self.prefix, ark_pid=ark_pid, author=author)
+
+        print(sparql_request)
 
         self.sparql.setQuery(sparql_request)
 

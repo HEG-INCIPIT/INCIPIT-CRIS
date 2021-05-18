@@ -40,10 +40,8 @@ class TelephoneForm(forms.Form):
 ##################################################
 
 class ArticleCreationForm(forms.Form):
-    name = forms.CharField(label='Titre ', max_length=200, required=False, validators=[not_quotes_regex])
+    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex])
     abstract = forms.CharField(label='Abstract ', max_length=1500, required=False, validators=[not_quotes_regex])
     ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex], help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''')
     date_published = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=False)
-    creator = forms.CharField(label='Auteur(s) ', max_length=100, required=False, validators=[not_quotes_regex]) # TODO
-
     
