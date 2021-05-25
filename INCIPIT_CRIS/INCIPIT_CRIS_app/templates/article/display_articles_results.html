@@ -10,7 +10,7 @@
         {% include 'main/base.html' %}
 
         {% for result in sparql_request %}
-            <p><a href="{% url "articles_display" result.0 %}"> {{ result.1 }}</a></p>
+            <p><a href="{% url "article_display" result.0 %}"> {{ result.1 }}</a></p>
         {% endfor %}
     </body>
 </html>

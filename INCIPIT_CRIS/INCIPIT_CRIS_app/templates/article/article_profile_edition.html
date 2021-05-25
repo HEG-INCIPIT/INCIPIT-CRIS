@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    </head>
+    <body>
+
+        {% include 'main/base.html' %}
+
+        {% block article_information %}
+            <p>
+                Article
+            </p>
+            <p>Nom : {{ data_article.name }} <a href="/articles/edition/field/name/{{data_article.ark_pid}}"> Modifer</a></p>
+            <p>abstract : {{ data_article.abstract }} <a href="/articles/edition/field/abstract/{{data_article.ark_pid}}"> Modifer</a></p>
+            <p>Date de publication : {{ data_article.datePublished }} <a href="/articles/edition/field/datePublished/{{data_article.ark_pid}}"> Modifer</a></p>
+            <p>Auteur(s) : <a href="/articles/edition/field/addAuthor/{{data_article.ark_pid}}"> Ajouter</a></p>
+            {% for author in data_article.authors %}
+                <div>
+                    <a href="/personnes/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+                    <form action="/articles/edition/field/deleteAuthor/{{data_article.ark_pid}}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" id="authorARK" name="authorARK" value="{{ author.0 }}">
+                        <input type="submit" value="Supprimer">
+                    </form>
+                </div>
+            {% endfor %}
+        {% endblock %}
+    </body>
+</html>
