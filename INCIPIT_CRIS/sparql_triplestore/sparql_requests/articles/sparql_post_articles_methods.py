@@ -77,3 +77,20 @@ class Sparql_post_articles_methods:
 
         return self.sparql.query().response.read()
         
+    def delete_author_of_article(self, ark_pid, author):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{ark_pid}> schema:author <{author}> .
+
+            }}
+            WHERE
+            {{
+                <{ark_pid}> schema:author <{author}> .
+            }}
+        """.format(prefix=self.prefix, ark_pid=ark_pid, author=author)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()

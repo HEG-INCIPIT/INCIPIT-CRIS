@@ -82,7 +82,7 @@ class Sparql_get_articles_methods:
 
         for author in Triplestore_JSON_responses_parser.parse_get_authors_article(self.sparql.query().response.read()):
             full_name = Sparql_get_Person_methods().get_full_name_person(author)
-            array_authors.append((author, full_name))
+            array_authors.append([author, full_name])
 
         return array_authors
 
@@ -109,6 +109,7 @@ class Sparql_get_articles_methods:
         data_article = Triplestore_JSON_responses_parser.parse_get_data_article(self.sparql.query().response.read())
         
         data_article['authors'] = authors
+        data_article['ark_pid'] = ark_pid
         return data_article
 
     def check_article_ark(self, ark_pid):
