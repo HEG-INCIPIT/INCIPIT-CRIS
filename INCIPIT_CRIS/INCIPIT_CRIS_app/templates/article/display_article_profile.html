@@ -13,12 +13,12 @@
         {% block article_information %}
             <p>
                 Article 
-                {% if user.is_authenticated and edition_granted %}
+                {% if user.is_authenticated and edition_granted or user.is_superuser %}
                     <a href="/articles/edition/{{ data_article.ark_pid }}">Modifier</a>
                 {% endif %}
             </p>
             <p>Nom : {{ data_article.name }}</p>
-            <p>abstract : {{ data_article.abstract }}</p>
+            <p>Abstract : {{ data_article.abstract }}</p>
             <p>Date de publication : {{ data_article.datePublished }}</p>
             <p>Auteur(s) : </p>
             {% for author in data_article.authors %}

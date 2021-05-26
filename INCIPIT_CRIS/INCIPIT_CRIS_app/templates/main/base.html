@@ -1,39 +1,48 @@
-<nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            INCIPIT-CRIS
-        </a>
-
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <a class="navbar-item" href="/personnes/">
-                Personnes
+<div id="navbarDiv">
+    <nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                INCIPIT-CRIS
             </a>
 
-            <a class="navbar-item" href="/articles/">
-                Articles
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample" id="burger" onclick="toggleBurger()">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
             </a>
         </div>
 
-        <div class="navbar-end">
-            {% if user.is_authenticated %}
-                <a class="navbar-item" href="/personnes/edition/{{user.ark_pid}}">Editer mon profil</a>
-                <a class="navbar-item" href="/articles/creation/">Création d'articles</a>
-                <a class="navbar-item" href="/personnes/{{user.ark_pid}}">{{ user.first_name }} {{ user.last_name }}</a>
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-primary" href="/logout/">
-                            Déconnexion
-                        </a>
+        <div id="navbar" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="/personnes/">
+                    Personnes
+                </a>
+
+                <a class="navbar-item" href="/articles/">
+                    Articles
+                </a>
+
+                <a class="navbar-item" href="/">
+                    Projets
+                </a>
+            </div>
+
+            <div class="navbar-end">
+                {% if user.is_authenticated %}
+                    <a class="navbar-item" href="/personnes/edition/{{user.ark_pid}}">Editer mon profil</a>
+                    <a class="navbar-item" href="/articles/creation/">Création d'articles</a>
+                    <figure class="image is-32x32">
+                        <img src="https://www.gravatar.com/avatar/a82c93e5386c52411d61b383222d2427.jpg?s=200&d=mm" class="is-rounded">
+                    </figure>
+                    <a class="navbar-item" href="/personnes/{{user.ark_pid}}">{{ user.first_name }} {{ user.last_name }}</a>
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-primary" href="/logout/">
+                                Déconnexion
+                            </a>
+                        </div>
                     </div>
-                {% else %}
+                    {% else %}
                     <div class="navbar-item">
                         <div class="buttons">
                             <a class="button is-primary" href="/login/">
@@ -41,8 +50,24 @@
                             </a>
                         </div>
                     </div>
-                </div>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+
+    <script>
+        const burgerIcon = document.getElementById('burger');
+        const dropMenu = document.getElementById('navbar');
+        const headerButtons = document.getElementsByClassName("nav-links");
+
+        const toggleBurger = () => {
+            burgerIcon.classList.toggle('is-active');
+            dropMenu.classList.toggle('is-active');
+            dropMenu.classList.toggle('has-text-right');
+
+            for (let cnt = 0; cnt < headerButtons.length; cnt++) {
+                headerButtons[cnt].classList.toggle('is-fullwidth');
+            }
+        };
+    </script>
+</div>
