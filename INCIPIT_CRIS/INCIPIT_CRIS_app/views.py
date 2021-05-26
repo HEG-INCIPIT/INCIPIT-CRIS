@@ -3,6 +3,7 @@ from .models import *
 from django.shortcuts import render, redirect
 from .forms import *
 import re
+from django.contrib.auth import get_user_model
 from arketype_API.ark import Ark
 from sparql_triplestore.sparql_requests.sparql_generic_post_methods import Sparql_generic_post_methods
 from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import Sparql_get_Person_methods
@@ -11,13 +12,27 @@ from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods imp
 from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import Sparql_post_articles_methods
 
 def index(request):
-    persons = len(Sparql_get_Person_methods().get_persons())
-    articles = len(Sparql_get_articles_methods().get_articles())
+    articles = Sparql_get_articles_methods().get_articles()
+    
+    articles_data = []
+    for article in articles:
+        articles_data.append(Sparql_get_articles_methods().get_data_article(article[0]))
+    articles_data.sort(key=lambda item:item['datePublished'], reverse=True)
+
+    User = get_user_model()
+    users = User.objects.all().filter(is_staff=False).order_by('date_joined')
+
+    last_users_registered = []
+    for i in range(1, 6):
+        last_users_registered.append([users.values('ark_pid')[len(users)-i]['ark_pid'], users.values('first_name')[len(users)-i]['first_name'], users.values('last_name')[len(users)-i]['last_name']])
+
     context = {
-        'persons': persons,
-        'articles': articles,
+        'persons': len(users),
+        'articles': len(articles),
+        'last_users_registered': last_users_registered,
+        'last_publications': articles_data[:5],
     }
-    return render(request, 'main/index.html')
+    return render(request, 'main/index.html', context)
 
 ##################################################
 # Person
