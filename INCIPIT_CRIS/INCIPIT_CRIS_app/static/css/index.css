@@ -1,0 +1,67 @@
+#navbarDiv {
+    padding-bottom: 50px;
+}
+
+input[type="text"] {
+    width: 50%;
+    height: 40px;
+    font-size: 12pt;
+}
+
+#researchForm .button {
+    height: 40px;
+}
+
+#researchForm{
+    padding-bottom: 40px;
+}
+
+.overline {
+    padding-left: 30px;
+    padding-bottom: 20px;
+    width: 90%;
+    border-top: 1px solid black;
+    margin-left: 10px;
+}
+
+.overline-left {
+    padding-bottom: 10px;
+    border-top: 1px solid black;
+    margin-left: 10px;
+    padding-left: 20px;
+}
+
+.align-text-left {
+    padding-left: 30px;
+}
+
+.overline-center {
+    border-top: 1px solid black;
+    padding-bottom: 10px;
+}
+
+.overline-right {
+    padding-bottom: 10px;
+    border-top: 1px solid black;
+    margin-right: 10px;
+    padding-right: 20px;
+}
+
+.align-text-right {
+    padding-right: 30px;
+}
+
+li:after {
+    display: block;
+    content: url('data:image/svg+xml;utf8,<svg width="9" height="9" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg"><rect x="0.75" y="0.5" width="8" height="8" rx="4" fill="%231CB0A8" /></svg>');
+}
+
+.displayCategory {
+    font-size: 11pt;
+    padding-right: 30px;
+    margin-top: auto;
+}
+
+#statsColumns {
+    padding-bottom: 50px;
+}
