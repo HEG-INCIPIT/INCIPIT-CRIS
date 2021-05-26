@@ -11,6 +11,12 @@ from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods imp
 from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import Sparql_post_articles_methods
 
 def index(request):
+    persons = len(Sparql_get_Person_methods().get_persons())
+    articles = len(Sparql_get_articles_methods().get_articles())
+    context = {
+        'persons': persons,
+        'articles': articles,
+    }
     return render(request, 'main/index.html')
 
 ##################################################
@@ -351,6 +357,28 @@ def article_author_deletion(request, ark_pid):
             Sparql_post_articles_methods().delete_author_of_article(ark_pid, author)
 
             return redirect(article_edition, ark_pid=ark_pid)
+        
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet article",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet article"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def article_deletion(request, ark_pid):
+    # Verify that the user is authenticated and has the right to modify the profile
+    if (request.user.is_authenticated):
+        # Request all the authors of the article
+        authors_article = Sparql_get_articles_methods().get_authors_article(ark_pid)
+        # Verify if the user ark is in the articles authors to grant edition
+        if(request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser):
+            
+            Sparql_post_articles_methods().delete_article(ark_pid)
+
+            return redirect(index)
         
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",
