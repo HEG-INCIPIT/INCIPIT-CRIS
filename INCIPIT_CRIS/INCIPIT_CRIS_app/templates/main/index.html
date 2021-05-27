@@ -27,9 +27,9 @@
                     </div>
                     <div class="align-text-left">
                         <ul>
-                        {% for user in last_users_registered %}
+                            {% for user in last_users_registered %}
                                 <li><a href="/personnes/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
-                        {% endfor %}
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
