@@ -1,8 +1,8 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
-from sparql_triplestore.triplestore_JSON_responses_parser import Triplestore_JSON_responses_parser
+from sparql_triplestore.triplestore_JSON_responses_parser import TriplestoreJSONResponsesParser
 
 
-class Sparql_get_articles_methods:
+class SparqlGetArticlesMethods:
     """
     A class used to do sparql GET requests about a Person to the triplestore
 
@@ -23,7 +23,7 @@ class Sparql_get_articles_methods:
     -------
 
     """
-
+    triple_json_response_parser = TriplestoreJSONResponsesParser()
     url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
     prefix = """
         PREFIX schema: <https://schema.org/>
@@ -58,14 +58,14 @@ class Sparql_get_articles_methods:
 
         self.sparql.setQuery(sparql_request)
 
-        return Triplestore_JSON_responses_parser.parse_get_articles(self.sparql.query().response.read())
+        return self.triple_json_response_parser.parse_get_articles(self.sparql.query().response.read())
 
     def get_authors_article(self, ark_pid):
         """
         Get all the authors of an article
         And return an array with tuples (identifier, dictionnary)
         """
-        from ..person.sparql_get_Person_methods import Sparql_get_Person_methods
+        from ..person.sparql_get_Person_methods import SparqlGetPersonMethods
 
         sparql_request = """
             {prefix}
@@ -80,8 +80,8 @@ class Sparql_get_articles_methods:
 
         array_authors = []
 
-        for author in Triplestore_JSON_responses_parser.parse_get_authors_article(self.sparql.query().response.read()):
-            full_name = Sparql_get_Person_methods().get_full_name_person(author)
+        for author in self.triple_json_response_parser.parse_get_authors_article(self.sparql.query().response.read()):
+            full_name = SparqlGetPersonMethods().get_full_name_person(author)
             array_authors.append([author, full_name])
 
         return array_authors
@@ -105,8 +105,8 @@ class Sparql_get_articles_methods:
 
         self.sparql.setQuery(sparql_request)
 
-        authors = Sparql_get_articles_methods().get_authors_article(ark_pid)
-        data_article = Triplestore_JSON_responses_parser.parse_get_data_article(self.sparql.query().response.read())
+        authors = SparqlGetArticlesMethods().get_authors_article(ark_pid)
+        data_article = self.triple_json_response_parser.parse_get_data_article(self.sparql.query().response.read())
         
         data_article['authors'] = authors
         data_article['ark_pid'] = ark_pid
@@ -128,4 +128,4 @@ class Sparql_get_articles_methods:
         """.format(prefix=self.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
-        return Triplestore_JSON_responses_parser.parse_check_person_ark(self.sparql.query().response.read())
+        return self.triple_json_response_parser.parse_check_person_ark(self.sparql.query().response.read())

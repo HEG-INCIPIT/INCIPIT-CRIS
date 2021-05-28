@@ -6,15 +6,15 @@ import re
 from django.contrib.auth import get_user_model
 from arketype_API.ark import Ark
 from sparql_triplestore.sparql_requests.sparql_generic_post_methods import Sparql_generic_post_methods
-from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import Sparql_get_Person_methods
-from sparql_triplestore.sparql_requests.person.sparql_post_Person_methods import Sparql_post_Person_methods
-from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods import Sparql_get_articles_methods
-from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import Sparql_post_articles_methods
+from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import SparqlGetPersonMethods
+from sparql_triplestore.sparql_requests.person.sparql_post_Person_methods import SparqlPostPersonMethods
+from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods import SparqlGetArticlesMethods
+from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import SparqlPostArticlesMethods
 
 sparql_generic_post_object = Sparql_generic_post_methods()
-sparql_get_person_object = Sparql_get_Person_methods()
-sparql_get_article_object = Sparql_get_articles_methods()
-sparql_post_article_object = Sparql_post_articles_methods()
+sparql_get_person_object = SparqlGetPersonMethods()
+sparql_get_article_object = SparqlGetArticlesMethods()
+sparql_post_article_object = SparqlPostArticlesMethods()
 
 
 def index(request):

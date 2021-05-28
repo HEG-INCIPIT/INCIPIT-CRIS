@@ -1,6 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, POST, DIGEST
 
-class Sparql_post_articles_methods:
+
+class SparqlPostArticlesMethods:
     """
     A class used to do sparql POST requests about an Article to the triplestore
 
@@ -31,7 +32,6 @@ class Sparql_post_articles_methods:
     password = 'pw'
 
     def __init__(self):
-
         self.sparql = SPARQLWrapper(self.url_endpoint)
 
         self.sparql.setHTTPAuth(DIGEST)
@@ -39,8 +39,7 @@ class Sparql_post_articles_methods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def create_article(self, ark_pid, name, abstract, datePublished):
-
+    def create_article(self, ark_pid, name, abstract, date_published):
         sparql_request = """
             {prefix}
 
@@ -52,18 +51,17 @@ class Sparql_post_articles_methods:
                 <{ark_pid}> a schema:ScholarlyArticle ;
                     schema:name \"\"\"{name}\"\"\" ;
                     schema:abstract \"\"\"{abstract}\"\"\" ;
-                    schema:datePublished "{datePublished}"^^xsd:date ;
+                    schema:datePublished "{date_published}"^^xsd:date ;
                     schema:identifier <{ark_pid}ARK> .
 
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, abstract=abstract, datePublished=datePublished)
+        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, abstract=abstract, datePublished=date_published)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
     def add_author_to_article(self, ark_pid, author):
-
         sparql_request = """
             {prefix}
 
@@ -76,7 +74,7 @@ class Sparql_post_articles_methods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
-        
+
     def delete_author_of_article(self, ark_pid, author):
         sparql_request = """
             {prefix}
@@ -95,13 +93,12 @@ class Sparql_post_articles_methods:
 
         return self.sparql.query().response.read()
 
-    
     def delete_article(self, ark_pid):
         sparql_request = """
             {prefix}
 
             DELETE WHERE {{
-                <{ark_pid}> ?predicat ?object .
+                <{ark_pid}> ?predicate ?object .
 
             }}
         """.format(prefix=self.prefix, ark_pid=ark_pid)
