@@ -8,15 +8,15 @@ class Sparql_get_Person_methods:
 
     Attributes
     ----------
-    url_endpoint : str
+    @url_endpoint : str
         the URL of the triplestore endpoint to do sparql resquests
-    prefix : str
+    @prefix : str
         the prefix of the ontologies used
-    admin : str
+    @admin : str
         the username of the endpoint used
-    password : str
+    @password : str
         the password of the username used for access to the endpoint
-    sparql : SPARQLWrapper
+    @sparql : SPARQLWrapper
         an object to set connection to the triple store, choose return format of the triple store answers and the method used
 
     Methods
