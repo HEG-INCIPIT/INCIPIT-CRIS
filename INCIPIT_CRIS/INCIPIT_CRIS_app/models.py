@@ -28,20 +28,20 @@ class User(AbstractUser):
         self.__original_last_name = self.last_name
 
     def save(self, *args, **kwargs):
-        if not self.sparql_get_person_object().check_person_ark(self.ark_pid) and not self.is_staff:
+        if not self.sparql_get_person_object.check_person_ark(self.ark_pid) and not self.is_staff:
             if self.ark_pid == '':
                 self.ark_pid = Ark().ark_creation()
-            sparql = self.sparql_post_person_object()
+            sparql = self.sparql_post_person_object
             sparql.init_person(self.ark_pid, self.first_name, self.last_name, self.email)
         if self.email != self.__original_email:
-            self.sparql_post_person_object().update_person_string_leaf(self.ark_pid, 'email', self.email,
-                                                                       self.__original_email)
+            self.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'email', self.email,
+                                                                     self.__original_email)
         if self.first_name != self.__original_first_name:
-            self.sparql_post_person_object().update_person_string_leaf(self.ark_pid, 'givenName', self.first_name,
-                                                                       self.__original_first_name)
+            self.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'givenName', self.first_name,
+                                                                     self.__original_first_name)
         if self.last_name != self.__original_last_name:
-            self.sparql_post_person_object().update_person_string_leaf(self.ark_pid, 'familyName', self.last_name,
-                                                                       self.__original_last_name)
+            self.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'familyName', self.last_name,
+                                                                     self.__original_last_name)
 
         super().save(*args, **kwargs)
         self.__original_email = self.email

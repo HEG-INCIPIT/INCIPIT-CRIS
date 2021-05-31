@@ -5,13 +5,13 @@ from .forms import *
 import re
 from django.contrib.auth import get_user_model
 from arketype_API.ark import Ark
-from sparql_triplestore.sparql_requests.sparql_generic_post_methods import Sparql_generic_post_methods
+from sparql_triplestore.sparql_requests.sparql_generic_post_methods import SparqlGenericPostMethods
 from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import SparqlGetPersonMethods
 from sparql_triplestore.sparql_requests.person.sparql_post_Person_methods import SparqlPostPersonMethods
 from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods import SparqlGetArticlesMethods
 from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import SparqlPostArticlesMethods
 
-sparql_generic_post_object = Sparql_generic_post_methods()
+sparql_generic_post_object = SparqlGenericPostMethods()
 sparql_get_person_object = SparqlGetPersonMethods()
 sparql_get_article_object = SparqlGetArticlesMethods()
 sparql_post_article_object = SparqlPostArticlesMethods()
@@ -70,6 +70,12 @@ def persons_research(request):
 
 
 def person_display(request, ark_pid):
+    """
+    Display a page with all the data of the person given by the ark_pid
+    :param request: object
+    :param ark_pid: string -> Person identifier
+    :return: render function with template and data
+    """
     context = {}
     # Verify in triplestore if the ark_pid correspond to a person
     sparql_request_check_person_ark = sparql_get_person_object.check_person_ark(ark_pid)

@@ -1,6 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, POST, DIGEST
 
-class Sparql_generic_post_methods:
+
+class SparqlGenericPostMethods:
     """
     A class used to do generics sparql POST requests to the triplestore
 
@@ -31,7 +32,6 @@ class Sparql_generic_post_methods:
     password = 'pw'
 
     def __init__(self):
-
         self.sparql = SPARQLWrapper(self.url_endpoint)
 
         self.sparql.setHTTPAuth(DIGEST)
@@ -39,37 +39,36 @@ class Sparql_generic_post_methods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def update_string_leaf(self, ark_pid, predicat, new_string, old_string):
-
+    def update_string_leaf(self, ark_pid, predicate, new_string, old_string):
         sparql_request = """
             {prefix}
 
-            DELETE {{ <{ark_pid}> schema:{predicat} \"\"\"{old_string}\"\"\" }}
-            INSERT {{ <{ark_pid}> schema:{predicat} \"\"\"{new_string}\"\"\" }}
+            DELETE {{ <{ark_pid}> schema:{predicate} \"\"\"{old_string}\"\"\" }}
+            INSERT {{ <{ark_pid}> schema:{predicate} \"\"\"{new_string}\"\"\" }}
             WHERE
             {{
-                <{ark_pid}> schema:{predicat} \"\"\"{old_string}\"\"\"
+                <{ark_pid}> schema:{predicate} \"\"\"{old_string}\"\"\"
             }}
 
-        """.format(prefix=self.prefix, ark_pid=ark_pid, predicat=predicat, old_string=old_string, new_string=new_string)
+        """.format(prefix=self.prefix, ark_pid=ark_pid, predicate=predicate, old_string=old_string,
+                   new_string=new_string)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
-    def update_date_leaf(self, ark_pid, predicat, new_date, old_date):
-
+    def update_date_leaf(self, ark_pid, predicate, new_date, old_date):
         sparql_request = """
             {prefix}
 
-            DELETE {{ <{ark_pid}> schema:{predicat} \"\"\"{old_date}\"\"\"^^xsd:date }}
-            INSERT {{ <{ark_pid}> schema:{predicat} \"\"\"{new_date}\"\"\"^^xsd:date }}
+            DELETE {{ <{ark_pid}> schema:{predicate} \"\"\"{old_date}\"\"\"^^xsd:date }}
+            INSERT {{ <{ark_pid}> schema:{predicate} \"\"\"{new_date}\"\"\"^^xsd:date }}
             WHERE
             {{
-                <{ark_pid}> schema:{predicat} \"\"\"{old_date}\"\"\"^^xsd:date
+                <{ark_pid}> schema:{predicate} \"\"\"{old_date}\"\"\"^^xsd:date
             }}
 
-        """.format(prefix=self.prefix, ark_pid=ark_pid, predicat=predicat, old_date=old_date, new_date=new_date)
+        """.format(prefix=self.prefix, ark_pid=ark_pid, predicate=predicate, old_date=old_date, new_date=new_date)
 
         print(sparql_request)
 

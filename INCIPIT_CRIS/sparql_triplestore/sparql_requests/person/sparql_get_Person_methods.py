@@ -1,5 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
-from sparql_triplestore.triplestore_JSON_responses_parser import TriplestoreJSONResponsesParser
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_person import *
 
 
 class SparqlGetPersonMethods:
@@ -23,7 +23,6 @@ class SparqlGetPersonMethods:
     -------
 
     """
-    triple_json_response_parser = TriplestoreJSONResponsesParser()
     url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
     prefix = """
         PREFIX schema: <https://schema.org/>
@@ -58,7 +57,7 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return self.triple_json_response_parser.parse_get_persons(self.sparql.query().response.read())
+        return parse_get_persons(self.sparql.query().response.read())
 
     def get_full_name_person(self, ark_pid):
         """
@@ -77,7 +76,7 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return self.triple_json_response_parser.parse_get_full_name_person(self.sparql.query().response.read())
+        return parse_get_full_name_person(self.sparql.query().response.read())
 
     def get_articles_person(self, ark_pid):
         """
@@ -99,7 +98,7 @@ class SparqlGetPersonMethods:
 
         array_articles = []
 
-        for article in self.triple_json_response_parser.parse_get_articles_person(self.sparql.query().response.read()):
+        for article in parse_get_articles_person(self.sparql.query().response.read()):
             data_article = SparqlGetArticlesMethods().get_data_article(article)
             array_articles.append((article, data_article))
 
@@ -127,7 +126,7 @@ class SparqlGetPersonMethods:
         self.sparql.setQuery(sparql_request)
 
         articles = SparqlGetPersonMethods().get_articles_person(ark_pid)
-        data_person = self.triple_json_response_parser.parse_get_data_person(self.sparql.query().response.read())
+        data_person = parse_get_data_person(self.sparql.query().response.read())
         data_person['articles'] = articles
 
         return data_person
@@ -148,4 +147,4 @@ class SparqlGetPersonMethods:
         """.format(prefix=self.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
-        return self.triple_json_response_parser.parse_check_person_ark(self.sparql.query().response.read())
+        return parse_check_person_ark(self.sparql.query().response.read())
