@@ -1,5 +1,13 @@
 .image {
     margin: auto;
     width: 50%;
+    margin-right: 10px;
 }
 
+.drop-opt {
+    margin-right: 10px;
+}
+
+.navbar-item{
+    font-size: 16px;
+}

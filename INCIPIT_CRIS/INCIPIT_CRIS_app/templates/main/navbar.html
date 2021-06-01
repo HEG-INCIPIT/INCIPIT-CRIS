@@ -1,0 +1,100 @@
+{% load static %}
+<div id="navbarDiv">
+    <nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                INCIPIT-CRIS
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample" id="burger" onclick="toggleBurger()">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbar" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="/personnes/">
+                    Personnes
+                </a>
+
+                <a class="navbar-item" href="/articles/">
+                    Articles
+                </a>
+
+                <a class="navbar-item" href="/">
+                    Projets
+                </a>
+                <a class="navbar-item" href="/">
+                    Institutions
+                </a>
+                <a class="navbar-item" href="/">
+                    Bailleurs de fonds
+                </a>
+                <a class="navbar-item" href="/">
+                    Données
+                </a>
+            </div>
+
+            <div class="navbar-end">
+                {% if user.is_authenticated %}
+
+                    <div class="drop-opt navbar-item has-dropdown is-hoverable is-arrowless">
+                        <div class="navbar-link">
+                            <figure class="image is-24x24">
+                                <img src="{%  static  'images/blank-profile-picture.png'  %}" class="is-rounded">
+                            </figure>
+                            <span>{{ user.first_name }} {{ user.last_name }}</span>
+                        </div>
+                        <div class="navbar-dropdown is-right">
+                            <a class="navbar-item" href="/personnes/{{user.ark_pid}}">
+                                Voir mon profil
+                            </a>
+                            <a class="navbar-item" href="/personnes/edition/{{user.ark_pid}}">
+                                Editer mon profil
+                            </a>
+                            <hr class="navbar-divider">
+                            <a class="navbar-item" href="/articles/creation/">
+                                Créer un article
+                            </a>
+                            <hr class="navbar-divider">
+                            <div class="navbar-item">
+                                <div class="buttons">
+                                    <a class="button is-primary" href="/logout/">
+                                        Déconnexion
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-primary" href="/login/">
+                                Connexion
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+</div>
+
+<script>
+    const burgerIcon = document.getElementById('burger');
+    const dropMenu = document.getElementById('navbar');
+    const headerButtons = document.getElementsByClassName("nav-links");
+
+    const toggleBurger = () => {
+        burgerIcon.classList.toggle('is-active');
+        dropMenu.classList.toggle('is-active');
+        dropMenu.classList.toggle('has-text-right');
+
+        for (let cnt = 0; cnt < headerButtons.length; cnt++) {
+            headerButtons[cnt].classList.toggle('is-fullwidth');
+        }
+    };
+</script>

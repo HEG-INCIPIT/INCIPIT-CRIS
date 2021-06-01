@@ -1,5 +1,19 @@
-#navbarDiv {
-    padding-bottom: 50px;
+.parallax {
+    background-image: url("../../static/images/index-picture.jpeg");
+    min-height: 300px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.research-section {
+    padding-top: 50px;
+}
+
+.is-research-title {
+    display: flex;
+    flex-direction: column;
 }
 
 input[type="text"] {
@@ -51,9 +65,14 @@ input[type="text"] {
     padding-right: 30px;
 }
 
-li:after {
+.display-content:after {
     display: block;
     content: url('data:image/svg+xml;utf8,<svg width="9" height="9" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg"><rect x="0.75" y="0.5" width="8" height="8" rx="4" fill="%231CB0A8" /></svg>');
+}
+
+.display-content-last-element {
+    position: relative;
+    padding-top: 20px;
 }
 
 .displayCategory {
@@ -64,4 +83,9 @@ li:after {
 
 #statsColumns {
     padding-bottom: 50px;
+}
+
+.columns{
+    position: relative;
+    padding-bottom: 20px;
 }

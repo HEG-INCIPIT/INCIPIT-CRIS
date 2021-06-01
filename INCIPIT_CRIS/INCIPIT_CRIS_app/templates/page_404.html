@@ -5,10 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>INCIPIT-CRIS</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     </head>
     <body>
-        {% include 'main/base.html' %}
+        {% include 'main/navbar.html' %}
 
-        Error 404 - Ressource not found
+        <p>Error 404 - Ressource not found</p>
+        {% include 'main/footer.html' %}
     </body>
 </html>

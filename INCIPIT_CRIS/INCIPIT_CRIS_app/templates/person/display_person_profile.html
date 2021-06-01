@@ -5,26 +5,35 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>INCIPIT-CRIS</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/person_profile.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
     </head>
     <body>
 
-        {% include 'main/base.html' %}
+        {% include 'main/navbar.html' %}
 
-        {% block person_information %}
-            <p>Person</p>
-            <p>Prénom : {{ data_person.given_name }}</p>
-            <p>Nom : {{ data_person.family_name }}</p>
-            <p>Email : {{ data_person.email }}</p>
-            <p>Téléphone : {{ data_person.telephone }}</p>
-            <p>Description : {{ data_person.description }}</p>
-        {% endblock %}
-        {% block person_articles %}
-            Articles :
-            {% for article in data_person.articles %}
-                <p>
-                    <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
-                </p>
-            {% endfor %}
-        {% endblock %}
+        <section>
+            {% block person_information %}
+                <div class="profile-img">
+                    <img src="{%  static  'images/blank-profile-picture.png'  %}" width="250" height="250">
+                </div>
+
+                <div class="is-size-4 name-person">{{ data_person.given_name }} {{ data_person.family_name }}</div>
+                <p>Email : {{ data_person.email }}</p>
+                <p>Téléphone : {{ data_person.telephone }}</p>
+                <p>Description : {{ data_person.description }}</p>
+            {% endblock %}
+            {% block person_articles %}
+                Articles :
+                {% for article in data_person.articles %}
+                    <p>
+                        <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                    </p>
+                {% endfor %}
+            {% endblock %}
+        </section>
+        {% include 'main/footer.html' %}
     </body>
 </html>

@@ -6,24 +6,27 @@
         <title>INCIPIT-CRIS</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         {% load static %}
-        <link rel="stylesheet"  href="{%  static  'css/article_creation.css'  %}">
+        <link rel="stylesheet" href="{% static 'css/article_creation.css' %}">
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
     </head>
     <body>
-    <section>
-        {% include 'main/base.html' %}
+        <section>
+            {% include 'main/navbar.html' %}
 
-        <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
-            {% csrf_token %}
-            <div class="autocomplete">
-                <label for="authorAutocomplete">Auteur : </label>
-                <input id="authorInput" type="text" name="authorAutocomplete" placeholder="Nom de l'auteur">
-            </div>
-            <div id="authorElements">
-            </div>
-            <input type="hidden" id="authorElementsPost" name="authorElementsPost">
-            <input type="submit" value="{{ button_value }}">
-        </form>
-    </section>
+            <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
+                {% csrf_token %}
+                <div class="autocomplete">
+                    <label for="authorAutocomplete">Auteur : </label>
+                    <input id="authorInput" type="text" name="authorAutocomplete" placeholder="Nom de l'auteur">
+                </div>
+                <div id="authorElements">
+                </div>
+                <input type="hidden" id="authorElementsPost" name="authorElementsPost">
+                <input type="submit" value="{{ button_value }}">
+            </form>
+        </section>
+        {% include 'main/footer.html' %}
     </body>
 </html>
 

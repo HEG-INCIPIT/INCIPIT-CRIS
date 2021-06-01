@@ -6,45 +6,48 @@
         <title>INCIPIT-CRIS</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         {% load static %}
-        <link rel="stylesheet"  href="{%  static  'css/article_creation.css'  %}">
+        <link rel="stylesheet" href="{% static 'css/article_creation.css' %}">
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
     </head>
     <body>
-    <section>
-        {% include 'main/base.html' %}
+        <section>
+            {% include 'main/navbar.html' %}
 
-        <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <div class="fieldWrapper">
-                {{ form.name.errors }}
-                <label for="{{ form.name.id_for_label }}">Nom de l'article : </label>
-                {{ form.name }}
-            </div>
-            <div class="fieldWrapper">
-                {{ form.abstract.errors }}
-                <label for="{{ form.abstract.id_for_label }}">Abstract : </label>
-                {{ form.abstract }}
-            </div>
-            <div class="fieldWrapper">
-                {{ form.ark_pid.errors }}
-                <label for="{{ form.ark_pid.id_for_label }}">ARK de l'article si existant : </label>
-                {{ form.ark_pid }}
-            </div>
-            <div class="fieldWrapper">
-                {{ form.date_published.errors }}
-                <label for="{{ form.date_published.id_for_label }}">Date de publication : </label>
-                {{ form.date_published }}
-            </div>
-            <div class="autocomplete">
-                <label for="authorAutocomplete">Auteur : </label>
-                <input id="authorInput" type="text" name="authorAutocomplete" placeholder="Nom de l'auteur">
-            </div>
-            <div id="authorElements">
-            </div>
-            <input type="hidden" id="authorElementsPost" name="authorElementsPost">
-            <input type="submit" value="{{ button_value }}">
-        </form>
-    </section>
+            <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="fieldWrapper">
+                    {{ form.name.errors }}
+                    <label for="{{ form.name.id_for_label }}">Nom de l'article : </label>
+                    {{ form.name }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.abstract.errors }}
+                    <label for="{{ form.abstract.id_for_label }}">Abstract : </label>
+                    {{ form.abstract }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.ark_pid.errors }}
+                    <label for="{{ form.ark_pid.id_for_label }}">ARK de l'article si existant : </label>
+                    {{ form.ark_pid }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.date_published.errors }}
+                    <label for="{{ form.date_published.id_for_label }}">Date de publication : </label>
+                    {{ form.date_published }}
+                </div>
+                <div class="autocomplete">
+                    <label for="authorAutocomplete">Auteur : </label>
+                    <input id="authorInput" type="text" name="authorAutocomplete" placeholder="Nom de l'auteur">
+                </div>
+                <div id="authorElements">
+                </div>
+                <input type="hidden" id="authorElementsPost" name="authorElementsPost">
+                <input type="submit" value="{{ button_value }}">
+            </form>
+        </section>
+        {% include 'main/footer.html' %}
     </body>
 </html>
 
@@ -69,7 +72,7 @@
             /*for each item in the array...*/
             for (i = 0; i < arr.length; i++) {
                 /*check if the item starts with the same letters as the text field value:*/
-                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                if (arr[i].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
                 /*create a DIV element for each matching element:*/
                 b = document.createElement("DIV");
                 /*make the matching letters bold:*/
@@ -81,16 +84,15 @@
                     b.addEventListener("click", function(e) {
                         /*create new element in forms to display authors selected:*/
                         var authorID = document.createElement("P");
-                        personToAdd = this.getElementsByTagName("input")[0].value;
+                        var personToAdd = this.getElementsByTagName("input")[0].value;
                         authorID.innerHTML = personToAdd;
                         arrayToSend.push(personToAdd);
                         arr = arr.filter(e => e !== authorID.innerHTML);
 
                         var btnDelete = document.createElement("BUTTON");
-                        btnDelete.innerHTML = "X";
+                        btnDelete.className = "delete";
                         btnDelete.type = "button";
                         authorID.appendChild(btnDelete);
-
 
                         btnDelete.addEventListener('click', function(e) {
                             parent = e.srcElement.parentNode;
