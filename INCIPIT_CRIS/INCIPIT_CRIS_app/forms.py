@@ -48,7 +48,7 @@ class ArticleCreationForm(forms.Form):
     abstract = forms.CharField(label='Abstract ', max_length=1500, required=False, validators=[not_quotes_regex])
     ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''')
-    date_published = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=False)
+    date_published = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=True)
 
 
 class ArticleNameForm(forms.Form):
@@ -81,7 +81,7 @@ class ArticleDatePublishedForm(forms.Form):
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
         my_arg = ''
-        if 'old_datePublished' in kwargs:
-            my_arg = kwargs.pop('old_datePublished')
+        if 'old_date_published' in kwargs:
+            my_arg = kwargs.pop('old_date_published')
         super().__init__(*args, **kwargs)
-        self.fields['datePublished'].initial = my_arg
+        self.fields['date_published'].initial = my_arg

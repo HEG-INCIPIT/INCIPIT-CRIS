@@ -55,7 +55,7 @@ class SparqlPostArticlesMethods:
                     schema:identifier <{ark_pid}ARK> .
 
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, abstract=abstract, datePublished=date_published)
+        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, abstract=abstract, date_published=date_published)
 
         self.sparql.setQuery(sparql_request)
 

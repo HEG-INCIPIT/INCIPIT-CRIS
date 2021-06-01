@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 import re
 from django.contrib.auth import get_user_model
+import string
 from arketype_API.ark import Ark
 from sparql_triplestore.sparql_requests.sparql_generic_post_methods import SparqlGenericPostMethods
 from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import SparqlGetPersonMethods
@@ -39,13 +40,14 @@ def index(request):
                                       users.values('first_name')[len(users) - i]['first_name'],
                                       users.values('last_name')[len(users) - i]['last_name']])
 
-    project_data = []
+    project_data = ['Projet exemple {}'.format(i+1) for i in range(5)]
 
     context = {
         'persons': len(users),
         'articles': len(articles),
         'last_users_registered': last_users_registered,
         'last_publications': articles_data[:5],
+        'project_data': project_data[:5],
     }
     return render(request, 'main/index.html', context)
 
@@ -61,9 +63,16 @@ def persons_research(request):
     :param request:
     :return: render function with template and data
     """
+    alphabet_list = list(string.ascii_lowercase)
+    categories = ["Personnes", "Professeurs ordinaire", "Assistants HES"]
+    category = categories[0]
     sparql_request = sparql_get_person_object.get_persons()
     context = {
-        'sparql_request': sparql_request
+        'sparql_request': sparql_request,
+        'size_sparql_request': len(sparql_request),
+        'alphabet_list': alphabet_list,
+        'categories': categories,
+        'category':category,
     }
 
     return render(request, 'person/display_person_results.html', context)
@@ -201,9 +210,16 @@ def person_article_deletion(request, ark_pid):
 ##################################################
 
 def article_research(request):
+    alphabet_list = list(string.ascii_lowercase)
+    categories = ["Articles"]
+    category = categories[0]
     sparql_request = sparql_get_article_object.get_articles()
     context = {
-        'sparql_request': sparql_request
+        'sparql_request': sparql_request,
+        'size_sparql_request': len(sparql_request),
+        'alphabet_list': alphabet_list,
+        'categories': categories,
+        'category':category,
     }
 
     return render(request, 'article/display_articles_results.html', context)
@@ -313,7 +329,7 @@ def article_chose_form_to_display(request, part_of_article_to_edit, data_article
         if part_of_article_to_edit == 'abstract':
             return ArticleAbstractForm(old_abstract=data_article[part_of_article_to_edit])
         if part_of_article_to_edit == 'datePublished':
-            return ArticleDatePublishedForm(old_datePublished=data_article[part_of_article_to_edit])
+            return ArticleDatePublishedForm(old_date_published=data_article[part_of_article_to_edit])
 
 
 def article_field_edition(request, part_of_article_to_edit, ark_pid):
