@@ -1,9 +1,44 @@
-.profile-img {
-    margin-left: 20px;
-    margin-top: 10px;
-    position: relative;
+.horizontal-align-left-edge {
+    padding-left: 50px;
 }
 
-section {
-    white-space: nowrap;
+h1 {
+    font-size: 26px !important;
+}
+
+.leftbox {
+    float:left; 
+    width:33%;
+    height:30%;
+}
+
+.middlebox {
+    float:left; 
+    width:33%;
+    height:30%;
+    padding-left: 20px;
+}
+
+.rightbox {
+    float:left;
+    width:33%;
+    height:30%;
+    padding-left: 20px;
+}
+
+.container {
+    width: 90%;
+    height: 50%;
+    margin-left: 50px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    display: table;
+}
+
+.tab-content div {
+    display: none;
+}
+
+.tab-content div.is-active {
+    display: block;
 }

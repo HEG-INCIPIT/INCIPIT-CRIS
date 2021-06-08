@@ -88,10 +88,13 @@ def person_display(request, ark_pid):
     context = {}
     # Verify in triplestore if the ark_pid correspond to a person
     sparql_request_check_person_ark = sparql_get_person_object.check_person_ark(ark_pid)
+    can_edit = True if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser) else False
     if sparql_request_check_person_ark:
         data_person = sparql_get_person_object.get_data_person(ark_pid)
         context = {
-            'data_person': data_person
+            'data_person': data_person,
+            'can_edit': can_edit,
+            'ark': ark_pid,
         }
         return render(request, 'person/display_person_profile.html', context)
 
@@ -226,12 +229,12 @@ def article_research(request):
 
 
 def article_display(request, ark_pid):
-    # Verify in triplestore if the ark_pid correspond to a person
+    # Verify in triplestore if the ark_pid correspond to an article
     sparql_request_check_article_ark = sparql_get_article_object.check_article_ark(ark_pid)
     if sparql_request_check_article_ark:
         data_article = sparql_get_article_object.get_data_article(ark_pid)
         edition_granted = False
-        if request.user.ark_pid in [authors[0] for authors in data_article['authors']]:
+        if request.user.is_authenticated and request.user.ark_pid in [authors[0] for authors in data_article['authors']]:
             edition_granted = True
         context = {
             'edition_granted': edition_granted,

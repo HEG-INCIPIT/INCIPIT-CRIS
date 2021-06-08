@@ -18,9 +18,9 @@
                 <ul>
                     {% for categ in categories %}
                         {% if category == categ %}
-                            <li class="is-active"><a href="">{{ categ }}</a></li>
+                            <li class="is-active"><a class="link-one" href="">{{ categ }}</a></li>
                         {% else %}
-                            <li class=""><a href="">{{ categ }}</a></li>
+                            <li class=""><a class="link-one" href="">{{ categ }}</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>
@@ -33,7 +33,7 @@
                     {% else %}
                         <ul>
                             {% for result in sparql_request %}
-                                <li><a href="{% url "person_display" result.0 %}">{{ result.2 }} {{ result.1 }}</a></li>
+                                <li><a class="link-one" href="{% url "person_display" result.0 %}">{{ result.2 }} {{ result.1 }}</a></li>
                                 <hr />
                             {% endfor %}
                         </ul>

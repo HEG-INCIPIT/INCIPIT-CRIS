@@ -22,7 +22,7 @@
             </p>
             <p>Nom : {{ data_article.name }}</p>
             <p>Abstract : {{ data_article.abstract }}</p>
-            <p>Date de publication : {{ data_article.datePublished }}</p>
+            <time datetime="{{ data_article.datePublished }}">Date de publication : {{ data_article.datePublished }}</time>
             <p>Auteur(s) : </p>
             {% for author in data_article.authors %}
                 <p>

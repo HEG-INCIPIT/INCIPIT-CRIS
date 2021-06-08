@@ -34,9 +34,9 @@
                     <div class="align-text-left">
                         <ul>
                             {% for user in last_users_registered %}
-                                <li class="display-content"><a href="/personnes/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
+                                <li class="display-content"><a class="link-one" href="/personnes/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
                             {% endfor %}
-                            <li class="display-content-last-element"><a href="/personnes/">Voir tout</a></li>
+                            <li class="display-content-last-element"><a class="link-one" href="/personnes/">Voir tout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -47,9 +47,9 @@
                     <div class="align-text-center">
                         <ul>
                             {% for article in last_publications %}
-                                    <li class="display-content"><a href="/articles/{{ article.ark_pid }}">{{ article.name }}</a></li>
+                                    <li class="display-content"><a class="link-one" href="/articles/{{ article.ark_pid }}">{{ article.name }}</a></li>
                             {% endfor %}
-                            <li class="display-content-last-element"><a href="/articles/">Voir tout</a></li>
+                            <li class="display-content-last-element"><a class="link-one" href="/articles/">Voir tout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -60,9 +60,9 @@
                     <div class="align-text-right">
                         <ul>
                             {% for project in project_data %}
-                                <li class="display-content"><a href="/">{{ project }}</a></li>
+                                <li class="display-content"><a class="link-one" href="/">{{ project }}</a></li>
                             {% endfor %}
-                            <li class="display-content-last-element"><a href="/">Voir tout</a></li>
+                            <li class="display-content-last-element"><a class="link-one" href="/">Voir tout</a></li>
                         </ul>
                     </div>
                 </div>
