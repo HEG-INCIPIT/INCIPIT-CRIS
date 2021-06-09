@@ -16,6 +16,8 @@
         {% include 'main/navbar.html' %}
 
         <section>
+            {% block information %}
+            {% endblock %}
             <div class="container"> 
                 <div class="boxes">
                     <div class="leftbox">
@@ -28,23 +30,27 @@
                             <h1>
                                 {{ data_person.given_name }} {{ data_person.family_name }}
                                 {% if can_edit %}
-                                    <a class="button is-primary" href="/personnes/edition/{{ ark }}">Modifier</a>
+                                    <a class="button is-primary" href="/personnes/edition/{{ ark_pid }}">Modifier</a>
                                 {% endif %}
                             </h1>
                             <br>
-                            <p class="subtitle is-6">Email : {{ data_person.email }}</p>
-                            <p class="subtitle is-6">Téléphone : {{ data_person.telephone }}</p>
+                            {% block person_left_information %}
+                                <p class="subtitle is-6">Email : {{ data_person.email }}</p>
+                                <p class="subtitle is-6">Téléphone : {{ data_person.telephone }}</p>
+                            {% endblock %}
                         </div>
                         <div class="rightbox">
                             <h1 style="visibility: hidden">
                                 {{ data_person.given_name }} {{ data_person.family_name }}
                                 {% if can_edit %}
-                                    <a class="button is-primary" href="/personnes/edition/{{ ark }}">Modifier</a>
+                                    <a class="button is-primary" href="/personnes/edition/{{ ark_pid }}">Modifier</a>
                                 {% endif %}
                             </h1>
                             <br>
-                            <p class="subtitle is-6">Domaines : ...</p>
-                            <p class="subtitle is-6">Institution : Haute Ecole de Gestion</p>
+                            {% block person_right_information %}
+                                <p class="subtitle is-6">Domaines : ...</p>
+                                <p class="subtitle is-6">Institution : Haute Ecole de Gestion</p>
+                            {% endblock %}
                         </div>
                     </div>
                 </div>
@@ -84,15 +90,19 @@
 
             <div class="tab-content">
                 <div class="is-active" data-content="apropos">
-                    <p>Description : {{ data_person.description }}</p>
+                    {% block apropos %}
+                        <p>Description : {{ data_person.description }}</p>
+                    {% endblock %}
                 </div>
                 <div data-content="publications">
-                    Articles :
-                    {% for article in data_person.articles %}
-                        <p>
-                            <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
-                        </p>
-                    {% endfor %}
+                    {% block articles %}
+                        Articles :
+                        {% for article in data_person.articles %}
+                            <p>
+                                <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                            </p>
+                        {% endfor %}
+                    {% endblock %}
                 </div>
                 <div data-content="projects">
                     <p>Projets : ...</p>

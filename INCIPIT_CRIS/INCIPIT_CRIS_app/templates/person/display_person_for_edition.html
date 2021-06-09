@@ -1,25 +1,33 @@
 {% extends "person/display_person_profile.html" %}
 
-{% block person_information %}
-    {{ message }}
-    <p>Person</p>
-    <p>Prénom : {{ data_person.given_name }}</p>
-    <p>Nom : {{ data_person.family_name }}</p>
-    <p>Email : {{ data_person.email }}</p>
-    <p>Téléphone : {{ data_person.telephone }} <a href="/personnes/edition/profil/telephone/{{user.ark_pid}}">modifer</a></p>
-    <p>Description : {{ data_person.description }} <a href="/personnes/edition/profil/description/{{user.ark_pid}}">modifer</a></p>
+{% block information %}
+{{ message }}
 {% endblock %}
 
-{% block person_articles %}
+{% block person_left_information %}
+    <p class="subtitle is-6">Email : {{ data_person.email }}</p>
+    <p class="subtitle is-6">Téléphone : {{ data_person.telephone }} <a class="link-one" href="/personnes/edition/profil/telephone/{{ ark_pid }}">Modifer</a></p>
+{% endblock %}
+
+{% block person_right_information %}
+    <p class="subtitle is-6">Domaines : ...</p>
+    <p class="subtitle is-6">Institution : Haute Ecole de Gestion</p>
+{% endblock %}
+
+{% block apropos %}
+<p>Description : {{ data_person.description }} <a class="link-one" href="/personnes/edition/profil/description/{{ ark_pid }}">Modifer</a></p>
+{% endblock %}
+
+{% block articles %}
     Articles :
     {% for article in data_person.articles %}
-        <div>
-            <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+        <p>
+            <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
             <form action="/personnes/edition/profil/deleteArticle/{{ark_pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
                 <input type="submit" value="Supprimer">
             </form>
-        </div>
+        </p>
     {% endfor %}
 {% endblock %}
