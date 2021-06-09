@@ -43,8 +43,9 @@ def index(request):
     project_data = ['Projet exemple {}'.format(i+1) for i in range(5)]
 
     context = {
-        'persons': len(users),
-        'articles': len(articles),
+        'len_persons': len(users),
+        'len_articles': len(articles),
+        'len_projects': len(project_data),
         'last_users_registered': last_users_registered,
         'last_publications': articles_data[:5],
         'project_data': project_data[:5],
@@ -94,7 +95,7 @@ def person_display(request, ark_pid):
         context = {
             'data_person': data_person,
             'can_edit': can_edit,
-            'ark': ark_pid,
+            'ark_pid': ark_pid,
         }
         return render(request, 'person/display_person_profile.html', context)
 
@@ -254,6 +255,7 @@ def article_creation(request):
             form = ArticleCreationForm(request.POST)
             if form.is_valid():
                 authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
+                print(authors)
                 ark_pid = form.cleaned_data['ark_pid']
                 if ark_pid == '':
                     ark_pid = Ark().ark_creation()
@@ -261,7 +263,7 @@ def article_creation(request):
                                                           form.cleaned_data['abstract'],
                                                           form.cleaned_data['date_published'])
                 for author in authors:
-                    sparql_post_article_object.add_author_to_article(ark_pid, author.split()[2])
+                    sparql_post_article_object.add_author_to_article(ark_pid, author.split()[-1])
                 return redirect(index)
         else:
             form = ArticleCreationForm()
