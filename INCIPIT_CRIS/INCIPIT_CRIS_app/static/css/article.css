@@ -1,0 +1,13 @@
+section{
+    margin-top: 20px;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.button {
+    float: right; 
+}
+
+.subtitle {
+    padding-top: 20px;
+}

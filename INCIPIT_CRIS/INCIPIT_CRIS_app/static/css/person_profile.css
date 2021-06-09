@@ -7,15 +7,15 @@ h1 {
 }
 
 .leftbox {
-    float:left; 
-    width:33%;
-    height:30%;
+    float: left; 
+    width: 33%;
+    height: 30%;
 }
 
 .middlebox {
-    float:left; 
-    width:33%;
-    height:30%;
+    float: left; 
+    width: 33%;
+    height: 30%;
     padding-left: 20px;
 }
 

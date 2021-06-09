@@ -33,6 +33,11 @@
                     {{ form.ark_pid }}
                 </div>
                 <div class="fieldWrapper">
+                    {{ form.url.errors }}
+                    <label for="{{ form.url.id_for_label }}">URL : </label>
+                    {{ form.url }}
+                </div>
+                <div class="fieldWrapper">
                     {{ form.date_published.errors }}
                     <label for="{{ form.date_published.id_for_label }}">Date de publication : </label>
                     {{ form.date_published }}
