@@ -94,11 +94,12 @@ class SparqlGetArticlesMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?name ?abstract ?datePublished WHERE
+            SELECT ?name ?abstract ?datePublished ?url WHERE
             {{
                 <{ark_research}> schema:name ?name .
                 <{ark_research}> schema:abstract ?abstract .
                 <{ark_research}> schema:datePublished ?datePublished .
+                <{ark_research}> schema:url ?url .
             }}
         """.format(prefix=self.prefix, ark_research=ark_pid)
 

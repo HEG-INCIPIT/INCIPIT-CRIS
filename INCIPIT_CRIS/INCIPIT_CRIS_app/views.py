@@ -110,7 +110,6 @@ def person_edition_display(request, ark_pid):
         if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser):
             data_person = sparql_get_person_object.get_data_person(ark_pid)
             context = {
-                'message': "Vous pouvez éditer votre profil",
                 'data_person': data_person,
                 'ark_pid': ark_pid
             }
@@ -261,7 +260,7 @@ def article_creation(request):
                     ark_pid = Ark().ark_creation()
                 sparql_post_article_object.create_article(ark_pid, form.cleaned_data['name'],
                                                           form.cleaned_data['abstract'],
-                                                          form.cleaned_data['date_published'])
+                                                          form.cleaned_data['date_published'], form.cleaned_data['url'])
                 for author in authors:
                     sparql_post_article_object.add_author_to_article(ark_pid, author.split()[-1])
                 return redirect(index)
@@ -299,7 +298,6 @@ def article_edition(request, ark_pid):
             edition_granted = True
             data_article = sparql_get_article_object.get_data_article(ark_pid)
             context = {
-                'message': "Vous pouvez éditer cet article",
                 'edition_granted': edition_granted,
                 'data_article': data_article
             }
