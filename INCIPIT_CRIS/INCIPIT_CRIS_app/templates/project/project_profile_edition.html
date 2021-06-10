@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    </head>
+    <body>
+
+        {% include 'main/navbar.html' %}
+
+        {% block project_information %}
+            <p>
+                Projet
+                <form action="/projects/edition/field/deleteProject/{{data_project.ark_pid}}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="projectARK" name="projectARK" value="{{ data_project.ark_pid }}">
+                    <input type="submit" value="Supprimer">
+                </form>
+            </p>
+            <p>Nom : {{ data_project.name }} <a href="/projects/edition/field/name/{{data_project.ark_pid}}"> Modifer</a></p>
+            <p>Abstract : {{ data_project.abstract }} <a href="/projects/edition/field/abstract/{{data_project.ark_pid}}"> Modifer</a></p>
+            <p>Date de publication : {{ data_project.datePublished }} <a href="/projects/edition/field/datePublished/{{data_project.ark_pid}}"> Modifer</a></p>
+            <p>Date de publication : {{ data_project.datePublished }} <a href="/projects/edition/field/datePublished/{{data_project.ark_pid}}"> Modifer</a></p>
+            <p>Auteur(s) : <a href="/projects/edition/field/addAuthor/{{data_project.ark_pid}}"> Ajouter</a></p>
+            {% for member in data_project.members %}
+                <div>
+                    <a href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
+                    <form action="/projects/edition/field/deleteAuthor/{{data_project.ark_pid}}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" id="memberARK" name="memberARK" value="{{ member.0 }}">
+                        <input type="submit" value="Supprimer">
+                    </form>
+                </div>
+            {% endfor %}
+        {% endblock %}
+        {% include 'main/footer.html' %}
+    </body>
+</html>

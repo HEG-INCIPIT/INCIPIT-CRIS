@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/project.css' %}">
+    </head>
+    <body>
+
+        {% include 'main/navbar.html' %}
+
+        {% block project_information %}
+            <section>
+                <p>
+                    {% if user.is_authenticated and edition_granted or user.is_superuser %}
+                        <a class="button is-primary" href="/projects/edition/{{ data_project.ark_pid }}">Modifier</a>
+                    {% endif %}
+                </p>
+                <p class="title is-4" align="justify">
+                    {{ data_project.name }} 
+                </p>
+                <p class="subtitle is-6" align="justify">{{ data_project.description }}</p>
+                <time datetime="{{ data_project.founding_date }}">Date de publication : {{ data_project.founding_date }}</time>
+                <p>URL : {{ data_project.url }}</p>
+                <p>Membre(s) : </p>
+                <p>
+                    {% for member in data_project.members %}
+                        <a href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a> 
+                    {% endfor %}
+                </p>
+            </section>
+        {% endblock %}
+        {% include 'main/footer.html' %}
+    </body>
+</html>
