@@ -15,7 +15,7 @@
 
         <form action="{{ url_to_return }}" method="post">
             {% csrf_token %}
-            {{ form|linebreaks }}
+            {{ form }}
             <input type="submit" value="{{ button_value }}">
         </form>
         {% include 'main/footer.html' %}

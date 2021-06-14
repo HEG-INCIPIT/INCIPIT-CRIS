@@ -1,19 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import *
 import string
-from sparql_triplestore.sparql_requests.sparql_generic_post_methods import SparqlGenericPostMethods
-from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import SparqlGetPersonMethods
-from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods import SparqlGetArticlesMethods
-from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import SparqlPostArticlesMethods
-from sparql_triplestore.sparql_requests.projects.sparql_get_projects_methods import SparqlGetProjectsMethods
-from sparql_triplestore.sparql_requests.projects.sparql_post_projects_methods import SparqlPostProjectsMethods
+from . import variables
 
-sparql_generic_post_object = SparqlGenericPostMethods()
-sparql_get_person_object = SparqlGetPersonMethods()
-sparql_get_article_object = SparqlGetArticlesMethods()
-sparql_post_article_object = SparqlPostArticlesMethods()
-sparql_get_project_object = SparqlGetProjectsMethods()
-sparql_post_project_object = SparqlPostProjectsMethods()
 
 def person_results(request):
     """
@@ -24,7 +13,7 @@ def person_results(request):
     alphabet_list = list(string.ascii_lowercase)
     categories = ["Personnes", "Professeurs ordinaire", "Assistants HES"]
     category = categories[0]
-    sparql_request = sparql_get_person_object.get_persons()
+    sparql_request = variables.sparql_get_person_object.get_persons()
     context = {
         'sparql_request': sparql_request,
         'size_sparql_request': len(sparql_request),
@@ -45,10 +34,10 @@ def person_profile(request, ark_pid):
     """
     context = {}
     # Verify in triplestore if the ark_pid correspond to a person
-    sparql_request_check_person_ark = sparql_get_person_object.check_person_ark(ark_pid)
+    sparql_request_check_person_ark = variables.sparql_get_person_object.check_person_ark(ark_pid)
     can_edit = True if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser) else False
     if sparql_request_check_person_ark:
-        data_person = sparql_get_person_object.get_data_person(ark_pid)
+        data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
         context = {
             'data_person': data_person,
             'can_edit': can_edit,
@@ -62,10 +51,10 @@ def person_profile(request, ark_pid):
 def person_edition(request, ark_pid):
     context = {}
     # Verify in triplestore if the ark_pid correspond to a person
-    sparql_request_check_person_ark = sparql_get_person_object.check_person_ark(ark_pid)
+    sparql_request_check_person_ark = variables.sparql_get_person_object.check_person_ark(ark_pid)
     if sparql_request_check_person_ark:
         if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser):
-            data_person = sparql_get_person_object.get_data_person(ark_pid)
+            data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
             context = {
                 'data_person': data_person,
                 'ark_pid': ark_pid
@@ -104,19 +93,19 @@ def person_form_selection(request, part_of_person_to_modify, data_person):
 def person_field_edition(request, part_of_person_to_modify, ark_pid):
     context = {}
     # Verify in triplestore if the ark_pid correspond to a person
-    sparql_request_check_person_ark = sparql_get_person_object.check_person_ark(ark_pid)
+    sparql_request_check_person_ark = variables.sparql_get_person_object.check_person_ark(ark_pid)
 
     if sparql_request_check_person_ark:
         # Verify that the user is authenticated and has the right to modify the profile
         if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser):
 
-            data_person = sparql_get_person_object.get_data_person(ark_pid)
+            data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
 
             form = person_form_selection(request, part_of_person_to_modify, data_person)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
-                    sparql_generic_post_object.update_string_leaf(ark_pid, part_of_person_to_modify,
+                    variables.sparql_generic_post_object.update_string_leaf(ark_pid, part_of_person_to_modify,
                                                                   form.cleaned_data[part_of_person_to_modify],
                                                                   data_person[part_of_person_to_modify])
                     return redirect(person_edition, ark_pid=ark_pid)
@@ -151,7 +140,7 @@ def person_article_deletion(request, ark_pid):
         # Verify that the edition of profile is made by the legitimate user or admin
         if request.user.ark_pid == ark_pid or request.user.is_superuser:
             article = request.POST.get('articleARK', '')
-            sparql_post_article_object.delete_author_of_article(article, ark_pid)
+            variables.sparql_post_article_object.delete_author_of_article(article, ark_pid)
 
             return redirect(person_edition, ark_pid=ark_pid)
 

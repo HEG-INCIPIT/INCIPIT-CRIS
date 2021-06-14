@@ -1,13 +1,7 @@
 from django.shortcuts import render
 from .forms import *
 from django.contrib.auth import get_user_model
-from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import SparqlGetPersonMethods
-from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods import SparqlGetArticlesMethods
-from sparql_triplestore.sparql_requests.projects.sparql_get_projects_methods import SparqlGetProjectsMethods
-
-sparql_get_person_object = SparqlGetPersonMethods()
-sparql_get_article_object = SparqlGetArticlesMethods()
-sparql_get_project_object = SparqlGetProjectsMethods()
+from . import variables
 
 
 def index(request):
@@ -16,11 +10,11 @@ def index(request):
     :param request: object
     :return: render function with template and data
     """
-    articles = sparql_get_article_object.get_articles()
+    articles = variables.sparql_get_article_object.get_articles()
 
     articles_data = []
     for article in articles:
-        articles_data.append(sparql_get_article_object.get_data_article(article[0]))
+        articles_data.append(variables.sparql_get_article_object.get_data_article(article[0]))
     articles_data.sort(key=lambda item: item['datePublished'], reverse=True)
 
     user_model = get_user_model()
@@ -32,11 +26,11 @@ def index(request):
                                       users.values('first_name')[len(users) - i]['first_name'],
                                       users.values('last_name')[len(users) - i]['last_name']])
 
-    projects = sparql_get_project_object.get_projects()
+    projects = variables.sparql_get_project_object.get_projects()
 
     projects_data = []
     for project in projects:
-        projects_data.append(sparql_get_project_object.get_data_project(project[0]))
+        projects_data.append(variables.sparql_get_project_object.get_data_project(project[0]))
     projects_data.sort(key=lambda item: item['founding_date'], reverse=True)
 
     context = {

@@ -3,24 +3,14 @@ from .forms import *
 import re
 import string
 from . import views
-from arketype_API.ark import Ark
-from sparql_triplestore.sparql_requests.sparql_generic_post_methods import SparqlGenericPostMethods
-from sparql_triplestore.sparql_requests.person.sparql_get_Person_methods import SparqlGetPersonMethods
-from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods import SparqlGetArticlesMethods
-from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import SparqlPostArticlesMethods
-
-
-sparql_generic_post_object = SparqlGenericPostMethods()
-sparql_get_person_object = SparqlGetPersonMethods()
-sparql_get_article_object = SparqlGetArticlesMethods()
-sparql_post_article_object = SparqlPostArticlesMethods()
+from . import variables
 
 
 def article_results(request):
     alphabet_list = list(string.ascii_lowercase)
     categories = ["Articles"]
     category = categories[0]
-    sparql_request = sparql_get_article_object.get_articles()
+    sparql_request = variables.sparql_get_article_object.get_articles()
     context = {
         'sparql_request': sparql_request,
         'size_sparql_request': len(sparql_request),
@@ -34,9 +24,9 @@ def article_results(request):
 
 def article_profile(request, ark_pid):
     # Verify in triplestore if the ark_pid correspond to an article
-    sparql_request_check_article_ark = sparql_get_article_object.check_article_ark(ark_pid)
+    sparql_request_check_article_ark = variables.sparql_get_article_object.check_article_ark(ark_pid)
     if sparql_request_check_article_ark:
-        data_article = sparql_get_article_object.get_data_article(ark_pid)
+        data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
         edition_granted = False
         if request.user.is_authenticated and request.user.ark_pid in [authors[0] for authors in data_article['authors']]:
             edition_granted = True
@@ -58,19 +48,18 @@ def article_creation(request):
             form = ArticleCreationForm(request.POST)
             if form.is_valid():
                 authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
-                print(authors)
                 ark_pid = form.cleaned_data['ark_pid']
                 if ark_pid == '':
-                    ark_pid = Ark().ark_creation()
-                sparql_post_article_object.create_article(ark_pid, form.cleaned_data['name'],
+                    ark_pid = variables.Ark().ark_creation()
+                variables.sparql_post_article_object.create_article(ark_pid, form.cleaned_data['name'],
                                                           form.cleaned_data['abstract'],
                                                           form.cleaned_data['date_published'], form.cleaned_data['url'])
                 for author in authors:
-                    sparql_post_article_object.add_author_to_article(ark_pid, author.split()[-1])
+                    variables.sparql_post_article_object.add_author_to_article(ark_pid, author.split()[-1])
                 return redirect(views.index)
         else:
             form = ArticleCreationForm()
-        persons_info = sparql_get_person_object.get_persons()
+        persons_info = variables.sparql_get_person_object.get_persons()
         persons = []
         for basic_info_person in persons_info:
             persons.append('''{} {}, {}'''.format(basic_info_person[1], basic_info_person[2], basic_info_person[0]))
@@ -96,11 +85,11 @@ def article_edition(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
             edition_granted = True
-            data_article = sparql_get_article_object.get_data_article(ark_pid)
+            data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
             context = {
                 'edition_granted': edition_granted,
                 'data_article': data_article
@@ -144,23 +133,23 @@ def article_field_edition(request, part_of_article_to_edit, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
 
-            data_article = sparql_get_article_object.get_data_article(ark_pid)
+            data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
 
             form = article_form_selection(request, part_of_article_to_edit, data_article)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
                     if part_of_article_to_edit == 'datePublished':
-                        sparql_generic_post_object.update_date_leaf(ark_pid, part_of_article_to_edit,
+                        variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_article_to_edit,
                                                                     form.cleaned_data[part_of_article_to_edit],
                                                                     str(data_article[part_of_article_to_edit]) +
                                                                     " 00:00:00+00:00")
                     else:
-                        sparql_generic_post_object.update_string_leaf(ark_pid, part_of_article_to_edit,
+                        variables.sparql_generic_post_object.update_string_leaf(ark_pid, part_of_article_to_edit,
                                                                       form.cleaned_data[part_of_article_to_edit],
                                                                       data_article[part_of_article_to_edit])
                     return redirect(article_edition, ark_pid=ark_pid)
@@ -188,20 +177,20 @@ def article_author_addition(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
 
-            data_article = sparql_get_article_object.get_data_article(ark_pid)
+            data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
             # Check the request method
             if request.method == 'POST':
                 authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
                 for author in authors:
-                    sparql_post_article_object.add_author_to_article(ark_pid, author.split()[2])
+                    variables.sparql_post_article_object.add_author_to_article(ark_pid, author.split()[2])
 
                 return redirect(article_edition, ark_pid=ark_pid)
 
-            persons_info = sparql_get_person_object.get_persons()
+            persons_info = variables.sparql_get_person_object.get_persons()
             persons = []
             for basic_info_person in persons_info:
                 if not (basic_info_person[0] in [author[0] for author in authors_article]):
@@ -230,11 +219,11 @@ def article_author_deletion(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
             author = request.POST.get('authorARK', '')
-            sparql_post_article_object.delete_author_of_article(ark_pid, author)
+            variables.sparql_post_article_object.delete_author_of_article(ark_pid, author)
 
             return redirect(article_edition, ark_pid=ark_pid)
 
@@ -252,10 +241,10 @@ def article_deletion(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
-            sparql_post_article_object.delete_article(ark_pid)
+            variables.sparql_post_article_object.delete_article(ark_pid)
 
             return redirect(views.index)
 
