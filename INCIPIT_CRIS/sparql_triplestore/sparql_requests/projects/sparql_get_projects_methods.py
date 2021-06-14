@@ -102,7 +102,6 @@ class SparqlGetProjectsMethods:
                 <{ark_research}> schema:url ?url .
             }}
         """.format(prefix=self.prefix, ark_research=ark_pid)
-        print(sparql_request)
 
         self.sparql.setQuery(sparql_request)
 
@@ -127,8 +126,6 @@ class SparqlGetProjectsMethods:
                 FILTER(?researchProject = schema:ResearchProject)
             }}
         """.format(prefix=self.prefix, ark_research=ark_pid)
-
-        print(sparql_request)
 
         self.sparql.setQuery(sparql_request)
         return parse_check_project_ark(self.sparql.query().response.read())
