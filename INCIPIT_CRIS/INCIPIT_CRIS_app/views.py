@@ -85,7 +85,7 @@ def persons_research(request):
         'category':category,
     }
 
-    return render(request, 'person/display_person_results.html', context)
+    return render(request, 'person/person_results.html', context)
 
 
 def person_display(request, ark_pid):
@@ -106,7 +106,7 @@ def person_display(request, ark_pid):
             'can_edit': can_edit,
             'ark_pid': ark_pid,
         }
-        return render(request, 'person/display_person_profile.html', context)
+        return render(request, 'person/person_profile.html', context)
 
     return render(request, 'page_404.html')
 
@@ -122,7 +122,7 @@ def person_edition_display(request, ark_pid):
                 'data_person': data_person,
                 'ark_pid': ark_pid
             }
-            return render(request, 'person/display_person_for_edition.html', context)
+            return render(request, 'person/person_profile_edition.html', context)
         else:
             if request.user.is_authenticated:
                 context = {
@@ -179,7 +179,7 @@ def person_profile_edition_display(request, part_of_profile_to_modify, ark_pid):
                 'url_to_return': '/personnes/edition/profil/{}/{}'.format(part_of_profile_to_modify, ark_pid)
             }
             # return the form to be completed
-            return render(request, 'forms/person/person_profil_edition.html', context)
+            return render(request, 'forms/person/person_profile_edition.html', context)
 
         else:
             # Check why the person cannot modify the profile and display the error
@@ -234,7 +234,7 @@ def article_research(request):
         'category':category,
     }
 
-    return render(request, 'article/display_articles_results.html', context)
+    return render(request, 'article/article_results.html', context)
 
 
 def article_display(request, ark_pid):
@@ -249,7 +249,7 @@ def article_display(request, ark_pid):
             'edition_granted': edition_granted,
             'data_article': data_article
         }
-        return render(request, 'article/display_article_profile.html', context)
+        return render(request, 'article/article_profile.html', context)
 
     return render(request, 'page_404.html')
 
@@ -376,7 +376,7 @@ def article_field_edition(request, part_of_article_to_edit, ark_pid):
                 'url_to_return': '/articles/edition/field/{}/{}'.format(part_of_article_to_edit, ark_pid)
             }
             # return the form to be completed
-            return render(request, 'forms/classic_form_display.html', context)
+            return render(request, 'forms/classic_form.html', context)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",
@@ -490,7 +490,7 @@ def projetcts_research(request):
         'category':category,
     }
 
-    return render(request, 'project/display_projects_results.html', context)
+    return render(request, 'project/project_results.html', context)
 
 
 def project_creation(request):
@@ -548,7 +548,7 @@ def project_display(request, ark_pid):
             'edition_granted': edition_granted,
             'data_project': data_project
         }
-        return render(request, 'project/display_project_profile.html', context)
+        return render(request, 'project/project_profile.html', context)
 
     return render(request, 'page_404.html')
 

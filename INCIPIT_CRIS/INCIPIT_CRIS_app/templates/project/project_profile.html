@@ -25,7 +25,8 @@
                     {{ data_project.name }} 
                 </p>
                 <p class="subtitle is-6" align="justify">{{ data_project.description }}</p>
-                <time datetime="{{ data_project.founding_date }}">Date de publication : {{ data_project.founding_date }}</time>
+                <p><time datetime="{{ data_project.founding_date }}">Date de début : {{ data_project.founding_date }}</time></p>
+                <p><time datetime="{{ data_project.dissolution_date }}">Date de fin : {{ data_project.dissolution_date }}</time></p>
                 <p>URL : {{ data_project.url }}</p>
                 <p>Membre(s) : </p>
                 <p>

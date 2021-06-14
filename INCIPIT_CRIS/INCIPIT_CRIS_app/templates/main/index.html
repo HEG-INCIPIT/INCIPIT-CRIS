@@ -60,7 +60,7 @@
                     <div class="align-text-right">
                         <ul>
                             {% for project in project_data %}
-                                <li class="display-content"><a class="link-one" href="/">{{ project }}</a></li>
+                                <li class="display-content"><a class="link-one" href="/projects/{{ project.ark_pid }}">{{ project.name }}</a></li>
                             {% endfor %}
                             <li class="display-content-last-element"><a class="link-one" href="/projects/">Voir tout</a></li>
                         </ul>
