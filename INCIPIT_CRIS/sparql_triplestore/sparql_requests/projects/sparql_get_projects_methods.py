@@ -98,10 +98,11 @@ class SparqlGetProjectsMethods:
                 <{ark_research}> schema:name ?name .
                 <{ark_research}> schema:description ?description .
                 <{ark_research}> schema:foundingDate ?foundingDate .
-                <{ark_research}> schema:dissolutionDate ?dissolutionDate ;
+                <{ark_research}> schema:dissolutionDate ?dissolutionDate .
                 <{ark_research}> schema:url ?url .
             }}
         """.format(prefix=self.prefix, ark_research=ark_pid)
+        print(sparql_request)
 
         self.sparql.setQuery(sparql_request)
 

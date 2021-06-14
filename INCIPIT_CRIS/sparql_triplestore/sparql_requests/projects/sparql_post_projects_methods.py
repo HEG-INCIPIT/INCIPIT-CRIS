@@ -52,7 +52,7 @@ class SparqlPostProjectsMethods:
                     schema:name \"\"\"{name}\"\"\" ;
                     schema:description \"\"\"{description}\"\"\" ;
                     schema:foundingDate "{founding_date}"^^xsd:date ;
-                    schema:dissolutionDate "dissolution_date"^^xsd:date ;
+                    schema:dissolutionDate "{dissolution_date}"^^xsd:date ;
                     schema:url \"\"\"{url}\"\"\" ;
                     schema:identifier <{ark_pid}ARK> .
             }}
