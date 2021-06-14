@@ -77,7 +77,7 @@ class ArticleAbstractForm(forms.Form):
 
 
 class ArticleDatePublishedForm(forms.Form):
-    datePublished = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=False)
+    date_published = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=False)
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
