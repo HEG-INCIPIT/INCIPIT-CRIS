@@ -18,7 +18,7 @@ sparql_get_project_object = SparqlGetProjectsMethods()
 sparql_post_project_object = SparqlPostProjectsMethods()
 
 
-def projetcts_research(request):
+def project_results(request):
     alphabet_list = list(string.ascii_lowercase)
     categories = ["Projets de recherche"]
     category = categories[0]
@@ -76,7 +76,7 @@ def project_creation(request):
         return render(request, 'page_info.html', context)
 
 
-def project_display(request, ark_pid):
+def project_profile(request, ark_pid):
     # Verify in triplestore if the ark_pid correspond to a project
     sparql_request_check_project_ark = sparql_get_project_object.check_project_ark(ark_pid)
     print(ark_pid)
@@ -121,9 +121,6 @@ def project_edition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-
-
-
 def project_deletion(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -143,4 +140,3 @@ def project_deletion(request, ark_pid):
         'message': "Connectez-vous pour pouvoir éditer cet projet"
     }
     return render(request, 'page_info.html', context)
-    

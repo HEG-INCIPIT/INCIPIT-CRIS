@@ -16,7 +16,7 @@ sparql_get_article_object = SparqlGetArticlesMethods()
 sparql_post_article_object = SparqlPostArticlesMethods()
 
 
-def article_research(request):
+def article_results(request):
     alphabet_list = list(string.ascii_lowercase)
     categories = ["Articles"]
     category = categories[0]
@@ -32,7 +32,7 @@ def article_research(request):
     return render(request, 'article/article_results.html', context)
 
 
-def article_display(request, ark_pid):
+def article_profile(request, ark_pid):
     # Verify in triplestore if the ark_pid correspond to an article
     sparql_request_check_article_ark = sparql_get_article_object.check_article_ark(ark_pid)
     if sparql_request_check_article_ark:
@@ -119,7 +119,7 @@ def article_edition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def article_chose_form_to_display(request, part_of_article_to_edit, data_article):
+def article_form_selection(request, part_of_article_to_edit, data_article):
     # Check the request method
     if request.method == 'POST':
         if part_of_article_to_edit == 'name':
@@ -150,7 +150,7 @@ def article_field_edition(request, part_of_article_to_edit, ark_pid):
 
             data_article = sparql_get_article_object.get_data_article(ark_pid)
 
-            form = article_chose_form_to_display(request, part_of_article_to_edit, data_article)
+            form = article_form_selection(request, part_of_article_to_edit, data_article)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():

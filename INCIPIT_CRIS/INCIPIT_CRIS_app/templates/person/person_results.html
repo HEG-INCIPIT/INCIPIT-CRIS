@@ -33,7 +33,7 @@
                     {% else %}
                         <ul>
                             {% for result in sparql_request %}
-                                <li><a class="link-one" href="{% url "person_display" result.0 %}">{{ result.2 }} {{ result.1 }}</a></li>
+                                <li><a class="link-one" href="{% url "person_profile" result.0 %}">{{ result.2 }} {{ result.1 }}</a></li>
                                 <hr />
                             {% endfor %}
                         </ul>

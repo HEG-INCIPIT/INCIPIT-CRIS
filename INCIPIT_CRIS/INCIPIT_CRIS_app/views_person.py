@@ -15,7 +15,7 @@ sparql_post_article_object = SparqlPostArticlesMethods()
 sparql_get_project_object = SparqlGetProjectsMethods()
 sparql_post_project_object = SparqlPostProjectsMethods()
 
-def persons_research(request):
+def person_results(request):
     """
     Compute a research of all persons in triplestore for the template
     :param request:
@@ -36,7 +36,7 @@ def persons_research(request):
     return render(request, 'person/person_results.html', context)
 
 
-def person_display(request, ark_pid):
+def person_profile(request, ark_pid):
     """
     Display a page with all the data of the person given by the ark_pid
     :param request: object
@@ -59,7 +59,7 @@ def person_display(request, ark_pid):
     return render(request, 'page_404.html')
 
 
-def person_edition_display(request, ark_pid):
+def person_edition(request, ark_pid):
     context = {}
     # Verify in triplestore if the ark_pid correspond to a person
     sparql_request_check_person_ark = sparql_get_person_object.check_person_ark(ark_pid)
@@ -85,23 +85,23 @@ def person_edition_display(request, ark_pid):
     return render(request, 'page_404.html')
 
 
-def person_chose_form_to_display(request, part_of_profile_to_modify, data_person):
+def person_form_selection(request, part_of_person_to_modify, data_person):
     # Check the request method
     if request.method == 'POST':
-        if part_of_profile_to_modify == 'description':
+        if part_of_person_to_modify == 'description':
             return DescriptionForm(request.POST)
-        if part_of_profile_to_modify == 'telephone':
+        if part_of_person_to_modify == 'telephone':
             return TelephoneForm(request.POST)
 
     # if not a POST it'll create a blank form
     else:
-        if part_of_profile_to_modify == 'description':
-            return DescriptionForm(old_description=data_person[part_of_profile_to_modify])
-        if part_of_profile_to_modify == 'telephone':
-            return TelephoneForm(old_telephone=data_person[part_of_profile_to_modify])
+        if part_of_person_to_modify == 'description':
+            return DescriptionForm(old_description=data_person[part_of_person_to_modify])
+        if part_of_person_to_modify == 'telephone':
+            return TelephoneForm(old_telephone=data_person[part_of_person_to_modify])
 
 
-def person_profile_edition_display(request, part_of_profile_to_modify, ark_pid):
+def person_field_edition(request, part_of_person_to_modify, ark_pid):
     context = {}
     # Verify in triplestore if the ark_pid correspond to a person
     sparql_request_check_person_ark = sparql_get_person_object.check_person_ark(ark_pid)
@@ -112,19 +112,19 @@ def person_profile_edition_display(request, part_of_profile_to_modify, ark_pid):
 
             data_person = sparql_get_person_object.get_data_person(ark_pid)
 
-            form = person_chose_form_to_display(request, part_of_profile_to_modify, data_person)
+            form = person_form_selection(request, part_of_person_to_modify, data_person)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
-                    sparql_generic_post_object.update_string_leaf(ark_pid, part_of_profile_to_modify,
-                                                                  form.cleaned_data[part_of_profile_to_modify],
-                                                                  data_person[part_of_profile_to_modify])
-                    return redirect(person_edition_display, ark_pid=ark_pid)
+                    sparql_generic_post_object.update_string_leaf(ark_pid, part_of_person_to_modify,
+                                                                  form.cleaned_data[part_of_person_to_modify],
+                                                                  data_person[part_of_person_to_modify])
+                    return redirect(person_edition, ark_pid=ark_pid)
 
             context = {
                 'form': form,
                 'button_value': 'Modifier',
-                'url_to_return': '/personnes/edition/profil/{}/{}'.format(part_of_profile_to_modify, ark_pid)
+                'url_to_return': '/personnes/edition/profil/{}/{}'.format(part_of_person_to_modify, ark_pid)
             }
             # return the form to be completed
             return render(request, 'forms/person/person_profile_edition.html', context)
@@ -153,7 +153,7 @@ def person_article_deletion(request, ark_pid):
             article = request.POST.get('articleARK', '')
             sparql_post_article_object.delete_author_of_article(article, ark_pid)
 
-            return redirect(person_edition_display, ark_pid=ark_pid)
+            return redirect(person_edition, ark_pid=ark_pid)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",
@@ -163,4 +163,3 @@ def person_article_deletion(request, ark_pid):
         'message': "Connectez-vous pour pouvoir éditer cet article"
     }
     return render(request, 'page_info.html', context)
-    
