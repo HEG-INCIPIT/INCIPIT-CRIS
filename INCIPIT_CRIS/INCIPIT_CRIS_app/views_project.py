@@ -116,7 +116,8 @@ def project_deletion(request, ark_pid):
         members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
         # Verify if the user ark is in the projects members to grant edition
         if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
-            variables.sparql_post_project_object.delete_project(ark_pid)
+            variables.sparql_generic_post_object.delete_subject(ark_pid)
+            variables.sparql_generic_post_object.delete_subject(ark_pid+"ARK")
 
             return redirect(views.index)
 
