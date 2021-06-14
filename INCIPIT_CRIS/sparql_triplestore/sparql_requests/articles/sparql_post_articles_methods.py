@@ -87,17 +87,3 @@ class SparqlPostArticlesMethods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
-
-    def delete_article(self, ark_pid):
-        sparql_request = """
-            {prefix}
-
-            DELETE WHERE {{
-                <{ark_pid}> ?predicate ?object .
-
-            }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        return self.sparql.query().response.read()

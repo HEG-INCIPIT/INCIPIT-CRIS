@@ -66,7 +66,7 @@ class SparqlPostPersonMethods:
                 <{ark_pid}> schema:{predicate} \"\"\"{old_string}\"\"\"
             }}
 
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, predicat=predicate, old_string=old_string, new_string=new_string)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, predicate=predicate, old_string=old_string, new_string=new_string)
 
         self.sparql.setQuery(sparql_request)
 

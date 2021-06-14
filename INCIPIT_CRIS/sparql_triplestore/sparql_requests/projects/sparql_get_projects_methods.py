@@ -59,7 +59,7 @@ class SparqlGetProjectsMethods:
         Get all the members of a project
         And return an array with tuples (identifier, dictionnary)
         """
-        from ..person.sparql_get_Person_methods import SparqlGetPersonMethods
+        from ..person.sparql_get_person_methods import SparqlGetPersonMethods
 
         sparql_request = """
             {prefix}
