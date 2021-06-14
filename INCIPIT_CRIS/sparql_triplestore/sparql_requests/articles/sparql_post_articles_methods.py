@@ -1,4 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, POST, DIGEST
+from .. import variables
 
 
 class SparqlPostArticlesMethods:
@@ -23,19 +24,12 @@ class SparqlPostArticlesMethods:
 
     """
 
-    url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
-    prefix = """
-        PREFIX schema: <https://schema.org/>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    """
-    admin = 'admin'
-    password = 'pw'
 
     def __init__(self):
-        self.sparql = SPARQLWrapper(self.url_endpoint)
+        self.sparql = SPARQLWrapper(variables.url_endpoint)
 
         self.sparql.setHTTPAuth(DIGEST)
-        self.sparql.setCredentials(self.admin, self.password)
+        self.sparql.setCredentials(variables.admin, variables.password)
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
@@ -56,7 +50,7 @@ class SparqlPostArticlesMethods:
                     schema:identifier <{ark_pid}ARK> .
 
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, abstract=abstract, date_published=date_published, url=url)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, name=name, abstract=abstract, date_published=date_published, url=url)
 
         self.sparql.setQuery(sparql_request)
 
@@ -70,7 +64,7 @@ class SparqlPostArticlesMethods:
                 <{ark_pid}> schema:author <{author}> .
 
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, author=author)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, author=author)
 
         self.sparql.setQuery(sparql_request)
 
@@ -88,7 +82,7 @@ class SparqlPostArticlesMethods:
             {{
                 <{ark_pid}> schema:author <{author}> .
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, author=author)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, author=author)
 
         self.sparql.setQuery(sparql_request)
 
@@ -102,7 +96,7 @@ class SparqlPostArticlesMethods:
                 <{ark_pid}> ?predicate ?object .
 
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 

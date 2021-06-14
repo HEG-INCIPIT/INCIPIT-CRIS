@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_person import *
+from .. import variables
 
 
 class SparqlGetPersonMethods:
@@ -23,18 +24,12 @@ class SparqlGetPersonMethods:
     -------
 
     """
-    url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
-    prefix = """
-        PREFIX schema: <https://schema.org/>
-    """
-    admin = 'admin'
-    password = 'pw'
 
     def __init__(self):
-        self.sparql = SPARQLWrapper(self.url_endpoint)
+        self.sparql = SPARQLWrapper(variables.url_endpoint)
 
         self.sparql.setHTTPAuth(DIGEST)
-        self.sparql.setCredentials(self.admin, self.password)
+        self.sparql.setCredentials(variables.admin, variables.password)
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(GET)
 
@@ -53,7 +48,7 @@ class SparqlGetPersonMethods:
                 ?person schema:givenName ?given_name .
                 ?person schema:familyName ?family_name .
             }}
-        """.format(prefix=self.prefix)
+        """.format(prefix=variables.prefix)
 
         self.sparql.setQuery(sparql_request)
 
@@ -72,7 +67,7 @@ class SparqlGetPersonMethods:
                 <{ark_research}> schema:givenName ?given_name .
                 <{ark_research}> schema:familyName ?family_name .
             }}
-        """.format(prefix=self.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -92,7 +87,7 @@ class SparqlGetPersonMethods:
             {{
                 ?article schema:author <{ark_research}> .
             }}
-        """.format(prefix=self.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -121,7 +116,7 @@ class SparqlGetPersonMethods:
                 OPTIONAL {{ <{ark_research}> schema:telephone ?telephone }}
                 OPTIONAL {{ <{ark_research}> schema:description ?description }}
             }}
-        """.format(prefix=self.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -144,7 +139,7 @@ class SparqlGetPersonMethods:
                 <{ark_research}> a ?person .
                 FILTER(?person = schema:Person)
             }}
-        """.format(prefix=self.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
         return parse_check_person_ark(self.sparql.query().response.read())

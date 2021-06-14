@@ -1,4 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, POST, DIGEST
+from .. import variables
 
 
 class SparqlPostProjectsMethods:
@@ -23,19 +24,11 @@ class SparqlPostProjectsMethods:
 
     """
 
-    url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
-    prefix = """
-        PREFIX schema: <https://schema.org/>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    """
-    admin = 'admin'
-    password = 'pw'
-
     def __init__(self):
-        self.sparql = SPARQLWrapper(self.url_endpoint)
+        self.sparql = SPARQLWrapper(variables.url_endpoint)
 
         self.sparql.setHTTPAuth(DIGEST)
-        self.sparql.setCredentials(self.admin, self.password)
+        self.sparql.setCredentials(variables.admin, variables.password)
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
@@ -56,7 +49,7 @@ class SparqlPostProjectsMethods:
                     schema:url \"\"\"{url}\"\"\" ;
                     schema:identifier <{ark_pid}ARK> .
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, name=name, description=description, founding_date=founding_date, dissolution_date=dissolution_date, url=url)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, name=name, description=description, founding_date=founding_date, dissolution_date=dissolution_date, url=url)
 
         self.sparql.setQuery(sparql_request)
 
@@ -69,7 +62,7 @@ class SparqlPostProjectsMethods:
             INSERT DATA {{
                 <{ark_pid}> schema:member <{member}> .
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, member=member)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, member=member)
 
         self.sparql.setQuery(sparql_request)
 
@@ -87,7 +80,7 @@ class SparqlPostProjectsMethods:
             {{
                 <{ark_pid}> schema:member <{member}> .
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid, member=member)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, member=member)
 
         self.sparql.setQuery(sparql_request)
 
@@ -100,7 +93,7 @@ class SparqlPostProjectsMethods:
             DELETE WHERE {{
                 <{ark_pid}> ?predicate ?object .
             }}
-        """.format(prefix=self.prefix, ark_pid=ark_pid)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 

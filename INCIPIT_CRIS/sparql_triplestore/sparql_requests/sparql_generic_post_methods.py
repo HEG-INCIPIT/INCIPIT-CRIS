@@ -1,4 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, POST, DIGEST
+from . import variables
 
 
 class SparqlGenericPostMethods:
@@ -23,19 +24,13 @@ class SparqlGenericPostMethods:
 
     """
 
-    url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
-    prefix = """
-        PREFIX schema: <https://schema.org/>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    """
-    admin = 'admin'
-    password = 'pw'
+    
 
     def __init__(self):
-        self.sparql = SPARQLWrapper(self.url_endpoint)
+        self.sparql = SPARQLWrapper(variables.url_endpoint)
 
         self.sparql.setHTTPAuth(DIGEST)
-        self.sparql.setCredentials(self.admin, self.password)
+        self.sparql.setCredentials(variables.admin, variables.password)
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
@@ -50,7 +45,7 @@ class SparqlGenericPostMethods:
                 <{ark_pid}> schema:{predicate} \"\"\"{old_string}\"\"\"
             }}
 
-        """.format(prefix=self.prefix, ark_pid=ark_pid, predicate=predicate, old_string=old_string,
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, predicate=predicate, old_string=old_string,
                    new_string=new_string)
 
         self.sparql.setQuery(sparql_request)
@@ -68,7 +63,7 @@ class SparqlGenericPostMethods:
                 <{ark_pid}> schema:{predicate} \"\"\"{old_date}\"\"\"^^xsd:date
             }}
 
-        """.format(prefix=self.prefix, ark_pid=ark_pid, predicate=predicate, old_date=old_date, new_date=new_date)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, predicate=predicate, old_date=old_date, new_date=new_date)
 
         print(sparql_request)
 

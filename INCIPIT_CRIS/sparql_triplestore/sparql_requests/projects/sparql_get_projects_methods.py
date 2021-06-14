@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_project import *
+from .. import variables
 
 
 class SparqlGetProjectsMethods:
@@ -23,19 +24,13 @@ class SparqlGetProjectsMethods:
     -------
 
     """
-    url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
-    prefix = """
-        PREFIX schema: <https://schema.org/>
-    """
-    admin = 'admin'
-    password = 'pw'
 
     def __init__(self):
 
-        self.sparql = SPARQLWrapper(self.url_endpoint)
+        self.sparql = SPARQLWrapper(variables.url_endpoint)
 
         self.sparql.setHTTPAuth(DIGEST)
-        self.sparql.setCredentials(self.admin, self.password)
+        self.sparql.setCredentials(variables.admin, variables.password)
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(GET)
 
@@ -53,7 +48,7 @@ class SparqlGetProjectsMethods:
                 ?project a schema:ResearchProject .
                 ?project schema:name ?name .
             }}
-        """.format(prefix=self.prefix)
+        """.format(prefix=variables.prefix)
 
         self.sparql.setQuery(sparql_request)
 
@@ -73,7 +68,7 @@ class SparqlGetProjectsMethods:
             {{
                 <{ark_research}> schema:member ?member .
             }}
-        """.format(prefix=self.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -101,7 +96,7 @@ class SparqlGetProjectsMethods:
                 <{ark_research}> schema:dissolutionDate ?dissolutionDate .
                 <{ark_research}> schema:url ?url .
             }}
-        """.format(prefix=self.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -125,7 +120,7 @@ class SparqlGetProjectsMethods:
                 <{ark_research}> a ?researchProject .
                 FILTER(?researchProject = schema:ResearchProject)
             }}
-        """.format(prefix=self.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
         return parse_check_project_ark(self.sparql.query().response.read())
