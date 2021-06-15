@@ -2,17 +2,17 @@ from arketype_API.ark import Ark
 from sparql_triplestore.sparql_requests.sparql_generic_post_methods import SparqlGenericPostMethods
 from sparql_triplestore.sparql_requests.person.sparql_get_person_methods import SparqlGetPersonMethods
 from sparql_triplestore.sparql_requests.person.sparql_post_person_methods import SparqlPostPersonMethods
-from sparql_triplestore.sparql_requests.articles.sparql_get_articles_methods import SparqlGetArticlesMethods
-from sparql_triplestore.sparql_requests.articles.sparql_post_articles_methods import SparqlPostArticlesMethods
-from sparql_triplestore.sparql_requests.projects.sparql_get_projects_methods import SparqlGetProjectsMethods
-from sparql_triplestore.sparql_requests.projects.sparql_post_projects_methods import SparqlPostProjectsMethods
+from sparql_triplestore.sparql_requests.article.sparql_get_article_methods import SparqlGetArticleMethods
+from sparql_triplestore.sparql_requests.article.sparql_post_article_methods import SparqlPostArticleMethods
+from sparql_triplestore.sparql_requests.project.sparql_get_project_methods import SparqlGetProjectMethods
+from sparql_triplestore.sparql_requests.project.sparql_post_project_methods import SparqlPostProjectMethods
 
 
 ark = Ark
 sparql_generic_post_object = SparqlGenericPostMethods()
 sparql_get_person_object = SparqlGetPersonMethods()
 sparql_post_person_object = SparqlPostPersonMethods()
-sparql_get_article_object = SparqlGetArticlesMethods()
-sparql_post_article_object = SparqlPostArticlesMethods()
-sparql_get_project_object = SparqlGetProjectsMethods()
-sparql_post_project_object = SparqlPostProjectsMethods()
+sparql_get_article_object = SparqlGetArticleMethods()
+sparql_post_article_object = SparqlPostArticleMethods()
+sparql_get_project_object = SparqlGetProjectMethods()
+sparql_post_project_object = SparqlPostProjectMethods()
