@@ -98,10 +98,13 @@ class SparqlGetArticleMethods:
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
+        print(sparql_request)
+
         self.sparql.setQuery(sparql_request)
 
-        authors = variables.sparql_get_article_object.get_authors_article(ark_pid)
         data_article = parse_get_data_article(self.sparql.query().response.read())
+
+        authors = variables.sparql_get_article_object.get_authors_article(ark_pid)
         
         data_article['authors'] = authors
         data_article['ark_pid'] = ark_pid

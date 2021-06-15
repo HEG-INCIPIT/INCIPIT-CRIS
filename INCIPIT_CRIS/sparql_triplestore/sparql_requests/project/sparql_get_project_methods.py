@@ -3,7 +3,7 @@ from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_project 
 from .. import variables
 
 
-class SparqlGetProjectsMethods:
+class SparqlGetProjectMethods:
     """
     A class used to do sparql GET requests about projects to the triplestore
 
@@ -75,7 +75,7 @@ class SparqlGetProjectsMethods:
         array_members = []
 
         for member in parse_get_members_project(self.sparql.query().response.read()):
-            full_name = SparqlGetPersonMethods().get_full_name_person(member)
+            full_name = variables.sparql_get_person_object.get_full_name_person(member)
             array_members.append([member, full_name])
 
         return array_members
@@ -100,7 +100,7 @@ class SparqlGetProjectsMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        members = SparqlGetProjectsMethods().get_members_project(ark_pid)
+        members = variables.sparql_get_project_object.get_members_project(ark_pid)
         data_project = parse_get_data_project(self.sparql.query().response.read())
         
         data_project['members'] = members

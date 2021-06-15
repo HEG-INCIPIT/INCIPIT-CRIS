@@ -26,6 +26,7 @@ def parse_get_authors_article(sparql_query_answer):
 
 def parse_get_data_article(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+    print(loaded_json)
     dict_data = {
         'name': loaded_json['name']['value'],
         'abstract': loaded_json['abstract']['value'],

@@ -56,7 +56,7 @@ class SparqlGetPersonMethods:
 
     def get_full_name_person(self, ark_pid):
         """
-        Get the full name of a person format
+        Get the full name of a person formated in a dict
         Return a dict with given name and family name
         """
         sparql_request = """
@@ -78,7 +78,6 @@ class SparqlGetPersonMethods:
         Get all the articles for who the person is an author
         Return an array with tuples (identifier, dictionnary)
         """
-        from ..articles.sparql_get_articles_methods import SparqlGetArticlesMethods
 
         sparql_request = """
             {prefix}
@@ -94,10 +93,37 @@ class SparqlGetPersonMethods:
         array_articles = []
 
         for article in parse_get_articles_person(self.sparql.query().response.read()):
-            data_article = SparqlGetArticlesMethods().get_data_article(article)
+            data_article = variables.sparql_get_article_object.get_data_article(article)
             array_articles.append((article, data_article))
 
         return array_articles
+
+
+    def get_projects_person(self, ark_pid):
+        """
+        Get all the projects for who the person is a member
+        Return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?project WHERE
+            {{
+                ?project schema:member <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_projects = []
+
+        for project in parse_get_projects_person(self.sparql.query().response.read()):
+            data_project = variables.sparql_get_project_object.get_data_project(project)
+            array_projects.append((project, data_project))
+
+        return array_projects
+
 
     def get_data_person(self, ark_pid):
         """
@@ -120,9 +146,13 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        articles = SparqlGetPersonMethods().get_articles_person(ark_pid)
         data_person = parse_get_data_person(self.sparql.query().response.read())
+
+        articles = variables.sparql_get_person_object.get_articles_person(ark_pid)
+        projects = variables.sparql_get_person_object.get_projects_person(ark_pid)
+        
         data_person['articles'] = articles
+        data_person['projects'] = projects
 
         return data_person
 

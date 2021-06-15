@@ -2,7 +2,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON, POST, DIGEST
 from .. import variables
 
 
-class SparqlPostProjectsMethods:
+class SparqlPostProjectMethods:
     """
     A class used to do sparql POST requests about an Article to the triplestore
 
