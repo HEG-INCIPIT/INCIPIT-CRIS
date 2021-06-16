@@ -107,6 +107,79 @@ def project_edition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
+def project_form_selection(request, part_of_project_to_edit, data_project):
+    # Check the request method
+    if request.method == 'POST':
+        if part_of_project_to_edit == 'name':
+            return ProjectNameForm(request.POST)
+        if part_of_project_to_edit == 'description':
+            return ProjectDescriptionForm(request.POST)
+        if part_of_project_to_edit == 'foundingDate':
+            return ProjectFoundingDateForm(request.POST)
+        if part_of_project_to_edit == 'dissolutionDate':
+            return ProjectDissolutionDateForm(request.POST)
+
+    # if not a POST it'll create a blank form
+    else:
+        if part_of_project_to_edit == 'name':
+            return ProjectNameForm(old_name=data_project[part_of_project_to_edit])
+        if part_of_project_to_edit == 'description':
+            return ProjectDescriptionForm(old_description=data_project[part_of_project_to_edit])
+        if part_of_project_to_edit == 'foundingDate':
+            return ProjectFoundingDateForm(old_founding_date=data_project['founding_date'])
+        if part_of_project_to_edit == 'dissolutionDate':
+            return ProjectDissolutionDateForm(old_dissolution_date=data_project['dissolution_date'])
+
+
+def project_field_edition(request, part_of_project_to_edit, ark_pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the members of the project
+        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        # Verify if the user ark is in the projects members to grant edition
+        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+
+            data_project = variables.sparql_get_project_object.get_data_project(ark_pid)
+
+            form = project_form_selection(request, part_of_project_to_edit, data_project)
+            # Check the request method
+            if request.method == 'POST':
+                if form.is_valid():
+                    if part_of_project_to_edit == 'foundingDate':
+                        variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_project_to_edit,
+                                                                    form.cleaned_data['founding_date'],
+                                                                    str(data_project['founding_date']) +
+                                                                    " 00:00:00+00:00")
+                    elif part_of_project_to_edit == 'dissolutionDate':
+                        variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_project_to_edit,
+                                                                    form.cleaned_data['dissolution_date'],
+                                                                    str(data_project['dissolution_date']) +
+                                                                    " 00:00:00+00:00")
+                    else:
+                        variables.sparql_generic_post_object.update_string_leaf(ark_pid, part_of_project_to_edit,
+                                                                      form.cleaned_data[part_of_project_to_edit],
+                                                                      data_project[part_of_project_to_edit])
+                    return redirect(project_edition, ark_pid=ark_pid)
+
+            context = {
+                'form': form,
+                'button_value': 'Modifier',
+                'url_to_return': '/projects/edition/field/{}/{}'.format(part_of_project_to_edit, ark_pid)
+            }
+            # return the form to be completed
+            return render(request, 'forms/classic_form.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet project"
+    }
+    return render(request, 'page_info.html', context)
+
+
 def project_member_addition(request, ark_pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
@@ -135,7 +208,7 @@ def project_member_addition(request, ark_pid):
             context = {
                 'button_value': 'Ajouter',
                 'title_of_person_added': 'Membre',
-                'url_to_return': '/projects/edition/field/addMember/{}'.format(ark_pid),
+                'url_to_return': '/projects/edition/field/add-member/{}'.format(ark_pid),
                 'persons': persons
             }
             # return the form to be completed
