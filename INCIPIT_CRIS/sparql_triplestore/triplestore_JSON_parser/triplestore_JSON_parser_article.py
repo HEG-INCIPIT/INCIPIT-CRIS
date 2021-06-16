@@ -29,7 +29,7 @@ def parse_get_data_article(sparql_query_answer):
     dict_data = {
         'name': loaded_json['name']['value'],
         'abstract': loaded_json['abstract']['value'],
-        'datePublished': loaded_json['datePublished']['value'][:10],
+        'date_published': loaded_json['datePublished']['value'][:10],
         'url': loaded_json['url']['value'],
     }
 

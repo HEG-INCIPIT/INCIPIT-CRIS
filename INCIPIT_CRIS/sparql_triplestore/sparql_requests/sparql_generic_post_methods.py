@@ -65,8 +65,6 @@ class SparqlGenericPostMethods:
 
         """.format(prefix=variables.prefix, ark_pid=ark_pid, predicate=predicate, old_date=old_date, new_date=new_date)
 
-        print(sparql_request)
-
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
