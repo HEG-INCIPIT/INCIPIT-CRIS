@@ -16,7 +16,7 @@ number_phone_regex = RegexValidator(r"^[0-9]*$", "Le numéro de téléphone doit
 
 
 class DescriptionForm(forms.Form):
-    description = forms.CharField(label='Description ', max_length=300, required=False, validators=[not_quotes_regex], widget=forms.Textarea)
+    description = forms.CharField(label='Description ', max_length=300, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder': 'Ajoutez votre description'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
