@@ -100,3 +100,51 @@ class ProjectCreationForm(forms.Form):
     founding_date = forms.DateTimeField(widget=DateInput, label='Date de début ', required=True)
     dissolution_date = forms.DateTimeField(widget=DateInput, label='Date de fin ', required=True)
     url = forms.CharField(label="URL", max_length=150, required=True, validators=[not_quotes_regex])
+
+
+class ProjectNameForm(forms.Form):
+    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        # overload init function to display actual value of the variable in this field
+        my_arg = ''
+        if 'old_name' in kwargs:
+            my_arg = kwargs.pop('old_name')
+        super().__init__(*args, **kwargs)
+        self.fields['name'].initial = my_arg
+
+
+class ProjectDescriptionForm(forms.Form):
+    description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        # overload init function to display actual value of the variable in this field
+        my_arg = ''
+        if 'old_description' in kwargs:
+            my_arg = kwargs.pop('old_description')
+        super().__init__(*args, **kwargs)
+        self.fields['description'].initial = my_arg
+
+
+class ProjectFoundingDateForm(forms.Form):
+    founding_date = forms.DateTimeField(widget=DateInput, label='Date de début ', required=False)
+
+    def __init__(self, *args, **kwargs):
+        # overload init function to display actual value of the variable in this field
+        my_arg = ''
+        if 'old_founding_date' in kwargs:
+            my_arg = kwargs.pop('old_founding_date')
+        super().__init__(*args, **kwargs)
+        self.fields['founding_date'].initial = my_arg
+
+
+class ProjectDissolutionDateForm(forms.Form):
+    dissolution_date = forms.DateTimeField(widget=DateInput, label='Date de fin ', required=False)
+
+    def __init__(self, *args, **kwargs):
+        # overload init function to display actual value of the variable in this field
+        my_arg = ''
+        if 'old_dissolution_date' in kwargs:
+            my_arg = kwargs.pop('old_dissolution_date')
+        super().__init__(*args, **kwargs)
+        self.fields['dissolution_date'].initial = my_arg
