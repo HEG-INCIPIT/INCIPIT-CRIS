@@ -184,7 +184,7 @@ def article_author_addition(request, ark_pid):
             data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
             # Check the request method
             if request.method == 'POST':
-                authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
+                authors = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
                 for author in authors:
                     variables.sparql_post_article_object.add_author_to_article(ark_pid, author.split()[2])
 
@@ -199,11 +199,12 @@ def article_author_addition(request, ark_pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'title_of_person_added': 'Auteur',
                 'url_to_return': '/articles/edition/field/addAuthor/{}'.format(ark_pid),
                 'persons': persons
             }
             # return the form to be completed
-            return render(request, 'forms/article/article_add_author.html', context)
+            return render(request, 'forms/add_person_to_group.html', context)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",
