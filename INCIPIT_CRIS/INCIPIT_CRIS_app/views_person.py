@@ -38,6 +38,10 @@ def person_profile(request, ark_pid):
     can_edit = True if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser) else False
     if sparql_request_check_person_ark:
         data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
+        """
+        data_person['articles'] : all data of articles for whom the person is author
+        data_person['projects'] : all data of projects for whom the person is member
+        """
         context = {
             'data_person': data_person,
             'can_edit': can_edit,

@@ -105,7 +105,14 @@
                     {% endblock %}
                 </div>
                 <div data-content="projects">
-                    <p>Projets : ...</p>
+                    {% block projects %}
+                        <p>Projets : </p>
+                        {% for project in data_person.projects %}
+                            <p>
+                                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                            </p>
+                        {% endfor %}
+                    {% endblock %}
                 </div>
                 <div data-content="data">
                     <p>Données : ...</p>
