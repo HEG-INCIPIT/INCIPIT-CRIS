@@ -23,7 +23,7 @@
     {% for article in data_person.articles %}
         <p>
             <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
-            <form action="/personnes/edition/profil/deleteArticle/{{ark_pid}}" method="post">
+            <form action="/personnes/edition/profil/delete-article/{{ark_pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
                 <input type="submit" value="Supprimer">
