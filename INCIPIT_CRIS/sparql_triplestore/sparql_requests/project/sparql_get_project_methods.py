@@ -99,9 +99,9 @@ class SparqlGetProjectMethods:
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
+        data_project = parse_get_data_project(self.sparql.query().response.read())
 
         members = variables.sparql_get_project_object.get_members_project(ark_pid)
-        data_project = parse_get_data_project(self.sparql.query().response.read())
         
         data_project['members'] = members
         data_project['ark_pid'] = ark_pid
