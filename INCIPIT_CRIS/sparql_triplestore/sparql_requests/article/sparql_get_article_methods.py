@@ -98,8 +98,6 @@ class SparqlGetArticleMethods:
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
-        print(sparql_request)
-
         self.sparql.setQuery(sparql_request)
 
         data_article = parse_get_data_article(self.sparql.query().response.read())
