@@ -17,12 +17,16 @@
             <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
                 {% csrf_token %}
                 <div class="autocomplete">
-                    <label for="authorAutocomplete">Auteur : </label>
-                    <input id="authorInput" type="text" name="authorAutocomplete" placeholder="Nom de l'auteur">
+                    <label for="groupAutocomplete">{{ title_of_person_added }} : </label>
+                    {% if title_of_person_added == 'Auteur' %}
+                        <input id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom de l'auteur">
+                    {% else %}
+                        <input id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom du membre">
+                    {% endif %}
                 </div>
-                <div id="authorElements">
+                <div id="groupElements">
                 </div>
-                <input type="hidden" id="authorElementsPost" name="authorElementsPost">
+                <input type="hidden" id="groupElementsPost" name="groupElementsPost">
                 <input type="submit" value="{{ button_value }}">
             </form>
         </section>
@@ -61,17 +65,17 @@
                 b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
                 /*execute a function when someone clicks on the item value (DIV element):*/
                     b.addEventListener("click", function(e) {
-                        /*create new element in forms to display authors selected:*/
-                        var authorID = document.createElement("P");
+                        /*create new element in forms to display groups selected:*/
+                        var groupID = document.createElement("P");
                         personToAdd = this.getElementsByTagName("input")[0].value;
-                        authorID.innerHTML = personToAdd;
+                        groupID.innerHTML = personToAdd;
                         arrayToSend.push(personToAdd);
-                        arr = arr.filter(e => e !== authorID.innerHTML);
+                        arr = arr.filter(e => e !== groupID.innerHTML);
 
                         var btnDelete = document.createElement("BUTTON");
                         btnDelete.innerHTML = "X";
                         btnDelete.type = "button";
-                        authorID.appendChild(btnDelete);
+                        groupID.appendChild(btnDelete);
 
 
                         btnDelete.addEventListener('click', function(e) {
@@ -81,7 +85,7 @@
                             arr.push(parent.innerHTML);
                             parent.remove();
                         }, false);
-                        document.getElementById("authorElements").appendChild(authorID);
+                        document.getElementById("groupElements").appendChild(groupID);
                         console.log(arrayToSend)
                         /*insert the value for the autocomplete text field:*/
                         inp.value = "";
@@ -152,13 +156,13 @@
 
     function process() {
 
-        document.getElementById("authorElementsPost").value = JSON.stringify(arrayToSend);
+        document.getElementById("groupElementsPost").value = JSON.stringify(arrayToSend);
         return true;
     }
 
-    var authors = {{ persons|safe }};
+    var groups = {{ persons|safe }};
     var arrayToSend = [];
 
-    autocomplete(document.getElementById("authorInput"), authors);
+    autocomplete(document.getElementById("groupInput"), groups);
 
 </script>

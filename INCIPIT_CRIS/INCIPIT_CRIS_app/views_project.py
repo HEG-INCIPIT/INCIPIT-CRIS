@@ -66,7 +66,6 @@ def project_creation(request):
 def project_profile(request, ark_pid):
     # Verify in triplestore if the ark_pid correspond to a project
     sparql_request_check_project_ark = variables.sparql_get_project_object.check_project_ark(ark_pid)
-    print(ark_pid)
     if sparql_request_check_project_ark:
         data_project = variables.sparql_get_project_object.get_data_project(ark_pid)
         edition_granted = False
@@ -100,6 +99,72 @@ def project_edition(request, ark_pid):
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet project",
             'edition_granted': edition_granted
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet project"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def project_member_addition(request, ark_pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the members of the project
+        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        # Verify if the user ark is in the projects members to grant edition
+        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+
+            data_project = variables.sparql_get_project_object.get_data_project(ark_pid)
+            # Check the request method
+            if request.method == 'POST':
+                members = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
+                for member in members:
+                    variables.sparql_post_project_object.add_member_to_project(ark_pid, member.split()[2])
+
+                return redirect(project_edition, ark_pid=ark_pid)
+
+            persons_info = variables.sparql_get_person_object.get_persons()
+            persons = []
+            for basic_info_person in persons_info:
+                if not (basic_info_person[0] in [member[0] for member in members_project]):
+                    persons.append(
+                        '''{} {}, {}'''.format(basic_info_person[1], basic_info_person[2], basic_info_person[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'title_of_person_added': 'Membre',
+                'url_to_return': '/projects/edition/field/addMember/{}'.format(ark_pid),
+                'persons': persons
+            }
+            # return the form to be completed
+            return render(request, 'forms/add_person_to_group.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet project"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def project_member_deletion(request, ark_pid):
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the members of the project
+        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        # Verify if the user ark is in the projects members to grant edition
+        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+            member = request.POST.get('memberARK', '')
+            variables.sparql_post_project_object.delete_member_of_project(ark_pid, member)
+
+            return redirect(project_edition, ark_pid=ark_pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet project",
         }
         return render(request, 'page_info.html', context)
     context = {

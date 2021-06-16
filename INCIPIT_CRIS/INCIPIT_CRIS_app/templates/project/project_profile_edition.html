@@ -23,14 +23,14 @@
                 </form>
             </p>
             <p>Nom : {{ data_project.name }} <a href="/projects/edition/field/name/{{data_project.ark_pid}}"> Modifer</a></p>
-            <p>Abstract : {{ data_project.abstract }} <a href="/projects/edition/field/abstract/{{data_project.ark_pid}}"> Modifer</a></p>
+            <p>Description : {{ data_project.description }} <a href="/projects/edition/field/abstract/{{data_project.ark_pid}}"> Modifer</a></p>
             <p>Date de publication : {{ data_project.datePublished }} <a href="/projects/edition/field/datePublished/{{data_project.ark_pid}}"> Modifer</a></p>
             <p>Date de publication : {{ data_project.datePublished }} <a href="/projects/edition/field/datePublished/{{data_project.ark_pid}}"> Modifer</a></p>
-            <p>Auteur(s) : <a href="/projects/edition/field/addAuthor/{{data_project.ark_pid}}"> Ajouter</a></p>
+            <p>Auteur(s) : <a href="/projects/edition/field/addMember/{{data_project.ark_pid}}"> Ajouter</a></p>
             {% for member in data_project.members %}
                 <div>
                     <a href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
-                    <form action="/projects/edition/field/deleteAuthor/{{data_project.ark_pid}}" method="post">
+                    <form action="/projects/edition/field/deleteMember/{{data_project.ark_pid}}" method="post">
                         {% csrf_token %}
                         <input type="hidden" id="memberARK" name="memberARK" value="{{ member.0 }}">
                         <input type="submit" value="Supprimer">

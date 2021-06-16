@@ -22,6 +22,8 @@ urlpatterns = [
 
     path('projects/', views_project.project_results, name='project_results'),
     path('projects/creation/', views_project.project_creation, name='project_creation'),
+    path('projects/edition/field/addMember/<path:ark_pid>', views_project.project_member_addition, name='project_member_addition'),
+    path('projects/edition/field/deleteMember/<path:ark_pid>', views_project.project_member_deletion, name='project_member_deletion'),
     path('projects/edition/field/deleteProject/<path:ark_pid>', views_project.project_deletion, name='project_deletion'),
     path('projects/edition/<path:ark_pid>', views_project.project_edition, name='project_edition'),
     path('projects/<path:ark_pid>', views_project.project_profile, name='project_profile'),
