@@ -10,7 +10,6 @@ def parse_get_projects(sparql_query_answer):
 
 
 def parse_check_project_ark(sparql_query_answer):
-    print(sparql_query_answer)
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     if len(loaded_json) > 0:
         return True
@@ -29,7 +28,7 @@ def parse_get_data_project(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'name': loaded_json['name']['value'],
-        'abstract': loaded_json['description']['value'],
+        'description': loaded_json['description']['value'],
         'founding_date': loaded_json['foundingDate']['value'][:10],
         'dissolution_date': loaded_json['dissolutionDate']['value'][:10],
         'url': loaded_json['url']['value'],
