@@ -31,13 +31,12 @@ def project_creation(request):
             form = ProjectCreationForm(request.POST)
             if form.is_valid():
                 members = re.findall('"([^"]*)"', request.POST['memberElementsPost'])
-                print(members)
                 ark_pid = form.cleaned_data['ark_pid']
                 if ark_pid == '':
                     ark_pid = variables.Ark().ark_creation()
-                    variables.sparql_post_project_object.create_project(ark_pid, form.cleaned_data['name'],
-                                                          form.cleaned_data['description'],
-                                                          form.cleaned_data['founding_date'], form.cleaned_data['dissolution_date'], form.cleaned_data['url'])
+                variables.sparql_post_project_object.create_project(ark_pid, form.cleaned_data['name'],
+                                                        form.cleaned_data['description'],
+                                                        form.cleaned_data['founding_date'], form.cleaned_data['dissolution_date'], form.cleaned_data['url'])
                 for member in members:
                     variables.sparql_post_project_object.add_member_to_project(ark_pid, member.split()[-1])
                 return redirect(views.index)
