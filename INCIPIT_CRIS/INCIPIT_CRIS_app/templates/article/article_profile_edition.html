@@ -16,7 +16,7 @@
         {% block article_information %}
             <p>
                 Article
-                <form action="/articles/edition/field/deleteArticle/{{data_article.ark_pid}}" method="post">
+                <form action="/articles/edition/field/delete-article/{{data_article.ark_pid}}" method="post">
                     {% csrf_token %}
                     <input type="hidden" id="articleARK" name="articleARK" value="{{ data_article.ark_pid }}">
                     <input type="submit" value="Supprimer">
@@ -24,12 +24,12 @@
             </p>
             <p>Nom : {{ data_article.name }} <a href="/articles/edition/field/name/{{data_article.ark_pid}}"> Modifer</a></p>
             <p>Abstract : {{ data_article.abstract }} <a href="/articles/edition/field/abstract/{{data_article.ark_pid}}"> Modifer</a></p>
-            <p>Date de publication : {{ data_article.datePublished }} <a href="/articles/edition/field/datePublished/{{data_article.ark_pid}}"> Modifer</a></p>
-            <p>Auteur(s) : <a href="/articles/edition/field/addAuthor/{{data_article.ark_pid}}"> Ajouter</a></p>
+            <p>Date de publication : {{ data_article.date_published }} <a href="/articles/edition/field/datePublished/{{data_article.ark_pid}}"> Modifer</a></p>
+            <p>Auteur(s) : <a href="/articles/edition/field/add-author/{{data_article.ark_pid}}"> Ajouter</a></p>
             {% for author in data_article.authors %}
                 <div>
                     <a href="/personnes/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
-                    <form action="/articles/edition/field/deleteAuthor/{{data_article.ark_pid}}" method="post">
+                    <form action="/articles/edition/field/delete-author/{{data_article.ark_pid}}" method="post">
                         {% csrf_token %}
                         <input type="hidden" id="authorARK" name="authorARK" value="{{ author.0 }}">
                         <input type="submit" value="Supprimer">

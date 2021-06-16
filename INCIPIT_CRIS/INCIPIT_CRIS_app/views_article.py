@@ -125,7 +125,7 @@ def article_form_selection(request, part_of_article_to_edit, data_article):
         if part_of_article_to_edit == 'abstract':
             return ArticleAbstractForm(old_abstract=data_article[part_of_article_to_edit])
         if part_of_article_to_edit == 'datePublished':
-            return ArticleDatePublishedForm(old_date_published=data_article[part_of_article_to_edit])
+            return ArticleDatePublishedForm(old_date_published=data_article['date_published'])
 
 
 def article_field_edition(request, part_of_article_to_edit, ark_pid):
@@ -145,8 +145,8 @@ def article_field_edition(request, part_of_article_to_edit, ark_pid):
                 if form.is_valid():
                     if part_of_article_to_edit == 'datePublished':
                         variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_article_to_edit,
-                                                                    form.cleaned_data[part_of_article_to_edit],
-                                                                    str(data_article[part_of_article_to_edit]) +
+                                                                    form.cleaned_data['date_published'],
+                                                                    str(data_article['date_published']) +
                                                                     " 00:00:00+00:00")
                     else:
                         variables.sparql_generic_post_object.update_string_leaf(ark_pid, part_of_article_to_edit,
@@ -200,7 +200,7 @@ def article_author_addition(request, ark_pid):
             context = {
                 'button_value': 'Ajouter',
                 'title_of_person_added': 'Auteur',
-                'url_to_return': '/articles/edition/field/addAuthor/{}'.format(ark_pid),
+                'url_to_return': '/articles/edition/field/add-author/{}'.format(ark_pid),
                 'persons': persons
             }
             # return the form to be completed
