@@ -20,7 +20,7 @@ PREFIX :        <#>
      .
      
 <#inferenceModel> rdf:type ja:InfModel;
-     ja:reasoner [ ja:reasonerURL <http://jena.hpl.hp.com/2003/RDFSExptRuleReasoner> ];
+     ja:reasoner [ ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLFBRuleReasoner> ];
      ja:baseModel <#baseModel>;
      .
 
