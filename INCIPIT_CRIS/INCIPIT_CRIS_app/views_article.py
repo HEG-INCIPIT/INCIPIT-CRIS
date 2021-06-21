@@ -181,12 +181,11 @@ def article_author_addition(request, ark_pid):
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
 
-            data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
             # Check the request method
             if request.method == 'POST':
                 authors = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
                 for author in authors:
-                    variables.sparql_post_article_object.add_author_to_article(ark_pid, author.split()[2])
+                    variables.sparql_post_article_object.add_author_to_article(ark_pid, author.split()[-1])
 
                 return redirect(article_edition, ark_pid=ark_pid)
 
@@ -225,6 +224,74 @@ def article_author_deletion(request, ark_pid):
         if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
             author = request.POST.get('authorARK', '')
             variables.sparql_post_article_object.delete_author_of_article(ark_pid, author)
+
+            return redirect(article_edition, ark_pid=ark_pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet article",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet article"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def article_project_addition(request, ark_pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the authors of the article
+        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        # Verify if the user ark is in the articles projects to grant edition
+        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                projects = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
+                for project in projects:
+                    variables.sparql_post_project_object.add_article_to_project(project.split()[-1], ark_pid)
+
+                return redirect(article_edition, ark_pid=ark_pid)
+
+            projects_info = variables.sparql_get_project_object.get_projects()
+            projects = []
+            # Request all the projects of the article
+            projects_article = variables.sparql_get_article_object.get_projects_article(ark_pid)
+            for basic_info_project in projects_info:
+                if not (basic_info_project[0] in [project[0] for project in projects_article]):
+                    projects.append(
+                        '''{}, {}'''.format(basic_info_project[1], basic_info_project[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'title_data_type_added': 'Projet',
+                'data_type_added': 'du projet',
+                'url_to_return': '/articles/edition/field/add-project/{}'.format(ark_pid),
+                'data': projects
+            }
+            # return the form to be completed
+            return render(request, 'forms/add_article_to_group.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet article",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet article"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def article_project_deletion(request, ark_pid):
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the authors of the article
+        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        # Verify if the user ark is in the articles projects to grant edition
+        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+            project = request.POST.get('projectARK', '')
+            variables.sparql_post_project_object.delete_article_of_project(project, ark_pid)
 
             return redirect(article_edition, ark_pid=ark_pid)
 
