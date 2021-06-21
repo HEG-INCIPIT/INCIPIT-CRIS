@@ -24,6 +24,7 @@ class SparqlPostProjectMethods:
 
     """
 
+
     def __init__(self):
         self.sparql = SPARQLWrapper(variables.url_endpoint)
 
@@ -31,6 +32,7 @@ class SparqlPostProjectMethods:
         self.sparql.setCredentials(variables.admin, variables.password)
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
+
 
     def create_project(self, ark_pid, name, description, founding_date, dissolution_date, url):
         sparql_request = """
@@ -55,6 +57,7 @@ class SparqlPostProjectMethods:
 
         return self.sparql.query().response.read()
 
+
     def add_member_to_project(self, ark_pid, member):
         sparql_request = """
             {prefix}
@@ -67,6 +70,7 @@ class SparqlPostProjectMethods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
+
 
     def delete_member_of_project(self, ark_pid, member):
         sparql_request = """
@@ -85,6 +89,40 @@ class SparqlPostProjectMethods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
+
+
+    def add_article_to_project(self, ark_pid, article):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{ark_pid}> schema:subjectOf <{article}> .
+            }}
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, article=article)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_article_of_project(self, ark_pid, article):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{ark_pid}> schema:subjectOf <{article}> .
+
+            }}
+            WHERE
+            {{
+                <{ark_pid}> schema:subjectOf <{article}> .
+            }}
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, article=article)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
 
     def delete_project(self, ark_pid):
         sparql_request = """

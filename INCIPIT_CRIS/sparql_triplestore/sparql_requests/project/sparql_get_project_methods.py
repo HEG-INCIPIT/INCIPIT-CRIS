@@ -25,6 +25,7 @@ class SparqlGetProjectMethods:
 
     """
 
+
     def __init__(self):
 
         self.sparql = SPARQLWrapper(variables.url_endpoint)
@@ -33,6 +34,7 @@ class SparqlGetProjectMethods:
         self.sparql.setCredentials(variables.admin, variables.password)
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(GET)
+
 
     def get_projects(self):
         """
@@ -53,6 +55,7 @@ class SparqlGetProjectMethods:
         self.sparql.setQuery(sparql_request)
 
         return parse_get_projects(self.sparql.query().response.read())
+
 
     def get_members_project(self, ark_pid):
         """
@@ -80,6 +83,33 @@ class SparqlGetProjectMethods:
 
         return array_members
 
+
+    def get_articles_project(self, ark_pid):
+        """
+        Get all the articles of a project
+        And return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?article WHERE
+            {{
+                <{ark_research}> schema:subjectOf ?article .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_articles = []
+
+        for article in parse_get_articles_project(self.sparql.query().response.read()):
+            full_name = variables.sparql_get_article_object.get_full_name_article(article)
+            array_articles.append([article, full_name])
+
+        return array_articles
+
+
     def get_data_project(self, ark_pid):
         """
         Get all the information of a project : ark, name, abstract, date of publication, members, ...
@@ -102,10 +132,13 @@ class SparqlGetProjectMethods:
         data_project = parse_get_data_project(self.sparql.query().response.read())
 
         members = variables.sparql_get_project_object.get_members_project(ark_pid)
+        articles = variables.sparql_get_project_object.get_articles_project(ark_pid)
         
         data_project['members'] = members
+        data_project['articles'] = articles
         data_project['ark_pid'] = ark_pid
         return data_project
+
 
     def check_project_ark(self, ark_pid):
         """

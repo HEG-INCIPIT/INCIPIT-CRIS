@@ -24,6 +24,14 @@ def parse_get_members_project(sparql_query_answer):
     return array_members
 
 
+def parse_get_articles_project(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_articles = []
+    for article in loaded_json:
+        array_articles.append(article['article']['value'])
+    return array_articles
+
+
 def parse_get_data_project(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {

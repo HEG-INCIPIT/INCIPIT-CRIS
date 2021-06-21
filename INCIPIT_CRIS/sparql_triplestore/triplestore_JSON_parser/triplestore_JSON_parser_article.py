@@ -1,6 +1,14 @@
 import json
 
 
+def parse_get_full_name_person(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+    dict_data = {
+        'name': loaded_json['name']['value'],
+    }
+    return dict_data
+
+
 def parse_get_articles(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     array_data_parsed = []

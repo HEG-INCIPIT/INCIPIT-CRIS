@@ -35,6 +35,26 @@ class SparqlGetArticleMethods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(GET)
 
+
+    def get_full_name_article(self, ark_pid):
+        """
+        Get the name of an article formated in a dict
+        Return a dict with name
+        """
+        sparql_request = """
+            {prefix}
+
+            SELECT ?name WHERE
+            {{
+                <{ark_research}> schema:name ?name .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_full_name_person(self.sparql.query().response.read())
+
+
     def get_articles(self):
         """
         Get basic information of an article : ark, name,
