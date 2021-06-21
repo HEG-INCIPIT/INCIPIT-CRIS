@@ -37,6 +37,22 @@
                     </form>
                 </div>
             {% endfor %}
+            <p>Article(s) : <a href="/projects/edition/field/add-article/{{data_project.ark_pid}}"> Ajouter</a></p>
+                {% for article in data_project.articles %}
+                <div>
+                    <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                    <form action="/projects/edition/field/delete-article/{{data_project.ark_pid}}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
+                        <input type="submit" value="Supprimer">
+                    </form>
+                </div>
+            {% endfor %}
+                <p>
+                    {% for article in data_project.articles %}
+                        <a href="/personnes/{{ article.0 }}">{{ article.1.given_name }} {{ article.1.family_name }}</a> 
+                    {% endfor %}
+                </p>
         {% endblock %}
         {% include 'main/footer.html' %}
     </body>

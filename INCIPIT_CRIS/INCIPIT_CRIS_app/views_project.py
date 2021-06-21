@@ -194,7 +194,7 @@ def project_member_addition(request, ark_pid):
             if request.method == 'POST':
                 members = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
                 for member in members:
-                    variables.sparql_post_project_object.add_member_to_project(ark_pid, member.split()[2])
+                    variables.sparql_post_project_object.add_member_to_project(ark_pid, member.split()[-1])
 
                 return redirect(project_edition, ark_pid=ark_pid)
 
@@ -233,6 +233,73 @@ def project_member_deletion(request, ark_pid):
         if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
             member = request.POST.get('memberARK', '')
             variables.sparql_post_project_object.delete_member_of_project(ark_pid, member)
+
+            return redirect(project_edition, ark_pid=ark_pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet project"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def project_article_addition(request, ark_pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        # Verify if the user ark is in the projects articles to grant edition
+        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                articles = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
+                for article in articles:
+                    variables.sparql_post_project_object.add_article_to_project(ark_pid, article.split()[-1])
+
+                return redirect(project_edition, ark_pid=ark_pid)
+
+            articles_info = variables.sparql_get_article_object.get_articles()
+            articles = []
+            # Request all the articles of the project
+            articles_project = variables.sparql_get_project_object.get_articles_project(ark_pid)
+            for basic_info_article in articles_info:
+                if not (basic_info_article[0] in [article[0] for article in articles_project]):
+                    articles.append(
+                        '''{}, {}'''.format(basic_info_article[1], basic_info_article[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'title_data_type_added': 'Article',
+                'data_type_added': 'de l\'article',
+                'url_to_return': '/projects/edition/field/add-article/{}'.format(ark_pid),
+                'data': articles
+            }
+            # return the form to be completed
+            return render(request, 'forms/add_article_to_group.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet project"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def project_article_deletion(request, ark_pid):
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the members of the project
+        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        # Verify if the user ark is in the projects members to grant edition
+        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+            article = request.POST.get('articleARK', '')
+            variables.sparql_post_project_object.delete_article_of_project(ark_pid, article)
 
             return redirect(project_edition, ark_pid=ark_pid)
 
