@@ -9,6 +9,14 @@ def parse_get_projects(sparql_query_answer):
     return array_data_parsed
 
 
+def parse_get_full_name_project(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+    dict_data = {
+        'name': loaded_json['name']['value'],
+    }
+    return dict_data
+
+
 def parse_check_project_ark(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     if len(loaded_json) > 0:

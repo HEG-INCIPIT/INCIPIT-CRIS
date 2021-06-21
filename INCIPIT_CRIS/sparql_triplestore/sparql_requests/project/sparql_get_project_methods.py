@@ -57,6 +57,25 @@ class SparqlGetProjectMethods:
         return parse_get_projects(self.sparql.query().response.read())
 
 
+    def get_full_name_project(self, ark_pid):
+        """
+        Get the name of an project formated in a dict
+        Return a dict with name
+        """
+        sparql_request = """
+            {prefix}
+
+            SELECT ?name WHERE
+            {{
+                <{ark_research}> schema:name ?name .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_full_name_project(self.sparql.query().response.read())
+
+
     def get_members_project(self, ark_pid):
         """
         Get all the members of a project

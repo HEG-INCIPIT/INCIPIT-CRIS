@@ -1,7 +1,7 @@
 import json
 
 
-def parse_get_full_name_person(sparql_query_answer):
+def parse_get_full_name_article(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'name': loaded_json['name']['value'],
@@ -30,6 +30,14 @@ def parse_get_authors_article(sparql_query_answer):
     for author in loaded_json:
         array_authors.append(author['author']['value'])
     return array_authors
+
+
+def parse_get_projects_article(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_projects = []
+    for project in loaded_json:
+        array_projects.append(project['project']['value'])
+    return array_projects
 
 
 def parse_get_data_article(sparql_query_answer):

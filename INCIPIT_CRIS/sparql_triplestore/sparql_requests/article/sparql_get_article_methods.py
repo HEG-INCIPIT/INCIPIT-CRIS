@@ -36,25 +36,6 @@ class SparqlGetArticleMethods:
         self.sparql.setMethod(GET)
 
 
-    def get_full_name_article(self, ark_pid):
-        """
-        Get the name of an article formated in a dict
-        Return a dict with name
-        """
-        sparql_request = """
-            {prefix}
-
-            SELECT ?name WHERE
-            {{
-                <{ark_research}> schema:name ?name .
-            }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        return parse_get_full_name_person(self.sparql.query().response.read())
-
-
     def get_articles(self):
         """
         Get basic information of an article : ark, name,
@@ -74,6 +55,26 @@ class SparqlGetArticleMethods:
         self.sparql.setQuery(sparql_request)
 
         return parse_get_articles(self.sparql.query().response.read())
+
+
+    def get_full_name_article(self, ark_pid):
+        """
+        Get the name of an article formated in a dict
+        Return a dict with name
+        """
+        sparql_request = """
+            {prefix}
+
+            SELECT ?name WHERE
+            {{
+                <{ark_research}> schema:name ?name .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_full_name_article(self.sparql.query().response.read())
+
 
     def get_authors_article(self, ark_pid):
         """
@@ -100,6 +101,33 @@ class SparqlGetArticleMethods:
 
         return array_authors
 
+
+    def get_projects_article(self, ark_pid):
+        """
+        Get all the projects of an article
+        And return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?project WHERE
+            {{
+                ?project schema:subjectOf <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_projects = []
+
+        for project in parse_get_projects_article(self.sparql.query().response.read()):
+            name = variables.sparql_get_project_object.get_full_name_project(project)
+            array_projects.append([project, name])
+
+        return array_projects
+
+
     def get_data_article(self, ark_pid):
         """
         Get all the information of an article : ark, name, abstract, date of publication, authors, ...
@@ -123,8 +151,10 @@ class SparqlGetArticleMethods:
         data_article = parse_get_data_article(self.sparql.query().response.read())
 
         authors = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        projects = variables.sparql_get_article_object.get_projects_article(ark_pid)
         
         data_article['authors'] = authors
+        data_article['projects'] = projects
         data_article['ark_pid'] = ark_pid
         return data_article
 
