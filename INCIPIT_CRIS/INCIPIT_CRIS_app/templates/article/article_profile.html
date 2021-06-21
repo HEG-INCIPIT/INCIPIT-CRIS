@@ -33,6 +33,12 @@
                         <a href="/personnes/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a> 
                     {% endfor %}
                 </p>
+                <p>Projet : </p>
+                <p>
+                    {% for project in data_article.projects %}
+                        <a href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                    {% endfor %}
+                </p>
             </section>
         {% endblock %}
         {% include 'main/footer.html' %}

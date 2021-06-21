@@ -36,6 +36,17 @@
                     </form>
                 </div>
             {% endfor %}
+            <p>Projet(s) : <a href="/articles/edition/field/add-project/{{data_article.ark_pid}}"> Ajouter</a></p>
+            {% for project in data_article.projects %}
+                <div>
+                    <a href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                    <form action="/articles/edition/field/delete-project/{{data_article.ark_pid}}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
+                        <input type="submit" value="Supprimer">
+                    </form>
+                </div>
+            {% endfor %}
         {% endblock %}
         {% include 'main/footer.html' %}
     </body>

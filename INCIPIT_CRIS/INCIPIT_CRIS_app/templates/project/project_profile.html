@@ -37,7 +37,7 @@
                 <p>Article(s) : </p>
                 <p>
                     {% for article in data_project.articles %}
-                        <a href="/personnes/{{ article.0 }}">{{ article.1.given_name }} {{ article.1.family_name }}</a> 
+                        <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a> 
                     {% endfor %}
                 </p>
             </section>

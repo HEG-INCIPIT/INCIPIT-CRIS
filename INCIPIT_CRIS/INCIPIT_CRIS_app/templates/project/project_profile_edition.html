@@ -48,11 +48,6 @@
                     </form>
                 </div>
             {% endfor %}
-                <p>
-                    {% for article in data_project.articles %}
-                        <a href="/personnes/{{ article.0 }}">{{ article.1.given_name }} {{ article.1.family_name }}</a> 
-                    {% endfor %}
-                </p>
         {% endblock %}
         {% include 'main/footer.html' %}
     </body>
