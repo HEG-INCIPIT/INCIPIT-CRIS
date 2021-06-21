@@ -15,7 +15,7 @@ def index(request):
     articles_data = []
     for article in articles:
         articles_data.append(variables.sparql_get_article_object.get_data_article(article[0]))
-    articles_data.sort(key=lambda item: item['datePublished'], reverse=True)
+    articles_data.sort(key=lambda item: item['date_published'], reverse=True)
 
     user_model = get_user_model()
     users = user_model.objects.all().filter(is_staff=False).order_by('date_joined')
