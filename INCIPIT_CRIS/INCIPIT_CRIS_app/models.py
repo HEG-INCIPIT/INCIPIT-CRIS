@@ -32,15 +32,15 @@ class User(AbstractUser):
             if self.ark_pid == '':
                 self.ark_pid = variables.ark.ark_creation()
             variables.sparql_post_person_object.init_person(self.ark_pid, self.first_name, self.last_name, self.email)
-        if self.email != self.__original_email:
-            variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'email', self.email,
-                                                                     self.__original_email)
-        if self.first_name != self.__original_first_name:
-            variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'givenName', self.first_name,
-                                                                     self.__original_first_name)
-        if self.last_name != self.__original_last_name:
-            variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'familyName', self.last_name,
-                                                                     self.__original_last_name)
+            if self.email != self.__original_email:
+                variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'email', self.email,
+                                                                        self.__original_email)
+            if self.first_name != self.__original_first_name:
+                variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'givenName', self.first_name,
+                                                                        self.__original_first_name)
+            if self.last_name != self.__original_last_name:
+                variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'familyName', self.last_name,
+                                                                        self.__original_last_name)
 
         super().save(*args, **kwargs)
         self.__original_email = self.email
@@ -51,7 +51,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.ark_pid
 
-@receiver(pre_delete)
+@receiver(pre_delete, sender=User)
 def delete_in_sparql(sender, instance, using, **kwargs):
     variables.sparql_generic_post_object.delete_subject(str(instance))
     variables.sparql_generic_post_object.delete_subject(str(instance)+"ARK")
