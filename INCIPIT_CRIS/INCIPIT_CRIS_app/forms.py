@@ -49,7 +49,7 @@ class ArticleCreationForm(forms.Form):
     ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''')
     date_published = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=True)
-    url = forms.CharField(label="URL", max_length=150, required=True, validators=[not_quotes_regex])
+    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex])
 
 
 class ArticleNameForm(forms.Form):
@@ -99,7 +99,7 @@ class ProjectCreationForm(forms.Form):
                               help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''')
     founding_date = forms.DateTimeField(widget=DateInput, label='Date de début ', required=True)
     dissolution_date = forms.DateTimeField(widget=DateInput, label='Date de fin ', required=True)
-    url = forms.CharField(label="URL", max_length=150, required=True, validators=[not_quotes_regex])
+    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex])
 
 
 class ProjectNameForm(forms.Form):
@@ -148,3 +148,20 @@ class ProjectDissolutionDateForm(forms.Form):
             my_arg = kwargs.pop('old_dissolution_date')
         super().__init__(*args, **kwargs)
         self.fields['dissolution_date'].initial = my_arg
+
+
+##################################################
+# Generic forms
+##################################################
+
+
+class URLForm(forms.Form):
+    url = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        # overload init function to display actual value of the variable in this field
+        my_arg = ''
+        if 'old_url' in kwargs:
+            my_arg = kwargs.pop('old_url')
+        super().__init__(*args, **kwargs)
+        self.fields['url'].initial = my_arg
