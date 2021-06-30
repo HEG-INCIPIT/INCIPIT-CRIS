@@ -5,9 +5,18 @@ section{
 }
 
 .button {
-    float: right; 
+    float: right;
+}
+
+.shift-button {
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .subtitle {
     padding-top: 20px;
+}
+
+.delete {
+    margin-top: 2px;
 }
