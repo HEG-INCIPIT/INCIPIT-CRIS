@@ -118,6 +118,8 @@ def project_form_selection(request, part_of_project_to_edit, data_project):
             return ProjectFoundingDateForm(request.POST)
         if part_of_project_to_edit == 'dissolutionDate':
             return ProjectDissolutionDateForm(request.POST)
+        if part_of_project_to_edit == 'url':
+            return URLForm(request.POST)
 
     # if not a POST it'll create a blank form
     else:
@@ -129,6 +131,8 @@ def project_form_selection(request, part_of_project_to_edit, data_project):
             return ProjectFoundingDateForm(old_founding_date=data_project['founding_date'])
         if part_of_project_to_edit == 'dissolutionDate':
             return ProjectDissolutionDateForm(old_dissolution_date=data_project['dissolution_date'])
+        if part_of_project_to_edit == 'url':
+            return URLForm(old_url=data_project['url'])
 
 
 def project_field_edition(request, part_of_project_to_edit, ark_pid):

@@ -117,6 +117,8 @@ def article_form_selection(request, part_of_article_to_edit, data_article):
             return ArticleAbstractForm(request.POST)
         if part_of_article_to_edit == 'datePublished':
             return ArticleDatePublishedForm(request.POST)
+        if part_of_article_to_edit == 'url':
+            return URLForm(request.POST)
 
     # if not a POST it'll create a blank form
     else:
@@ -126,6 +128,8 @@ def article_form_selection(request, part_of_article_to_edit, data_article):
             return ArticleAbstractForm(old_abstract=data_article[part_of_article_to_edit])
         if part_of_article_to_edit == 'datePublished':
             return ArticleDatePublishedForm(old_date_published=data_article['date_published'])
+        if part_of_article_to_edit == 'url':
+            return URLForm(old_url=data_article['url'])
 
 
 def article_field_edition(request, part_of_article_to_edit, ark_pid):
