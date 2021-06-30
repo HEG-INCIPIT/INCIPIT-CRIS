@@ -14,8 +14,10 @@
 
         {% include 'main/navbar.html' %}
 
-        {% block project_information %}
-            <section>
+        <section>
+            {% block information %}
+            {% endblock %}
+            {% block project_information %}
                 <p>
                     {% if user.is_authenticated and edition_granted or user.is_superuser %}
                         <a class="button is-primary" href="/projects/edition/{{ data_project.ark_pid }}">Modifier</a>
@@ -29,19 +31,19 @@
                 <p><time datetime="{{ data_project.dissolution_date }}">Date de fin : {{ data_project.dissolution_date }}</time></p>
                 <p>URL : {{ data_project.url }}</p>
                 <p>Membre(s) : </p>
-                <p>
-                    {% for member in data_project.members %}
+                {% for member in data_project.members %}
+                    <p>
                         <a href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a> 
-                    {% endfor %}
-                </p>
+                    </p>
+                {% endfor %}
                 <p>Article(s) : </p>
-                <p>
-                    {% for article in data_project.articles %}
+                {% for article in data_project.articles %}
+                    <p>
                         <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a> 
-                    {% endfor %}
-                </p>
-            </section>
-        {% endblock %}
+                    </p>
+                {% endfor %}
+            {% endblock %}
+        </section>
         {% include 'main/footer.html' %}
     </body>
 </html>

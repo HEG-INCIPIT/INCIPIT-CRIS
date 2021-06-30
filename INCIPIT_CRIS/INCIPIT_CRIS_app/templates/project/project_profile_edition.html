@@ -1,54 +1,60 @@
-<!DOCTYPE html>
-<html class="has-navbar-fixed-top">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>INCIPIT-CRIS</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    </head>
-    <body>
+{% extends "project/project_profile.html" %}
 
-        {% include 'main/navbar.html' %}
+{% block information %}
+    {{ message }}
+{% endblock %}
 
-        {% block project_information %}
-            <p>
-                Projet
-                <form action="/projects/edition/field/delete-project/{{data_project.ark_pid}}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" id="projectARK" name="projectARK" value="{{ data_project.ark_pid }}">
-                    <input type="submit" value="Supprimer">
-                </form>
-            </p>
-            <p>Nom : {{ data_project.name }} <a href="/projects/edition/field/name/{{data_project.ark_pid}}"> Modifer</a></p>
-            <p>Description : {{ data_project.description }} <a href="/projects/edition/field/description/{{data_project.ark_pid}}"> Modifer</a></p>
-            <p>Date de début : {{ data_project.founding_date }} <a href="/projects/edition/field/foundingDate/{{data_project.ark_pid}}"> Modifer</a></p>
-            <p>Date de fin : {{ data_project.dissolution_date }} <a href="/projects/edition/field/dissolutionDate/{{data_project.ark_pid}}"> Modifer</a></p>
-            <p>Membre(s) : <a href="/projects/edition/field/add-member/{{data_project.ark_pid}}"> Ajouter</a></p>
-            {% for member in data_project.members %}
-                <div>
-                    <a href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
-                    <form action="/projects/edition/field/delete-member/{{data_project.ark_pid}}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" id="memberARK" name="memberARK" value="{{ member.0 }}">
-                        <input type="submit" value="Supprimer">
-                    </form>
-                </div>
-            {% endfor %}
-            <p>Article(s) : <a href="/projects/edition/field/add-article/{{data_project.ark_pid}}"> Ajouter</a></p>
-                {% for article in data_project.articles %}
-                <div>
-                    <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
-                    <form action="/projects/edition/field/delete-article/{{data_project.ark_pid}}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
-                        <input type="submit" value="Supprimer">
-                    </form>
-                </div>
-            {% endfor %}
-        {% endblock %}
-        {% include 'main/footer.html' %}
-    </body>
-</html>
+
+{% block project_information %}
+
+    <a class="button is-primary" href="/projects/{{ data_project.ark_pid }}">Voir le projet</a>
+
+    <form action="/projects/edition/field/delete-project/{{data_project.ark_pid}}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="projectARK" name="projectARK" value="{{ data_project.ark_pid }}">
+        <input class="shift-button button is-danger" type="submit" value="Supprimer">
+    </form>
+
+    <p class="title is-4" align="justify">
+        {{ data_project.name }} <a class="link-one is-size-6" href="/projects/edition/field/name/{{data_project.ark_pid}}"> Modifer</a>
+    </p>
+
+    <p class="subtitle is-6" align="justify">
+        {% if data_project.description == "" %}
+            <a class="link-one" href="/projects/edition/field/description/{{data_project.ark_pid}}"> Ajouter un abstract</a>
+        {% else %}
+            {{ data_project.description }}
+            <a class="link-one" href="/projects/edition/field/description/{{data_project.ark_pid}}"> Modifier</a>
+        {% endif %}
+    </p>
+
+    <p><time datetime="{{ data_project.founding_date }}">Date de début : {{ data_project.founding_date }}</time> <a class="link-one" href="/projects/edition/field/foundingDate/{{data_project.ark_pid}}"> Modifer</a></p>
+    <p><time datetime="{{ data_project.dissolution_date }}">Date de fin : {{ data_project.dissolution_date }}</time> <a class="link-one" href="/projects/edition/field/dissolutionDate/{{data_project.ark_pid}}"> Modifer</a></p>
+    
+    <p>URL : <a class="link-one" href="{{ data_project.url }}"> {{ data_project.url }}</a> <a class="link-one" href="/projects/edition/field/url/{{data_project.ark_pid}}"> Modifier</a></p>
+
+    <p>Membre(s) : <a class="link-one" href="/projects/edition/field/add-member/{{data_project.ark_pid}}"> Ajouter</a> </p>
+    {% for member in data_project.members %}
+        <p>
+            <form action="/projects/edition/field/delete-member/{{data_project.ark_pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="memberARK" name="memberARK" value="{{ member.0 }}">
+                <a class="link-one" href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
+    <p>Article(s) : <a class="link-one" href="/projects/edition/field/add-article/{{data_project.ark_pid}}"> Ajouter</a></p>
+    {% for article in data_project.articles %}
+        <p>
+            <form action="/projects/edition/field/delete-article/{{data_project.ark_pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
+                <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
+{% endblock %}
