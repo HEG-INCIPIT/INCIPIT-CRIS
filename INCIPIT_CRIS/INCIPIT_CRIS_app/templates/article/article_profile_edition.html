@@ -27,7 +27,7 @@
         {% endif %}
     </p>
     <time datetime="{{ data_article.date_published }}">Date de publication : {{ data_article.date_published }} <a class="link-one" href="/articles/edition/field/datePublished/{{data_article.ark_pid}}"> Modifer</a></time>
-    <p>URL : <a class="link-one" href="{{ data_article.url }}">{{ data_article.url }}</a></p>
+    <p>URL : <a class="link-one" href="{{ data_article.url }}">{{ data_article.url }}</a> <a class="link-one" href="/articles/edition/field/url/{{data_article.ark_pid}}"> Modifer</a></p>
     <p>Auteur(s) : <a class="link-one" href="/articles/edition/field/add-author/{{data_article.ark_pid}}"> Ajouter</a></p>
         {% for author in data_article.authors %}
             <p>
