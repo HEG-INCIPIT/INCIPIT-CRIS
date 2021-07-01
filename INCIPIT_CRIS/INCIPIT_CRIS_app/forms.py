@@ -16,7 +16,7 @@ number_phone_regex = RegexValidator(r"^[0-9]*$", "Le numéro de téléphone doit
 
 
 class DescriptionForm(forms.Form):
-    description = forms.CharField(label='Description ', max_length=300, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder': 'Ajoutez votre description'}))
+    description = forms.CharField(label='Description ', max_length=300, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder': 'Ajoutez votre description','class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -44,8 +44,8 @@ class TelephoneForm(forms.Form):
 ##################################################
 
 class ArticleCreationForm(forms.Form):
-    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea)
-    abstract = forms.CharField(label='Abstract ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea)
+    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
+    abstract = forms.CharField(label='Abstract ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''')
     date_published = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=True)
@@ -53,7 +53,7 @@ class ArticleCreationForm(forms.Form):
 
 
 class ArticleNameForm(forms.Form):
-    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea)
+    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -65,7 +65,7 @@ class ArticleNameForm(forms.Form):
 
 
 class ArticleAbstractForm(forms.Form):
-    abstract = forms.CharField(label='Abstract ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea)
+    abstract = forms.CharField(label='Abstract ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -93,8 +93,8 @@ class ArticleDatePublishedForm(forms.Form):
 ##################################################
 
 class ProjectCreationForm(forms.Form):
-    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea)
-    description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea)
+    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
+    description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''')
     founding_date = forms.DateTimeField(widget=DateInput, label='Date de début ', required=True)
@@ -103,7 +103,7 @@ class ProjectCreationForm(forms.Form):
 
 
 class ProjectNameForm(forms.Form):
-    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea)
+    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -115,7 +115,7 @@ class ProjectNameForm(forms.Form):
 
 
 class ProjectDescriptionForm(forms.Form):
-    description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea)
+    description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -156,7 +156,7 @@ class ProjectDissolutionDateForm(forms.Form):
 
 
 class URLForm(forms.Form):
-    url = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea)
+    url = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
