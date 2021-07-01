@@ -15,7 +15,7 @@ User/Password are available in the file `fuseki/run/shiro.ini`.
 
 ## How tu run
 
-Actually the shell script INCIPIT-CRIS_launcher.sh launch fuseki and django on the port 8000. Make sure to execute the script being in the folder and that it has the permissions to be run. Simply enter 
+Actually the shell script INCIPIT-CRIS_launcher.sh launch fuseki and django on the port 8000. Make sure to execute the script being in the folder, that it has the permissions to be run, and that the package virtualenv is already intalled. Then simply enter 
 
 ```bash
 ./INCIPIT-CRIS_launcher.sh
