@@ -6,7 +6,7 @@ INCIPIT-CRIS is a project developed at the HEG of Geneva. The purpose is to deve
 
 Interaction scheme :
 
-![alt text](INCIPIT-CRIS_Interactions.png "Logo Title Text 1")
+![alt text](INCIPIT-CRIS_Interactions.jpg "Logo Title Text 1")
 
 ## Fuseki
 
@@ -22,3 +22,4 @@ Actually the shell script INCIPIT-CRIS_launcher.sh launch fuseki and django on t
 ```
 
 in the terminal and enjoy !
+
