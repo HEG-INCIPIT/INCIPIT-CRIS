@@ -15,7 +15,9 @@ User/Password are available in the file `fuseki/run/shiro.ini`.
 
 ## How tu run
 
-Actually the shell script INCIPIT-CRIS_launcher.sh launch fuseki and django localhost on the port 8000. Make sure to execute the script being in the folder, that it has the permissions to be run, and that the package virtualenv is already intalled. Then simply enter 
+Actually the shell script INCIPIT-CRIS_launcher.sh launch fuseki and django localhost on the port 8000. The only manipulation you have to do is to access to web interface of fuseki on the address
+`localhost:3030` then click on `dataset -> upload files -> select files...` and add the ontology schemaorg-20210511.ttl. Then upload the file and it's done !
+Make sure to execute the script being in the folder, that it has the permissions to be run, and that the package virtualenv is already intalled. Then simply enter 
 
 ```bash
 ./INCIPIT-CRIS_launcher.sh
