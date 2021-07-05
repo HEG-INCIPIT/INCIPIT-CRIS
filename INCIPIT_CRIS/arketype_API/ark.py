@@ -1,10 +1,129 @@
-array_ark = ["ark:/68061/g24w2n", "ark:/68061/g24w2a", "ark:/68061/g24w2b", "ark:/68061/g24w2c"]
+import urllib.request
+import base64
 
 class Ark:
-    def __init__(self):
-        self.ark = array_ark[0]
-        if(len(array_ark)>0):
-            array_ark.pop(0)
 
-    def ark_creation(self):
-        return self.ark
+    server = 'https://dev.arketype.ch/'
+    username = 'apitest'
+    password = '1234'
+    shoulder = 'ark:/99999/fk3'
+
+    def mint(self, target, who, what, when):
+        r = urllib.request.Request("{}shoulder/{}".format(self.server, self.shoulder))
+        r.get_method = lambda: 'POST'
+    
+        s = '_target: {}\nerc.who: {}\nerc.what: {}\nerc.when: {}'.format(target, who, what, when).encode("UTF-8")
+        r.data = s
+        r.add_header('Content-Type', 'text/plain; charset=UTF-8')
+        r.add_header('Content-Length', str(len(s)))
+
+        r.add_header('Authorization', 'Basic ' + base64.b64encode((self.username + ':' + self.password).encode('utf-8')).decode('utf-8'))
+
+        c = None
+        try:
+            c = urllib.request.urlopen(r)
+            s = c.read().decode('UTF-8')
+            assert s.startswith('success:'), s
+            return s[8:].split()[0]
+        except urllib.error.HTTPError as e:
+            raise urllib.error.HTTPError()
+            '''if e.fp != None:
+                s = e.fp.read().decode('UTF-8')
+                if not s.startswith('error:'): s = 'error: ' + s
+                return (id, s)
+            else:
+                return (id, 'error: %d %s' % (e.code, e.msg))'''
+        except Exception as e:
+            raise Exception()
+            #return (id, 'error: ' + str(e))
+        finally:
+            if c != None: c.close()
+
+    
+    def view(self, ark):
+        r = urllib.request.Request('https://dev.arketype.ch/id/{}'.format(ark))
+        r.get_method = lambda: 'GET'
+
+        c = None
+        try:
+            c = urllib.request.urlopen(r)
+            s = c.read().decode('UTF-8')
+            assert s.startswith('success:'), s
+            return s
+        except urllib.error.HTTPError as e:
+            raise urllib.error.HTTPError
+            '''if e.fp != None:
+                s = e.fp.read().decode('UTF-8')
+                if not s.startswith('error:'): s = 'error: ' + s
+                return (id, s)
+            else:
+                return (id, 'error: %d %s' % (e.code, e.msg))'''
+        except Exception as e:
+            raise Exception()
+            #return (id, 'error: ' + str(e))
+        finally:
+            if c != None: c.close()
+
+
+    def update(self, ark, target, who, what, when):
+        r = urllib.request.Request("{}id/{}".format(self.server, ark))
+        r.get_method = lambda: 'POST'
+    
+        s = '_target: {}\nerc.who: {}\nerc.what: {}\nerc.when: {}'.format(target, who, what, when).encode("UTF-8")
+        r.data = s
+        r.add_header('Content-Type', 'text/plain; charset=UTF-8')
+        r.add_header('Content-Length', str(len(s)))
+
+        r.add_header('Authorization', 'Basic ' + base64.b64encode((self.username + ':' + self.password).encode('utf-8')).decode('utf-8'))
+
+        c = None
+        try:
+            c = urllib.request.urlopen(r)
+            s = c.read().decode('UTF-8')
+            assert s.startswith('success:'), s
+            return s[8:].split()[0]
+        except urllib.error.HTTPError as e:
+            raise urllib.error.HTTPError()
+            '''if e.fp != None:
+                s = e.fp.read().decode('UTF-8')
+                if not s.startswith('error:'): s = 'error: ' + s
+                return (id, s)
+            else:
+                return (id, 'error: %d %s' % (e.code, e.msg))'''
+        except Exception as e:
+            raise Exception()
+            #return (id, 'error: ' + str(e))
+        finally:
+            if c != None: c.close()
+
+
+    def create(self, ark, target, who, what, when):
+        r = urllib.request.Request("{}id/{}".format(self.server, ark))
+        r.get_method = lambda: 'PUT'
+    
+        s = '_target: {}\nerc.who: {}\nerc.what: {}\nerc.when: {}'.format(target, who, what, when).encode("UTF-8")
+        r.data = s
+        r.add_header('Content-Type', 'text/plain; charset=UTF-8')
+        r.add_header('Content-Length', str(len(s)))
+
+        r.add_header('Authorization', 'Basic ' + base64.b64encode((self.username + ':' + self.password).encode('utf-8')).decode('utf-8'))
+
+        c = None
+        try:
+            c = urllib.request.urlopen(r)
+            s = c.read().decode('UTF-8')
+            assert s.startswith('success:'), s
+            return s[8:].split()[0]
+        except urllib.error.HTTPError as e:
+            raise urllib.error.HTTPError()
+            '''if e.fp != None:
+                s = e.fp.read().decode('UTF-8')
+                if not s.startswith('error:'): s = 'error: ' + s
+                return (id, s)
+            else:
+                return (id, 'error: %d %s' % (e.code, e.msg))'''
+        except Exception as e:
+            raise Exception()
+            #return (id, 'error: ' + str(e))
+        finally:
+            if c != None: c.close()
