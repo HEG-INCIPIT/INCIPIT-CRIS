@@ -97,7 +97,7 @@ class ProjectCreationForm(forms.Form):
     name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
-                              help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'ARK si existant','class':'input'}))
+                              help_text='''Indiqué l'ark du projet s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'ARK si existant','class':'input'}))
     founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de début ', required=True)
     dissolution_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fin ', required=True)
     url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL','class':'input'}))
@@ -149,6 +149,20 @@ class ProjectDissolutionDateForm(forms.Form):
             my_arg = kwargs.pop('old_dissolution_date')
         super().__init__(*args, **kwargs)
         self.fields['dissolution_date'].initial = my_arg
+
+
+##################################################
+# Project forms
+##################################################
+
+class DatasetCreationForm(forms.Form):
+    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
+    abstract = forms.CharField(label='Abstract ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
+    ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
+                              help_text='''Indiqué l'ark du jeu de données s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'ARK si existant','class':'input'}))
+    created_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de création ', required=True)
+    modified_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de modification ', required=True)
+    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL','class':'input'}))
 
 
 ##################################################
