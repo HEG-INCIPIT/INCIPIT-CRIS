@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from . import variables
+from django.conf import settings
+import datetime
 
 
 class User(AbstractUser):
@@ -30,7 +32,16 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         if not variables.sparql_get_person_object.check_person_ark(self.ark_pid) and not self.is_staff:
             if self.ark_pid == '':
-                self.ark_pid = variables.ark.ark_creation()
+                
+                try:
+                    self.ark_pid = variables.ark.mint('', '{} {}'.format(self.first_name, self.last_name), 
+                        'Creating an ARK in INCIPIT-CRIS for a person named {} {}'.format(self.first_name, self.last_name), '{}'.format(datetime.datetime.now()))
+                    variables.ark.update('{}'.format(self.ark_pid), '{}{}'.format(settings.URL, self.ark_pid), '{} {}'.format(self.first_name, self.last_name), 
+                        'Creating an ARK in INCIPIT-CRIS for a person named {} {}'.format(self.first_name, self.last_name), '{}'.format(datetime.datetime.now()))
+                except:
+                    print("ERROR")
+                    raise Exception
+
             variables.sparql_post_person_object.init_person(self.ark_pid, self.first_name, self.last_name, self.email)
             if self.email != self.__original_email:
                 variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'email', self.email,

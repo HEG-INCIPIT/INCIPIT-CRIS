@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import *
 import re
 import string
+import datetime
+from django.conf import settings
 from . import views
 from . import variables
 
@@ -50,7 +52,14 @@ def article_creation(request):
                 authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
                 ark_pid = form.cleaned_data['ark_pid']
                 if ark_pid == '':
-                    ark_pid = variables.Ark().ark_creation()
+                    try:
+                        ark_pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
+                            'Creating an ARK in INCIPIT-CRIS for an article named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
+                        variables.ark.update('{}'.format(ark_pid), '{}{}'.format(settings.URL, ark_pid), '{} {}'.format(form.cleaned_data['name']), 
+                            'Creating an ARK in INCIPIT-CRIS for an article named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
+                    except:
+                        print("ERROR")
+                        raise Exception
                 variables.sparql_post_article_object.create_article(ark_pid, form.cleaned_data['name'],
                                                           form.cleaned_data['abstract'],
                                                           form.cleaned_data['date_published'], form.cleaned_data['url'])

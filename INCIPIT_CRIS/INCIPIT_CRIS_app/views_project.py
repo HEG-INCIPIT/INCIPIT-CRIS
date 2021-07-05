@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import *
 import re
 import string
+import datetime
+from django.conf import settings
 from . import views
 from . import variables
 
@@ -33,7 +35,14 @@ def project_creation(request):
                 members = re.findall('"([^"]*)"', request.POST['memberElementsPost'])
                 ark_pid = form.cleaned_data['ark_pid']
                 if ark_pid == '':
-                    ark_pid = variables.Ark().ark_creation()
+                    try:
+                        ark_pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
+                            'Creating an ARK in INCIPIT-CRIS for a project named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
+                        variables.ark.update('{}'.format(ark_pid), '{}{}'.format(settings.URL, ark_pid), '{} {}'.format(form.cleaned_data['name']), 
+                            'Creating an ARK in INCIPIT-CRIS for an project named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
+                    except:
+                        print("ERROR")
+                        raise Exception
                 variables.sparql_post_project_object.create_project(ark_pid, form.cleaned_data['name'],
                                                         form.cleaned_data['description'],
                                                         form.cleaned_data['founding_date'], form.cleaned_data['dissolution_date'], form.cleaned_data['url'])
