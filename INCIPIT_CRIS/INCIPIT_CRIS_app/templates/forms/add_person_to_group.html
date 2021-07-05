@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="{% static 'css/article_creation.css' %}">
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/form.css' %}">
     </head>
     <body>
         {% include 'main/navbar.html' %}
@@ -19,15 +20,15 @@
                 <div class="autocomplete">
                     <label for="groupAutocomplete">{{ title_of_person_added }} : </label>
                     {% if title_of_person_added == 'Auteur' %}
-                        <input id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom de l'auteur">
+                        <input class="input" id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom de l'auteur">
                     {% else %}
-                        <input id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom du membre">
+                        <input class="input" id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom du membre">
                     {% endif %}
                 </div>
                 <div id="groupElements">
                 </div>
                 <input type="hidden" id="groupElementsPost" name="groupElementsPost">
-                <input type="submit" value="{{ button_value }}">
+                <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
         {% include 'main/footer.html' %}

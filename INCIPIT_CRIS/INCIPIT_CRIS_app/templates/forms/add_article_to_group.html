@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="{% static 'css/article_creation.css' %}">
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/form.css' %}">
     </head>
     <body>
         <section>
@@ -18,12 +19,12 @@
                 {% csrf_token %}
                 <div class="autocomplete">
                     <label for="groupAutocomplete">{{ title_data_type_added }} : </label>
-                        <input id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom {{ data_type_added }}">
+                        <input class="input" id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom {{ data_type_added }}">
                 </div>
                 <div id="groupElements">
                 </div>
                 <input type="hidden" id="groupElementsPost" name="groupElementsPost">
-                <input type="submit" value="{{ button_value }}">
+                <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
         {% include 'main/footer.html' %}
