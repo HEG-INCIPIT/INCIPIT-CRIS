@@ -10,7 +10,7 @@ from . import variables
 
 def project_results(request):
     alphabet_list = list(string.ascii_lowercase)
-    categories = ["Projets de recherche"]
+    categories = ['Projets de recherche']
     category = categories[0]
     sparql_request = variables.sparql_get_project_object.get_projects()
     context = {
@@ -19,9 +19,10 @@ def project_results(request):
         'alphabet_list': alphabet_list,
         'categories': categories,
         'category':category,
+        'url':'/projects/',
     }
 
-    return render(request, 'project/project_results.html', context)
+    return render(request, 'generic/results.html', context)
 
 
 def project_creation(request):

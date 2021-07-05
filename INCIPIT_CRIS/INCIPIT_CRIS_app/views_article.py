@@ -10,7 +10,7 @@ from . import variables
 
 def article_results(request):
     alphabet_list = list(string.ascii_lowercase)
-    categories = ["Articles"]
+    categories = ['Articles']
     category = categories[0]
     sparql_request = variables.sparql_get_article_object.get_articles()
     context = {
@@ -19,9 +19,10 @@ def article_results(request):
         'alphabet_list': alphabet_list,
         'categories': categories,
         'category':category,
+        'url':'/articles/',
     }
 
-    return render(request, 'article/article_results.html', context)
+    return render(request, 'generic/results.html', context)
 
 
 def article_profile(request, ark_pid):
