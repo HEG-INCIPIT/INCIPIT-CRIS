@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import RegexValidator
+from django.forms.widgets import NumberInput
 
 not_quotes_regex = RegexValidator(r"""[^".{3,}]""", "Vous ne pouvez pas mettre trois guillemets de suite")
 
@@ -28,7 +29,7 @@ class DescriptionForm(forms.Form):
 
 
 class TelephoneForm(forms.Form):
-    telephone = forms.CharField(label='Telephone ', max_length=18, required=False, validators=[number_phone_regex])
+    telephone = forms.CharField(label='Téléphone ', max_length=18, required=False, validators=[number_phone_regex], widget=forms.TextInput(attrs={'placeholder': 'Numéro','class':'input'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -47,9 +48,9 @@ class ArticleCreationForm(forms.Form):
     name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     abstract = forms.CharField(label='Abstract ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
-                              help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''')
-    date_published = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=True)
-    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex])
+                              help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'ARK si existant','class':'input'}))
+    date_published = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de publication ', required=True)
+    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL','class':'input'}))
 
 
 class ArticleNameForm(forms.Form):
@@ -77,7 +78,7 @@ class ArticleAbstractForm(forms.Form):
 
 
 class ArticleDatePublishedForm(forms.Form):
-    date_published = forms.DateTimeField(widget=DateInput, label='Date de publication ', required=False)
+    date_published = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de publication ', required=False)
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -96,10 +97,10 @@ class ProjectCreationForm(forms.Form):
     name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     ark_pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
-                              help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''')
-    founding_date = forms.DateTimeField(widget=DateInput, label='Date de début ', required=True)
-    dissolution_date = forms.DateTimeField(widget=DateInput, label='Date de fin ', required=True)
-    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex])
+                              help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'ARK si existant','class':'input'}))
+    founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de début ', required=True)
+    dissolution_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fin ', required=True)
+    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL','class':'input'}))
 
 
 class ProjectNameForm(forms.Form):
@@ -127,7 +128,7 @@ class ProjectDescriptionForm(forms.Form):
 
 
 class ProjectFoundingDateForm(forms.Form):
-    founding_date = forms.DateTimeField(widget=DateInput, label='Date de début ', required=False)
+    founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de début ', required=False)
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -139,7 +140,7 @@ class ProjectFoundingDateForm(forms.Form):
 
 
 class ProjectDissolutionDateForm(forms.Form):
-    dissolution_date = forms.DateTimeField(widget=DateInput, label='Date de fin ', required=False)
+    dissolution_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fin ', required=False)
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
