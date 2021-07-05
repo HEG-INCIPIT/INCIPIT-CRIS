@@ -120,7 +120,7 @@ def person_field_edition(request, part_of_person_to_modify, ark_pid):
                 'url_to_return': '/personnes/edition/profil/{}/{}'.format(part_of_person_to_modify, ark_pid)
             }
             # return the form to be completed
-            return render(request, 'forms/person/person_profile_edition.html', context)
+            return render(request, 'forms/classic_form.html', context)
 
         else:
             # Check why the person cannot modify the profile and display the error
