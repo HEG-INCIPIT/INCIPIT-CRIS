@@ -11,7 +11,7 @@ def person_results(request):
     :return: render function with template and data
     """
     alphabet_list = list(string.ascii_lowercase)
-    categories = ["Personnes", "Professeurs ordinaire", "Assistants HES"]
+    categories = ['Personnes', 'Professeurs ordinaire', 'Assistants HES']
     category = categories[0]
     sparql_request = variables.sparql_get_person_object.get_persons()
     context = {
@@ -53,6 +53,12 @@ def person_profile(request, ark_pid):
 
 
 def person_edition(request, ark_pid):
+    """
+    Display a page with all the data of the person given by the ark_pid and adds links to modify some parts
+    :param request:
+    :param ark_pid: ark of the person to edit
+    :return: render function with template and data
+    """
     context = {}
     # Verify in triplestore if the ark_pid correspond to a person
     sparql_request_check_person_ark = variables.sparql_get_person_object.check_person_ark(ark_pid)
@@ -79,6 +85,12 @@ def person_edition(request, ark_pid):
 
 
 def person_form_selection(request, part_of_person_to_modify, data_person):
+    """
+    Select and return the correct form to be used in order to modify a field
+    :param request:
+    :part_of_person_to_modify: indicate which field is asked to be modified
+    :data_person: dictionnary with all the data of a person
+    """
     # Check the request method
     if request.method == 'POST':
         if part_of_person_to_modify == 'description':
