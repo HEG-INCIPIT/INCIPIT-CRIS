@@ -29,9 +29,11 @@
                         <div class="middlebox">
                             <h1>
                                 {{ data_person.given_name }} {{ data_person.family_name }}
-                                {% if can_edit %}
-                                    <a class="button is-primary" href="/personnes/edition/{{ ark_pid }}">Modifier</a>
-                                {% endif %}
+                                {% block button_back %}
+                                    {% if can_edit %}
+                                        <a class="button is-primary" href="/personnes/edition/{{ ark_pid }}">Modifier</a>
+                                    {% endif %}
+                                {% endblock %}
                             </h1>
                             <br>
                             {% block person_left_information %}

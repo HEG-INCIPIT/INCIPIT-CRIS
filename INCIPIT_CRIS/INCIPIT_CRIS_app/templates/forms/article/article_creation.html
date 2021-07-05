@@ -13,6 +13,8 @@
     <body>
         <section>
             {% include 'main/navbar.html' %}
+            
+            <h1 class="title is-4">Créer un article</h1>
 
             <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
                 {% csrf_token %}
@@ -44,12 +46,12 @@
                 </div>
                 <div class="autocomplete">
                     <label for="authorAutocomplete">Auteur : </label>
-                    <input id="authorInput" type="text" name="authorAutocomplete" placeholder="Nom de l'auteur">
+                    <input class="input" id="authorInput" type="text" name="authorAutocomplete" placeholder="Nom de l'auteur">
                 </div>
                 <div id="authorElements">
                 </div>
                 <input type="hidden" id="authorElementsPost" name="authorElementsPost">
-                <input type="submit" value="{{ button_value }}">
+                <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
         {% include 'main/footer.html' %}

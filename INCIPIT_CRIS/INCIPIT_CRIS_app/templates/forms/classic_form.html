@@ -8,6 +8,7 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/form.css' %}">
     </head>
     <body>
 
@@ -16,7 +17,7 @@
         <form action="{{ url_to_return }}" method="post">
             {% csrf_token %}
             {{ form }}
-            <input type="submit" value="{{ button_value }}">
+            <input class="button is-primary" type="submit" value="{{ button_value }}">
         </form>
         {% include 'main/footer.html' %}
     </body>

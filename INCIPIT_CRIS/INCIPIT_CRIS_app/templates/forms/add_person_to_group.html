@@ -11,8 +11,8 @@
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
     </head>
     <body>
+        {% include 'main/navbar.html' %}
         <section>
-            {% include 'main/navbar.html' %}
 
             <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
                 {% csrf_token %}

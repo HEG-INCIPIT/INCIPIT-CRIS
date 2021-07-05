@@ -8,15 +8,23 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
     </head>
     <body>
         {% include 'main/navbar.html' %}
 
-        <h2>Log In</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-            <button type="submit">Log In</button>
+        <form class="box" method="post">
+            <h1 class="title is-4">Connectez-vous</h1>
+            {% csrf_token %}
+            <div class="label-login">
+                <label>Nom d'utilisateur : </label> {{ form.username }}
+            </div>
+            <div class="label-login">
+                <label>Mot de passe : </label> {{ form.password }}
+            </div>
+            <button class="button is-primary" type="submit">Connexion</button>
         </form>
+
+        {% include 'main/footer.html' %}
     </body>
 </html>
