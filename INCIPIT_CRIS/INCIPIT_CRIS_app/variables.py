@@ -8,7 +8,7 @@ from sparql_triplestore.sparql_requests.project.sparql_get_project_methods impor
 from sparql_triplestore.sparql_requests.project.sparql_post_project_methods import SparqlPostProjectMethods
 
 
-ark = Ark
+ark = Ark()
 sparql_generic_post_object = SparqlGenericPostMethods()
 sparql_get_person_object = SparqlGetPersonMethods()
 sparql_post_person_object = SparqlPostPersonMethods()
