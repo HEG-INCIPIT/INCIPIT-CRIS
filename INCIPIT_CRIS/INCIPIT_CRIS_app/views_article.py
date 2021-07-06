@@ -9,6 +9,23 @@ from . import variables
 
 
 def article_results(request):
+    '''
+    Search in the triplestore all the articles and format a dictionnary that's used
+    in the template to display information.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display results for articles and a dictionnary with all the data needed to fulfill
+        the template.
+    '''
+
     alphabet_list = list(string.ascii_lowercase)
     categories = ['Articles']
     category = categories[0]
@@ -26,6 +43,24 @@ def article_results(request):
 
 
 def article_profile(request, ark_pid):
+    '''
+    Display a page with all the data of an article that is given by the ark_pid.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the profil of an article and a dictionnary with all the data needed to fulfill
+        the template.
+    '''
+
     # Verify in triplestore if the ark_pid correspond to an article
     sparql_request_check_article_ark = variables.sparql_get_article_object.check_article_ark(ark_pid)
     if sparql_request_check_article_ark:
@@ -91,6 +126,24 @@ def article_creation(request):
 
 
 def article_edition(request, ark_pid):
+    '''
+    Display a page with all the data of the article given by the ark_pid and adds links to modify some parts.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the profil of a article with the fields that can be edited and a dictionnary
+        with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -119,6 +172,24 @@ def article_edition(request, ark_pid):
 
 
 def article_form_selection(request, part_of_article_to_edit, data_article):
+    '''
+    Select and return the correct form to be used in order to modify a field.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    part_of_article_to_modify : String
+        Indicates the field that is asked to be modified.
+    data_article : Dictionary
+        Contain the data of the different fields of a article.
+
+    Returns
+    -------
+    Form
+        A form with the fields desired
+    '''
+
     # Check the request method
     if request.method == 'POST':
         if part_of_article_to_edit == 'name':
@@ -143,6 +214,26 @@ def article_form_selection(request, part_of_article_to_edit, data_article):
 
 
 def article_field_edition(request, part_of_article_to_edit, ark_pid):
+    '''
+    Handle the display and the selection of the correct form to modify a given field
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    part_of_article_to_modify : String
+        Indicates the field that is asked to be modified.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the field of the profil of an article that is going to be modified and a dictionnary
+        with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -212,12 +303,13 @@ def article_author_addition(request, ark_pid):
 
             context = {
                 'button_value': 'Ajouter',
-                'title_of_person_added': 'Auteur',
+                'title_data_type_added': 'Auteur',
+                'data_type_added': 'du projet',
                 'url_to_return': '/articles/edition/field/add-author/{}'.format(ark_pid),
-                'persons': persons
+                'data': persons
             }
             # return the form to be completed
-            return render(request, 'forms/add_person_to_group.html', context)
+            return render(request, 'forms/autocompletion_group.html', context)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",
@@ -285,7 +377,7 @@ def article_project_addition(request, ark_pid):
                 'data': projects
             }
             # return the form to be completed
-            return render(request, 'forms/add_article_to_group.html', context)
+            return render(request, 'forms/autocompletion_group.html', context)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",

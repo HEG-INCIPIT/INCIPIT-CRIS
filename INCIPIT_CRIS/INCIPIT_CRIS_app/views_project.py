@@ -9,6 +9,23 @@ from . import variables
 
 
 def project_results(request):
+    '''
+    Search in the triplestore all the projects and format a dictionnary that's used
+    in the template to display information.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display results for projects and a dictionnary with all the data needed to fulfill
+        the template.
+    '''
+
     alphabet_list = list(string.ascii_lowercase)
     categories = ['Projets de recherche']
     category = categories[0]
@@ -74,6 +91,24 @@ def project_creation(request):
 
 
 def project_profile(request, ark_pid):
+    '''
+    Display a page with all the data of a project that is given by the ark_pid.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the profil of a project and a dictionnary with all the data needed to fulfill
+        the template.
+    '''
+
     # Verify in triplestore if the ark_pid correspond to a project
     sparql_request_check_project_ark = variables.sparql_get_project_object.check_project_ark(ark_pid)
     if sparql_request_check_project_ark:
@@ -90,6 +125,24 @@ def project_profile(request, ark_pid):
     return render(request, 'page_404.html')
 
 def project_edition(request, ark_pid):
+    '''
+    Display a page with all the data of the project given by the ark_pid and adds links to modify some parts.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the profil of a project with the fields that can be edited and a dictionnary
+        with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -118,6 +171,24 @@ def project_edition(request, ark_pid):
 
 
 def project_form_selection(request, part_of_project_to_edit, data_project):
+    '''
+    Select and return the correct form to be used in order to modify a field.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    part_of_project_to_modify : String
+        Indicates the field that is asked to be modified.
+    data_project : Dictionary
+        Contain the data of the different fields of a project.
+
+    Returns
+    -------
+    Form
+        A form with the fields desired
+    '''
+
     # Check the request method
     if request.method == 'POST':
         if part_of_project_to_edit == 'name':
@@ -146,6 +217,25 @@ def project_form_selection(request, part_of_project_to_edit, data_project):
 
 
 def project_field_edition(request, part_of_project_to_edit, ark_pid):
+    '''
+    Handle the display and the selection of the correct form to modify a given field
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    part_of_project_to_modify : String
+        Indicates the field that is asked to be modified.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the field of the profil of a project that is going to be modified and a dictionnary
+        with all the data needed to fulfill the template.
+    '''
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -221,12 +311,13 @@ def project_member_addition(request, ark_pid):
 
             context = {
                 'button_value': 'Ajouter',
-                'title_of_person_added': 'Membre',
+                'title_data_type_added': 'Membre',
+                'data_type_added': 'du membre',
                 'url_to_return': '/projects/edition/field/add-member/{}'.format(ark_pid),
-                'persons': persons
+                'data': persons
             }
             # return the form to be completed
-            return render(request, 'forms/add_person_to_group.html', context)
+            return render(request, 'forms/autocompletion_group.html', context)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet project",
@@ -239,6 +330,22 @@ def project_member_addition(request, ark_pid):
 
 
 def project_member_deletion(request, ark_pid):
+    '''
+    Deletes a member of the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
@@ -293,7 +400,7 @@ def project_article_addition(request, ark_pid):
                 'data': articles
             }
             # return the form to be completed
-            return render(request, 'forms/add_article_to_group.html', context)
+            return render(request, 'forms/autocompletion_group.html', context)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet project",
@@ -306,6 +413,22 @@ def project_article_addition(request, ark_pid):
 
 
 def project_article_deletion(request, ark_pid):
+    '''
+    Deletes an article of the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
@@ -328,6 +451,22 @@ def project_article_deletion(request, ark_pid):
 
 
 def project_deletion(request, ark_pid):
+    '''
+    Deletes completely an project and all his leafs
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the index page.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project

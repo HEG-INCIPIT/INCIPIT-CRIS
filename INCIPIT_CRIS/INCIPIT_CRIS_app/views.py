@@ -5,11 +5,22 @@ from . import variables
 
 
 def index(request):
-    """
-    Compute data of users from database, articles and project from triplestore for the template
-    :param request: object
-    :return: render function with template and data
-    """
+    '''
+    Search data of users from database, articles and project from triplestore and display it all
+    in the template
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the index page and a dictionnary with all the data needed to fulfill
+        the template.
+    '''
     articles = variables.sparql_get_article_object.get_articles()
 
     articles_data = []
