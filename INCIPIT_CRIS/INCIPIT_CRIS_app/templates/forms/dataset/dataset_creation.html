@@ -6,24 +6,56 @@
         <title>INCIPIT-CRIS</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         {% load static %}
-        <link rel="stylesheet" href="{% static 'css/article_creation.css' %}">
+        <link rel="stylesheet" href="{% static 'css/form_creation.css' %}">
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/form.css' %}">
     </head>
     <body>
         <section>
             {% include 'main/navbar.html' %}
+            
+            <h1 class="title is-4">Créer un jeu de données</h1>
 
             <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
                 {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="fieldWrapper">
+                    {{ form.name.errors }}
+                    <label for="{{ form.name.id_for_label }}">Nom du jeu de données : </label>
+                    {{ form.name }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.abstract.errors }}
+                    <label for="{{ form.abstract.id_for_label }}">Résumé : </label>
+                    {{ form.abstract }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.ark_pid.errors }}
+                    <label for="{{ form.ark_pid.id_for_label }}">ARK du dataset si existant : </label>
+                    {{ form.ark_pid }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.url.errors }}
+                    <label for="{{ form.url.id_for_label }}">URL : </label>
+                    {{ form.url }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.created_date.errors }}
+                    <label for="{{ form.created_date.id_for_label }}">Date de création : </label>
+                    {{ form.created_date }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.modified_date.errors }}
+                    <label for="{{ form.modified_date.id_for_label }}">Date de modification : </label>
+                    {{ form.modified_date }}
+                </div>
                 <div class="autocomplete">
-                    <label for="groupAutocomplete">{{ title_data_type_added }} : </label>
-                        <input class="input" id="groupInput" type="text" name="groupAutocomplete" placeholder="Nom {{ data_type_added }}">
+                    <label for="maintainerAutocomplete">Mainteneur : </label>
+                    <input class="input" id="maintainerInput" type="text" name="maintainerAutocomplete" placeholder="Nom du mainteneur">
                 </div>
-                <div id="groupElements">
+                <div id="maintainerElements">
                 </div>
-                <input type="hidden" id="groupElementsPost" name="groupElementsPost">
+                <input type="hidden" id="maintainerElementsPost" name="maintainerElementsPost">
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
@@ -52,7 +84,7 @@
             /*for each item in the array...*/
             for (i = 0; i < arr.length; i++) {
                 /*check if the item starts with the same letters as the text field value:*/
-                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                if (arr[i].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
                 /*create a DIV element for each matching element:*/
                 b = document.createElement("DIV");
                 /*make the matching letters bold:*/
@@ -62,18 +94,17 @@
                 b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
                 /*execute a function when someone clicks on the item value (DIV element):*/
                     b.addEventListener("click", function(e) {
-                        /*create new element in forms to display array_data selected:*/
-                        var groupID = document.createElement("P");
-                        personToAdd = this.getElementsByTagName("input")[0].value;
-                        groupID.innerHTML = personToAdd;
+                        /*create new element in forms to display maintainers selected:*/
+                        var maintainerID = document.createElement("P");
+                        var personToAdd = this.getElementsByTagName("input")[0].value;
+                        maintainerID.innerHTML = personToAdd;
                         arrayToSend.push(personToAdd);
-                        arr = arr.filter(e => e !== groupID.innerHTML);
+                        arr = arr.filter(e => e !== maintainerID.innerHTML);
 
                         var btnDelete = document.createElement("BUTTON");
-                        btnDelete.innerHTML = "X";
+                        btnDelete.className = "delete";
                         btnDelete.type = "button";
-                        groupID.appendChild(btnDelete);
-
+                        maintainerID.appendChild(btnDelete);
 
                         btnDelete.addEventListener('click', function(e) {
                             parent = e.srcElement.parentNode;
@@ -82,7 +113,7 @@
                             arr.push(parent.innerHTML);
                             parent.remove();
                         }, false);
-                        document.getElementById("groupElements").appendChild(groupID);
+                        document.getElementById("maintainerElements").appendChild(maintainerID);
                         console.log(arrayToSend)
                         /*insert the value for the autocomplete text field:*/
                         inp.value = "";
@@ -153,13 +184,13 @@
 
     function process() {
 
-        document.getElementById("groupElementsPost").value = JSON.stringify(arrayToSend);
+        document.getElementById("maintainerElementsPost").value = JSON.stringify(arrayToSend);
         return true;
     }
 
-    var array_data = {{ data|safe }};
+    var maintainers = {{ persons|safe }};
     var arrayToSend = [];
 
-    autocomplete(document.getElementById("groupInput"), array_data);
+    autocomplete(document.getElementById("maintainerInput"), maintainers);
 
 </script>

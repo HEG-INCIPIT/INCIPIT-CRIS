@@ -23,15 +23,28 @@
 {% endblock %}
 
 {% block articles %}
-    Articles :
+    <p>Articles :  <a class="link-one" href="/personnes/edition/profil/add-article/{{data_person.ark_pid}}"> Ajouter</a></p>
     {% for article in data_person.articles %}
         <p>
-            <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
             <form action="/personnes/edition/profil/delete-article/{{ark_pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
-                <input type="submit" value="Supprimer">
+                <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                <button class="delete"></button>
             </form>
+        </p>
+    {% endfor %}
+{% endblock %}
+
+{% block projects %}
+    <p>Projets : <a class="link-one" href="/personnes/edition/profil/add-project/{{data_person.ark_pid}}"> Ajouter</a></p>
+    {% for project in data_person.projects %}
+        <p>
+            <form action="/personnes/edition/profil/delete-project/{{ark_pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
+                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                <button class="delete"></button>
         </p>
     {% endfor %}
 {% endblock %}
