@@ -151,6 +151,7 @@ class SparqlGetPersonMethods:
         articles = variables.sparql_get_person_object.get_articles_person(ark_pid)
         projects = variables.sparql_get_person_object.get_projects_person(ark_pid)
         
+        data_person['ark_pid'] = ark_pid
         data_person['articles'] = articles
         data_person['projects'] = projects
 
