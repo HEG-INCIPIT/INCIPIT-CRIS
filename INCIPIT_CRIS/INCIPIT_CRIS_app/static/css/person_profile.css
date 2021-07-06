@@ -42,3 +42,7 @@ h1 {
 .tab-content div.is-active {
     display: block;
 }
+
+.delete {
+    margin-top: 3px;
+}
