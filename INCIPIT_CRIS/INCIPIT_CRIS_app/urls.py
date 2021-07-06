@@ -6,7 +6,10 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     path('personnes/', views_person.person_results, name='person_results'),
+    path('personnes/edition/profil/add-article/<path:ark_pid>', views_person.person_article_addition, name='person_article_addition'),
     path('personnes/edition/profil/delete-article/<path:ark_pid>', views_person.person_article_deletion, name='person_article_deletion'),
+    path('personnes/edition/profil/add-project/<path:ark_pid>', views_person.person_project_addition, name='person_project_addition'),
+    path('personnes/edition/profil/delete-project/<path:ark_pid>', views_person.person_project_deletion, name='person_project_deletion'),
     path('personnes/edition/profil/<str:part_of_person_to_modify>/<path:ark_pid>', views_person.person_field_edition, name='person_field_edition'),
     path('personnes/edition/<path:ark_pid>', views_person.person_edition, name='person_edition_display'),
     path('personnes/<path:ark_pid>', views_person.person_profile, name='person_profile'),
@@ -34,5 +37,6 @@ urlpatterns = [
     path('projects/<path:ark_pid>', views_project.project_profile, name='project_profile'),
 
     path('datasets/', views_dataset.dataset_results, name='dataset_results'),
+    path('datasets/creation/', views_dataset.dataset_creation, name='dataset_creation'),
     
 ]

@@ -9,6 +9,22 @@ from . import variables
 
 
 def dataset_results(request):
+    '''
+    Search in the triplestore all the datasets and format a dictionnary that's used
+    in the template to display information.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display results for datasets and a dictionnary with all the data needed to fulfill
+        the template.
+    '''
     alphabet_list = list(string.ascii_lowercase)
     categories = ['Jeux de données']
     category = categories[0]
@@ -51,7 +67,7 @@ def dataset_creation(request):
                     variables.sparql_post_dataset_object.add_maintainer_to_dataset(ark_pid, maintainer.split()[-1])
                 return redirect(views.index)
         else:
-            form = ArticleCreationForm()
+            form = DatasetCreationForm()
         persons_info = variables.sparql_get_person_object.get_persons()
         persons = []
         for basic_info_person in persons_info:
