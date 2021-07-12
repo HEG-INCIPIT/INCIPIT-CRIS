@@ -27,10 +27,10 @@
                     {{ data_dataset.name }} 
                 </p>
                 <p class="subtitle is-6" align="justify">{{ data_dataset.abstract }}</p>
-                <p><time datetime="{{ data_dataset.created_date }}">Date de début : {{ data_dataset.created_date }}</time></p>
-                <p><time datetime="{{ data_dataset.modified_date }}">Date de fin : {{ data_dataset.modified_date }}</time></p>
-                <p>URL des détails : <a class="link-one" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></p>
-                <p>URL des données : <a class="link-one" href="{{ data_dataset.url_data.url }}">{{ data_dataset.url_data.url }}</a></p>
+                <p><time datetime="{{ data_dataset.created_date }}">Date de création : {{ data_dataset.created_date }}</time></p>
+                <p><time datetime="{{ data_dataset.modified_date }}">Date de modification : {{ data_dataset.modified_date }}</time></p>
+                <p>URL des détails : <a class="link-one" href="{{ data_dataset.url_details }}">{{ data_dataset.url_details }}</a></p>
+                <p>URL des données : <a class="link-one" href="{{ data_dataset.url_data.url_data }}">{{ data_dataset.url_data.url_data }}</a></p>
                 <p>Créateur(s) : </p>
                 {% for creator in data_dataset.creators %}
                     <p>

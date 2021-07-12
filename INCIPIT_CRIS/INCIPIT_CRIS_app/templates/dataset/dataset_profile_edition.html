@@ -28,11 +28,11 @@
         {% endif %}
     </p>
 
-    <p><time datetime="{{ data_dataset.created_date }}">Date de début : {{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/createdDate/{{data_dataset.ark_pid}}"> Modifer</a></p>
-    <p><time datetime="{{ data_dataset.modified_date }}">Date de fin : {{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/modifiedDate/{{data_dataset.ark_pid}}"> Modifer</a></p>
+    <p><time datetime="{{ data_dataset.created_date }}">Date de création : {{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/dateCreated/{{data_dataset.ark_pid}}"> Modifer</a></p>
+    <p><time datetime="{{ data_dataset.modified_date }}">Date de modification : {{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/dateModified/{{data_dataset.ark_pid}}"> Modifer</a></p>
     
-    <p>URL des détails : <a class="link-one" href="{{ data_dataset.url }}"> {{ data_dataset.url }}</a> <a class="link-one" href="/datasets/edition/field/url/{{data_dataset.ark_pid}}"> Modifier</a></p>
-    <p>URL des données : <a class="link-one" href="{{ data_dataset.url_data.url }}"> {{ data_dataset.url_data.url }}</a> <a class="link-one" href="/datasets/edition/field/url_data/{{data_dataset.ark_pid}}"> Modifier</a></p>
+    <p>URL des détails : <a class="link-one" href="{{ data_dataset.url_details }}"> {{ data_dataset.url_details }}</a> <a class="link-one" href="/datasets/edition/field/urlDetails/{{data_dataset.ark_pid}}"> Modifier</a></p>
+    <p>URL des données : <a class="link-one" href="{{ data_dataset.url_data.url_data }}"> {{ data_dataset.url_data.url_data }}</a> <a class="link-one" href="/datasets/edition/field/urlData/{{data_dataset.ark_pid}}"> Modifier</a></p>
 
     <p>Créateur(s) : <a class="link-one" href="/datasets/edition/field/add-creator/{{data_dataset.ark_pid}}"> Ajouter</a> </p>
     {% for creator in data_dataset.creators %}
