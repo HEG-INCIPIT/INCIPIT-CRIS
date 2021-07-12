@@ -206,7 +206,7 @@ def project_form_selection(request, part_of_project_to_edit, data_project):
     # Check the request method
     if request.method == 'POST':
         if part_of_project_to_edit == 'name':
-            return ProjectNameForm(request.POST)
+            return NameForm(request.POST)
         if part_of_project_to_edit == 'description':
             return ProjectDescriptionForm(request.POST)
         if part_of_project_to_edit == 'foundingDate':
@@ -219,7 +219,7 @@ def project_form_selection(request, part_of_project_to_edit, data_project):
     # if not a POST it'll create a blank form
     else:
         if part_of_project_to_edit == 'name':
-            return ProjectNameForm(old_name=data_project[part_of_project_to_edit])
+            return NameForm(old_name=data_project[part_of_project_to_edit])
         if part_of_project_to_edit == 'description':
             return ProjectDescriptionForm(old_description=data_project[part_of_project_to_edit])
         if part_of_project_to_edit == 'foundingDate':

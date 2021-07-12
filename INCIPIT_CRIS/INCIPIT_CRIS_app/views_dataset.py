@@ -140,7 +140,7 @@ def dataset_profile(request, ark_pid):
     if sparql_request_check_dataset_ark:
         data_dataset = variables.sparql_get_dataset_object.get_data_dataset(ark_pid)
         edition_granted = False
-        if request.user.is_authenticated and request.user.ark_pid in [maintainer[0] for maintainer in data_dataset['maintainers']]:
+        if request.user.is_authenticated and (request.user.ark_pid in [maintainer[0] for maintainer in data_dataset['maintainers']] or request.user.ark_pid in [creator[0] for creator in data_dataset['creators']]):
             edition_granted = True
         context = {
             'edition_granted': edition_granted,
@@ -175,8 +175,10 @@ def dataset_edition(request, ark_pid):
     if request.user.is_authenticated:
         # Request all the creators of the dataset
         creators_dataset = variables.sparql_get_dataset_object.get_creators_dataset(ark_pid)
-        # Verify if the user ark is in the datasets creators to grant edition
-        if request.user.ark_pid in [creators[0] for creators in creators_dataset] or request.user.is_superuser:
+        # Request all the maintainers of the dataset
+        maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(ark_pid)
+        # Verify if the user ark is in the datasets creators or maintainers to grant edition
+        if request.user.ark_pid in [creators[0] for creators in creators_dataset] or request.user.ark_pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
             edition_granted = True
             data_dataset = variables.sparql_get_dataset_object.get_data_dataset(ark_pid)
             context = {
@@ -189,6 +191,135 @@ def dataset_edition(request, ark_pid):
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet dataset",
             'edition_granted': edition_granted
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet dataset"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def dataset_form_selection(request, part_of_dataset_to_edit, data_dataset):
+    '''
+    Select and return the correct form to be used in order to modify a field.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    part_of_dataset_to_modify : String
+        Indicates the field that is asked to be modified.
+    data_dataset : Dictionary
+        Contain the data of the different fields of a dataset.
+
+    Returns
+    -------
+    Form
+        A form with the fields desired
+    '''
+
+    # Check the request method
+    if request.method == 'POST':
+        if part_of_dataset_to_edit == 'name':
+            return NameForm(request.POST)
+        if part_of_dataset_to_edit == 'abstract':
+            return AbstractForm(request.POST)
+        if part_of_dataset_to_edit == 'dateCreated':
+            return DatasetCreatedDateForm(request.POST)
+        if part_of_dataset_to_edit == 'dateModified':
+            return DatasetModifiedDateForm(request.POST)
+        if part_of_dataset_to_edit == 'urlDetails':
+            return DatasetURLDetailsForm(request.POST)
+        if part_of_dataset_to_edit == 'urlData':
+            return DatasetURLDataForm(request.POST)
+
+    # if not a POST it'll create a blank form
+    else:
+        if part_of_dataset_to_edit == 'name':
+            return NameForm(old_name=data_dataset[part_of_dataset_to_edit])
+        if part_of_dataset_to_edit == 'abstract':
+            return AbstractForm(old_abstract=data_dataset[part_of_dataset_to_edit])
+        if part_of_dataset_to_edit == 'dateCreated':
+            return DatasetCreatedDateForm(old_created_date=data_dataset['created_date'])
+        if part_of_dataset_to_edit == 'dateModified':
+            return DatasetModifiedDateForm(old_modified_date=data_dataset['modified_date'])
+        if part_of_dataset_to_edit == 'urlDetails':
+            return DatasetURLDetailsForm(old_url_details=data_dataset['url_details'])
+        if part_of_dataset_to_edit == 'urlData':
+            return DatasetURLDataForm(old_url_data=data_dataset['url_data']['url_data'])
+
+
+
+def dataset_field_edition(request, part_of_dataset_to_edit, ark_pid):
+    '''
+    Handle the display and the selection of the correct form to modify a given field
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    part_of_article_to_modify : String
+        Indicates the field that is asked to be modified.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the field of the profil of a dataset that is going to be modified and a dictionnary
+        with all the data needed to fulfill the template.
+    '''
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the creators of the dataset
+        creators_dataset = variables.sparql_get_dataset_object.get_creators_dataset(ark_pid)
+        # Request all the maintainers of the dataset
+        maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(ark_pid)
+        # Verify if the user ark is in the datasets creators or maintainers to grant edition
+        if request.user.ark_pid in [creators[0] for creators in creators_dataset] or request.user.ark_pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+
+            data_dataset = variables.sparql_get_dataset_object.get_data_dataset(ark_pid)
+
+            form = dataset_form_selection(request, part_of_dataset_to_edit, data_dataset)
+            # Check the request method
+            if request.method == 'POST':
+                if form.is_valid():
+                    if part_of_dataset_to_edit == 'dateCreated':
+                        variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_dataset_to_edit,
+                                                                    form.cleaned_data['created_date'],
+                                                                    str(data_dataset['created_date']) +
+                                                                    ' 00:00:00+00:00')
+                    elif part_of_dataset_to_edit == 'dateModified':
+                        variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_dataset_to_edit,
+                                                                    form.cleaned_data['modified_date'],
+                                                                    str(data_dataset['modified_date']) +
+                                                                    ' 00:00:00+00:00')
+                    elif part_of_dataset_to_edit == 'urlDetails':
+                        variables.sparql_generic_post_object.update_string_leaf(ark_pid, 'url',
+                                                                    form.cleaned_data['url_details'],
+                                                                    data_dataset['url_details'])
+                    elif part_of_dataset_to_edit == 'urlData':
+                        variables.sparql_generic_post_object.update_string_leaf(str(ark_pid)+'DD', 'url',
+                                                                    form.cleaned_data['url_data'],
+                                                                    data_dataset['url_data']['url_data'])
+                    else:
+                        variables.sparql_generic_post_object.update_string_leaf(ark_pid, part_of_dataset_to_edit,
+                                                                      form.cleaned_data[part_of_dataset_to_edit],
+                                                                      data_dataset[part_of_dataset_to_edit])
+                    return redirect(dataset_edition, ark_pid=ark_pid)
+
+            context = {
+                'form': form,
+                'button_value': 'Modifier',
+                'url_to_return': '/datasets/edition/field/{}/{}'.format(part_of_dataset_to_edit, ark_pid)
+            }
+            # return the form to be completed
+            return render(request, 'forms/classic_form.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet dataset",
         }
         return render(request, 'page_info.html', context)
     context = {
