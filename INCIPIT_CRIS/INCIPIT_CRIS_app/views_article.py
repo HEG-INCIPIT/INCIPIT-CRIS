@@ -193,9 +193,9 @@ def article_form_selection(request, part_of_article_to_edit, data_article):
     # Check the request method
     if request.method == 'POST':
         if part_of_article_to_edit == 'name':
-            return ArticleNameForm(request.POST)
+            return NameForm(request.POST)
         if part_of_article_to_edit == 'abstract':
-            return ArticleAbstractForm(request.POST)
+            return AbstractForm(request.POST)
         if part_of_article_to_edit == 'datePublished':
             return ArticleDatePublishedForm(request.POST)
         if part_of_article_to_edit == 'url':
@@ -204,9 +204,9 @@ def article_form_selection(request, part_of_article_to_edit, data_article):
     # if not a POST it'll create a blank form
     else:
         if part_of_article_to_edit == 'name':
-            return ArticleNameForm(old_name=data_article[part_of_article_to_edit])
+            return NameForm(old_name=data_article[part_of_article_to_edit])
         if part_of_article_to_edit == 'abstract':
-            return ArticleAbstractForm(old_abstract=data_article[part_of_article_to_edit])
+            return AbstractForm(old_abstract=data_article[part_of_article_to_edit])
         if part_of_article_to_edit == 'datePublished':
             return ArticleDatePublishedForm(old_date_published=data_article['date_published'])
         if part_of_article_to_edit == 'url':
