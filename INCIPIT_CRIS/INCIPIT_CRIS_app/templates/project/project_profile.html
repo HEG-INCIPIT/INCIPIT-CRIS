@@ -29,7 +29,7 @@
                 <p class="subtitle is-6" align="justify">{{ data_project.description }}</p>
                 <p><time datetime="{{ data_project.founding_date }}">Date de début : {{ data_project.founding_date }}</time></p>
                 <p><time datetime="{{ data_project.dissolution_date }}">Date de fin : {{ data_project.dissolution_date }}</time></p>
-                <p>URL : {{ data_project.url }}</p>
+                <p>URL : <a class="link-one" href="{{ data_project.url }}">{{ data_project.url }}</a></p>
                 <p>Membre(s) : </p>
                 {% for member in data_project.members %}
                     <p>
