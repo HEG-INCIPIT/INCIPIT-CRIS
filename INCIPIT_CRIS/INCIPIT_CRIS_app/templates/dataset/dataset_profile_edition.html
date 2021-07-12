@@ -1,0 +1,73 @@
+{% extends "dataset/dataset_profile.html" %}
+
+{% block information %}
+    {{ message }}
+{% endblock %}
+
+
+{% block dataset_information %}
+
+    <a class="button is-primary" href="/datasets/{{ data_dataset.ark_pid }}">Voir le projet</a>
+
+    <form action="/datasets/edition/delete-dataset/{{data_dataset.ark_pid}}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="datasetARK" name="datasetARK" value="{{ data_dataset.ark_pid }}">
+        <input class="shift-button button is-danger" type="submit" value="Supprimer">
+    </form>
+
+    <p class="title is-4" align="justify">
+        {{ data_dataset.name }} <a class="link-one is-size-6" href="/datasets/edition/field/name/{{data_dataset.ark_pid}}"> Modifer</a>
+    </p>
+
+    <p class="subtitle is-6" align="justify">
+        {% if data_dataset.abstract == "" %}
+            <a class="link-one" href="/datasets/edition/field/abstract/{{data_dataset.ark_pid}}"> Ajouter un abstract</a>
+        {% else %}
+            {{ data_dataset.abstract }}
+            <a class="link-one" href="/datasets/edition/field/abstract/{{data_dataset.ark_pid}}"> Modifier</a>
+        {% endif %}
+    </p>
+
+    <p><time datetime="{{ data_dataset.created_date }}">Date de début : {{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/createdDate/{{data_dataset.ark_pid}}"> Modifer</a></p>
+    <p><time datetime="{{ data_dataset.modified_date }}">Date de fin : {{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/modifiedDate/{{data_dataset.ark_pid}}"> Modifer</a></p>
+    
+    <p>URL des détails : <a class="link-one" href="{{ data_dataset.url }}"> {{ data_dataset.url }}</a> <a class="link-one" href="/datasets/edition/field/url/{{data_dataset.ark_pid}}"> Modifier</a></p>
+    <p>URL des données : <a class="link-one" href="{{ data_dataset.url_data.url }}"> {{ data_dataset.url_data.url }}</a> <a class="link-one" href="/datasets/edition/field/url_data/{{data_dataset.ark_pid}}"> Modifier</a></p>
+
+    <p>Créateur(s) : <a class="link-one" href="/datasets/edition/field/add-creator/{{data_dataset.ark_pid}}"> Ajouter</a> </p>
+    {% for creator in data_dataset.creators %}
+        <p>
+            <form action="/datasets/edition/field/delete-creator/{{data_dataset.ark_pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="creatorARK" name="creatorARK" value="{{ creator.0 }}">
+                <a class="link-one" href="/personnes/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
+    <p>Mainteneur(s) : <a class="link-one" href="/datasets/edition/field/add-maintainer/{{data_dataset.ark_pid}}"> Ajouter</a> </p>
+    {% for maintainer in data_dataset.maintainers %}
+        <p>
+            <form action="/datasets/edition/field/delete-maintainer/{{data_dataset.ark_pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="maintainerARK" name="maintainerARK" value="{{ maintainer.0 }}">
+                <a class="link-one" href="/personnes/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
+    <p>Projet(s) : <a class="link-one" href="/datasets/edition/field/add-projects/{{data_dataset.ark_pid}}"> Ajouter</a></p>
+    {% for projects in data_dataset.projectss %}
+        <p>
+            <form action="/datasets/edition/field/delete-projects/{{data_dataset.ark_pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="projectsARK" name="projectsARK" value="{{ projects.0 }}">
+                <a class="link-one" href="/projectss/{{ projects.0 }}">{{ projects.1.name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
+{% endblock %}

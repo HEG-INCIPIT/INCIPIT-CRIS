@@ -9,7 +9,7 @@
     
     <a class="button is-primary" href="/articles/{{ data_article.ark_pid }}">Voir l'article</a>
 
-    <form action="/articles/edition/field/delete-article/{{data_article.ark_pid}}" method="post">
+    <form action="/articles/edition/delete-article/{{data_article.ark_pid}}" method="post">
         {% csrf_token %}
         <input type="hidden" id="articleARK" name="articleARK" value="{{ data_article.ark_pid }}">
         <input class="shift-button button is-danger" type="submit" value="Supprimer">

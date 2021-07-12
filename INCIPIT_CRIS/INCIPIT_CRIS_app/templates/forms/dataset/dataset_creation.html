@@ -35,9 +35,14 @@
                     {{ form.ark_pid }}
                 </div>
                 <div class="fieldWrapper">
-                    {{ form.url.errors }}
-                    <label for="{{ form.url.id_for_label }}">URL : </label>
-                    {{ form.url }}
+                    {{ form.url_details.errors }}
+                    <label for="{{ form.url_details.id_for_label }}">URL des détails du jeu de données : </label>
+                    {{ form.url_details }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.url_data.errors }}
+                    <label for="{{ form.url_data.id_for_label }}">URL du jeu de données : </label>
+                    {{ form.url_data }}
                 </div>
                 <div class="fieldWrapper">
                     {{ form.created_date.errors }}
@@ -55,7 +60,14 @@
                 </div>
                 <div id="maintainerElements">
                 </div>
+                <div class="autocomplete">
+                    <label for="creatorAutocomplete">Créateur : </label>
+                    <input class="input" id="creatorInput" type="text" name="creatorAutocomplete" placeholder="Nom du créateur">
+                </div>
+                <div id="creatorElements">
+                </div>
                 <input type="hidden" id="maintainerElementsPost" name="maintainerElementsPost">
+                <input type="hidden" id="creatorElementsPost" name="creatorElementsPost">
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
@@ -64,7 +76,7 @@
 </html>
 
 <script>
-    function autocomplete(inp, arr) {
+    function autocomplete(inp, arr, idName, array) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
         var currentFocus;
@@ -98,7 +110,7 @@
                         var maintainerID = document.createElement("P");
                         var personToAdd = this.getElementsByTagName("input")[0].value;
                         maintainerID.innerHTML = personToAdd;
-                        arrayToSend.push(personToAdd);
+                        array.push(personToAdd);
                         arr = arr.filter(e => e !== maintainerID.innerHTML);
 
                         var btnDelete = document.createElement("BUTTON");
@@ -109,12 +121,12 @@
                         btnDelete.addEventListener('click', function(e) {
                             parent = e.srcElement.parentNode;
                             e.srcElement.remove();
-                            arrayToSend = arrayToSend.filter(el => el !== parent.innerHTML);
+                            array = array.filter(el => el !== parent.innerHTML);
                             arr.push(parent.innerHTML);
                             parent.remove();
                         }, false);
-                        document.getElementById("maintainerElements").appendChild(maintainerID);
-                        console.log(arrayToSend)
+                        document.getElementById(idName).appendChild(maintainerID);
+                        console.log(array)
                         /*insert the value for the autocomplete text field:*/
                         inp.value = "";
                         /*close the list of autocompleted values,
@@ -184,13 +196,16 @@
 
     function process() {
 
-        document.getElementById("maintainerElementsPost").value = JSON.stringify(arrayToSend);
+        document.getElementById("maintainerElementsPost").value = JSON.stringify(arrayToSendMaintainer);
+        document.getElementById("creatorElementsPost").value = JSON.stringify(arrayToSendCreator);
         return true;
     }
 
-    var maintainers = {{ persons|safe }};
-    var arrayToSend = [];
+    var data = {{ persons|safe }};
+    var arrayToSendMaintainer = [];
+    var arrayToSendCreator = [];
 
-    autocomplete(document.getElementById("maintainerInput"), maintainers);
+    autocomplete(document.getElementById("maintainerInput"), data, "maintainerElements", arrayToSendMaintainer);
+    autocomplete(document.getElementById("creatorInput"), data, "creatorElements", arrayToSendCreator);
 
 </script>

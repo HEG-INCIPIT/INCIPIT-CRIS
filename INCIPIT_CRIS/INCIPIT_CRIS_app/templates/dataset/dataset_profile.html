@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/profil.css' %}">
+    </head>
+    <body>
+
+        {% include 'main/navbar.html' %}
+
+        <section>
+            {% block information %}
+            {% endblock %}
+            {% block dataset_information %}
+                <p>
+                    {% if user.is_authenticated and edition_granted or user.is_superuser %}
+                        <a class="button is-primary" href="/datasets/edition/{{ data_dataset.ark_pid }}">Modifier</a>
+                    {% endif %}
+                </p>
+                <p class="title is-4" align="justify">
+                    {{ data_dataset.name }} 
+                </p>
+                <p class="subtitle is-6" align="justify">{{ data_dataset.abstract }}</p>
+                <p><time datetime="{{ data_dataset.created_date }}">Date de début : {{ data_dataset.created_date }}</time></p>
+                <p><time datetime="{{ data_dataset.modified_date }}">Date de fin : {{ data_dataset.modified_date }}</time></p>
+                <p>URL des détails : <a class="link-one" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></p>
+                <p>URL des données : <a class="link-one" href="{{ data_dataset.url_data.url }}">{{ data_dataset.url_data.url }}</a></p>
+                <p>Créateur(s) : </p>
+                {% for creator in data_dataset.creators %}
+                    <p>
+                        <a class="link-one" href="/personnes/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a> 
+                    </p>
+                {% endfor %}
+                <p>Mainteneur(s) : </p>
+                {% for maintainer in data_dataset.maintainers %}
+                    <p>
+                        <a class="link-one" href="/personnes/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a> 
+                    </p>
+                {% endfor %}
+                <p>Projet(s) : </p>
+                {% for project in data_dataset.projects %}
+                    <p>
+                        <a href="/projects/{{ project.0 }}">{{ project.1.name }}</a> 
+                    </p>
+                {% endfor %}
+            {% endblock %}
+        </section>
+        {% include 'main/footer.html' %}
+    </body>
+</html>
