@@ -43,6 +43,21 @@ def project_results(request):
 
 
 def project_creation(request):
+    '''
+    Create a project in the triplestore and mint an ARK if it's not given
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -53,6 +68,7 @@ def project_creation(request):
                 members = re.findall('"([^"]*)"', request.POST['memberElementsPost'])
                 ark_pid = form.cleaned_data['ark_pid']
                 if ark_pid == '':
+                    # Try to mint an ARK with the functions of the app arketype_API
                     try:
                         ark_pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
                             'Creating an ARK in INCIPIT-CRIS for a project named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
@@ -105,8 +121,7 @@ def project_profile(request, ark_pid):
     -------
     HttpResponse
         A HttpResponse object that is composed of a request object, the name of the template
-        to display the profil of a project and a dictionnary with all the data needed to fulfill
-        the template.
+        to display and a dictionnary with all the data needed to fulfill the template.
     '''
 
     # Verify in triplestore if the ark_pid correspond to a project
@@ -139,8 +154,7 @@ def project_edition(request, ark_pid):
     -------
     HttpResponse
         A HttpResponse object that is composed of a request object, the name of the template
-        to display the profil of a project with the fields that can be edited and a dictionnary
-        with all the data needed to fulfill the template.
+        to display and a dictionnary with all the data needed to fulfill the template.
     '''
 
     context = {}
@@ -285,6 +299,25 @@ def project_field_edition(request, part_of_project_to_edit, ark_pid):
 
 
 def project_member_addition(request, ark_pid):
+    '''
+    Adds a member to the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page to edit a project.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -344,6 +377,9 @@ def project_member_deletion(request, ark_pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a project.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
     '''
 
     # Verify that the user is authenticated and has the right to modify the profile
@@ -368,6 +404,25 @@ def project_member_deletion(request, ark_pid):
 
 
 def project_article_addition(request, ark_pid):
+    '''
+    Adds an article to the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -464,7 +519,8 @@ def project_deletion(request, ark_pid):
     Returns
     -------
     HttpResponseRedirect
-        A HttpResponseRedirect object that redirect to the index page.
+        A HttpResponseRedirect object that redirects to the index page or renders a page with
+        information on why the it's not possible to delete the project.
     '''
 
     # Verify that the user is authenticated and has the right to modify the profile
