@@ -163,13 +163,13 @@ class SparqlGetDatasetMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?name ?abstract ?dateCreated ?dateModified ?url WHERE
+            SELECT ?name ?abstract ?dateCreated ?dateModified ?url_details WHERE
             {{
                 <{ark_research}> schema:name ?name .
                 <{ark_research}> schema:abstract ?abstract .
                 <{ark_research}> schema:dateCreated ?dateCreated .
                 <{ark_research}> schema:dateModified ?dateModified .
-                <{ark_research}> schema:url ?url .
+                <{ark_research}> schema:url ?url_details .
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
@@ -213,12 +213,12 @@ class SparqlGetDatasetMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?url WHERE
+            SELECT ?url_data WHERE
             {{
-                <{ark_research}DD> schema:url ?url .
+                <{ark_research}DD> schema:url ?url_data .
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_url_dataset(self.sparql.query().response.read())
+        return parse_get_url_data_dataset(self.sparql.query().response.read())

@@ -50,6 +50,10 @@ class SparqlGenericPostMethods:
 
         self.sparql.setQuery(sparql_request)
 
+        print("\n")
+        print(sparql_request)
+        print("\n")
+
         return self.sparql.query().response.read()
 
     def update_date_leaf(self, ark_pid, predicate, new_date, old_date):

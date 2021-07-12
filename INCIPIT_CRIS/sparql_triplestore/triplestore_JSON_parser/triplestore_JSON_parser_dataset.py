@@ -57,14 +57,14 @@ def parse_get_data_dataset(sparql_query_answer):
         'abstract': loaded_json['abstract']['value'],
         'created_date': loaded_json['dateCreated']['value'][:10],
         'modified_date': loaded_json['dateModified']['value'][:10],
-        'url': loaded_json['url']['value'],
+        'url_details': loaded_json['url_details']['value'],
     }
 
     return dict_data
 
-def parse_get_url_dataset(sparql_query_answer):
+def parse_get_url_data_dataset(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
-        'url': loaded_json['url']['value'],
+        'url_data': loaded_json['url_data']['value'],
     }
     return dict_data
