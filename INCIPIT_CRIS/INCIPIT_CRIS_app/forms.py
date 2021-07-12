@@ -162,7 +162,8 @@ class DatasetCreationForm(forms.Form):
                               help_text='''Indiqué l'ark du jeu de données s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'ARK si existant','class':'input'}))
     created_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de création ', required=True)
     modified_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de modification ', required=True)
-    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL','class':'input'}))
+    url_details = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des détails','class':'input'}))
+    url_data = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des données','class':'input'}))
 
 
 ##################################################
