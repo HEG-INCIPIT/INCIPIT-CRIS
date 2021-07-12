@@ -39,6 +39,7 @@ urlpatterns = [
     path('datasets/', views_dataset.dataset_results, name='dataset_results'),
     path('datasets/creation/', views_dataset.dataset_creation, name='dataset_creation'),
     path('datasets/edition/delete-dataset/<path:ark_pid>', views_dataset.dataset_deletion, name='dataset_deletion'),
+    path('datasets/edition/field/<str:part_of_dataset_to_edit>/<path:ark_pid>', views_dataset.dataset_field_edition, name='dataset_field_edition'),
     path('datasets/edition/<path:ark_pid>', views_dataset.dataset_edition, name='dataset_edition'),
     path('datasets/<path:ark_pid>', views_dataset.dataset_profile, name='dataset_profile'),
     
