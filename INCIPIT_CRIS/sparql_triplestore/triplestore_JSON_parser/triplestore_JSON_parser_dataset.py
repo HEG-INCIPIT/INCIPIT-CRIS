@@ -24,29 +24,47 @@ def parse_check_dataset_ark(sparql_query_answer):
     return False
 
 
-def parse_get_authors_dataset(sparql_query_answer):
+def parse_get_maintainers_dataset(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_authors = []
-    for author in loaded_json:
-        array_authors.append(author['author']['value'])
-    return array_authors
+    array_maintainers = []
+    for json_data in loaded_json:
+        array_maintainers.append(json_data['maintainer']['value'])
+    return array_maintainers
+
+
+def parse_get_creators_dataset(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_creators = []
+    print(loaded_json)
+    for json_data in loaded_json:
+        array_creators.append(json_data['creator']['value'])
+    return array_creators
 
 
 def parse_get_projects_dataset(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     array_projects = []
-    for project in loaded_json:
-        array_projects.append(project['project']['value'])
+    for json_data in loaded_json:
+        array_projects.append(json_data['project']['value'])
     return array_projects
 
 
 def parse_get_data_dataset(sparql_query_answer):
+    print(sparql_query_answer)
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'name': loaded_json['name']['value'],
         'abstract': loaded_json['abstract']['value'],
-        'date_published': loaded_json['datePublished']['value'][:10],
+        'created_date': loaded_json['dateCreated']['value'][:10],
+        'modified_date': loaded_json['dateModified']['value'][:10],
         'url': loaded_json['url']['value'],
     }
 
+    return dict_data
+
+def parse_get_url_dataset(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+    dict_data = {
+        'url': loaded_json['url']['value'],
+    }
     return dict_data

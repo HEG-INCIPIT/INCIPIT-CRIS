@@ -76,30 +76,56 @@ class SparqlGetDatasetMethods:
         return parse_get_full_name_dataset(self.sparql.query().response.read())
 
 
-    def get_authors_dataset(self, ark_pid):
+    def get_maintainers_dataset(self, ark_pid):
         """
-        Get all the authors of an dataset
+        Get all the maintainers of an dataset
         And return an array with tuples (identifier, dictionnary)
         """
 
         sparql_request = """
             {prefix}
 
-            SELECT ?author WHERE
+            SELECT ?maintainer WHERE
             {{
-                <{ark_research}> schema:author ?author .
+                <{ark_research}> schema:maintainer ?maintainer .
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 
-        array_authors = []
+        array_maintainers = []
 
-        for author in parse_get_authors_dataset(self.sparql.query().response.read()):
-            full_name = variables.sparql_get_person_object.get_full_name_person(author)
-            array_authors.append([author, full_name])
+        for maintainer in parse_get_maintainers_dataset(self.sparql.query().response.read()):
+            full_name = variables.sparql_get_person_object.get_full_name_person(maintainer)
+            array_maintainers.append([maintainer, full_name])
 
-        return array_authors
+        return array_maintainers
+
+
+    def get_creators_dataset(self, ark_pid):
+        """
+        Get all the creators of an dataset
+        And return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?creator WHERE
+            {{
+                <{ark_research}> schema:creator ?creator .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_creators = []
+
+        for creator in parse_get_creators_dataset(self.sparql.query().response.read()):
+            full_name = variables.sparql_get_person_object.get_full_name_person(creator)
+            array_creators.append([creator, full_name])
+
+        return array_creators
 
 
     def get_projects_dataset(self, ark_pid):
@@ -113,7 +139,7 @@ class SparqlGetDatasetMethods:
 
             SELECT ?project WHERE
             {{
-                ?project schema:subjectOf <{ark_research}> .
+                <{ark_research}> schema:isPartOf ?project .
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
@@ -130,18 +156,19 @@ class SparqlGetDatasetMethods:
 
     def get_data_dataset(self, ark_pid):
         """
-        Get all the information of an dataset : ark, name, abstract, date of publication, authors, ...
+        Get all the information of an dataset : ark, name, abstract, date of publication, maintainers, ...
         And return a dictionnary with all elements
         """
 
         sparql_request = """
             {prefix}
 
-            SELECT ?name ?abstract ?datePublished ?url WHERE
+            SELECT ?name ?abstract ?dateCreated ?dateModified ?url WHERE
             {{
                 <{ark_research}> schema:name ?name .
                 <{ark_research}> schema:abstract ?abstract .
-                <{ark_research}> schema:datePublished ?datePublished .
+                <{ark_research}> schema:dateCreated ?dateCreated .
+                <{ark_research}> schema:dateModified ?dateModified .
                 <{ark_research}> schema:url ?url .
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
@@ -150,12 +177,16 @@ class SparqlGetDatasetMethods:
 
         data_dataset = parse_get_data_dataset(self.sparql.query().response.read())
 
-        authors = variables.sparql_get_dataset_object.get_authors_dataset(ark_pid)
+        maintainers = variables.sparql_get_dataset_object.get_maintainers_dataset(ark_pid)
+        creators = variables.sparql_get_dataset_object.get_creators_dataset(ark_pid)
         projects = variables.sparql_get_dataset_object.get_projects_dataset(ark_pid)
+        url = variables.sparql_get_dataset_object.get_url_data_dataset(ark_pid)
         
-        data_dataset['authors'] = authors
+        data_dataset['maintainers'] = maintainers
+        data_dataset['creators'] = creators
         data_dataset['projects'] = projects
         data_dataset['ark_pid'] = ark_pid
+        data_dataset['url_data'] = url
         return data_dataset
 
     def check_dataset_ark(self, ark_pid):
@@ -166,12 +197,28 @@ class SparqlGetDatasetMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?scholarlyArticle WHERE
+            SELECT ?dataset WHERE
             {{
-                <{ark_research}> a ?scholarlyArticle .
-                FILTER(?scholarlyArticle = schema:ScholarlyArticle)
+                <{ark_research}> a ?dataset .
+                FILTER(?dataset = schema:Dataset)
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
         return parse_check_dataset_ark(self.sparql.query().response.read())
+
+
+    def get_url_data_dataset(self, ark_pid):
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?url WHERE
+            {{
+                <{ark_research}DD> schema:url ?url .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_url_dataset(self.sparql.query().response.read())

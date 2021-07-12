@@ -34,7 +34,7 @@ class SparqlPostDatasetMethods:
         self.sparql.setMethod(POST)
 
 
-    def create_dataset(self, ark_pid, name, abstract, date_created, date_modified, url):
+    def create_dataset(self, ark_pid, name, abstract, date_created, date_modified, url_data, url_details):
         sparql_request = """
             {prefix}
 
@@ -43,16 +43,21 @@ class SparqlPostDatasetMethods:
                     schema:propertyID 'ARK' ;
                     schema:value "{ark_pid}" .
 
+                <{ark_pid}DD> a schema:DataDownload ;
+                    schema:url "{url_data}" .
+
                 <{ark_pid}> a schema:Dataset ;
                     schema:name \"\"\"{name}\"\"\" ;
                     schema:abstract \"\"\"{abstract}\"\"\" ;
                     schema:dateCreated "{date_created}"^^xsd:date ;
                     schema:dateModified "{date_modified}"^^xsd:date ;
-                    schema:url \"\"\"{url}\"\"\" ;
-                    schema:identifier <{ark_pid}ARK> .
+                    schema:url \"\"\"{url_details}\"\"\" ;
+                    schema:identifier <{ark_pid}ARK> ;
+                    schema:distribution <{ark_pid}DD> .
 
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, name=name, abstract=abstract, date_created=date_created, date_modified=date_modified, url=url)
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, name=name, abstract=abstract, 
+            date_created=date_created, date_modified=date_modified, url_data=url_data, url_details=url_details)
 
         self.sparql.setQuery(sparql_request)
 
@@ -87,6 +92,74 @@ class SparqlPostDatasetMethods:
                 <{ark_pid}> schema:maintainer <{maintainer}> .
             }}
         """.format(prefix=variables.prefix, ark_pid=ark_pid, maintainer=maintainer)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_creator_to_dataset(self, ark_pid, creator):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{ark_pid}> schema:creator <{creator}> .
+
+            }}
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, creator=creator)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_creator_of_dataset(self, ark_pid, creator):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{ark_pid}> schema:creator <{creator}> .
+
+            }}
+            WHERE
+            {{
+                <{ark_pid}> schema:creator <{creator}> .
+            }}
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, creator=creator)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_project_to_dataset(self, ark_pid, project):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{ark_pid}> schema:isPartOf <{project}> .
+
+            }}
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, project=project)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_project_of_dataset(self, ark_pid, project):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{ark_pid}> schema:isPartOf <{project}> .
+
+            }}
+            WHERE
+            {{
+                <{ark_pid}> schema:isPartOf <{project}> .
+            }}
+        """.format(prefix=variables.prefix, ark_pid=ark_pid, project=project)
 
         self.sparql.setQuery(sparql_request)
 

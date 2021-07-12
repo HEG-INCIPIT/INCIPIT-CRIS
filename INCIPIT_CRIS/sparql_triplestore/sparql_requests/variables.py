@@ -1,6 +1,7 @@
 from .article.sparql_get_article_methods import SparqlGetArticleMethods
 from .person.sparql_get_person_methods import SparqlGetPersonMethods
 from .project.sparql_get_project_methods import SparqlGetProjectMethods
+from .dataset.sparql_get_dataset_methods import SparqlGetDatasetMethods
 
 
 url_endpoint = 'http://localhost:3030/INCIPIT-CRIS/'
@@ -14,3 +15,4 @@ password = 'pw'
 sparql_get_article_object = SparqlGetArticleMethods()
 sparql_get_person_object = SparqlGetPersonMethods()
 sparql_get_project_object = SparqlGetProjectMethods()
+sparql_get_dataset_object = SparqlGetDatasetMethods()
