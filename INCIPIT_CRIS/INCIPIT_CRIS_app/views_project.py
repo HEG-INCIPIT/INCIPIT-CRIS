@@ -505,6 +505,108 @@ def project_article_deletion(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
+def project_dataset_addition(request, ark_pid):
+    '''
+    Adds a dataset to the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        # Verify if the user ark is in the projects datasets to grant edition
+        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                datasets = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
+                for dataset in datasets:
+                    variables.sparql_post_dataset_object.add_project_to_dataset(dataset.split()[-1], ark_pid)
+
+                return redirect(project_edition, ark_pid=ark_pid)
+
+            datasets_info = variables.sparql_get_dataset_object.get_datasets()
+            datasets = []
+            # Request all the datasets of the project
+            datasets_project = variables.sparql_get_project_object.get_datasets_project(ark_pid)
+            for basic_info_dataset in datasets_info:
+                if not (basic_info_dataset[0] in [dataset[0] for dataset in datasets_project]):
+                    datasets.append(
+                        '''{}, {}'''.format(basic_info_dataset[1], basic_info_dataset[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'title_data_type_added': 'Dataset',
+                'data_type_added': 'du dataset',
+                'url_to_return': '/projects/edition/field/add-dataset/{}'.format(ark_pid),
+                'data': datasets
+            }
+            # return the form to be completed
+            return render(request, 'forms/autocompletion_group.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce project"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def project_dataset_deletion(request, ark_pid):
+    '''
+    Deletes an dataset of the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the members of the project
+        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        # Verify if the user ark is in the projects members to grant edition
+        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+            dataset = request.POST.get('datasetARK', '')
+            variables.sparql_post_dataset_object.delete_project_from_dataset(dataset, ark_pid)
+
+            return redirect(project_edition, ark_pid=ark_pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce project"
+    }
+    return render(request, 'page_info.html', context)
+
+
 def project_deletion(request, ark_pid):
     '''
     Deletes completely an project and all his leafs

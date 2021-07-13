@@ -376,3 +376,165 @@ def person_project_deletion(request, ark_pid):
         'message': "Connectez-vous pour pouvoir éditer cet project"
     }
     return render(request, 'page_info.html', context)
+
+
+def person_datasets_creator_addition(request, ark_pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify if the user as the right to modify the profile
+        if request.user.ark_pid == ark_pid or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                datasets = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
+                for dataset in datasets:
+                    variables.sparql_post_dataset_object.add_creator_to_dataset(dataset.split()[-1], ark_pid)
+
+                return redirect(person_edition, ark_pid=ark_pid)
+
+            datasets_info = variables.sparql_get_dataset_object.get_datasets()
+            datasets = []
+            # Request all the datasets of the person
+            datasets_person = variables.sparql_get_person_object.get_datasets_creator_person(ark_pid)
+            for basic_info_dataset in datasets_info:
+                if not (basic_info_dataset[0] in [dataset[0] for dataset in datasets_person]):
+                    datasets.append(
+                        '''{}, {}'''.format(basic_info_dataset[1], basic_info_dataset[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'title_data_type_added': 'Jeu de données',
+                'data_type_added': 'du jeu de données',
+                'url_to_return': '/personnes/edition/profil/add-dataset-creator/{}'.format(ark_pid),
+                'data': datasets
+            }
+            # return the form to be completed
+            return render(request, 'forms/autocompletion_group.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet person",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet person"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_datasets_creator_deletion(request, ark_pid):
+    '''
+    Deletes a dataset of the given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.ark_pid == ark_pid or request.user.is_superuser:
+
+            dataset = request.POST.get('dataset_creatorARK', '')
+            print("LAAAAAAAAAAAAAAAAAAAAAA")
+            variables.sparql_post_dataset_object.delete_creator_of_dataset(dataset, ark_pid)
+
+            return redirect(person_edition, ark_pid=ark_pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce dataset",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce dataset"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_datasets_maintainer_addition(request, ark_pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify if the user as the right to modify the profile
+        if request.user.ark_pid == ark_pid or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                datasets = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
+                for dataset in datasets:
+                    variables.sparql_post_dataset_object.add_maintainer_to_dataset(dataset.split()[-1], ark_pid)
+
+                return redirect(person_edition, ark_pid=ark_pid)
+
+            datasets_info = variables.sparql_get_dataset_object.get_datasets()
+            datasets = []
+            # Request all the datasets of the person
+            datasets_person = variables.sparql_get_person_object.get_datasets_maintainer_person(ark_pid)
+            for basic_info_dataset in datasets_info:
+                if not (basic_info_dataset[0] in [dataset[0] for dataset in datasets_person]):
+                    datasets.append(
+                        '''{}, {}'''.format(basic_info_dataset[1], basic_info_dataset[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'title_data_type_added': 'Jeu de données',
+                'data_type_added': 'du jeu de données',
+                'url_to_return': '/personnes/edition/profil/add-dataset-maintainer/{}'.format(ark_pid),
+                'data': datasets
+            }
+            # return the form to be completed
+            return render(request, 'forms/autocompletion_group.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet person",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet person"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_datasets_maintainer_deletion(request, ark_pid):
+    '''
+    Deletes a dataset of the given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.ark_pid == ark_pid or request.user.is_superuser:
+
+            dataset = request.POST.get('dataset_maintainerARK', '')
+            print("ICIIIIIIIIIIIIIIII")
+            variables.sparql_post_dataset_object.delete_maintainer_of_dataset(dataset, ark_pid)
+
+            return redirect(person_edition, ark_pid=ark_pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce dataset",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce dataset"
+    }
+    return render(request, 'page_info.html', context)
