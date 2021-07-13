@@ -3,6 +3,7 @@ from .forms import *
 import string
 import re
 from . import variables
+from . import form_selection
 
 
 def person_results(request):
@@ -63,10 +64,12 @@ def person_profile(request, ark_pid):
     if sparql_request_check_person_ark:
         data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
 
-        # Some elements contained in the dictionnary data_person :
-        #
-        #data_person['articles'] : all data of articles for whom the person is author
-        #data_person['projects'] : all data of projects for whom the person is member
+        '''
+        Some elements contained in the dictionnary data_person :
+        
+        data_person['articles'] : all data of articles for whom the person is author
+        data_person['projects'] : all data of projects for whom the person is member
+        '''
 
         context = {
             'data_person': data_person,
@@ -122,39 +125,6 @@ def person_edition(request, ark_pid):
     return render(request, 'page_404.html')
 
 
-def person_form_selection(request, part_of_person_to_modify, data_person):
-    '''
-    Select and return the correct form to be used in order to modify a field.
-
-    Parameters
-    ----------
-    request : HttpRequest
-        It is the metadata of the request.
-    part_of_person_to_modify : String
-        Indicates the field that is asked to be modified.
-    data_person : Dictionary
-        Contain the data of the different fields of a person.
-
-    Returns
-    -------
-    Form
-        A form with the fields desired
-    '''
-    # Check the request method
-    if request.method == 'POST':
-        if part_of_person_to_modify == 'description':
-            return DescriptionForm(request.POST)
-        if part_of_person_to_modify == 'telephone':
-            return TelephoneForm(request.POST)
-
-    # if not a POST it'll create a blank form
-    else:
-        if part_of_person_to_modify == 'description':
-            return DescriptionForm(old_description=data_person[part_of_person_to_modify])
-        if part_of_person_to_modify == 'telephone':
-            return TelephoneForm(old_telephone=data_person[part_of_person_to_modify])
-
-
 def person_field_edition(request, part_of_person_to_modify, ark_pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
@@ -186,7 +156,7 @@ def person_field_edition(request, part_of_person_to_modify, ark_pid):
 
             data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
 
-            form = person_form_selection(request, part_of_person_to_modify, data_person)
+            form = form_selection.form_selection(request, part_of_person_to_modify, data_person)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
@@ -444,7 +414,6 @@ def person_datasets_creator_deletion(request, ark_pid):
         if request.user.ark_pid == ark_pid or request.user.is_superuser:
 
             dataset = request.POST.get('dataset_creatorARK', '')
-            print("LAAAAAAAAAAAAAAAAAAAAAA")
             variables.sparql_post_dataset_object.delete_creator_of_dataset(dataset, ark_pid)
 
             return redirect(person_edition, ark_pid=ark_pid)
@@ -525,7 +494,6 @@ def person_datasets_maintainer_deletion(request, ark_pid):
         if request.user.ark_pid == ark_pid or request.user.is_superuser:
 
             dataset = request.POST.get('dataset_maintainerARK', '')
-            print("ICIIIIIIIIIIIIIIII")
             variables.sparql_post_dataset_object.delete_maintainer_of_dataset(dataset, ark_pid)
 
             return redirect(person_edition, ark_pid=ark_pid)

@@ -6,6 +6,7 @@ import datetime
 from django.conf import settings
 from . import views
 from . import variables
+from . import form_selection
 
 
 def dataset_results(request):
@@ -193,57 +194,6 @@ def dataset_edition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def dataset_form_selection(request, part_of_dataset_to_edit, data_dataset):
-    '''
-    Select and return the correct form to be used in order to modify a field.
-
-    Parameters
-    ----------
-    request : HttpRequest
-        It is the metadata of the request.
-    part_of_dataset_to_modify : String
-        Indicates the field that is asked to be modified.
-    data_dataset : Dictionary
-        Contain the data of the different fields of a dataset.
-
-    Returns
-    -------
-    Form
-        A form with the fields desired
-    '''
-
-    # Check the request method
-    if request.method == 'POST':
-        if part_of_dataset_to_edit == 'name':
-            return NameForm(request.POST)
-        if part_of_dataset_to_edit == 'abstract':
-            return AbstractForm(request.POST)
-        if part_of_dataset_to_edit == 'dateCreated':
-            return DatasetCreatedDateForm(request.POST)
-        if part_of_dataset_to_edit == 'dateModified':
-            return DatasetModifiedDateForm(request.POST)
-        if part_of_dataset_to_edit == 'url-details':
-            return DatasetURLDetailsForm(request.POST)
-        if part_of_dataset_to_edit == 'url-data-download':
-            return DatasetURLDataForm(request.POST)
-
-    # if not a POST it'll create a blank form
-    else:
-        if part_of_dataset_to_edit == 'name':
-            return NameForm(old_name=data_dataset[part_of_dataset_to_edit])
-        if part_of_dataset_to_edit == 'abstract':
-            return AbstractForm(old_abstract=data_dataset[part_of_dataset_to_edit])
-        if part_of_dataset_to_edit == 'dateCreated':
-            return DatasetCreatedDateForm(old_created_date=data_dataset['created_date'])
-        if part_of_dataset_to_edit == 'dateModified':
-            return DatasetModifiedDateForm(old_modified_date=data_dataset['modified_date'])
-        if part_of_dataset_to_edit == 'url-details':
-            return DatasetURLDetailsForm(old_url_details=data_dataset['url'])
-        if part_of_dataset_to_edit == 'url-data-download':
-            return DatasetURLDataForm(old_url_data=data_dataset['data_download']['url'])
-
-
-
 def dataset_field_edition(request, part_of_dataset_to_edit, ark_pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
@@ -276,7 +226,7 @@ def dataset_field_edition(request, part_of_dataset_to_edit, ark_pid):
 
             data_dataset = variables.sparql_get_dataset_object.get_data_dataset(ark_pid)
 
-            form = dataset_form_selection(request, part_of_dataset_to_edit, data_dataset)
+            form = form_selection.form_selection(request, part_of_dataset_to_edit, data_dataset)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():

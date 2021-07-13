@@ -79,18 +79,6 @@ class ProjectCreationForm(forms.Form):
     url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL', 'class':'input'}))
 
 
-class ProjectDescriptionForm(forms.Form):
-    description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Description', 'class':'textarea'}))
-
-    def __init__(self, *args, **kwargs):
-        # overload init function to display actual value of the variable in this field
-        my_arg = ''
-        if 'old_description' in kwargs:
-            my_arg = kwargs.pop('old_description')
-        super().__init__(*args, **kwargs)
-        self.fields['description'].initial = my_arg
-
-
 class ProjectFoundingDateForm(forms.Form):
     founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de début ', required=False)
 

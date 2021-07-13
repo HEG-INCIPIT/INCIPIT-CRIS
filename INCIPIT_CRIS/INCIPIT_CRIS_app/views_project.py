@@ -6,6 +6,7 @@ import datetime
 from django.conf import settings
 from . import views
 from . import variables
+from . import form_selection
 
 
 def project_results(request):
@@ -184,52 +185,6 @@ def project_edition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_form_selection(request, part_of_project_to_edit, data_project):
-    '''
-    Select and return the correct form to be used in order to modify a field.
-
-    Parameters
-    ----------
-    request : HttpRequest
-        It is the metadata of the request.
-    part_of_project_to_modify : String
-        Indicates the field that is asked to be modified.
-    data_project : Dictionary
-        Contain the data of the different fields of a project.
-
-    Returns
-    -------
-    Form
-        A form with the fields desired
-    '''
-
-    # Check the request method
-    if request.method == 'POST':
-        if part_of_project_to_edit == 'name':
-            return NameForm(request.POST)
-        if part_of_project_to_edit == 'description':
-            return ProjectDescriptionForm(request.POST)
-        if part_of_project_to_edit == 'foundingDate':
-            return ProjectFoundingDateForm(request.POST)
-        if part_of_project_to_edit == 'dissolutionDate':
-            return ProjectDissolutionDateForm(request.POST)
-        if part_of_project_to_edit == 'url':
-            return URLForm(request.POST)
-
-    # if not a POST it'll create a blank form
-    else:
-        if part_of_project_to_edit == 'name':
-            return NameForm(old_name=data_project[part_of_project_to_edit])
-        if part_of_project_to_edit == 'description':
-            return ProjectDescriptionForm(old_description=data_project[part_of_project_to_edit])
-        if part_of_project_to_edit == 'foundingDate':
-            return ProjectFoundingDateForm(old_founding_date=data_project['founding_date'])
-        if part_of_project_to_edit == 'dissolutionDate':
-            return ProjectDissolutionDateForm(old_dissolution_date=data_project['dissolution_date'])
-        if part_of_project_to_edit == 'url':
-            return URLForm(old_url=data_project['url'])
-
-
 def project_field_edition(request, part_of_project_to_edit, ark_pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
@@ -260,7 +215,7 @@ def project_field_edition(request, part_of_project_to_edit, ark_pid):
 
             data_project = variables.sparql_get_project_object.get_data_project(ark_pid)
 
-            form = project_form_selection(request, part_of_project_to_edit, data_project)
+            form = form_selection.form_selection(request, part_of_project_to_edit, data_project)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():

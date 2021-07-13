@@ -6,6 +6,7 @@ import datetime
 from django.conf import settings
 from . import views
 from . import variables
+from . import form_selection
 
 
 def article_results(request):
@@ -94,7 +95,6 @@ def article_creation(request):
                         variables.ark.update('{}'.format(ark_pid), '{}{}'.format(settings.URL, ark_pid), '{} {}'.format(form.cleaned_data['name']), 
                             'Creating an ARK in INCIPIT-CRIS for an article named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
                     except:
-                        print("ERROR")
                         raise Exception
                 variables.sparql_post_article_object.create_article(ark_pid, form.cleaned_data['name'],
                                                           form.cleaned_data['abstract'],
@@ -171,48 +171,6 @@ def article_edition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def article_form_selection(request, part_of_article_to_edit, data_article):
-    '''
-    Select and return the correct form to be used in order to modify a field.
-
-    Parameters
-    ----------
-    request : HttpRequest
-        It is the metadata of the request.
-    part_of_article_to_modify : String
-        Indicates the field that is asked to be modified.
-    data_article : Dictionary
-        Contain the data of the different fields of a article.
-
-    Returns
-    -------
-    Form
-        A form with the fields desired
-    '''
-
-    # Check the request method
-    if request.method == 'POST':
-        if part_of_article_to_edit == 'name':
-            return NameForm(request.POST)
-        if part_of_article_to_edit == 'abstract':
-            return AbstractForm(request.POST)
-        if part_of_article_to_edit == 'datePublished':
-            return ArticleDatePublishedForm(request.POST)
-        if part_of_article_to_edit == 'url':
-            return URLForm(request.POST)
-
-    # if not a POST it'll create a blank form
-    else:
-        if part_of_article_to_edit == 'name':
-            return NameForm(old_name=data_article[part_of_article_to_edit])
-        if part_of_article_to_edit == 'abstract':
-            return AbstractForm(old_abstract=data_article[part_of_article_to_edit])
-        if part_of_article_to_edit == 'datePublished':
-            return ArticleDatePublishedForm(old_date_published=data_article['date_published'])
-        if part_of_article_to_edit == 'url':
-            return URLForm(old_url=data_article['url'])
-
-
 def article_field_edition(request, part_of_article_to_edit, ark_pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
@@ -244,7 +202,7 @@ def article_field_edition(request, part_of_article_to_edit, ark_pid):
 
             data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
 
-            form = article_form_selection(request, part_of_article_to_edit, data_article)
+            form = form_selection.form_selection(request, part_of_article_to_edit, data_article)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
