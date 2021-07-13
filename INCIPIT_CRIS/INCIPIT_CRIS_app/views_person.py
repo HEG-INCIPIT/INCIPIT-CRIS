@@ -23,6 +23,7 @@ def person_results(request):
         to display results for persons and a dictionnary with all the data needed to fulfill
         the template.
     '''
+
     alphabet_list = list(string.ascii_lowercase)
     categories = ['Personnes', 'Professeurs ordinaire', 'Assistants HES']
     category = categories[0]
@@ -58,10 +59,11 @@ def person_profile(request, ark_pid):
     '''
 
     context = {}
-    # Verify in triplestore if the ark_pid correspond to a person
-    sparql_request_check_person_ark = variables.sparql_get_person_object.check_person_ark(ark_pid)
     can_edit = True if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser) else False
-    if sparql_request_check_person_ark:
+    
+    # Verify in triplestore if the ark_pid correspond to a person
+    if variables.sparql_get_person_object.check_person_ark(ark_pid):
+
         data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
 
         '''
@@ -69,12 +71,12 @@ def person_profile(request, ark_pid):
         
         data_person['articles'] : all data of articles for whom the person is author
         data_person['projects'] : all data of projects for whom the person is member
+        data_person['ark_pid'] : ark pid of the person
         '''
 
         context = {
             'data_person': data_person,
             'can_edit': can_edit,
-            'ark_pid': ark_pid,
         }
         return render(request, 'person/person_profile.html', context)
 
@@ -100,15 +102,13 @@ def person_edition(request, ark_pid):
         with all the data needed to fulfill the template.
     '''
 
-    context = {}
     # Verify in triplestore if the ark_pid correspond to a person
-    sparql_request_check_person_ark = variables.sparql_get_person_object.check_person_ark(ark_pid)
-    if sparql_request_check_person_ark:
+    if variables.sparql_get_person_object.check_person_ark(ark_pid):
+        context = {}
         if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser):
             data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
             context = {
                 'data_person': data_person,
-                'ark_pid': ark_pid
             }
             return render(request, 'person/person_profile_edition.html', context)
         else:
@@ -125,7 +125,7 @@ def person_edition(request, ark_pid):
     return render(request, 'page_404.html')
 
 
-def person_field_edition(request, part_of_person_to_modify, ark_pid):
+def person_field_edition(request, field_to_modify, ark_pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
 
@@ -133,7 +133,7 @@ def person_field_edition(request, part_of_person_to_modify, ark_pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    part_of_person_to_modify : String
+    field_to_modify : String
         Indicates the field that is asked to be modified.
     ark_pid: String
         It's a string representing an ARK.
@@ -145,45 +145,41 @@ def person_field_edition(request, part_of_person_to_modify, ark_pid):
         to display the field of the profil of a person that is going to be modified and a dictionnary
         with all the data needed to fulfill the template.
     '''
-    
-    context = {}
-    # Verify in triplestore if the ark_pid correspond to a person
-    sparql_request_check_person_ark = variables.sparql_get_person_object.check_person_ark(ark_pid)
 
-    if sparql_request_check_person_ark:
+    # Verify in triplestore if the ark_pid correspond to a person
+    if variables.sparql_get_person_object.check_person_ark(ark_pid):
+        context = {}
         # Verify that the user is authenticated and has the right to modify the profile
         if request.user.is_authenticated and (request.user.ark_pid == ark_pid or request.user.is_superuser):
-
             data_person = variables.sparql_get_person_object.get_data_person(ark_pid)
-
-            form = form_selection.form_selection(request, part_of_person_to_modify, data_person)
+            form = form_selection.form_selection(request, field_to_modify, data_person)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
-                    variables.sparql_generic_post_object.update_string_leaf(ark_pid, part_of_person_to_modify,
-                                                                  form.cleaned_data[part_of_person_to_modify],
-                                                                  data_person[part_of_person_to_modify])
+                    variables.sparql_generic_post_object.update_string_leaf(ark_pid, field_to_modify,
+                                                                  form.cleaned_data[field_to_modify],
+                                                                  data_person[field_to_modify])
                     return redirect(person_edition, ark_pid=ark_pid)
+                
+                return render(request, 'page_error.html')
 
             context = {
                 'form': form,
                 'button_value': 'Modifier',
-                'url_to_return': '/persons/edition/profil/{}/{}'.format(part_of_person_to_modify, ark_pid)
+                'url_to_return': '/persons/edition/profil/{}/{}'.format(field_to_modify, ark_pid)
             }
-            # return the form to be completed
             return render(request, 'forms/classic_form.html', context)
 
+        # Check why the person cannot modify the profile and display the error
+        if request.user.is_authenticated:
+            context = {
+                'message': "Vous n'avez pas le droit d'éditer ce profil"
+            }
         else:
-            # Check why the person cannot modify the profile and display the error
-            if request.user.is_authenticated:
-                context = {
-                    'message': "Vous n'avez pas le droit d'éditer ce profil"
-                }
-            else:
-                context = {
-                    'message': "Connectez-vous pour modifier votre profil"
-                }
-
+            context = {
+                'message': "Connectez-vous pour modifier votre profil"
+            }
+        
         return render(request, 'page_info.html', context)
 
     return render(request, 'page_404.html')
@@ -191,7 +187,7 @@ def person_field_edition(request, part_of_person_to_modify, ark_pid):
 
 def person_article_deletion(request, ark_pid):
     '''
-    Deletes an article of the given person
+    Deletes an article of a given person
 
     Parameters
     ----------
@@ -205,6 +201,7 @@ def person_article_deletion(request, ark_pid):
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a person.
     '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Verify that the edition of profile is made by the legitimate user or admin
@@ -225,12 +222,28 @@ def person_article_deletion(request, ark_pid):
 
 
 def person_article_addition(request, ark_pid):
+    '''
+    Adds an article to a given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
     context = {}
     
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Verify if the user as the right to modify the profile
-        if request.user.ark_pid == ark_pid or request.user.is_superuser:
+        if request.user.is_superuser:
             
             # Check the request method
             if request.method == 'POST':
@@ -240,8 +253,9 @@ def person_article_addition(request, ark_pid):
 
                 return redirect(person_edition, ark_pid=ark_pid)
 
-            articles_info = variables.sparql_get_article_object.get_articles()
             articles = []
+            # Request all the articles in the triplestore
+            articles_info = variables.sparql_get_article_object.get_articles()
             # Request all the articles of the person
             articles_person = variables.sparql_get_person_object.get_articles_person(ark_pid)
             for basic_info_article in articles_info:
@@ -270,11 +284,27 @@ def person_article_addition(request, ark_pid):
 
 
 def person_project_addition(request, ark_pid):
+    '''
+    Adds a project to a given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Verify if the user as the right to modify the profile
-        if request.user.ark_pid == ark_pid or request.user.is_superuser:
+        if request.user.is_superuser:
 
             # Check the request method
             if request.method == 'POST':
@@ -284,8 +314,9 @@ def person_project_addition(request, ark_pid):
 
                 return redirect(person_edition, ark_pid=ark_pid)
 
-            projects_info = variables.sparql_get_project_object.get_projects()
             projects = []
+            # Request all the projects in the triplestore
+            projects_info = variables.sparql_get_project_object.get_projects()
             # Request all the projects of the person
             projects_person = variables.sparql_get_person_object.get_projects_person(ark_pid)
             for basic_info_project in projects_info:
@@ -329,6 +360,7 @@ def person_project_deletion(request, ark_pid):
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a person.
     '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Verify that the edition of profile is made by the legitimate user or admin
@@ -349,11 +381,27 @@ def person_project_deletion(request, ark_pid):
 
 
 def person_datasets_creator_addition(request, ark_pid):
+    '''
+    Adds a dataset as creator to a given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Verify if the user as the right to modify the profile
-        if request.user.ark_pid == ark_pid or request.user.is_superuser:
+        if request.user.is_superuser:
 
             # Check the request method
             if request.method == 'POST':
@@ -363,8 +411,9 @@ def person_datasets_creator_addition(request, ark_pid):
 
                 return redirect(person_edition, ark_pid=ark_pid)
 
-            datasets_info = variables.sparql_get_dataset_object.get_datasets()
             datasets = []
+            # Request all the datasets in the triplestore
+            datasets_info = variables.sparql_get_dataset_object.get_datasets()
             # Request all the datasets of the person
             datasets_person = variables.sparql_get_person_object.get_datasets_creator_person(ark_pid)
             for basic_info_dataset in datasets_info:
@@ -394,7 +443,7 @@ def person_datasets_creator_addition(request, ark_pid):
 
 def person_datasets_creator_deletion(request, ark_pid):
     '''
-    Deletes a dataset of the given person
+    Deletes a dataset of a given person
 
     Parameters
     ----------
@@ -408,6 +457,7 @@ def person_datasets_creator_deletion(request, ark_pid):
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a person.
     '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Verify that the edition of profile is made by the legitimate user or admin
@@ -429,11 +479,27 @@ def person_datasets_creator_deletion(request, ark_pid):
 
 
 def person_datasets_maintainer_addition(request, ark_pid):
+    '''
+    Adds a dataset as maintainer to a given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    ark_pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Verify if the user as the right to modify the profile
-        if request.user.ark_pid == ark_pid or request.user.is_superuser:
+        if request.user.is_superuser:
 
             # Check the request method
             if request.method == 'POST':
@@ -443,8 +509,9 @@ def person_datasets_maintainer_addition(request, ark_pid):
 
                 return redirect(person_edition, ark_pid=ark_pid)
 
-            datasets_info = variables.sparql_get_dataset_object.get_datasets()
             datasets = []
+            # Request all the datasets in the triplestore
+            datasets_info = variables.sparql_get_dataset_object.get_datasets()
             # Request all the datasets of the person
             datasets_person = variables.sparql_get_person_object.get_datasets_maintainer_person(ark_pid)
             for basic_info_dataset in datasets_info:
@@ -488,6 +555,7 @@ def person_datasets_maintainer_deletion(request, ark_pid):
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a person.
     '''
+    
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Verify that the edition of profile is made by the legitimate user or admin
