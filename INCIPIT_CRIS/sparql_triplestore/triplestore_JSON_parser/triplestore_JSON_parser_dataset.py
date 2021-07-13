@@ -35,7 +35,6 @@ def parse_get_maintainers_dataset(sparql_query_answer):
 def parse_get_creators_dataset(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     array_creators = []
-    print(loaded_json)
     for json_data in loaded_json:
         array_creators.append(json_data['creator']['value'])
     return array_creators
