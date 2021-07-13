@@ -34,7 +34,7 @@
                 <form action="/articles/edition/field/delete-author/{{data_article.ark_pid}}" method="post">
                     {% csrf_token %}
                     <input type="hidden" id="authorARK" name="authorARK" value="{{ author.0 }}">
-                    <a class="link-one" href="/personnes/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+                    <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
                     <button class="delete"></button>
                 </form>
             </p>

@@ -168,7 +168,7 @@ def person_field_edition(request, part_of_person_to_modify, ark_pid):
             context = {
                 'form': form,
                 'button_value': 'Modifier',
-                'url_to_return': '/personnes/edition/profil/{}/{}'.format(part_of_person_to_modify, ark_pid)
+                'url_to_return': '/persons/edition/profil/{}/{}'.format(part_of_person_to_modify, ark_pid)
             }
             # return the form to be completed
             return render(request, 'forms/classic_form.html', context)
@@ -253,7 +253,7 @@ def person_article_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Article',
                 'data_type_added': 'de l\'article',
-                'url_to_return': '/personnes/edition/profil/add-article/{}'.format(ark_pid),
+                'url_to_return': '/persons/edition/profil/add-article/{}'.format(ark_pid),
                 'data': articles
             }
             # return the form to be completed
@@ -297,7 +297,7 @@ def person_project_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Projet',
                 'data_type_added': 'du projet',
-                'url_to_return': '/personnes/edition/profil/add-project/{}'.format(ark_pid),
+                'url_to_return': '/persons/edition/profil/add-project/{}'.format(ark_pid),
                 'data': projects
             }
             # return the form to be completed
@@ -376,7 +376,7 @@ def person_datasets_creator_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Jeu de données',
                 'data_type_added': 'du jeu de données',
-                'url_to_return': '/personnes/edition/profil/add-dataset-creator/{}'.format(ark_pid),
+                'url_to_return': '/persons/edition/profil/add-dataset-creator/{}'.format(ark_pid),
                 'data': datasets
             }
             # return the form to be completed
@@ -456,7 +456,7 @@ def person_datasets_maintainer_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Jeu de données',
                 'data_type_added': 'du jeu de données',
-                'url_to_return': '/personnes/edition/profil/add-dataset-maintainer/{}'.format(ark_pid),
+                'url_to_return': '/persons/edition/profil/add-dataset-maintainer/{}'.format(ark_pid),
                 'data': datasets
             }
             # return the form to be completed

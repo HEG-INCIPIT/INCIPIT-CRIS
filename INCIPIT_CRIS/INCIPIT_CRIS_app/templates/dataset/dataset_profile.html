@@ -34,13 +34,13 @@
                 <p>Créateur(s) : </p>
                 {% for creator in data_dataset.creators %}
                     <p>
-                        <a class="link-one" href="/personnes/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a> 
+                        <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a> 
                     </p>
                 {% endfor %}
                 <p>Mainteneur(s) : </p>
                 {% for maintainer in data_dataset.maintainers %}
                     <p>
-                        <a class="link-one" href="/personnes/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a> 
+                        <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a> 
                     </p>
                 {% endfor %}
                 <p>Projet(s) : </p>

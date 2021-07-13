@@ -33,7 +33,7 @@
                 <p>Membre(s) : </p>
                 {% for member in data_project.members %}
                     <p>
-                        <a class="link-one" href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a> 
+                        <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a> 
                     </p>
                 {% endfor %}
                 <p>Article(s) : </p>

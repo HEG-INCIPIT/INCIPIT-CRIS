@@ -34,9 +34,9 @@
                     <div class="align-text-left">
                         <ul>
                             {% for user in last_users_registered %}
-                                <li class="display-content"><a class="link-one" href="/personnes/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
+                                <li class="display-content"><a class="link-one" href="/persons/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
                             {% endfor %}
-                            <li class="display-content-last-element"><a class="link-one" href="/personnes/">Voir tout</a></li>
+                            <li class="display-content-last-element"><a class="link-one" href="/persons/">Voir tout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                 <h1 class="is-size-5">Statistiques</h1>
             </div>
             <div id="statsColumns" name="statsColumns" class="tile is-ancestor has-text-centered">
-                <a href="/personnes" id="personsStats" name="personsStats" class="tile is-parent">
+                <a href="/persons" id="personsStats" name="personsStats" class="tile is-parent">
                     <article class="tile is-child box content">
                         <p class="title">{{ len_persons }}</p>
                         <p class="heading">Personnes</p>
@@ -86,7 +86,7 @@
                         <p class="heading">Articles</p>
                     </article>
                 </a>
-                <a href="/projets" id="projectsStats" name="projectsStats" class="tile is-parent">
+                <a href="/projects" id="projectsStats" name="projectsStats" class="tile is-parent">
                     <article class="tile is-child box content">
                         <p class="title">{{ len_projects }}</p>
                         <p class="heading">Projets</p>

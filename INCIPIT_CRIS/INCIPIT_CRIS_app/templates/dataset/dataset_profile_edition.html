@@ -40,7 +40,7 @@
             <form action="/datasets/edition/field/delete-creator/{{data_dataset.ark_pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="creatorARK" name="creatorARK" value="{{ creator.0 }}">
-                <a class="link-one" href="/personnes/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
                 <button class="delete"></button>
             </form>
         </p>
@@ -52,7 +52,7 @@
             <form action="/datasets/edition/field/delete-maintainer/{{data_dataset.ark_pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="maintainerARK" name="maintainerARK" value="{{ maintainer.0 }}">
-                <a class="link-one" href="/personnes/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
                 <button class="delete"></button>
             </form>
         </p>
