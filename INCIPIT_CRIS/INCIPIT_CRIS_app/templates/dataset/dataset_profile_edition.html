@@ -31,8 +31,8 @@
     <p><time datetime="{{ data_dataset.created_date }}">Date de création : {{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/dateCreated/{{data_dataset.ark_pid}}"> Modifer</a></p>
     <p><time datetime="{{ data_dataset.modified_date }}">Date de modification : {{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/dateModified/{{data_dataset.ark_pid}}"> Modifer</a></p>
     
-    <p>URL des détails : <a class="link-one" href="{{ data_dataset.url_details }}"> {{ data_dataset.url_details }}</a> <a class="link-one" href="/datasets/edition/field/urlDetails/{{data_dataset.ark_pid}}"> Modifier</a></p>
-    <p>URL des données : <a class="link-one" href="{{ data_dataset.url_data.url_data }}"> {{ data_dataset.url_data.url_data }}</a> <a class="link-one" href="/datasets/edition/field/urlData/{{data_dataset.ark_pid}}"> Modifier</a></p>
+    <p>URL des détails : <a class="link-one" href="{{ data_dataset.url }}"> {{ data_dataset.url }}</a> <a class="link-one" href="/datasets/edition/field/url-details/{{data_dataset.ark_pid}}"> Modifier</a></p>
+    <p>URL des données : <a class="link-one" href="{{ data_dataset.data_download.url }}"> {{ data_dataset.data_download.url }}</a> <a class="link-one" href="/datasets/edition/field/url-data-download/{{data_dataset.ark_pid}}"> Modifier</a></p>
 
     <p>Créateur(s) : <a class="link-one" href="/datasets/edition/field/add-creator/{{data_dataset.ark_pid}}"> Ajouter</a> </p>
     {% for creator in data_dataset.creators %}
@@ -58,13 +58,13 @@
         </p>
     {% endfor %}
 
-    <p>Projet(s) : <a class="link-one" href="/datasets/edition/field/add-projects/{{data_dataset.ark_pid}}"> Ajouter</a></p>
-    {% for projects in data_dataset.projectss %}
+    <p>Projet(s) : <a class="link-one" href="/datasets/edition/field/add-project/{{data_dataset.ark_pid}}"> Ajouter</a></p>
+    {% for project in data_dataset.projects %}
         <p>
-            <form action="/datasets/edition/field/delete-projects/{{data_dataset.ark_pid}}" method="post">
+            <form action="/datasets/edition/field/delete-project/{{data_dataset.ark_pid}}" method="post">
                 {% csrf_token %}
-                <input type="hidden" id="projectsARK" name="projectsARK" value="{{ projects.0 }}">
-                <a class="link-one" href="/projectss/{{ projects.0 }}">{{ projects.1.name }}</a>
+                <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
+                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
                 <button class="delete"></button>
             </form>
         </p>

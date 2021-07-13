@@ -33,16 +33,23 @@
                 <p>Membre(s) : </p>
                 {% for member in data_project.members %}
                     <p>
-                        <a href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a> 
+                        <a class="link-one" href="/personnes/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a> 
                     </p>
                 {% endfor %}
                 <p>Article(s) : </p>
                 {% for article in data_project.articles %}
                     <p>
-                        <a href="/articles/{{ article.0 }}">{{ article.1.name }}</a> 
+                        <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a> 
+                    </p>
+                {% endfor %}
+                <p>Jeu(x) de données : </p>
+                {% for dataset in data_project.datasets %}
+                    <p>
+                        <a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a> 
                     </p>
                 {% endfor %}
             {% endblock %}
+
         </section>
         {% include 'main/footer.html' %}
     </body>

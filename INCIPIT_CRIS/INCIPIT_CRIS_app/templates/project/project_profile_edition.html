@@ -57,4 +57,16 @@
         </p>
     {% endfor %}
 
+    <p>Jeu(x) de données : <a class="link-one" href="/projects/edition/field/add-dataset/{{data_project.ark_pid}}"> Ajouter</a></p>
+    {% for dataset in data_project.datasets %}
+        <p>
+            <form action="/projects/edition/field/delete-dataset/{{data_project.ark_pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="datasetARK" name="datasetARK" value="{{ dataset.0 }}">
+                <a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
 {% endblock %}

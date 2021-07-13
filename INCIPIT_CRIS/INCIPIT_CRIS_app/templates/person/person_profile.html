@@ -117,7 +117,21 @@
                     {% endblock %}
                 </div>
                 <div data-content="data">
-                    <p>Données : ...</p>
+                    <p>Données : </p>
+                    {% block dataset %}
+                        <p>Créateur :</p>
+                        {% for creator in data_person.datasets_creator %}
+                            <p>
+                                <a class="link-one" href="/datasets/{{ creator.0 }}">{{ creator.1.name }}</a>
+                            </p>
+                        {% endfor %}
+                        <p>Mainteneur :</p>
+                        {% for maintainer in data_person.datasets_maintainer %}
+                            <p>
+                                <a class="link-one" href="/datasets/{{ maintainer.0 }}">{{ maintainer.1.name }}</a>
+                            </p>
+                        {% endfor %}
+                    {% endblock %}
                 </div>
             </div>
         </section>
