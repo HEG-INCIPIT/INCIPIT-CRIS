@@ -163,13 +163,13 @@ class SparqlGetDatasetMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?name ?abstract ?dateCreated ?dateModified ?url_details WHERE
+            SELECT ?name ?abstract ?dateCreated ?dateModified ?url WHERE
             {{
                 <{ark_research}> schema:name ?name .
                 <{ark_research}> schema:abstract ?abstract .
                 <{ark_research}> schema:dateCreated ?dateCreated .
                 <{ark_research}> schema:dateModified ?dateModified .
-                <{ark_research}> schema:url ?url_details .
+                <{ark_research}> schema:url ?url .
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
@@ -180,13 +180,13 @@ class SparqlGetDatasetMethods:
         maintainers = variables.sparql_get_dataset_object.get_maintainers_dataset(ark_pid)
         creators = variables.sparql_get_dataset_object.get_creators_dataset(ark_pid)
         projects = variables.sparql_get_dataset_object.get_projects_dataset(ark_pid)
-        url = variables.sparql_get_dataset_object.get_url_data_dataset(ark_pid)
+        data_download = variables.sparql_get_dataset_object.get_data_download_dataset(ark_pid)
         
         data_dataset['maintainers'] = maintainers
         data_dataset['creators'] = creators
         data_dataset['projects'] = projects
         data_dataset['ark_pid'] = ark_pid
-        data_dataset['url_data'] = url
+        data_dataset['data_download'] = data_download
         return data_dataset
 
     def check_dataset_ark(self, ark_pid):
@@ -208,17 +208,17 @@ class SparqlGetDatasetMethods:
         return parse_check_dataset_ark(self.sparql.query().response.read())
 
 
-    def get_url_data_dataset(self, ark_pid):
+    def get_data_download_dataset(self, ark_pid):
 
         sparql_request = """
             {prefix}
 
-            SELECT ?url_data WHERE
+            SELECT ?url WHERE
             {{
-                <{ark_research}DD> schema:url ?url_data .
+                <{ark_research}DD> schema:url ?url .
             }}
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_url_data_dataset(self.sparql.query().response.read())
+        return parse_get_data_download_dataset(self.sparql.query().response.read())

@@ -129,6 +129,32 @@ class SparqlGetProjectMethods:
         return array_articles
 
 
+    def get_datasets_project(self, ark_pid):
+        """
+        Get all the datasets of a project
+        And return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?dataset WHERE
+            {{
+                ?dataset schema:isPartOf <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_datasets = []
+
+        for dataset in parse_get_datasets_project(self.sparql.query().response.read()):
+            full_name = variables.sparql_get_dataset_object.get_full_name_dataset(dataset)
+            array_datasets.append([dataset, full_name])
+
+        return array_datasets
+
+
     def get_data_project(self, ark_pid):
         """
         Get all the information of a project : ark, name, abstract, date of publication, members, ...
@@ -152,10 +178,13 @@ class SparqlGetProjectMethods:
 
         members = variables.sparql_get_project_object.get_members_project(ark_pid)
         articles = variables.sparql_get_project_object.get_articles_project(ark_pid)
+        datasets = variables.sparql_get_project_object.get_datasets_project(ark_pid)
         
         data_project['members'] = members
         data_project['articles'] = articles
+        data_project['datasets'] = datasets
         data_project['ark_pid'] = ark_pid
+        
         return data_project
 
 
@@ -175,4 +204,5 @@ class SparqlGetProjectMethods:
         """.format(prefix=variables.prefix, ark_research=ark_pid)
 
         self.sparql.setQuery(sparql_request)
+        
         return parse_check_project_ark(self.sparql.query().response.read())

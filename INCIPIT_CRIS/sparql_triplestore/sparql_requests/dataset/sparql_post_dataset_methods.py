@@ -147,7 +147,7 @@ class SparqlPostDatasetMethods:
         return self.sparql.query().response.read()
 
 
-    def delete_project_of_dataset(self, ark_pid, project):
+    def delete_project_from_dataset(self, ark_pid, project):
         sparql_request = """
             {prefix}
 

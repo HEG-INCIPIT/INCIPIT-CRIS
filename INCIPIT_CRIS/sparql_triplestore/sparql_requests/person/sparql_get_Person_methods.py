@@ -125,6 +125,58 @@ class SparqlGetPersonMethods:
         return array_projects
 
 
+    def get_datasets_creator_person(self, ark_pid):
+        """
+        Get all the datasets for who the person is a creator
+        Return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?dataset WHERE
+            {{
+                ?dataset schema:creator <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_datasets = []
+
+        for dataset in parse_get_datasets_person(self.sparql.query().response.read()):
+            data_dataset = variables.sparql_get_dataset_object.get_data_dataset(dataset)
+            array_datasets.append((dataset, data_dataset))
+
+        return array_datasets
+
+
+    def get_datasets_maintainer_person(self, ark_pid):
+        """
+        Get all the datasets for who the person is a maintainer
+        Return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?dataset WHERE
+            {{
+                ?dataset schema:maintainer <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=ark_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_datasets = []
+
+        for dataset in parse_get_datasets_person(self.sparql.query().response.read()):
+            data_dataset = variables.sparql_get_dataset_object.get_data_dataset(dataset)
+            array_datasets.append((dataset, data_dataset))
+
+        return array_datasets
+
+
     def get_data_person(self, ark_pid):
         """
         Get all the information of a person : ark, given name, family name, ...
@@ -150,10 +202,14 @@ class SparqlGetPersonMethods:
 
         articles = variables.sparql_get_person_object.get_articles_person(ark_pid)
         projects = variables.sparql_get_person_object.get_projects_person(ark_pid)
+        datasets_creator = variables.sparql_get_person_object.get_datasets_creator_person(ark_pid)
+        datasets_maintainer = variables.sparql_get_person_object.get_datasets_maintainer_person(ark_pid)
         
         data_person['ark_pid'] = ark_pid
         data_person['articles'] = articles
         data_person['projects'] = projects
+        data_person['datasets_creator'] = datasets_creator
+        data_person['datasets_maintainer'] = datasets_maintainer
 
         return data_person
 

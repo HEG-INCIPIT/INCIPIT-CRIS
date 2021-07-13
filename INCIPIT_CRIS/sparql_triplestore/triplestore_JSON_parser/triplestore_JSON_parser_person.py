@@ -35,6 +35,14 @@ def parse_get_projects_person(sparql_query_answer):
     return array_projects
 
 
+def parse_get_datasets_person(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_datasets = []
+    for dataset in loaded_json:
+        array_datasets.append(dataset['dataset']['value'])
+    return array_datasets
+
+
 def parse_check_person_ark(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     if len(loaded_json) > 0:
