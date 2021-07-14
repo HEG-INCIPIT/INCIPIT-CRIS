@@ -137,7 +137,7 @@ class SparqlPostDatasetMethods:
             {prefix}
 
             INSERT DATA {{
-                <{pid}> schema:isPartOf <{project}> .
+                <{pid}> schema:producer <{project}> .
 
             }}
         """.format(prefix=variables.prefix, pid=pid, project=project)
@@ -152,14 +152,47 @@ class SparqlPostDatasetMethods:
             {prefix}
 
             DELETE {{
-                <{pid}> schema:isPartOf <{project}> .
+                <{pid}> schema:producer <{project}> .
 
             }}
             WHERE
             {{
-                <{pid}> schema:isPartOf <{project}> .
+                <{pid}> schema:producer <{project}> .
             }}
         """.format(prefix=variables.prefix, pid=pid, project=project)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+    def add_article_to_dataset(self, pid, article):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{article}> schema:isBasedOn <{pid}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, article=article)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_article_from_dataset(self, pid, article):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{article}> schema:isBasedOn <{pid}> .
+
+            }}
+            WHERE
+            {{
+                <{article}> schema:isBasedOn <{pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, article=article)
 
         self.sparql.setQuery(sparql_request)
 

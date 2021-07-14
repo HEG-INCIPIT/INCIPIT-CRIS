@@ -139,7 +139,7 @@ class SparqlGetDatasetMethods:
 
             SELECT ?project WHERE
             {{
-                <{ark_research}> schema:isPartOf ?project .
+                <{ark_research}> schema:producer ?project .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
@@ -152,6 +152,32 @@ class SparqlGetDatasetMethods:
             array_projects.append([project, name])
 
         return array_projects
+
+    
+    def get_articles_dataset(self, pid):
+        """
+        Get all the articles of an dataset
+        And return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?article WHERE
+            {{
+                ?article schema:producer <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_articles = []
+
+        for article in parse_get_articles_dataset(self.sparql.query().response.read()):
+            name = variables.sparql_get_article_object.get_full_name_article(article)
+            array_articles.append([article, name])
+
+        return array_articles
 
 
     def get_data_dataset(self, pid):

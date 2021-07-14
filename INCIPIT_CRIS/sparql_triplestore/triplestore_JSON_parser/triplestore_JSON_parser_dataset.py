@@ -48,6 +48,14 @@ def parse_get_projects_dataset(sparql_query_answer):
     return array_projects
 
 
+def parse_get_articles_dataset(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_articles = []
+    for json_data in loaded_json:
+        array_articles.append(json_data['article']['value'])
+    return array_articles
+
+
 def parse_get_data_dataset(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
