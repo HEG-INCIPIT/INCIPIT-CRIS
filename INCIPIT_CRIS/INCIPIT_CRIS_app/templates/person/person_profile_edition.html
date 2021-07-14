@@ -5,12 +5,12 @@
 {% endblock %}
 
 {% block button_back %}
-    <a class="button is-primary" href="/persons/{{ data_person.ark_pid }}">Voir le profil</a>
+    <a class="button is-primary" href="/persons/{{ data_person.pid }}">Voir le profil</a>
 {% endblock %}
 
 {% block person_left_information %}
     <p class="subtitle is-6">Email : {{ data_person.email }}</p>
-    <p class="subtitle is-6">Téléphone : {{ data_person.telephone }} <a class="link-one" href="/persons/edition/profil/telephone/{{ data_person.ark_pid }}">Modifer</a></p>
+    <p class="subtitle is-6">Téléphone : {{ data_person.telephone }} <a class="link-one" href="/persons/edition/profil/telephone/{{ data_person.pid }}">Modifer</a></p>
 {% endblock %}
 
 {% block person_right_information %}
@@ -19,14 +19,14 @@
 {% endblock %}
 
 {% block apropos %}
-    <p>Description : {{ data_person.description }} <a class="link-one" href="/persons/edition/profil/description/{{ data_person.ark_pid }}">Modifer</a></p>
+    <p>Description : {{ data_person.description }} <a class="link-one" href="/persons/edition/profil/description/{{ data_person.pid }}">Modifer</a></p>
 {% endblock %}
 
 {% block articles %}
-    <p>Articles :  <a class="link-one" href="/persons/edition/profil/add-article/{{data_person.ark_pid}}"> Ajouter</a></p>
+    <p>Articles :  <a class="link-one" href="/persons/edition/profil/add-article/{{data_person.pid}}"> Ajouter</a></p>
     {% for article in data_person.articles %}
         <p>
-            <form action="/persons/edition/profil/delete-article/{{data_person.ark_pid}}" method="post">
+            <form action="/persons/edition/profil/delete-article/{{data_person.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
                 <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
@@ -37,10 +37,10 @@
 {% endblock %}
 
 {% block projects %}
-    <p>Projets : <a class="link-one" href="/persons/edition/profil/add-project/{{data_person.ark_pid}}"> Ajouter</a></p>
+    <p>Projets : <a class="link-one" href="/persons/edition/profil/add-project/{{data_person.pid}}"> Ajouter</a></p>
     {% for project in data_person.projects %}
         <p>
-            <form action="/persons/edition/profil/delete-project/{{data_person.ark_pid}}" method="post">
+            <form action="/persons/edition/profil/delete-project/{{data_person.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
                 <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
@@ -51,10 +51,10 @@
 {% endblock %}
 
 {% block dataset %}
-    <p>Créateur de : <a class="link-one" href="/persons/edition/profil/add-dataset-creator/{{data_person.ark_pid}}"> Ajouter</a></p>
+    <p>Créateur de : <a class="link-one" href="/persons/edition/profil/add-dataset-creator/{{data_person.pid}}"> Ajouter</a></p>
     {% for dataset_creator in data_person.datasets_creator %}
         <p>
-            <form action="/persons/edition/profil/delete-dataset-creator/{{data_person.ark_pid}}" method="post">
+            <form action="/persons/edition/profil/delete-dataset-creator/{{data_person.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="dataset_creatorARK" name="dataset_creatorARK" value="{{ dataset_creator.0 }}">
                 <a class="link-one" href="/dataset_creators/{{ dataset_creator.0 }}">{{ dataset_creator.1.name }}</a>
@@ -63,10 +63,10 @@
         </p>
     {% endfor %}
 
-    <p>Mainteneur de : <a class="link-one" href="/persons/edition/profil/add-dataset-maintainer/{{data_person.ark_pid}}"> Ajouter</a></p>
+    <p>Mainteneur de : <a class="link-one" href="/persons/edition/profil/add-dataset-maintainer/{{data_person.pid}}"> Ajouter</a></p>
     {% for dataset_maintainer in data_person.datasets_maintainer %}
         <p>
-            <form action="/persons/edition/profil/delete-dataset-maintainer/{{data_aperson.ark_pid}}" method="post">
+            <form action="/persons/edition/profil/delete-dataset-maintainer/{{data_aperson.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="dataset_maintainerARK" name="dataset_maintainerARK" value="{{ dataset_maintainer.0 }}">
                 <a class="link-one" href="/dataset_maintainers/{{ dataset_maintainer.0 }}">{{ dataset_maintainer.1.name }}</a>

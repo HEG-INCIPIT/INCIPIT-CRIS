@@ -33,7 +33,7 @@ def index(request):
 
     last_users_registered = []
     for i in range(1, 6):
-        last_users_registered.append([users.values('ark_pid')[len(users) - i]['ark_pid'],
+        last_users_registered.append([users.values('pid')[len(users) - i]['pid'],
                                       users.values('first_name')[len(users) - i]['first_name'],
                                       users.values('last_name')[len(users) - i]['last_name']])
 

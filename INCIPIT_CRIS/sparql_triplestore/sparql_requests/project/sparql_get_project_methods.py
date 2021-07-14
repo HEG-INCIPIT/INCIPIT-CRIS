@@ -57,7 +57,7 @@ class SparqlGetProjectMethods:
         return parse_get_projects(self.sparql.query().response.read())
 
 
-    def get_full_name_project(self, ark_pid):
+    def get_full_name_project(self, pid):
         """
         Get the name of an project formated in a dict
         Return a dict with name
@@ -69,14 +69,14 @@ class SparqlGetProjectMethods:
             {{
                 <{ark_research}> schema:name ?name .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
         return parse_get_full_name_project(self.sparql.query().response.read())
 
 
-    def get_members_project(self, ark_pid):
+    def get_members_project(self, pid):
         """
         Get all the members of a project
         And return an array with tuples (identifier, dictionnary)
@@ -90,7 +90,7 @@ class SparqlGetProjectMethods:
             {{
                 <{ark_research}> schema:member ?member .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -103,7 +103,7 @@ class SparqlGetProjectMethods:
         return array_members
 
 
-    def get_articles_project(self, ark_pid):
+    def get_articles_project(self, pid):
         """
         Get all the articles of a project
         And return an array with tuples (identifier, dictionnary)
@@ -116,7 +116,7 @@ class SparqlGetProjectMethods:
             {{
                 <{ark_research}> schema:subjectOf ?article .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -129,7 +129,7 @@ class SparqlGetProjectMethods:
         return array_articles
 
 
-    def get_datasets_project(self, ark_pid):
+    def get_datasets_project(self, pid):
         """
         Get all the datasets of a project
         And return an array with tuples (identifier, dictionnary)
@@ -142,7 +142,7 @@ class SparqlGetProjectMethods:
             {{
                 ?dataset schema:isPartOf <{ark_research}> .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -155,7 +155,7 @@ class SparqlGetProjectMethods:
         return array_datasets
 
 
-    def get_data_project(self, ark_pid):
+    def get_data_project(self, pid):
         """
         Get all the information of a project : ark, name, abstract, date of publication, members, ...
         And return a dictionnary with all elements
@@ -171,24 +171,24 @@ class SparqlGetProjectMethods:
                 <{ark_research}> schema:dissolutionDate ?dissolutionDate .
                 <{ark_research}> schema:url ?url .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
         data_project = parse_get_data_project(self.sparql.query().response.read())
 
-        members = variables.sparql_get_project_object.get_members_project(ark_pid)
-        articles = variables.sparql_get_project_object.get_articles_project(ark_pid)
-        datasets = variables.sparql_get_project_object.get_datasets_project(ark_pid)
+        members = variables.sparql_get_project_object.get_members_project(pid)
+        articles = variables.sparql_get_project_object.get_articles_project(pid)
+        datasets = variables.sparql_get_project_object.get_datasets_project(pid)
         
         data_project['members'] = members
         data_project['articles'] = articles
         data_project['datasets'] = datasets
-        data_project['ark_pid'] = ark_pid
+        data_project['pid'] = pid
         
         return data_project
 
 
-    def check_project_ark(self, ark_pid):
+    def check_project_ark(self, pid):
         """
         Return a boolean
         """
@@ -201,7 +201,7 @@ class SparqlGetProjectMethods:
                 <{ark_research}> a ?researchProject .
                 FILTER(?researchProject = schema:ResearchProject)
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
         

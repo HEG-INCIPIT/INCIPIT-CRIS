@@ -14,7 +14,7 @@ class User(AbstractUser):
     email = models.CharField(max_length=255)
     first_name = models.CharField(max_length=30, blank=False, null=False)
     last_name = models.CharField(max_length=150, blank=False, null=False)
-    ark_pid = models.CharField(blank=True, max_length=100)
+    pid = models.CharField(blank=True, max_length=100)
 
     # variables to verify at each save of a user if those elements changed
     __original_email = None
@@ -30,27 +30,27 @@ class User(AbstractUser):
 
 
     def save(self, *args, **kwargs):
-        if not variables.sparql_get_person_object.check_person_ark(self.ark_pid) and not self.is_staff:
-            if self.ark_pid == '':
+        if not variables.sparql_get_person_object.check_person_ark(self.pid) and not self.is_staff:
+            if self.pid == '':
                 
                 try:
-                    self.ark_pid = variables.ark.mint('', '{} {}'.format(self.first_name, self.last_name), 
+                    self.pid = variables.ark.mint('', '{} {}'.format(self.first_name, self.last_name), 
                         'Creating an ARK in INCIPIT-CRIS for a person named {} {}'.format(self.first_name, self.last_name), '{}'.format(datetime.datetime.now()))
-                    variables.ark.update('{}'.format(self.ark_pid), '{}{}'.format(settings.URL, self.ark_pid), '{} {}'.format(self.first_name, self.last_name), 
+                    variables.ark.update('{}'.format(self.pid), '{}{}'.format(settings.URL, self.pid), '{} {}'.format(self.first_name, self.last_name), 
                         'Creating an ARK in INCIPIT-CRIS for a person named {} {}'.format(self.first_name, self.last_name), '{}'.format(datetime.datetime.now()))
                 except:
                     print("ERROR")
                     raise Exception
 
-            variables.sparql_post_person_object.init_person(self.ark_pid, self.first_name, self.last_name, self.email)
+            variables.sparql_post_person_object.init_person(self.pid, self.first_name, self.last_name, self.email)
             if self.email != self.__original_email:
-                variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'email', self.email,
+                variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'email', self.email,
                                                                         self.__original_email)
             if self.first_name != self.__original_first_name:
-                variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'givenName', self.first_name,
+                variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'givenName', self.first_name,
                                                                         self.__original_first_name)
             if self.last_name != self.__original_last_name:
-                variables.sparql_post_person_object.update_person_string_leaf(self.ark_pid, 'familyName', self.last_name,
+                variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'familyName', self.last_name,
                                                                         self.__original_last_name)
 
         super().save(*args, **kwargs)
@@ -60,7 +60,7 @@ class User(AbstractUser):
 
 
     def __str__(self):
-        return self.ark_pid
+        return self.pid
 
 @receiver(pre_delete, sender=User)
 def delete_in_sparql(sender, instance, using, **kwargs):

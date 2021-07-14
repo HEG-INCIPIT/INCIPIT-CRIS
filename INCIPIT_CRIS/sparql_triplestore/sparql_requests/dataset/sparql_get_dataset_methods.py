@@ -57,7 +57,7 @@ class SparqlGetDatasetMethods:
         return parse_get_datasets(self.sparql.query().response.read())
 
 
-    def get_full_name_dataset(self, ark_pid):
+    def get_full_name_dataset(self, pid):
         """
         Get the name of an dataset formated in a dict
         Return a dict with name
@@ -69,14 +69,14 @@ class SparqlGetDatasetMethods:
             {{
                 <{ark_research}> schema:name ?name .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
         return parse_get_full_name_dataset(self.sparql.query().response.read())
 
 
-    def get_maintainers_dataset(self, ark_pid):
+    def get_maintainers_dataset(self, pid):
         """
         Get all the maintainers of an dataset
         And return an array with tuples (identifier, dictionnary)
@@ -89,7 +89,7 @@ class SparqlGetDatasetMethods:
             {{
                 <{ark_research}> schema:maintainer ?maintainer .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -102,7 +102,7 @@ class SparqlGetDatasetMethods:
         return array_maintainers
 
 
-    def get_creators_dataset(self, ark_pid):
+    def get_creators_dataset(self, pid):
         """
         Get all the creators of an dataset
         And return an array with tuples (identifier, dictionnary)
@@ -115,7 +115,7 @@ class SparqlGetDatasetMethods:
             {{
                 <{ark_research}> schema:creator ?creator .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -128,7 +128,7 @@ class SparqlGetDatasetMethods:
         return array_creators
 
 
-    def get_projects_dataset(self, ark_pid):
+    def get_projects_dataset(self, pid):
         """
         Get all the projects of an dataset
         And return an array with tuples (identifier, dictionnary)
@@ -141,7 +141,7 @@ class SparqlGetDatasetMethods:
             {{
                 <{ark_research}> schema:isPartOf ?project .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -154,7 +154,7 @@ class SparqlGetDatasetMethods:
         return array_projects
 
 
-    def get_data_dataset(self, ark_pid):
+    def get_data_dataset(self, pid):
         """
         Get all the information of an dataset : ark, name, abstract, date of publication, maintainers, ...
         And return a dictionnary with all elements
@@ -171,25 +171,25 @@ class SparqlGetDatasetMethods:
                 <{ark_research}> schema:dateModified ?dateModified .
                 <{ark_research}> schema:url ?url .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
         data_dataset = parse_get_data_dataset(self.sparql.query().response.read())
 
-        maintainers = variables.sparql_get_dataset_object.get_maintainers_dataset(ark_pid)
-        creators = variables.sparql_get_dataset_object.get_creators_dataset(ark_pid)
-        projects = variables.sparql_get_dataset_object.get_projects_dataset(ark_pid)
-        data_download = variables.sparql_get_dataset_object.get_data_download_dataset(ark_pid)
+        maintainers = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
+        creators = variables.sparql_get_dataset_object.get_creators_dataset(pid)
+        projects = variables.sparql_get_dataset_object.get_projects_dataset(pid)
+        data_download = variables.sparql_get_dataset_object.get_data_download_dataset(pid)
         
         data_dataset['maintainers'] = maintainers
         data_dataset['creators'] = creators
         data_dataset['projects'] = projects
-        data_dataset['ark_pid'] = ark_pid
+        data_dataset['pid'] = pid
         data_dataset['data_download'] = data_download
         return data_dataset
 
-    def check_dataset_ark(self, ark_pid):
+    def check_dataset_ark(self, pid):
         """
         Return a boolean
         """
@@ -202,13 +202,13 @@ class SparqlGetDatasetMethods:
                 <{ark_research}> a ?dataset .
                 FILTER(?dataset = schema:Dataset)
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
         return parse_check_dataset_ark(self.sparql.query().response.read())
 
 
-    def get_data_download_dataset(self, ark_pid):
+    def get_data_download_dataset(self, pid):
 
         sparql_request = """
             {prefix}
@@ -217,7 +217,7 @@ class SparqlGetDatasetMethods:
             {{
                 <{ark_research}DD> schema:url ?url .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 

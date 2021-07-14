@@ -54,7 +54,7 @@ class SparqlGetPersonMethods:
 
         return parse_get_persons(self.sparql.query().response.read())
 
-    def get_full_name_person(self, ark_pid):
+    def get_full_name_person(self, pid):
         """
         Get the full name of a person formated in a dict
         Return a dict with given name and family name
@@ -67,13 +67,13 @@ class SparqlGetPersonMethods:
                 <{ark_research}> schema:givenName ?given_name .
                 <{ark_research}> schema:familyName ?family_name .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
         return parse_get_full_name_person(self.sparql.query().response.read())
 
-    def get_articles_person(self, ark_pid):
+    def get_articles_person(self, pid):
         """
         Get all the articles for who the person is an author
         Return an array with tuples (identifier, dictionnary)
@@ -86,7 +86,7 @@ class SparqlGetPersonMethods:
             {{
                 ?article schema:author <{ark_research}> .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -99,7 +99,7 @@ class SparqlGetPersonMethods:
         return array_articles
 
 
-    def get_projects_person(self, ark_pid):
+    def get_projects_person(self, pid):
         """
         Get all the projects for who the person is a member
         Return an array with tuples (identifier, dictionnary)
@@ -112,7 +112,7 @@ class SparqlGetPersonMethods:
             {{
                 ?project schema:member <{ark_research}> .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -125,7 +125,7 @@ class SparqlGetPersonMethods:
         return array_projects
 
 
-    def get_datasets_creator_person(self, ark_pid):
+    def get_datasets_creator_person(self, pid):
         """
         Get all the datasets for who the person is a creator
         Return an array with tuples (identifier, dictionnary)
@@ -138,7 +138,7 @@ class SparqlGetPersonMethods:
             {{
                 ?dataset schema:creator <{ark_research}> .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -151,7 +151,7 @@ class SparqlGetPersonMethods:
         return array_datasets
 
 
-    def get_datasets_maintainer_person(self, ark_pid):
+    def get_datasets_maintainer_person(self, pid):
         """
         Get all the datasets for who the person is a maintainer
         Return an array with tuples (identifier, dictionnary)
@@ -164,7 +164,7 @@ class SparqlGetPersonMethods:
             {{
                 ?dataset schema:maintainer <{ark_research}> .
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
@@ -177,7 +177,7 @@ class SparqlGetPersonMethods:
         return array_datasets
 
 
-    def get_data_person(self, ark_pid):
+    def get_data_person(self, pid):
         """
         Get all the information of a person : ark, given name, family name, ...
         Return a dictionnary with all elements
@@ -194,18 +194,18 @@ class SparqlGetPersonMethods:
                 OPTIONAL {{ <{ark_research}> schema:telephone ?telephone }}
                 OPTIONAL {{ <{ark_research}> schema:description ?description }}
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
         data_person = parse_get_data_person(self.sparql.query().response.read())
 
-        articles = variables.sparql_get_person_object.get_articles_person(ark_pid)
-        projects = variables.sparql_get_person_object.get_projects_person(ark_pid)
-        datasets_creator = variables.sparql_get_person_object.get_datasets_creator_person(ark_pid)
-        datasets_maintainer = variables.sparql_get_person_object.get_datasets_maintainer_person(ark_pid)
+        articles = variables.sparql_get_person_object.get_articles_person(pid)
+        projects = variables.sparql_get_person_object.get_projects_person(pid)
+        datasets_creator = variables.sparql_get_person_object.get_datasets_creator_person(pid)
+        datasets_maintainer = variables.sparql_get_person_object.get_datasets_maintainer_person(pid)
         
-        data_person['ark_pid'] = ark_pid
+        data_person['pid'] = pid
         data_person['articles'] = articles
         data_person['projects'] = projects
         data_person['datasets_creator'] = datasets_creator
@@ -213,7 +213,7 @@ class SparqlGetPersonMethods:
 
         return data_person
 
-    def check_person_ark(self, ark_pid):
+    def check_person_ark(self, pid):
         """
         Return a boolean
         """
@@ -226,7 +226,7 @@ class SparqlGetPersonMethods:
                 <{ark_research}> a ?person .
                 FILTER(?person = schema:Person)
             }}
-        """.format(prefix=variables.prefix, ark_research=ark_pid)
+        """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
         return parse_check_person_ark(self.sparql.query().response.read())

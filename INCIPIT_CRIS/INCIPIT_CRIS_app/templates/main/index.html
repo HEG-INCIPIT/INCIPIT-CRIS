@@ -47,7 +47,7 @@
                     <div class="align-text-center">
                         <ul>
                             {% for article in last_publications %}
-                                    <li class="display-content"><a class="link-one" href="/articles/{{ article.ark_pid }}">{{ article.name }}</a></li>
+                                    <li class="display-content"><a class="link-one" href="/articles/{{ article.pid }}">{{ article.name }}</a></li>
                             {% endfor %}
                             <li class="display-content-last-element"><a class="link-one" href="/articles/">Voir tout</a></li>
                         </ul>
@@ -60,7 +60,7 @@
                     <div class="align-text-right">
                         <ul>
                             {% for project in project_data %}
-                                <li class="display-content"><a class="link-one" href="/projects/{{ project.ark_pid }}">{{ project.name }}</a></li>
+                                <li class="display-content"><a class="link-one" href="/projects/{{ project.pid }}">{{ project.name }}</a></li>
                             {% endfor %}
                             <li class="display-content-last-element"><a class="link-one" href="/projects/">Voir tout</a></li>
                         </ul>

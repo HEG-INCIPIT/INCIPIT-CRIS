@@ -32,41 +32,41 @@ class SparqlPostPersonMethods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def init_person(self, ark_pid, given_name, family_name, email):
+    def init_person(self, pid, given_name, family_name, email):
         sparql_request = """
             {prefix}
 
             INSERT DATA {{
-                <{ark_pid}ARK> a schema:PropertyValue ;
+                <{pid}ARK> a schema:PropertyValue ;
                     schema:propertyID 'ARK' ;
-                    schema:value "{ark_pid}" .
+                    schema:value "{pid}" .
                 
-                <{ark_pid}> a schema:Person ;
+                <{pid}> a schema:Person ;
                     schema:givenName "{given_name}" ;
                     schema:familyName "{family_name}" ;
                     schema:email "{email}" ;
                     schema:description \"\"\"\"\"\";
                     schema:telephone \"\"\"\"\"\";
-                    schema:identifier <{ark_pid}ARK> .
+                    schema:identifier <{pid}ARK> .
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, given_name=given_name, family_name=family_name, email=email)
+        """.format(prefix=variables.prefix, pid=pid, given_name=given_name, family_name=family_name, email=email)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
-    def update_person_string_leaf(self, ark_pid, predicate, new_string, old_string):
+    def update_person_string_leaf(self, pid, predicate, new_string, old_string):
         sparql_request = """
             {prefix}
 
-            DELETE {{ <{ark_pid}> schema:{predicate} \"\"\"{old_string}\"\"\" }}
-            INSERT {{ <{ark_pid}> schema:{predicate} \"\"\"{new_string}\"\"\" }}
+            DELETE {{ <{pid}> schema:{predicate} \"\"\"{old_string}\"\"\" }}
+            INSERT {{ <{pid}> schema:{predicate} \"\"\"{new_string}\"\"\" }}
             WHERE
             {{
-                <{ark_pid}> schema:{predicate} \"\"\"{old_string}\"\"\"
+                <{pid}> schema:{predicate} \"\"\"{old_string}\"\"\"
             }}
 
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, predicate=predicate, old_string=old_string, new_string=new_string)
+        """.format(prefix=variables.prefix, pid=pid, predicate=predicate, old_string=old_string, new_string=new_string)
 
         self.sparql.setQuery(sparql_request)
 

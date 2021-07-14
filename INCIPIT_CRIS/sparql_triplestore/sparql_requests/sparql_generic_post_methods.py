@@ -34,51 +34,51 @@ class SparqlGenericPostMethods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def update_string_leaf(self, ark_pid, predicate, new_string, old_string):
+    def update_string_leaf(self, pid, predicate, new_string, old_string):
         sparql_request = """
             {prefix}
 
-            DELETE {{ <{ark_pid}> schema:{predicate} \"\"\"{old_string}\"\"\" }}
-            INSERT {{ <{ark_pid}> schema:{predicate} \"\"\"{new_string}\"\"\" }}
+            DELETE {{ <{pid}> schema:{predicate} \"\"\"{old_string}\"\"\" }}
+            INSERT {{ <{pid}> schema:{predicate} \"\"\"{new_string}\"\"\" }}
             WHERE
             {{
-                <{ark_pid}> schema:{predicate} \"\"\"{old_string}\"\"\"
+                <{pid}> schema:{predicate} \"\"\"{old_string}\"\"\"
             }}
 
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, predicate=predicate, old_string=old_string,
+        """.format(prefix=variables.prefix, pid=pid, predicate=predicate, old_string=old_string,
                    new_string=new_string)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
-    def update_date_leaf(self, ark_pid, predicate, new_date, old_date):
+    def update_date_leaf(self, pid, predicate, new_date, old_date):
         sparql_request = """
             {prefix}
 
-            DELETE {{ <{ark_pid}> schema:{predicate} \"\"\"{old_date}\"\"\"^^xsd:date }}
-            INSERT {{ <{ark_pid}> schema:{predicate} \"\"\"{new_date}\"\"\"^^xsd:date }}
+            DELETE {{ <{pid}> schema:{predicate} \"\"\"{old_date}\"\"\"^^xsd:date }}
+            INSERT {{ <{pid}> schema:{predicate} \"\"\"{new_date}\"\"\"^^xsd:date }}
             WHERE
             {{
-                <{ark_pid}> schema:{predicate} \"\"\"{old_date}\"\"\"^^xsd:date
+                <{pid}> schema:{predicate} \"\"\"{old_date}\"\"\"^^xsd:date
             }}
 
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, predicate=predicate, old_date=old_date, new_date=new_date)
+        """.format(prefix=variables.prefix, pid=pid, predicate=predicate, old_date=old_date, new_date=new_date)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
 
-    def delete_subject(self, ark_pid):
+    def delete_subject(self, pid):
         sparql_request = """
             {prefix}
 
             DELETE WHERE {{
-                <{ark_pid}> ?predicate ?object .
+                <{pid}> ?predicate ?object .
 
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid)
+        """.format(prefix=variables.prefix, pid=pid)
 
         self.sparql.setQuery(sparql_request)
 

@@ -33,56 +33,56 @@ class SparqlPostArticleMethods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def create_article(self, ark_pid, name, abstract, date_published, url):
+    def create_article(self, pid, name, abstract, date_published, url):
         sparql_request = """
             {prefix}
 
             INSERT DATA {{
-                <{ark_pid}ARK> a schema:PropertyValue ;
+                <{pid}ARK> a schema:PropertyValue ;
                     schema:propertyID 'ARK' ;
-                    schema:value "{ark_pid}" .
+                    schema:value "{pid}" .
 
-                <{ark_pid}> a schema:ScholarlyArticle ;
+                <{pid}> a schema:ScholarlyArticle ;
                     schema:name \"\"\"{name}\"\"\" ;
                     schema:abstract \"\"\"{abstract}\"\"\" ;
                     schema:datePublished "{date_published}"^^xsd:date ;
                     schema:url \"\"\"{url}\"\"\" ;
-                    schema:identifier <{ark_pid}ARK> .
+                    schema:identifier <{pid}ARK> .
 
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, name=name, abstract=abstract, date_published=date_published, url=url)
+        """.format(prefix=variables.prefix, pid=pid, name=name, abstract=abstract, date_published=date_published, url=url)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
-    def add_author_to_article(self, ark_pid, author):
+    def add_author_to_article(self, pid, author):
         sparql_request = """
             {prefix}
 
             INSERT DATA {{
-                <{ark_pid}> schema:author <{author}> .
+                <{pid}> schema:author <{author}> .
 
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, author=author)
+        """.format(prefix=variables.prefix, pid=pid, author=author)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
-    def delete_author_of_article(self, ark_pid, author):
+    def delete_author_of_article(self, pid, author):
         sparql_request = """
             {prefix}
 
             DELETE {{
-                <{ark_pid}> schema:author <{author}> .
+                <{pid}> schema:author <{author}> .
 
             }}
             WHERE
             {{
-                <{ark_pid}> schema:author <{author}> .
+                <{pid}> schema:author <{author}> .
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, author=author)
+        """.format(prefix=variables.prefix, pid=pid, author=author)
 
         self.sparql.setQuery(sparql_request)
 

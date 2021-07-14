@@ -67,22 +67,22 @@ def project_creation(request):
             form = ProjectCreationForm(request.POST)
             if form.is_valid():
                 members = re.findall('"([^"]*)"', request.POST['memberElementsPost'])
-                ark_pid = form.cleaned_data['ark_pid']
-                if ark_pid == '':
+                pid = form.cleaned_data['pid']
+                if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
                     try:
-                        ark_pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
+                        pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
                             'Creating an ARK in INCIPIT-CRIS for a project named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
-                        variables.ark.update('{}'.format(ark_pid), '{}{}'.format(settings.URL, ark_pid), '{} {}'.format(form.cleaned_data['name']), 
+                        variables.ark.update('{}'.format(pid), '{}{}'.format(settings.URL, pid), '{} {}'.format(form.cleaned_data['name']), 
                             'Creating an ARK in INCIPIT-CRIS for an project named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
                     except:
                         print("ERROR")
                         raise Exception
-                variables.sparql_post_project_object.create_project(ark_pid, form.cleaned_data['name'],
+                variables.sparql_post_project_object.create_project(pid, form.cleaned_data['name'],
                                                         form.cleaned_data['description'],
                                                         form.cleaned_data['founding_date'], form.cleaned_data['dissolution_date'], form.cleaned_data['url'])
                 for member in members:
-                    variables.sparql_post_project_object.add_member_to_project(ark_pid, member.split()[-1])
+                    variables.sparql_post_project_object.add_member_to_project(pid, member.split()[-1])
                 return redirect(views.index)
         else:
             form = ProjectCreationForm()
@@ -107,15 +107,15 @@ def project_creation(request):
         return render(request, 'page_info.html', context)
 
 
-def project_profile(request, ark_pid):
+def project_profile(request, pid):
     '''
-    Display a page with all the data of a project that is given by the ark_pid.
+    Display a page with all the data of a project that is given by the pid.
 
     Parameters
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -125,12 +125,12 @@ def project_profile(request, ark_pid):
         to display and a dictionnary with all the data needed to fulfill the template.
     '''
 
-    # Verify in triplestore if the ark_pid correspond to a project
-    sparql_request_check_project_ark = variables.sparql_get_project_object.check_project_ark(ark_pid)
+    # Verify in triplestore if the pid correspond to a project
+    sparql_request_check_project_ark = variables.sparql_get_project_object.check_project_ark(pid)
     if sparql_request_check_project_ark:
-        data_project = variables.sparql_get_project_object.get_data_project(ark_pid)
+        data_project = variables.sparql_get_project_object.get_data_project(pid)
         edition_granted = False
-        if request.user.is_authenticated and request.user.ark_pid in [members[0] for members in data_project['members']]:
+        if request.user.is_authenticated and request.user.pid in [members[0] for members in data_project['members']]:
             edition_granted = True
         context = {
             'edition_granted': edition_granted,
@@ -140,15 +140,15 @@ def project_profile(request, ark_pid):
 
     return render(request, 'page_404.html')
 
-def project_edition(request, ark_pid):
+def project_edition(request, pid):
     '''
-    Display a page with all the data of the project given by the ark_pid and adds links to modify some parts.
+    Display a page with all the data of the project given by the pid and adds links to modify some parts.
 
     Parameters
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -162,11 +162,11 @@ def project_edition(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects members to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
             edition_granted = True
-            data_project = variables.sparql_get_project_object.get_data_project(ark_pid)
+            data_project = variables.sparql_get_project_object.get_data_project(pid)
             context = {
                 'edition_granted': edition_granted,
                 'data_project': data_project
@@ -185,7 +185,7 @@ def project_edition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_field_edition(request, part_of_project_to_edit, ark_pid):
+def project_field_edition(request, part_of_project_to_edit, pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
 
@@ -195,7 +195,7 @@ def project_field_edition(request, part_of_project_to_edit, ark_pid):
         It is the metadata of the request.
     part_of_project_to_modify : String
         Indicates the field that is asked to be modified.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -209,36 +209,36 @@ def project_field_edition(request, part_of_project_to_edit, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects members to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
 
-            data_project = variables.sparql_get_project_object.get_data_project(ark_pid)
+            data_project = variables.sparql_get_project_object.get_data_project(pid)
 
             form = form_selection.form_selection(request, part_of_project_to_edit, data_project)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
                     if part_of_project_to_edit == 'foundingDate':
-                        variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_project_to_edit,
+                        variables.sparql_generic_post_object.update_date_leaf(pid, part_of_project_to_edit,
                                                                     form.cleaned_data['founding_date'],
                                                                     str(data_project['founding_date']) +
                                                                     " 00:00:00+00:00")
                     elif part_of_project_to_edit == 'dissolutionDate':
-                        variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_project_to_edit,
+                        variables.sparql_generic_post_object.update_date_leaf(pid, part_of_project_to_edit,
                                                                     form.cleaned_data['dissolution_date'],
                                                                     str(data_project['dissolution_date']) +
                                                                     " 00:00:00+00:00")
                     else:
-                        variables.sparql_generic_post_object.update_string_leaf(ark_pid, part_of_project_to_edit,
+                        variables.sparql_generic_post_object.update_string_leaf(pid, part_of_project_to_edit,
                                                                       form.cleaned_data[part_of_project_to_edit],
                                                                       data_project[part_of_project_to_edit])
-                    return redirect(project_edition, ark_pid=ark_pid)
+                    return redirect(project_edition, pid=pid)
 
             context = {
                 'form': form,
                 'button_value': 'Modifier',
-                'url_to_return': '/projects/edition/field/{}/{}'.format(part_of_project_to_edit, ark_pid)
+                'url_to_return': '/projects/edition/field/{}/{}'.format(part_of_project_to_edit, pid)
             }
             # return the form to be completed
             return render(request, 'forms/classic_form.html', context)
@@ -253,7 +253,7 @@ def project_field_edition(request, part_of_project_to_edit, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_member_addition(request, ark_pid):
+def project_member_addition(request, pid):
     '''
     Adds a member to the given project
 
@@ -261,7 +261,7 @@ def project_member_addition(request, ark_pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -277,18 +277,18 @@ def project_member_addition(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects members to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
 
-            data_project = variables.sparql_get_project_object.get_data_project(ark_pid)
+            data_project = variables.sparql_get_project_object.get_data_project(pid)
             # Check the request method
             if request.method == 'POST':
                 members = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
                 for member in members:
-                    variables.sparql_post_project_object.add_member_to_project(ark_pid, member.split()[-1])
+                    variables.sparql_post_project_object.add_member_to_project(pid, member.split()[-1])
 
-                return redirect(project_edition, ark_pid=ark_pid)
+                return redirect(project_edition, pid=pid)
 
             persons_info = variables.sparql_get_person_object.get_persons()
             persons = []
@@ -301,7 +301,7 @@ def project_member_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Membre',
                 'data_type_added': 'du membre',
-                'url_to_return': '/projects/edition/field/add-member/{}'.format(ark_pid),
+                'url_to_return': '/projects/edition/field/add-member/{}'.format(pid),
                 'data': persons
             }
             # return the form to be completed
@@ -317,7 +317,7 @@ def project_member_addition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_member_deletion(request, ark_pid):
+def project_member_deletion(request, pid):
     '''
     Deletes a member of the given project
 
@@ -325,7 +325,7 @@ def project_member_deletion(request, ark_pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -340,13 +340,13 @@ def project_member_deletion(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects members to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
             member = request.POST.get('memberARK', '')
-            variables.sparql_post_project_object.delete_member_of_project(ark_pid, member)
+            variables.sparql_post_project_object.delete_member_of_project(pid, member)
 
-            return redirect(project_edition, ark_pid=ark_pid)
+            return redirect(project_edition, pid=pid)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet project",
@@ -358,7 +358,7 @@ def project_member_deletion(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_article_addition(request, ark_pid):
+def project_article_addition(request, pid):
     '''
     Adds an article to the given project
 
@@ -366,7 +366,7 @@ def project_article_addition(request, ark_pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -381,22 +381,22 @@ def project_article_addition(request, ark_pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects articles to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
 
             # Check the request method
             if request.method == 'POST':
                 articles = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
                 for article in articles:
-                    variables.sparql_post_project_object.add_article_to_project(ark_pid, article.split()[-1])
+                    variables.sparql_post_project_object.add_article_to_project(pid, article.split()[-1])
 
-                return redirect(project_edition, ark_pid=ark_pid)
+                return redirect(project_edition, pid=pid)
 
             articles_info = variables.sparql_get_article_object.get_articles()
             articles = []
             # Request all the articles of the project
-            articles_project = variables.sparql_get_project_object.get_articles_project(ark_pid)
+            articles_project = variables.sparql_get_project_object.get_articles_project(pid)
             for basic_info_article in articles_info:
                 if not (basic_info_article[0] in [article[0] for article in articles_project]):
                     articles.append(
@@ -406,7 +406,7 @@ def project_article_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Article',
                 'data_type_added': 'de l\'article',
-                'url_to_return': '/projects/edition/field/add-article/{}'.format(ark_pid),
+                'url_to_return': '/projects/edition/field/add-article/{}'.format(pid),
                 'data': articles
             }
             # return the form to be completed
@@ -422,7 +422,7 @@ def project_article_addition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_article_deletion(request, ark_pid):
+def project_article_deletion(request, pid):
     '''
     Deletes an article of the given project
 
@@ -430,7 +430,7 @@ def project_article_deletion(request, ark_pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -442,13 +442,13 @@ def project_article_deletion(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects members to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
             article = request.POST.get('articleARK', '')
-            variables.sparql_post_project_object.delete_article_of_project(ark_pid, article)
+            variables.sparql_post_project_object.delete_article_of_project(pid, article)
 
-            return redirect(project_edition, ark_pid=ark_pid)
+            return redirect(project_edition, pid=pid)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet project",
@@ -460,7 +460,7 @@ def project_article_deletion(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_dataset_addition(request, ark_pid):
+def project_dataset_addition(request, pid):
     '''
     Adds a dataset to the given project
 
@@ -468,7 +468,7 @@ def project_dataset_addition(request, ark_pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -483,22 +483,22 @@ def project_dataset_addition(request, ark_pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects datasets to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
 
             # Check the request method
             if request.method == 'POST':
                 datasets = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
                 for dataset in datasets:
-                    variables.sparql_post_dataset_object.add_project_to_dataset(dataset.split()[-1], ark_pid)
+                    variables.sparql_post_dataset_object.add_project_to_dataset(dataset.split()[-1], pid)
 
-                return redirect(project_edition, ark_pid=ark_pid)
+                return redirect(project_edition, pid=pid)
 
             datasets_info = variables.sparql_get_dataset_object.get_datasets()
             datasets = []
             # Request all the datasets of the project
-            datasets_project = variables.sparql_get_project_object.get_datasets_project(ark_pid)
+            datasets_project = variables.sparql_get_project_object.get_datasets_project(pid)
             for basic_info_dataset in datasets_info:
                 if not (basic_info_dataset[0] in [dataset[0] for dataset in datasets_project]):
                     datasets.append(
@@ -508,7 +508,7 @@ def project_dataset_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Dataset',
                 'data_type_added': 'du dataset',
-                'url_to_return': '/projects/edition/field/add-dataset/{}'.format(ark_pid),
+                'url_to_return': '/projects/edition/field/add-dataset/{}'.format(pid),
                 'data': datasets
             }
             # return the form to be completed
@@ -524,7 +524,7 @@ def project_dataset_addition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_dataset_deletion(request, ark_pid):
+def project_dataset_deletion(request, pid):
     '''
     Deletes an dataset of the given project
 
@@ -532,7 +532,7 @@ def project_dataset_deletion(request, ark_pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -544,13 +544,13 @@ def project_dataset_deletion(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects members to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
             dataset = request.POST.get('datasetARK', '')
-            variables.sparql_post_dataset_object.delete_project_from_dataset(dataset, ark_pid)
+            variables.sparql_post_dataset_object.delete_project_from_dataset(dataset, pid)
 
-            return redirect(project_edition, ark_pid=ark_pid)
+            return redirect(project_edition, pid=pid)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer ce project",
@@ -562,7 +562,7 @@ def project_dataset_deletion(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def project_deletion(request, ark_pid):
+def project_deletion(request, pid):
     '''
     Deletes completely an project and all his leafs
 
@@ -570,7 +570,7 @@ def project_deletion(request, ark_pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -583,11 +583,11 @@ def project_deletion(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project
-        members_project = variables.sparql_get_project_object.get_members_project(ark_pid)
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
         # Verify if the user ark is in the projects members to grant edition
-        if request.user.ark_pid in [members[0] for members in members_project] or request.user.is_superuser:
-            variables.sparql_generic_post_object.delete_subject(ark_pid)
-            variables.sparql_generic_post_object.delete_subject(ark_pid+"ARK")
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
+            variables.sparql_generic_post_object.delete_subject(pid)
+            variables.sparql_generic_post_object.delete_subject(pid+"ARK")
 
             return redirect(views.index)
 

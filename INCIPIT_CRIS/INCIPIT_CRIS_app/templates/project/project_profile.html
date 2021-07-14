@@ -20,7 +20,7 @@
             {% block project_information %}
                 <p>
                     {% if user.is_authenticated and edition_granted or user.is_superuser %}
-                        <a class="button is-primary" href="/projects/edition/{{ data_project.ark_pid }}">Modifier</a>
+                        <a class="button is-primary" href="/projects/edition/{{ data_project.pid }}">Modifier</a>
                     {% endif %}
                 </p>
                 <p class="title is-4" align="justify">

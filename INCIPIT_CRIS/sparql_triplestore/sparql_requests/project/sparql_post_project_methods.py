@@ -34,104 +34,104 @@ class SparqlPostProjectMethods:
         self.sparql.setMethod(POST)
 
 
-    def create_project(self, ark_pid, name, description, founding_date, dissolution_date, url):
+    def create_project(self, pid, name, description, founding_date, dissolution_date, url):
         sparql_request = """
             {prefix}
 
             INSERT DATA {{
-                <{ark_pid}ARK> a schema:PropertyValue ;
+                <{pid}ARK> a schema:PropertyValue ;
                     schema:propertyID 'ARK' ;
-                    schema:value "{ark_pid}" .
+                    schema:value "{pid}" .
 
-                <{ark_pid}> a schema:ResearchProject ;
+                <{pid}> a schema:ResearchProject ;
                     schema:name \"\"\"{name}\"\"\" ;
                     schema:description \"\"\"{description}\"\"\" ;
                     schema:foundingDate "{founding_date}"^^xsd:date ;
                     schema:dissolutionDate "{dissolution_date}"^^xsd:date ;
                     schema:url \"\"\"{url}\"\"\" ;
-                    schema:identifier <{ark_pid}ARK> .
+                    schema:identifier <{pid}ARK> .
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, name=name, description=description, founding_date=founding_date, dissolution_date=dissolution_date, url=url)
+        """.format(prefix=variables.prefix, pid=pid, name=name, description=description, founding_date=founding_date, dissolution_date=dissolution_date, url=url)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
 
-    def add_member_to_project(self, ark_pid, member):
+    def add_member_to_project(self, pid, member):
         sparql_request = """
             {prefix}
 
             INSERT DATA {{
-                <{ark_pid}> schema:member <{member}> .
+                <{pid}> schema:member <{member}> .
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, member=member)
+        """.format(prefix=variables.prefix, pid=pid, member=member)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
 
-    def delete_member_of_project(self, ark_pid, member):
+    def delete_member_of_project(self, pid, member):
         sparql_request = """
             {prefix}
 
             DELETE {{
-                <{ark_pid}> schema:member <{member}> .
+                <{pid}> schema:member <{member}> .
 
             }}
             WHERE
             {{
-                <{ark_pid}> schema:member <{member}> .
+                <{pid}> schema:member <{member}> .
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, member=member)
+        """.format(prefix=variables.prefix, pid=pid, member=member)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
 
-    def add_article_to_project(self, ark_pid, article):
+    def add_article_to_project(self, pid, article):
         sparql_request = """
             {prefix}
 
             INSERT DATA {{
-                <{ark_pid}> schema:subjectOf <{article}> .
+                <{pid}> schema:subjectOf <{article}> .
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, article=article)
+        """.format(prefix=variables.prefix, pid=pid, article=article)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
 
-    def delete_article_of_project(self, ark_pid, article):
+    def delete_article_of_project(self, pid, article):
         sparql_request = """
             {prefix}
 
             DELETE {{
-                <{ark_pid}> schema:subjectOf <{article}> .
+                <{pid}> schema:subjectOf <{article}> .
 
             }}
             WHERE
             {{
-                <{ark_pid}> schema:subjectOf <{article}> .
+                <{pid}> schema:subjectOf <{article}> .
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid, article=article)
+        """.format(prefix=variables.prefix, pid=pid, article=article)
 
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
 
 
-    def delete_project(self, ark_pid):
+    def delete_project(self, pid):
         sparql_request = """
             {prefix}
 
             DELETE WHERE {{
-                <{ark_pid}> ?predicate ?object .
+                <{pid}> ?predicate ?object .
             }}
-        """.format(prefix=variables.prefix, ark_pid=ark_pid)
+        """.format(prefix=variables.prefix, pid=pid)
 
         self.sparql.setQuery(sparql_request)
 

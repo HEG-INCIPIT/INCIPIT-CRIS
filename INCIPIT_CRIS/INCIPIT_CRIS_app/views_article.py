@@ -43,15 +43,15 @@ def article_results(request):
     return render(request, 'generic/results.html', context)
 
 
-def article_profile(request, ark_pid):
+def article_profile(request, pid):
     '''
-    Display a page with all the data of an article that is given by the ark_pid.
+    Display a page with all the data of an article that is given by the pid.
 
     Parameters
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -62,11 +62,11 @@ def article_profile(request, ark_pid):
         the template.
     '''
 
-    # Verify in triplestore if the ark_pid correspond to an article
-    if variables.sparql_get_article_object.check_article_ark(ark_pid):
-        data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
+    # Verify in triplestore if the pid correspond to an article
+    if variables.sparql_get_article_object.check_article_ark(pid):
+        data_article = variables.sparql_get_article_object.get_data_article(pid)
         # Verify if the user as the rights to edit the article
-        edition_granted = request.user.is_authenticated and request.user.ark_pid in [authors[0] for authors in data_article['authors']] or request.user.is_superuser
+        edition_granted = request.user.is_authenticated and request.user.pid in [authors[0] for authors in data_article['authors']] or request.user.is_superuser
         
         context = {
             'edition_granted': edition_granted,
@@ -86,20 +86,20 @@ def article_creation(request):
             form = ArticleCreationForm(request.POST)
             if form.is_valid():
                 authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
-                ark_pid = form.cleaned_data['ark_pid']
-                if ark_pid == '':
+                pid = form.cleaned_data['pid']
+                if pid == '':
                     try:
-                        ark_pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
+                        pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
                             'Creating an ARK in INCIPIT-CRIS for an article named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
-                        variables.ark.update('{}'.format(ark_pid), '{}{}'.format(settings.URL, ark_pid), '{} {}'.format(form.cleaned_data['name']), 
+                        variables.ark.update('{}'.format(pid), '{}{}'.format(settings.URL, pid), '{} {}'.format(form.cleaned_data['name']), 
                             'Creating an ARK in INCIPIT-CRIS for an article named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
                     except:
                         raise Exception
-                variables.sparql_post_article_object.create_article(ark_pid, form.cleaned_data['name'],
+                variables.sparql_post_article_object.create_article(pid, form.cleaned_data['name'],
                                                           form.cleaned_data['abstract'],
                                                           form.cleaned_data['date_published'], form.cleaned_data['url'])
                 for author in authors:
-                    variables.sparql_post_article_object.add_author_to_article(ark_pid, author.split()[-1])
+                    variables.sparql_post_article_object.add_author_to_article(pid, author.split()[-1])
                 return redirect(views.index)
         else:
             form = ArticleCreationForm()
@@ -124,15 +124,15 @@ def article_creation(request):
         return render(request, 'page_info.html', context)
 
 
-def article_edition(request, ark_pid):
+def article_edition(request, pid):
     '''
-    Display a page with all the data of the article given by the ark_pid and adds links to modify some parts.
+    Display a page with all the data of the article given by the pid and adds links to modify some parts.
 
     Parameters
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -147,11 +147,11 @@ def article_edition(request, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
             edition_granted = True
-            data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
+            data_article = variables.sparql_get_article_object.get_data_article(pid)
             context = {
                 'edition_granted': edition_granted,
                 'data_article': data_article
@@ -170,7 +170,7 @@ def article_edition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def article_field_edition(request, part_of_article_to_edit, ark_pid):
+def article_field_edition(request, part_of_article_to_edit, pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
 
@@ -180,7 +180,7 @@ def article_field_edition(request, part_of_article_to_edit, ark_pid):
         It is the metadata of the request.
     part_of_article_to_modify : String
         Indicates the field that is asked to be modified.
-    ark_pid: String
+    pid: String
         It's a string representing an ARK.
 
     Returns
@@ -195,31 +195,31 @@ def article_field_edition(request, part_of_article_to_edit, ark_pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
 
-            data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
+            data_article = variables.sparql_get_article_object.get_data_article(pid)
 
             form = form_selection.form_selection(request, part_of_article_to_edit, data_article)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
                     if part_of_article_to_edit == 'datePublished':
-                        variables.sparql_generic_post_object.update_date_leaf(ark_pid, part_of_article_to_edit,
+                        variables.sparql_generic_post_object.update_date_leaf(pid, part_of_article_to_edit,
                                                                     form.cleaned_data['date_published'],
                                                                     str(data_article['date_published']) +
                                                                     " 00:00:00+00:00")
                     else:
-                        variables.sparql_generic_post_object.update_string_leaf(ark_pid, part_of_article_to_edit,
+                        variables.sparql_generic_post_object.update_string_leaf(pid, part_of_article_to_edit,
                                                                       form.cleaned_data[part_of_article_to_edit],
                                                                       data_article[part_of_article_to_edit])
-                    return redirect(article_edition, ark_pid=ark_pid)
+                    return redirect(article_edition, pid=pid)
 
             context = {
                 'form': form,
                 'button_value': 'Modifier',
-                'url_to_return': '/articles/edition/field/{}/{}'.format(part_of_article_to_edit, ark_pid)
+                'url_to_return': '/articles/edition/field/{}/{}'.format(part_of_article_to_edit, pid)
             }
             # return the form to be completed
             return render(request, 'forms/classic_form.html', context)
@@ -234,22 +234,22 @@ def article_field_edition(request, part_of_article_to_edit, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def article_author_addition(request, ark_pid):
+def article_author_addition(request, pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
 
             # Check the request method
             if request.method == 'POST':
                 authors = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
                 for author in authors:
-                    variables.sparql_post_article_object.add_author_to_article(ark_pid, author.split()[-1])
+                    variables.sparql_post_article_object.add_author_to_article(pid, author.split()[-1])
 
-                return redirect(article_edition, ark_pid=ark_pid)
+                return redirect(article_edition, pid=pid)
 
             persons_info = variables.sparql_get_person_object.get_persons()
             persons = []
@@ -262,7 +262,7 @@ def article_author_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Auteur',
                 'data_type_added': 'du projet',
-                'url_to_return': '/articles/edition/field/add-author/{}'.format(ark_pid),
+                'url_to_return': '/articles/edition/field/add-author/{}'.format(pid),
                 'data': persons
             }
             # return the form to be completed
@@ -278,17 +278,17 @@ def article_author_addition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def article_author_deletion(request, ark_pid):
+def article_author_deletion(request, pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
             author = request.POST.get('authorARK', '')
-            variables.sparql_post_article_object.delete_author_of_article(ark_pid, author)
+            variables.sparql_post_article_object.delete_author_of_article(pid, author)
 
-            return redirect(article_edition, ark_pid=ark_pid)
+            return redirect(article_edition, pid=pid)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",
@@ -300,27 +300,27 @@ def article_author_deletion(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def article_project_addition(request, ark_pid):
+def article_project_addition(request, pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles projects to grant edition
-        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
 
             # Check the request method
             if request.method == 'POST':
                 projects = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
                 for project in projects:
-                    variables.sparql_post_project_object.add_article_to_project(project.split()[-1], ark_pid)
+                    variables.sparql_post_project_object.add_article_to_project(project.split()[-1], pid)
 
-                return redirect(article_edition, ark_pid=ark_pid)
+                return redirect(article_edition, pid=pid)
 
             projects_info = variables.sparql_get_project_object.get_projects()
             projects = []
             # Request all the projects of the article
-            projects_article = variables.sparql_get_article_object.get_projects_article(ark_pid)
+            projects_article = variables.sparql_get_article_object.get_projects_article(pid)
             for basic_info_project in projects_info:
                 if not (basic_info_project[0] in [project[0] for project in projects_article]):
                     projects.append(
@@ -330,7 +330,7 @@ def article_project_addition(request, ark_pid):
                 'button_value': 'Ajouter',
                 'title_data_type_added': 'Projet',
                 'data_type_added': 'du projet',
-                'url_to_return': '/articles/edition/field/add-project/{}'.format(ark_pid),
+                'url_to_return': '/articles/edition/field/add-project/{}'.format(pid),
                 'data': projects
             }
             # return the form to be completed
@@ -346,17 +346,17 @@ def article_project_addition(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def article_project_deletion(request, ark_pid):
+def article_project_deletion(request, pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles projects to grant edition
-        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
             project = request.POST.get('projectARK', '')
-            variables.sparql_post_project_object.delete_article_of_project(project, ark_pid)
+            variables.sparql_post_project_object.delete_article_of_project(project, pid)
 
-            return redirect(article_edition, ark_pid=ark_pid)
+            return redirect(article_edition, pid=pid)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",
@@ -368,15 +368,15 @@ def article_project_deletion(request, ark_pid):
     return render(request, 'page_info.html', context)
 
 
-def article_deletion(request, ark_pid):
+def article_deletion(request, pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(ark_pid)
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.ark_pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
-            variables.sparql_generic_post_object.delete_subject(ark_pid)
-            variables.sparql_generic_post_object.delete_subject(ark_pid+"ARK")
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+            variables.sparql_generic_post_object.delete_subject(pid)
+            variables.sparql_generic_post_object.delete_subject(pid+"ARK")
 
             return redirect(views.index)
 

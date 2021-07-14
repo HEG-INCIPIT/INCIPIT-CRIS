@@ -20,7 +20,7 @@
             {% block dataset_information %}
                 <p>
                     {% if user.is_authenticated and edition_granted or user.is_superuser %}
-                        <a class="button is-primary" href="/datasets/edition/{{ data_dataset.ark_pid }}">Modifier</a>
+                        <a class="button is-primary" href="/datasets/edition/{{ data_dataset.pid }}">Modifier</a>
                     {% endif %}
                 </p>
                 <p class="title is-4" align="justify">
