@@ -20,7 +20,7 @@
             {% endblock %}
             {% block article_information %}
                 <p>
-                    {% if user.is_authenticated and edition_granted or user.is_superuser %}
+                    {% if edition_granted %}
                         <a class="button is-primary" href="/articles/edition/{{ data_article.ark_pid }}">Modifier</a>
                     {% endif %}
                 </p>

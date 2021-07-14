@@ -63,12 +63,11 @@ def article_profile(request, ark_pid):
     '''
 
     # Verify in triplestore if the ark_pid correspond to an article
-    sparql_request_check_article_ark = variables.sparql_get_article_object.check_article_ark(ark_pid)
-    if sparql_request_check_article_ark:
+    if variables.sparql_get_article_object.check_article_ark(ark_pid):
         data_article = variables.sparql_get_article_object.get_data_article(ark_pid)
-        edition_granted = False
-        if request.user.is_authenticated and request.user.ark_pid in [authors[0] for authors in data_article['authors']]:
-            edition_granted = True
+        # Verify if the user as the rights to edit the article
+        edition_granted = request.user.is_authenticated and request.user.ark_pid in [authors[0] for authors in data_article['authors']] or request.user.is_superuser
+        
         context = {
             'edition_granted': edition_granted,
             'data_article': data_article
