@@ -70,4 +70,16 @@
         </p>
     {% endfor %}
 
+    <p>Article(s) : <a class="link-one" href="/datasets/edition/field/add-article/{{data_dataset.pid}}"> Ajouter</a></p>
+    {% for article in data_dataset.articles %}
+        <p>
+            <form action="/datasets/edition/field/delete-article/{{data_dataset.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
+                <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
 {% endblock %}

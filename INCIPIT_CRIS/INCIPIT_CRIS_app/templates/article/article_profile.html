@@ -36,10 +36,18 @@
                         <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a> 
                     </p>
                 {% endfor %}
-                <p>Projet : </p>
+                
+                <p>Projet(s) : </p>
                 {% for project in data_article.projects %}
                     <p>
                         <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                    </p>
+                {% endfor %}
+
+                <p>Jeu(x) de données : </p>
+                {% for dataset in data_article.datasets %}
+                    <p>
+                        <a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a>
                     </p>
                 {% endfor %}
             {% endblock %}

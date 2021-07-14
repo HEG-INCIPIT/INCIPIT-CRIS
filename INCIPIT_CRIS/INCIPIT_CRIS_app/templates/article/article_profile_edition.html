@@ -28,27 +28,41 @@
     </p>
     <time datetime="{{ data_article.date_published }}">Date de publication : {{ data_article.date_published }} <a class="link-one" href="/articles/edition/field/datePublished/{{data_article.pid}}"> Modifer</a></time>
     <p>URL : <a class="link-one" href="{{ data_article.url }}">{{ data_article.url }}</a> <a class="link-one" href="/articles/edition/field/url/{{data_article.pid}}"> Modifer</a></p>
+    
     <p>Auteur(s) : <a class="link-one" href="/articles/edition/field/add-author/{{data_article.pid}}"> Ajouter</a></p>
-        {% for author in data_article.authors %}
-            <p>
-                <form action="/articles/edition/field/delete-author/{{data_article.pid}}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" id="authorARK" name="authorARK" value="{{ author.0 }}">
-                    <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
-                    <button class="delete"></button>
-                </form>
-            </p>
-        {% endfor %}
-    <p>Projet : <a class="link-one" href="/articles/edition/field/add-project/{{data_article.pid}}"> Ajouter</a></p>
-        {% for project in data_article.projects %}
-            <p>
-                <form action="/articles/edition/field/delete-project/{{data_article.pid}}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
-                    <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
-                    <button class="delete"></button>
-                </form>
-            </p>
-        {% endfor %}
+    {% for author in data_article.authors %}
+        <p>
+            <form action="/articles/edition/field/delete-author/{{data_article.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="authorARK" name="authorARK" value="{{ author.0 }}">
+                <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
+    <p>Projet(s) : <a class="link-one" href="/articles/edition/field/add-project/{{data_article.pid}}"> Ajouter</a></p>
+    {% for project in data_article.projects %}
+        <p>
+            <form action="/articles/edition/field/delete-project/{{data_article.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
+                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
+
+    <p>Jeu(x) de données : <a class="link-one" href="/articles/edition/field/add-dataset/{{data_article.pid}}"> Ajouter</a></p>
+    {% for dataset in data_article.datasets %}
+        <p>
+            <form action="/articles/edition/field/delete-dataset/{{data_article.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="datasetARK" name="datasetARK" value="{{ dataset.0 }}">
+                <a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a>
+                <button class="delete"></button>
+            </form>
+        </p>
+    {% endfor %}
 {% endblock %}
 

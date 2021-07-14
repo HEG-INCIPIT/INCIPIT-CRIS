@@ -368,6 +368,74 @@ def article_project_deletion(request, pid):
     return render(request, 'page_info.html', context)
 
 
+def article_dataset_addition(request, pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the authors of the article
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
+        # Verify if the user ark is in the articles datasets to grant edition
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                datasets = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
+                for dataset in datasets:
+                    variables.sparql_post_dataset_object.add_article_to_dataset(dataset.split()[-1], pid)
+
+                return redirect(article_edition, pid=pid)
+
+            datasets_info = variables.sparql_get_dataset_object.get_datasets()
+            datasets = []
+            # Request all the datasets of the article
+            datasets_article = variables.sparql_get_article_object.get_datasets_article(pid)
+            for basic_info_dataset in datasets_info:
+                if not (basic_info_dataset[0] in [dataset[0] for dataset in datasets_article]):
+                    datasets.append(
+                        '''{}, {}'''.format(basic_info_dataset[1], basic_info_dataset[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'title_data_type_added': 'Projet',
+                'data_type_added': 'du projet',
+                'url_to_return': '/articles/edition/field/add-dataset/{}'.format(pid),
+                'data': datasets
+            }
+            # return the form to be completed
+            return render(request, 'forms/autocompletion_group.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet article",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet article"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def article_dataset_deletion(request, pid):
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the authors of the article
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
+        # Verify if the user ark is in the articles datasets to grant edition
+        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+            dataset = request.POST.get('datasetARK', '')
+            variables.sparql_post_dataset_object.delete_article_from_dataset(dataset, pid)
+
+            return redirect(article_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet article",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet article"
+    }
+    return render(request, 'page_info.html', context)
+
+
 def article_deletion(request, pid):
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:

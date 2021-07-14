@@ -49,6 +49,12 @@
                         <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a> 
                     </p>
                 {% endfor %}
+                <p>Article(s) : </p>
+                {% for article in data_dataset.articles %}
+                    <p>
+                        <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a> 
+                    </p>
+                {% endfor %}
             {% endblock %}
         </section>
         {% include 'main/footer.html' %}

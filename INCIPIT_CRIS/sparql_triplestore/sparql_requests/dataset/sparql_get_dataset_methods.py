@@ -165,7 +165,7 @@ class SparqlGetDatasetMethods:
 
             SELECT ?article WHERE
             {{
-                ?article schema:producer <{ark_research}> .
+                ?article schema:isBasedOn <{ark_research}> .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
@@ -206,11 +206,13 @@ class SparqlGetDatasetMethods:
         maintainers = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         creators = variables.sparql_get_dataset_object.get_creators_dataset(pid)
         projects = variables.sparql_get_dataset_object.get_projects_dataset(pid)
+        articles = variables.sparql_get_dataset_object.get_articles_dataset(pid)
         data_download = variables.sparql_get_dataset_object.get_data_download_dataset(pid)
         
         data_dataset['maintainers'] = maintainers
         data_dataset['creators'] = creators
         data_dataset['projects'] = projects
+        data_dataset['articles'] = articles
         data_dataset['pid'] = pid
         data_dataset['data_download'] = data_download
         return data_dataset

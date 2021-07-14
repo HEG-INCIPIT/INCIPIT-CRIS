@@ -128,6 +128,32 @@ class SparqlGetArticleMethods:
         return array_projects
 
 
+    def get_datasets_article(self, pid):
+        """
+        Get all the datasets of an article
+        And return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?dataset WHERE
+            {{
+                <{ark_research}> schema:isBasedOn ?dataset .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_datasets = []
+
+        for dataset in parse_get_datasets_article(self.sparql.query().response.read()):
+            name = variables.sparql_get_dataset_object.get_full_name_dataset(dataset)
+            array_datasets.append([dataset, name])
+
+        return array_datasets
+
+
     def get_data_article(self, pid):
         """
         Get all the information of an article : ark, name, abstract, date of publication, authors, ...
@@ -152,9 +178,11 @@ class SparqlGetArticleMethods:
 
         authors = variables.sparql_get_article_object.get_authors_article(pid)
         projects = variables.sparql_get_article_object.get_projects_article(pid)
+        datasets = variables.sparql_get_article_object.get_datasets_article(pid)
         
         data_article['authors'] = authors
         data_article['projects'] = projects
+        data_article['datasets'] = datasets
         data_article['pid'] = pid
         return data_article
 

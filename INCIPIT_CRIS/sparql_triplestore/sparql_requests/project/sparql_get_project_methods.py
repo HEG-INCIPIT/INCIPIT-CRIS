@@ -140,7 +140,7 @@ class SparqlGetProjectMethods:
 
             SELECT ?dataset WHERE
             {{
-                ?dataset schema:isPartOf <{ark_research}> .
+                ?dataset schema:producer <{ark_research}> .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
