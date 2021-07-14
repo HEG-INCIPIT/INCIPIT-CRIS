@@ -58,10 +58,11 @@ def dataset_creation(request):
         to display results for datasets and a dictionnary with all the data needed to fulfill
         the template.
     HttpResponseRedirect
-        A HttpResponseRedirect object that redirect to the page to create a dataset.
+        A HttpResponseRedirect object that redirect to the index page.
     '''
 
     context = {}
+    form = forms.Form()
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Check the request method
@@ -122,7 +123,7 @@ def dataset_profile(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -132,12 +133,11 @@ def dataset_profile(request, pid):
     '''
 
     # Verify in triplestore if the pid correspond to a dataset
-    sparql_request_check_dataset_ark = variables.sparql_get_dataset_object.check_dataset_ark(pid)
-    if sparql_request_check_dataset_ark:
+    if variables.sparql_get_dataset_object.check_dataset_ark(pid):
+        # Request the data about the dataset given
         data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
-        edition_granted = False
-        if request.user.is_authenticated and (request.user.pid in [maintainer[0] for maintainer in data_dataset['maintainers']] or request.user.pid in [creator[0] for creator in data_dataset['creators']]):
-            edition_granted = True
+        # Verify if the user as the rights to edit the dataset
+        edition_granted = request.user.is_authenticated and (request.user.pid in [maintainer[0] for maintainer in data_dataset['maintainers']] or request.user.pid in [creator[0] for creator in data_dataset['creators']])
         context = {
             'edition_granted': edition_granted,
             'data_dataset': data_dataset
@@ -156,7 +156,7 @@ def dataset_edition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -168,14 +168,12 @@ def dataset_edition(request, pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
-        # Request all the creators of the dataset
-        creators_dataset = variables.sparql_get_dataset_object.get_creators_dataset(pid)
-        # Request all the maintainers of the dataset
-        maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
+        # Request the data of the given dataset
+        data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.pid in [creators[0] for creators in data_dataset['creators']] or request.user.pid in [maintainers[0] for maintainers in data_dataset['maintainers']] or request.user.is_superuser:
             edition_granted = True
-            data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
+            
             context = {
                 'edition_granted': edition_granted,
                 'data_dataset': data_dataset
@@ -205,7 +203,7 @@ def dataset_field_edition(request, part_of_dataset_to_edit, pid):
     part_of_article_to_modify : String
         Indicates the field that is asked to be modified.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -217,14 +215,11 @@ def dataset_field_edition(request, part_of_dataset_to_edit, pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
-        # Request all the creators of the dataset
-        creators_dataset = variables.sparql_get_dataset_object.get_creators_dataset(pid)
-        # Request all the maintainers of the dataset
-        maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
+        # Request all the data of the given dataset
+        data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
+        
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
-
-            data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in data_dataset['creators']] or request.user.pid in [maintainers[0] for maintainers in data_dataset['maintainers']]:
 
             form = form_selection.form_selection(request, part_of_dataset_to_edit, data_dataset)
             # Check the request method
@@ -240,14 +235,14 @@ def dataset_field_edition(request, part_of_dataset_to_edit, pid):
                                                                     form.cleaned_data['modified_date'],
                                                                     str(data_dataset['modified_date']) +
                                                                     ' 00:00:00+00:00')
-                    elif part_of_dataset_to_edit == 'urlDetails':
+                    elif part_of_dataset_to_edit == 'url-details':
                         variables.sparql_generic_post_object.update_string_leaf(pid, 'url',
                                                                     form.cleaned_data['url_details'],
-                                                                    data_dataset['url_details'])
-                    elif part_of_dataset_to_edit == 'urlData':
+                                                                    data_dataset['url'])
+                    elif part_of_dataset_to_edit == 'url-data-download':
                         variables.sparql_generic_post_object.update_string_leaf(str(pid)+'DD', 'url',
                                                                     form.cleaned_data['url_data'],
-                                                                    data_dataset['url_data']['url_data'])
+                                                                    data_dataset['data_download']['url'])
                     else:
                         variables.sparql_generic_post_object.update_string_leaf(pid, part_of_dataset_to_edit,
                                                                       form.cleaned_data[part_of_dataset_to_edit],
@@ -281,7 +276,7 @@ def dataset_creator_addition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -300,7 +295,7 @@ def dataset_creator_addition(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
 
             # Check the request method
             if request.method == 'POST':
@@ -346,7 +341,7 @@ def dataset_creator_deletion(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -364,7 +359,7 @@ def dataset_creator_deletion(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
         
             # Get the value of a variable in the POST request by its id
             creator = request.POST.get('creatorARK', '')
@@ -391,7 +386,7 @@ def dataset_maintainer_addition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -410,7 +405,7 @@ def dataset_maintainer_addition(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
        
             # Check the request method
             if request.method == 'POST':
@@ -454,9 +449,9 @@ def dataset_maintainer_deletion(request, pid):
     Parameters
     ----------
     request : HttpRequest
-        It is the metadata of the request.
+        It is the metadata from the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -474,7 +469,7 @@ def dataset_maintainer_deletion(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
        
             # Get the value of a variable in the POST request by its id
             maintainer = request.POST.get('maintainerARK', '')
@@ -493,6 +488,25 @@ def dataset_maintainer_deletion(request, pid):
 
 
 def dataset_project_addition(request, pid):
+    '''
+    Adds a project to the given dataset
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page to edit a dataset.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -501,7 +515,7 @@ def dataset_project_addition(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
        
             # Check the request method
             if request.method == 'POST':
@@ -541,6 +555,25 @@ def dataset_project_addition(request, pid):
 
 
 def dataset_project_deletion(request, pid):
+    '''
+    Deletes a project from the given dataset
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a dataset.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the creators of the dataset
@@ -548,7 +581,7 @@ def dataset_project_deletion(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
        
             project = request.POST.get('projectARK', '')
             variables.sparql_post_dataset_object.delete_project_from_dataset(pid, project)
@@ -566,6 +599,25 @@ def dataset_project_deletion(request, pid):
 
 
 def dataset_article_addition(request, pid):
+    '''
+    Adds an article to the given dataset
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page to edit a dataset.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
@@ -574,7 +626,7 @@ def dataset_article_addition(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
        
             # Check the request method
             if request.method == 'POST':
@@ -614,6 +666,25 @@ def dataset_article_addition(request, pid):
 
 
 def dataset_article_deletion(request, pid):
+    '''
+    Deletes an article from the given dataset
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a dataset.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the creators of the dataset
@@ -621,7 +692,7 @@ def dataset_article_deletion(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
        
             article = request.POST.get('articleARK', '')
             variables.sparql_post_dataset_object.delete_article_from_dataset(pid, article)
@@ -639,6 +710,25 @@ def dataset_article_deletion(request, pid):
 
 
 def dataset_deletion(request, pid):
+    '''
+    Deletes the given dataset
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the index page.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the creators of the dataset
@@ -646,7 +736,7 @@ def dataset_deletion(request, pid):
         # Request all the maintainers of the dataset
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
 
             variables.sparql_generic_post_object.delete_subject(pid)
             variables.sparql_generic_post_object.delete_subject(pid+"ARK")

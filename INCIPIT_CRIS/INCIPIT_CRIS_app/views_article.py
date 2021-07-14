@@ -52,7 +52,7 @@ def article_profile(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -78,7 +78,26 @@ def article_profile(request, pid):
 
 
 def article_creation(request):
+    '''
+    Create in the triplestore an article from the data provided from the form requested
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display results for datasets and a dictionnary with all the data needed to fulfill
+        the template.
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the index page.
+    '''
+
     context = {}
+    form = forms.Form()
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Check the request method
@@ -133,7 +152,7 @@ def article_edition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -146,12 +165,11 @@ def article_edition(request, pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
-        # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
+        # Request all the data of the given article
+        data_article = variables.sparql_get_article_object.get_data_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in data_article['authors']]:
             edition_granted = True
-            data_article = variables.sparql_get_article_object.get_data_article(pid)
             context = {
                 'edition_granted': edition_granted,
                 'data_article': data_article
@@ -181,7 +199,7 @@ def article_field_edition(request, part_of_article_to_edit, pid):
     part_of_article_to_modify : String
         Indicates the field that is asked to be modified.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -194,12 +212,10 @@ def article_field_edition(request, part_of_article_to_edit, pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
-        # Request all the authors of the article
-        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
+        # Request all the data of the given article
+        data_article = variables.sparql_get_article_object.get_data_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
-
-            data_article = variables.sparql_get_article_object.get_data_article(pid)
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in data_article['authors']]:
 
             form = form_selection.form_selection(request, part_of_article_to_edit, data_article)
             # Check the request method
@@ -235,13 +251,32 @@ def article_field_edition(request, part_of_article_to_edit, pid):
 
 
 def article_author_addition(request, pid):
+    '''
+    Adds an author to the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page to edit an article.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
         authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
 
             # Check the request method
             if request.method == 'POST':
@@ -251,8 +286,9 @@ def article_author_addition(request, pid):
 
                 return redirect(article_edition, pid=pid)
 
-            persons_info = variables.sparql_get_person_object.get_persons()
             persons = []
+            # Request all the persons in the triplestore
+            persons_info = variables.sparql_get_person_object.get_persons()
             for basic_info_person in persons_info:
                 if not (basic_info_person[0] in [author[0] for author in authors_article]):
                     persons.append(
@@ -279,12 +315,31 @@ def article_author_addition(request, pid):
 
 
 def article_author_deletion(request, pid):
+    '''
+    Deletes an author of the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of an article.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
         authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
             author = request.POST.get('authorARK', '')
             variables.sparql_post_article_object.delete_author_of_article(pid, author)
 
@@ -301,13 +356,32 @@ def article_author_deletion(request, pid):
 
 
 def article_project_addition(request, pid):
+    '''
+    Adds a project to the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page to edit an article.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
         authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles projects to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
 
             # Check the request method
             if request.method == 'POST':
@@ -317,8 +391,9 @@ def article_project_addition(request, pid):
 
                 return redirect(article_edition, pid=pid)
 
-            projects_info = variables.sparql_get_project_object.get_projects()
             projects = []
+            # Request all the projects in the triplestore
+            projects_info = variables.sparql_get_project_object.get_projects()
             # Request all the projects of the article
             projects_article = variables.sparql_get_article_object.get_projects_article(pid)
             for basic_info_project in projects_info:
@@ -347,12 +422,31 @@ def article_project_addition(request, pid):
 
 
 def article_project_deletion(request, pid):
+    '''
+    Deletes a project of the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of an article.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
         authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles projects to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
             project = request.POST.get('projectARK', '')
             variables.sparql_post_project_object.delete_article_of_project(project, pid)
 
@@ -369,13 +463,32 @@ def article_project_deletion(request, pid):
 
 
 def article_dataset_addition(request, pid):
+    '''
+    Adds a dataset to the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page to edit an article.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
         authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles datasets to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
 
             # Check the request method
             if request.method == 'POST':
@@ -385,8 +498,9 @@ def article_dataset_addition(request, pid):
 
                 return redirect(article_edition, pid=pid)
 
-            datasets_info = variables.sparql_get_dataset_object.get_datasets()
             datasets = []
+            # Request all the datasets in the triplestore
+            datasets_info = variables.sparql_get_dataset_object.get_datasets()
             # Request all the datasets of the article
             datasets_article = variables.sparql_get_article_object.get_datasets_article(pid)
             for basic_info_dataset in datasets_info:
@@ -415,12 +529,31 @@ def article_dataset_addition(request, pid):
 
 
 def article_dataset_deletion(request, pid):
+    '''
+    Deletes a dataset of the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of an article.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
         authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles datasets to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
             dataset = request.POST.get('datasetARK', '')
             variables.sparql_post_dataset_object.delete_article_from_dataset(dataset, pid)
 
@@ -437,12 +570,31 @@ def article_dataset_deletion(request, pid):
 
 
 def article_deletion(request, pid):
+    '''
+    Deletes the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the index page.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the authors of the article
         authors_article = variables.sparql_get_article_object.get_authors_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
-        if request.user.pid in [authors[0] for authors in authors_article] or request.user.is_superuser:
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
             variables.sparql_generic_post_object.delete_subject(pid)
             variables.sparql_generic_post_object.delete_subject(pid+"ARK")
 

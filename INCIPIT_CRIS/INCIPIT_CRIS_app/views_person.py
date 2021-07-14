@@ -48,7 +48,7 @@ def person_profile(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -92,7 +92,7 @@ def person_edition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -136,7 +136,7 @@ def person_field_edition(request, field_to_modify, pid):
     field_to_modify : String
         Indicates the field that is asked to be modified.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -194,7 +194,7 @@ def person_article_deletion(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -230,7 +230,7 @@ def person_article_addition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -292,7 +292,7 @@ def person_project_addition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -353,7 +353,7 @@ def person_project_deletion(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -389,7 +389,7 @@ def person_datasets_creator_addition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -450,7 +450,7 @@ def person_datasets_creator_deletion(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -487,7 +487,7 @@ def person_datasets_maintainer_addition(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -548,7 +548,7 @@ def person_datasets_maintainer_deletion(request, pid):
     request : HttpRequest
         It is the metadata of the request.
     pid: String
-        It's a string representing an ARK.
+        It's a string representing the PID of the current object.
 
     Returns
     -------
