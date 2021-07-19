@@ -169,17 +169,13 @@ def article_edition(request, pid):
         data_article = variables.sparql_get_article_object.get_data_article(pid)
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.is_superuser or request.user.pid in [authors[0] for authors in data_article['authors']]:
-            edition_granted = True
             context = {
-                'edition_granted': edition_granted,
                 'data_article': data_article
             }
             return render(request, 'article/article_profile_edition.html', context)
 
-        edition_granted = False
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",
-            'edition_granted': edition_granted
         }
         return render(request, 'page_info.html', context)
     context = {
@@ -210,6 +206,7 @@ def article_field_edition(request, part_of_article_to_edit, pid):
     '''
 
     context = {}
+    form = forms.Form()
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the data of the given article

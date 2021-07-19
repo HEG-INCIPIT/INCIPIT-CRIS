@@ -137,7 +137,7 @@ def dataset_profile(request, pid):
         # Request the data about the dataset given
         data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
         # Verify if the user as the rights to edit the dataset
-        edition_granted = request.user.is_authenticated and (request.user.pid in [maintainer[0] for maintainer in data_dataset['maintainers']] or request.user.pid in [creator[0] for creator in data_dataset['creators']])
+        edition_granted = request.user.is_superuser or request.user.is_authenticated and (request.user.pid in [maintainer[0] for maintainer in data_dataset['maintainers']] or request.user.pid in [creator[0] for creator in data_dataset['creators']])
         context = {
             'edition_granted': edition_granted,
             'data_dataset': data_dataset
@@ -171,19 +171,15 @@ def dataset_edition(request, pid):
         # Request the data of the given dataset
         data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
-        if request.user.pid in [creators[0] for creators in data_dataset['creators']] or request.user.pid in [maintainers[0] for maintainers in data_dataset['maintainers']] or request.user.is_superuser:
-            edition_granted = True
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in data_dataset['creators']] or request.user.pid in [maintainers[0] for maintainers in data_dataset['maintainers']]:
             
             context = {
-                'edition_granted': edition_granted,
                 'data_dataset': data_dataset
             }
             return render(request, 'dataset/dataset_profile_edition.html', context)
 
-        edition_granted = False
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet dataset",
-            'edition_granted': edition_granted
         }
         return render(request, 'page_info.html', context)
     context = {
@@ -213,6 +209,7 @@ def dataset_field_edition(request, part_of_dataset_to_edit, pid):
         with all the data needed to fulfill the template.
     '''
     context = {}
+    form = forms.Form()
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the data of the given dataset

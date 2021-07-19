@@ -60,6 +60,7 @@ def project_creation(request):
     '''
 
     context = {}
+    form = forms.Form()
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Check the request method
@@ -76,7 +77,6 @@ def project_creation(request):
                         variables.ark.update('{}'.format(pid), '{}{}'.format(settings.URL, pid), '{} {}'.format(form.cleaned_data['name']), 
                             'Creating an ARK in INCIPIT-CRIS for an project named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
                     except:
-                        print("ERROR")
                         raise Exception
                 variables.sparql_post_project_object.create_project(pid, form.cleaned_data['name'],
                                                         form.cleaned_data['description'],
@@ -130,7 +130,7 @@ def project_profile(request, pid):
     if sparql_request_check_project_ark:
         data_project = variables.sparql_get_project_object.get_data_project(pid)
         edition_granted = False
-        if request.user.is_authenticated and request.user.pid in [members[0] for members in data_project['members']]:
+        if request.user.is_superuser or request.user.is_authenticated and request.user.pid in [members[0] for members in data_project['members']]:
             edition_granted = True
         context = {
             'edition_granted': edition_granted,
@@ -161,22 +161,17 @@ def project_edition(request, pid):
     context = {}
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
-        # Request all the members of the project
-        members_project = variables.sparql_get_project_object.get_members_project(pid)
+        # Request all the data of the given project
+        data_project = variables.sparql_get_project_object.get_data_project(pid)
         # Verify if the user ark is in the projects members to grant edition
-        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
-            edition_granted = True
-            data_project = variables.sparql_get_project_object.get_data_project(pid)
+        if request.user.is_superuser or request.user.pid in [members[0] for members in data_project['members']]:
             context = {
-                'edition_granted': edition_granted,
                 'data_project': data_project
             }
             return render(request, 'project/project_profile_edition.html', context)
 
-        edition_granted = False
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet project",
-            'edition_granted': edition_granted
         }
         return render(request, 'page_info.html', context)
     context = {
@@ -205,7 +200,9 @@ def project_field_edition(request, part_of_project_to_edit, pid):
         to display the field of the profil of a project that is going to be modified and a dictionnary
         with all the data needed to fulfill the template.
     '''
+
     context = {}
+    form = forms.Form()
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
         # Request all the members of the project

@@ -145,10 +145,10 @@ def person_field_edition(request, field_to_modify, pid):
         to display the field of the profil of a person that is going to be modified and a dictionnary
         with all the data needed to fulfill the template.
     '''
-
+    context = {}
+    form = forms.Form()
     # Verify in triplestore if the pid correspond to a person
     if variables.sparql_get_person_object.check_person_ark(pid):
-        context = {}
         # Verify that the user is authenticated and has the right to modify the profile
         if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser):
             data_person = variables.sparql_get_person_object.get_data_person(pid)
