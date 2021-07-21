@@ -21,6 +21,9 @@ def index(request):
         to display the index page and a dictionnary with all the data needed to fulfill
         the template.
     '''
+
+    datasets = variables.sparql_get_dataset_object.get_datasets()
+
     articles = variables.sparql_get_article_object.get_articles()
 
     articles_data = []
@@ -46,6 +49,7 @@ def index(request):
 
     context = {
         'len_persons': len(users),
+        'len_datasets': len(datasets),
         'len_articles': len(articles),
         'len_projects': len(projects_data),
         'last_users_registered': last_users_registered,

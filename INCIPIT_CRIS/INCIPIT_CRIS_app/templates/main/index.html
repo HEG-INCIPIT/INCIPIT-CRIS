@@ -35,6 +35,7 @@
                         <ul>
                             {% for user in last_users_registered %}
                                 <li class="display-content"><a class="link-one" href="/persons/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
+                                <img src="{% static 'svg/data_separator.svg' %}" />
                             {% endfor %}
                             <li class="display-content-last-element"><a class="link-one" href="/persons/">Voir tout</a></li>
                         </ul>
@@ -48,6 +49,7 @@
                         <ul>
                             {% for article in last_publications %}
                                     <li class="display-content"><a class="link-one" href="/articles/{{ article.pid }}">{{ article.name }}</a></li>
+                                    <img src="{% static 'svg/data_separator.svg' %}" />
                             {% endfor %}
                             <li class="display-content-last-element"><a class="link-one" href="/articles/">Voir tout</a></li>
                         </ul>
@@ -61,6 +63,7 @@
                         <ul>
                             {% for project in project_data %}
                                 <li class="display-content"><a class="link-one" href="/projects/{{ project.pid }}">{{ project.name }}</a></li>
+                                <img src="{% static 'svg/data_separator.svg' %}" />
                             {% endfor %}
                             <li class="display-content-last-element"><a class="link-one" href="/projects/">Voir tout</a></li>
                         </ul>
@@ -90,6 +93,12 @@
                     <article class="tile is-child box content">
                         <p class="title">{{ len_projects }}</p>
                         <p class="heading">Projets</p>
+                    </article>
+                </a>
+                <a href="/datasets/" id="datasetsStats" name="datasetsStats" class="tile is-parent">
+                    <article class="tile is-child box content">
+                        <p class="title">{{ len_datasets }}</p>
+                        <p class="heading">Jeu de données</p>
                     </article>
                 </a>
             </div>
