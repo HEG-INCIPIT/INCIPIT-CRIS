@@ -1,11 +1,25 @@
 {% extends "dataset/dataset_profile.html" %}
 
+{% load static %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+        <ul>
+            <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+            <li><a class="link-one" href="/datasets/">Données</a></li>
+            <li><a class="link-one" href="/datasets/{{ data_dataset.pid }}" aria-current="page">Profil</a></li>
+            <li class="is-active"><a href="/datasets/{{ data_dataset.pid }}/edition" aria-current="page">Edition</a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+
 {% block information %}
     {{ message }}
 {% endblock %}
 
 
-{% block dataset_information %}
+{% block information_header %}
 
     <a class="button is-primary" href="/datasets/{{ data_dataset.pid }}">Voir le projet</a>
 
@@ -16,70 +30,105 @@
     </form>
 
     <p class="title is-4" align="justify">
-        {{ data_dataset.name }} <a class="link-one is-size-6" href="/datasets/edition/field/name/{{data_dataset.pid}}"> Modifer</a>
+        {{ data_dataset.name }} <a class="link-one is-size-6" href="/datasets/edition/field/name/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a>
     </p>
 
     <p class="subtitle is-6" align="justify">
         {% if data_dataset.abstract == "" %}
-            <a class="link-one" href="/datasets/edition/field/abstract/{{data_dataset.pid}}"> Ajouter un abstract</a>
+            <a class="link-one" href="/datasets/edition/field/abstract/{{data_dataset.pid}}">Ajouter un abstract</a>
         {% else %}
             {{ data_dataset.abstract }}
-            <a class="link-one" href="/datasets/edition/field/abstract/{{data_dataset.pid}}"> Modifier</a>
+            <a class="link-one" href="/datasets/edition/field/abstract/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a>
         {% endif %}
     </p>
+{% endblock %}
 
-    <p><time datetime="{{ data_dataset.created_date }}">Date de création : {{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/dateCreated/{{data_dataset.pid}}"> Modifer</a></p>
-    <p><time datetime="{{ data_dataset.modified_date }}">Date de modification : {{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/dateModified/{{data_dataset.pid}}"> Modifer</a></p>
+{% block information_relative_data %}
+    <p class="title-data"><time datetime="{{ data_dataset.created_date }}">Date de création : </p>
+    <p class="data">{{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/dateCreated/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
+    <p class="title-data"><time datetime="{{ data_dataset.modified_date }}">Date de modification : </p>
+    <p class="data">{{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/dateModified/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
     
-    <p>URL des détails : <a class="link-one" href="{{ data_dataset.url }}"> {{ data_dataset.url }}</a> <a class="link-one" href="/datasets/edition/field/url-details/{{data_dataset.pid}}"> Modifier</a></p>
-    <p>URL des données : <a class="link-one" href="{{ data_dataset.data_download.url }}"> {{ data_dataset.data_download.url }}</a> <a class="link-one" href="/datasets/edition/field/url-data-download/{{data_dataset.pid}}"> Modifier</a></p>
+    <p class="title-data">URL des détails : </p>
+    <p class="data"><a class="link-one" href="{{ data_dataset.url }}"> {{ data_dataset.url }}</a> <a class="link-one" href="/datasets/edition/field/url-details/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
+    <p class="title-data">URL des données : </p>
+    <p class="data"><a class="link-one" href="{{ data_dataset.data_download.url }}"> {{ data_dataset.data_download.url }}</a> <a class="link-one" href="/datasets/edition/field/url-data-download/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
+{% endblock %}
 
-    <p>Créateur(s) : <a class="link-one" href="/datasets/edition/field/add-creator/{{data_dataset.pid}}"> Ajouter</a> </p>
-    {% for creator in data_dataset.creators %}
-        <p>
-            <form action="/datasets/edition/field/delete-creator/{{data_dataset.pid}}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="creatorARK" name="creatorARK" value="{{ creator.0 }}">
-                <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
-                <button class="delete"></button>
-            </form>
-        </p>
-    {% endfor %}
+{% block information_persons %}
+    <p class="title-data">Créateur(s) : <a class="link-one" href="/datasets/edition/field/add-creator/{{data_dataset.pid}}"><i class="fas fa-plus-circle"></i></a> </p>
+    <ul>
+        {% for creator in data_dataset.creators %}
 
-    <p>Mainteneur(s) : <a class="link-one" href="/datasets/edition/field/add-maintainer/{{data_dataset.pid}}"> Ajouter</a> </p>
-    {% for maintainer in data_dataset.maintainers %}
-        <p>
-            <form action="/datasets/edition/field/delete-maintainer/{{data_dataset.pid}}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="maintainerARK" name="maintainerARK" value="{{ maintainer.0 }}">
-                <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
-                <button class="delete"></button>
-            </form>
-        </p>
-    {% endfor %}
+            <li class="data">
+                <form action="/datasets/edition/field/delete-creator/{{data_dataset.pid}}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="creatorARK" name="creatorARK" value="{{ creator.0 }}">
+                    <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                    <button class="delete"></button>
+                </form>
+            </li>
+            {% if not forloop.last %}
+                <img src="{% static 'svg/data_separator.svg' %}" />
+            {% endif %}
+        {% endfor %}
+    </ul>
 
-    <p>Projet(s) : <a class="link-one" href="/datasets/edition/field/add-project/{{data_dataset.pid}}"> Ajouter</a></p>
-    {% for project in data_dataset.projects %}
-        <p>
-            <form action="/datasets/edition/field/delete-project/{{data_dataset.pid}}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
-                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
-                <button class="delete"></button>
-            </form>
-        </p>
-    {% endfor %}
+    <p class="title-data">Mainteneur(s) : <a class="link-one" href="/datasets/edition/field/add-maintainer/{{data_dataset.pid}}"><i class="fas fa-plus-circle"></i></a> </p>
+    <ul>
+        {% for maintainer in data_dataset.maintainers %}
 
-    <p>Article(s) : <a class="link-one" href="/datasets/edition/field/add-article/{{data_dataset.pid}}"> Ajouter</a></p>
-    {% for article in data_dataset.articles %}
-        <p>
-            <form action="/datasets/edition/field/delete-article/{{data_dataset.pid}}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
-                <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
-                <button class="delete"></button>
-            </form>
-        </p>
-    {% endfor %}
+            <li class="data">
+                <form action="/datasets/edition/field/delete-maintainer/{{data_dataset.pid}}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="maintainerARK" name="maintainerARK" value="{{ maintainer.0 }}">
+                    <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                    <button class="delete"></button>
+                </form>
+            </li>
+            {% if not forloop.last %}
+                <img src="{% static 'svg/data_separator.svg' %}" />
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}
 
+{% block information_ %}
+    <p class="title-data">Projet(s) : <a class="link-one" href="/datasets/edition/field/add-project/{{data_dataset.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <ul>
+        {% for project in data_dataset.projects %}
+            <li class="data">
+                <form action="/datasets/edition/field/delete-project/{{data_dataset.pid}}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
+                    <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                    <button class="delete"></button>
+                </form>
+            </li>
+            {% if not forloop.last %}
+                <img src="{% static 'svg/data_separator.svg' %}" />
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <p class="title-data">Article(s) : <a class="link-one" href="/datasets/edition/field/add-article/{{data_dataset.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <ul>
+        {% for article in data_dataset.articles %}
+            <li class="data">
+
+                <form action="/datasets/edition/field/delete-article/{{data_dataset.pid}}" method="post">
+                    {% csrf_token %}
+
+                            <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
+                            <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+
+                            <button class="delete"></button>
+
+                </form>
+            </li>
+            {% if not forloop.last %}
+                <img src="{% static 'svg/data_separator.svg' %}" />
+            {% endif %}
+        {% endfor %}
+    </ul>
 {% endblock %}

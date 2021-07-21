@@ -13,11 +13,22 @@
     <body>
 
         {% include 'main/navbar.html' %}
-
+        
         <section>
+        
+            {% block breadcrumb %}
+                <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+                    <ul>
+                        <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+                        <li><a class="link-one" href="/datasets/">Données</a></li>
+                        <li class="is-active"><a href="/datasets/{{ data_dataset.pid }}" aria-current="page">Profil</a></li>
+                    </ul>
+                </nav>
+            {% endblock %}
+
             {% block information %}
             {% endblock %}
-            {% block dataset_information %}
+            {% block information_header %}
                 <p>
                     {% if user.is_authenticated and edition_granted or user.is_superuser %}
                         <a class="button is-primary" href="/datasets/edition/{{ data_dataset.pid }}">Modifier</a>
@@ -27,35 +38,69 @@
                     {{ data_dataset.name }} 
                 </p>
                 <p class="subtitle is-6" align="justify">{{ data_dataset.abstract }}</p>
-                <p><time datetime="{{ data_dataset.created_date }}">Date de création : {{ data_dataset.created_date }}</time></p>
-                <p><time datetime="{{ data_dataset.modified_date }}">Date de modification : {{ data_dataset.modified_date }}</time></p>
-                <p>URL des détails : <a class="link-one" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></p>
-                <p>URL des données : <a class="link-one" href="{{ data_dataset.data_download.url }}">{{ data_dataset.data_download.url }}</a></p>
-                <p>Créateur(s) : </p>
-                {% for creator in data_dataset.creators %}
-                    <p>
-                        <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a> 
-                    </p>
-                {% endfor %}
-                <p>Mainteneur(s) : </p>
-                {% for maintainer in data_dataset.maintainers %}
-                    <p>
-                        <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a> 
-                    </p>
-                {% endfor %}
-                <p>Projet(s) : </p>
-                {% for project in data_dataset.projects %}
-                    <p>
-                        <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a> 
-                    </p>
-                {% endfor %}
-                <p>Article(s) : </p>
-                {% for article in data_dataset.articles %}
-                    <p>
-                        <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a> 
-                    </p>
-                {% endfor %}
             {% endblock %}
+
+            <hr>
+            
+            <div class="columns">
+                <div class="column has-text-left">
+                    {% block information_relative_data %}
+                        <p class="title-data"><time datetime="{{ data_dataset.created_date }}">Date de création : </p>
+                        <p class="data">{{ data_dataset.created_date }}</time></p>
+                        <p class="title-data"><time datetime="{{ data_dataset.modified_date }}">Date de modification : </p>
+                        <p class="data">{{ data_dataset.modified_date }}</time></p>
+                        <p class="title-data">URL des détails : </p>
+                        <p class="data"><a class="link-one" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></p>
+                        <p class="title-data">URL des données : </p>
+                        <p class="data"><a class="link-one" href="{{ data_dataset.data_download.url }}">{{ data_dataset.data_download.url }}</a></p>
+                    {% endblock %}
+                </div>
+                <div class="column has-text-centered">
+                    {% block information_persons %}
+                        <p class="title-data">Créateur(s) : </p>
+                        <ul>
+                            {% for creator in data_dataset.creators %}
+                                <li class="data"><a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a></li>
+                                {% if not forloop.last %}
+                                    <img src="{% static 'svg/data_separator.svg' %}" />
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <p class="title-data">Mainteneur(s) : </p>
+                        <ul>
+                            {% for maintainer in data_dataset.maintainers %}
+                                <li class="data"><a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a></li>
+                                {% if not forloop.last %}
+                                    <img src="{% static 'svg/data_separator.svg' %}" />
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endblock %}
+                </div>
+                <div class="column has-text-right">
+                    {% block information_ %}
+                        <p class="title-data">Projet(s) : </p>
+                        <ul>
+                            {% for project in data_dataset.projects %}
+                                <li class="data"><a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a></li>
+                                {% if not forloop.last %}
+                                    <img src="{% static 'svg/data_separator.svg' %}" />
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+
+                        <p class="title-data">Article(s) : </p>
+                        <ul>
+                            {% for article in data_dataset.articles %}
+                                <li class="data"><a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a></li>
+                                {% if not forloop.last %}
+                                    <img src="{% static 'svg/data_separator.svg' %}" />
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endblock %}
+                </div>
+            </div>
         </section>
         {% include 'main/footer.html' %}
     </body>

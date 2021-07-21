@@ -24,3 +24,24 @@ section{
 .a {
     font: normal !important;
 }
+
+.has-text-left .data {
+    padding-left: 15px;
+}
+
+.title-data {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.link-one i {
+    color: #cecece;
+}
+
+.title-data a {
+    font-size: 1.2rem;
+}
+
+.fa-plus-circle {
+    vertical-align: -2px;
+}
