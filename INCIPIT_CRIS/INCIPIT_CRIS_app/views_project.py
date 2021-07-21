@@ -180,7 +180,7 @@ def project_edition(request, pid):
     return render(request, 'page_info.html', context)
 
 
-def project_field_edition(request, part_of_project_to_edit, pid):
+def project_field_edition(request, field_to_modify, pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
 
@@ -212,30 +212,30 @@ def project_field_edition(request, part_of_project_to_edit, pid):
 
             data_project = variables.sparql_get_project_object.get_data_project(pid)
 
-            form = form_selection.form_selection(request, part_of_project_to_edit, data_project)
+            form = form_selection.form_selection(request, field_to_modify, data_project)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
-                    if part_of_project_to_edit == 'foundingDate':
-                        variables.sparql_generic_post_object.update_date_leaf(pid, part_of_project_to_edit,
+                    if field_to_modify == 'foundingDate':
+                        variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['founding_date'],
                                                                     str(data_project['founding_date']) +
                                                                     " 00:00:00+00:00")
-                    elif part_of_project_to_edit == 'dissolutionDate':
-                        variables.sparql_generic_post_object.update_date_leaf(pid, part_of_project_to_edit,
+                    elif field_to_modify == 'dissolutionDate':
+                        variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['dissolution_date'],
                                                                     str(data_project['dissolution_date']) +
                                                                     " 00:00:00+00:00")
                     else:
-                        variables.sparql_generic_post_object.update_string_leaf(pid, part_of_project_to_edit,
-                                                                      form.cleaned_data[part_of_project_to_edit],
-                                                                      data_project[part_of_project_to_edit])
+                        variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
+                                                                      form.cleaned_data[field_to_modify],
+                                                                      data_project[field_to_modify])
                     return redirect(project_edition, pid=pid)
 
             context = {
                 'form': form,
                 'button_value': 'Modifier',
-                'url_to_return': '/projects/edition/field/{}/{}'.format(part_of_project_to_edit, pid)
+                'url_to_return': '/projects/edition/field/{}/{}'.format(field_to_modify, pid)
             }
             # return the form to be completed
             return render(request, 'forms/classic_form.html', context)

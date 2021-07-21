@@ -188,7 +188,7 @@ def dataset_edition(request, pid):
     return render(request, 'page_info.html', context)
 
 
-def dataset_field_edition(request, part_of_dataset_to_edit, pid):
+def dataset_field_edition(request, field_to_modify, pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
 
@@ -218,38 +218,38 @@ def dataset_field_edition(request, part_of_dataset_to_edit, pid):
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in data_dataset['creators']] or request.user.pid in [maintainers[0] for maintainers in data_dataset['maintainers']]:
 
-            form = form_selection.form_selection(request, part_of_dataset_to_edit, data_dataset)
+            form = form_selection.form_selection(request, field_to_modify, data_dataset)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
-                    if part_of_dataset_to_edit == 'dateCreated':
-                        variables.sparql_generic_post_object.update_date_leaf(pid, part_of_dataset_to_edit,
+                    if field_to_modify == 'dateCreated':
+                        variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['created_date'],
                                                                     str(data_dataset['created_date']) +
                                                                     ' 00:00:00+00:00')
-                    elif part_of_dataset_to_edit == 'dateModified':
-                        variables.sparql_generic_post_object.update_date_leaf(pid, part_of_dataset_to_edit,
+                    elif field_to_modify == 'dateModified':
+                        variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['modified_date'],
                                                                     str(data_dataset['modified_date']) +
                                                                     ' 00:00:00+00:00')
-                    elif part_of_dataset_to_edit == 'url-details':
+                    elif field_to_modify == 'url-details':
                         variables.sparql_generic_post_object.update_string_leaf(pid, 'url',
                                                                     form.cleaned_data['url_details'],
                                                                     data_dataset['url'])
-                    elif part_of_dataset_to_edit == 'url-data-download':
+                    elif field_to_modify == 'url-data-download':
                         variables.sparql_generic_post_object.update_string_leaf(str(pid)+'DD', 'url',
                                                                     form.cleaned_data['url_data'],
                                                                     data_dataset['data_download']['url'])
                     else:
-                        variables.sparql_generic_post_object.update_string_leaf(pid, part_of_dataset_to_edit,
-                                                                      form.cleaned_data[part_of_dataset_to_edit],
-                                                                      data_dataset[part_of_dataset_to_edit])
+                        variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
+                                                                      form.cleaned_data[field_to_modify],
+                                                                      data_dataset[field_to_modify])
                     return redirect(dataset_edition, pid=pid)
 
             context = {
                 'form': form,
                 'button_value': 'Modifier',
-                'url_to_return': '/datasets/edition/field/{}/{}'.format(part_of_dataset_to_edit, pid)
+                'url_to_return': '/datasets/edition/field/{}/{}'.format(field_to_modify, pid)
             }
             # return the form to be completed
             return render(request, 'forms/classic_form.html', context)

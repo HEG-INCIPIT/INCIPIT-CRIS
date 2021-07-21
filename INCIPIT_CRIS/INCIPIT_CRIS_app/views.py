@@ -32,7 +32,7 @@ def index(request):
     users = user_model.objects.all().filter(is_staff=False).order_by('date_joined')
 
     last_users_registered = []
-    for i in range(1, 6):
+    for i in range(1, min(5+1, len(users)+1)):
         last_users_registered.append([users.values('pid')[len(users) - i]['pid'],
                                       users.values('first_name')[len(users) - i]['first_name'],
                                       users.values('last_name')[len(users) - i]['last_name']])

@@ -184,7 +184,7 @@ def article_edition(request, pid):
     return render(request, 'page_info.html', context)
 
 
-def article_field_edition(request, part_of_article_to_edit, pid):
+def article_field_edition(request, field_to_modify, pid):
     '''
     Handle the display and the selection of the correct form to modify a given field
 
@@ -214,25 +214,25 @@ def article_field_edition(request, part_of_article_to_edit, pid):
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.is_superuser or request.user.pid in [authors[0] for authors in data_article['authors']]:
 
-            form = form_selection.form_selection(request, part_of_article_to_edit, data_article)
+            form = form_selection.form_selection(request, field_to_modify, data_article)
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
-                    if part_of_article_to_edit == 'datePublished':
-                        variables.sparql_generic_post_object.update_date_leaf(pid, part_of_article_to_edit,
+                    if field_to_modify == 'datePublished':
+                        variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['date_published'],
                                                                     str(data_article['date_published']) +
                                                                     " 00:00:00+00:00")
                     else:
-                        variables.sparql_generic_post_object.update_string_leaf(pid, part_of_article_to_edit,
-                                                                      form.cleaned_data[part_of_article_to_edit],
-                                                                      data_article[part_of_article_to_edit])
+                        variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
+                                                                      form.cleaned_data[field_to_modify],
+                                                                      data_article[field_to_modify])
                     return redirect(article_edition, pid=pid)
 
             context = {
                 'form': form,
                 'button_value': 'Modifier',
-                'url_to_return': '/articles/edition/field/{}/{}'.format(part_of_article_to_edit, pid)
+                'url_to_return': '/articles/edition/field/{}/{}'.format(field_to_modify, pid)
             }
             # return the form to be completed
             return render(request, 'forms/classic_form.html', context)

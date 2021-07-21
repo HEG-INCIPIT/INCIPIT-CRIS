@@ -15,7 +15,7 @@ urlpatterns = [
     path('persons/edition/profil/delete-dataset-maintainer/<path:pid>', views_person.person_datasets_maintainer_deletion, name='person_datasets_maintainer_deletion'),
     path('persons/edition/profil/add-dataset-creator/<path:pid>', views_person.person_datasets_creator_addition, name='person_datasets_creator_addition'),
     path('persons/edition/profil/delete-dataset-creator/<path:pid>', views_person.person_datasets_creator_deletion, name='person_datasets_creator_deletion'),
-    path('persons/edition/profil/<str:part_of_person_to_modify>/<path:pid>', views_person.person_field_edition, name='person_field_edition'),
+    path('persons/edition/profil/<str:field_to_modify>/<path:pid>', views_person.person_field_edition, name='person_field_edition'),
     path('persons/edition/<path:pid>', views_person.person_edition, name='person_edition_display'),
     path('persons/<path:pid>', views_person.person_profile, name='person_profile'),
 
@@ -29,7 +29,7 @@ urlpatterns = [
     path('articles/edition/field/add-dataset/<path:pid>', views_article.article_dataset_addition, name='article_dataset_addition'),
     path('articles/edition/field/delete-dataset/<path:pid>', views_article.article_dataset_deletion, name='article_dataset_deletion'),
     path('articles/edition/delete-article/<path:pid>', views_article.article_deletion, name='article_deletion'),
-    path('articles/edition/field/<str:part_of_article_to_edit>/<path:pid>', views_article.article_field_edition, name='article_field_edition'),
+    path('articles/edition/field/<str:field_to_modify>/<path:pid>', views_article.article_field_edition, name='article_field_edition'),
     path('articles/edition/<path:pid>', views_article.article_edition, name='article_edition'),
     path('articles/<path:pid>', views_article.article_profile, name='article_profile'),
 
@@ -43,7 +43,7 @@ urlpatterns = [
     path('projects/edition/field/delete-article/<path:pid>', views_project.project_article_deletion, name='project_article_deletion'),
     path('projects/edition/field/add-dataset/<path:pid>', views_project.project_dataset_addition, name='project_dataset_addition'),
     path('projects/edition/field/delete-dataset/<path:pid>', views_project.project_dataset_deletion, name='project_dataset_deletion'),
-    path('projects/edition/field/<str:part_of_project_to_edit>/<path:pid>', views_project.project_field_edition, name='project_field_edition'),
+    path('projects/edition/field/<str:field_to_modify>/<path:pid>', views_project.project_field_edition, name='project_field_edition'),
     path('projects/edition/<path:pid>', views_project.project_edition, name='project_edition'),
     path('projects/<path:pid>', views_project.project_profile, name='project_profile'),
 
@@ -59,7 +59,7 @@ urlpatterns = [
     path('datasets/edition/field/add-article/<path:pid>', views_dataset.dataset_article_addition, name='dataset_article_addition'),
     path('datasets/edition/field/delete-article/<path:pid>', views_dataset.dataset_article_deletion, name='dataset_article_deletion'),
     path('datasets/edition/delete-dataset/<path:pid>', views_dataset.dataset_deletion, name='dataset_deletion'),
-    path('datasets/edition/field/<str:part_of_dataset_to_edit>/<path:pid>', views_dataset.dataset_field_edition, name='dataset_field_edition'),
+    path('datasets/edition/field/<str:field_to_modify>/<path:pid>', views_dataset.dataset_field_edition, name='dataset_field_edition'),
     path('datasets/edition/<path:pid>', views_dataset.dataset_edition, name='dataset_edition'),
     path('datasets/<path:pid>', views_dataset.dataset_profile, name='dataset_profile'),
     
