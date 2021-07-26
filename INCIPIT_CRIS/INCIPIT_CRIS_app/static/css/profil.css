@@ -21,8 +21,12 @@ section{
     margin-top: 2px;
 }
 
-.a {
+a {
     font: normal !important;
+}
+
+.url {
+    word-break: break-all;
 }
 
 .has-text-justified .data {
