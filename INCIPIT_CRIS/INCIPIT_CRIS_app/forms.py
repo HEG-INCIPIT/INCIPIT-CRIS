@@ -143,7 +143,7 @@ class DatasetModifiedDateForm(forms.Form):
 
 
 class DatasetURLDetailsForm(forms.Form):
-    url_details = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des détails', 'class':'input'}))
+    url_details = forms.CharField(label="URL de détails", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL de détails', 'class':'input'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -155,7 +155,7 @@ class DatasetURLDetailsForm(forms.Form):
 
 
 class DatasetURLDataForm(forms.Form):
-    url_data = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des données', 'class':'input'}))
+    url_data = forms.CharField(label="URL des données", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des données', 'class':'input'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
