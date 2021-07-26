@@ -6,13 +6,23 @@
         <title>INCIPIT-CRIS</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         {% load static %}
-        <link rel="stylesheet" href="{% static 'css/form_creation.css' %}">
+        <link rel="stylesheet" href="{% static 'css/form.css' %}">
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
     </head>
     <body>
+        
+        {% include 'main/navbar.html' %}
+
         <section>
-            {% include 'main/navbar.html' %}
+
+            <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+                <ul>
+                    <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+                    <li><a class="link-one" href="/projects/">Projets</a></li>
+                    <li class="is-active"><a href="/projects/creation/" aria-current="page">Créer un projet</a></li>
+                </ul>
+            </nav>
 
             <h1 class="title is-4">Créer un projet</h1>
 
