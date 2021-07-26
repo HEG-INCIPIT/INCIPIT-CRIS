@@ -43,19 +43,27 @@
             <hr>
             
             <div class="columns">
-                <div class="column has-text-left">
+                <div class="column has-text-justified">
                     {% block information_relative_data %}
                         <p class="title-data"><time datetime="{{ data_dataset.created_date }}">Date de création : </p>
-                        <p class="data">{{ data_dataset.created_date }}</time></p>
+                        <ul>
+                            <li class="data">{{ data_dataset.created_date }}</time></li>
+                        </ul>
                         <p class="title-data"><time datetime="{{ data_dataset.modified_date }}">Date de modification : </p>
-                        <p class="data">{{ data_dataset.modified_date }}</time></p>
+                        <ul>
+                            <li class="data">{{ data_dataset.modified_date }}</time></li>
+                        </ul>
                         <p class="title-data">URL des détails : </p>
-                        <p class="data"><a class="link-one" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></p>
+                        <ul>
+                            <li class="data"><a class="link-one" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></li>
+                        </ul>
                         <p class="title-data">URL des données : </p>
-                        <p class="data"><a class="link-one" href="{{ data_dataset.data_download.url }}">{{ data_dataset.data_download.url }}</a></p>
+                        <ul>
+                            <li class="data"><a class="link-one" href="{{ data_dataset.data_download.url }}">{{ data_dataset.data_download.url }}</a></li>
+                        </ul>
                     {% endblock %}
                 </div>
-                <div class="column has-text-centered">
+                <div class="column has-text-justified">
                     {% block information_persons %}
                         <p class="title-data">Créateur(s) : </p>
                         <ul>
@@ -77,7 +85,7 @@
                         </ul>
                     {% endblock %}
                 </div>
-                <div class="column has-text-right">
+                <div class="column has-text-justified">
                     {% block information_ %}
                         <p class="title-data">Projet(s) : </p>
                         <ul>

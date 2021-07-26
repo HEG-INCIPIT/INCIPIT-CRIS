@@ -25,8 +25,8 @@ section{
     font: normal !important;
 }
 
-.has-text-left .data {
-    padding-left: 15px;
+.has-text-justified .data {
+    padding-left: 1em;
 }
 
 .title-data {
@@ -38,10 +38,23 @@ section{
     color: #cecece;
 }
 
-.title-data a {
+.title-data i {
     font-size: 1.2rem;
 }
 
 .fa-plus-circle {
     vertical-align: -2px;
+}
+
+.columns ul li::before {
+    content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+    color: #679bff; /* Change the color */
+    font-weight: bold; /* If you want it to be bold */
+    display: inline-block; /* Needed to add space between the bullet and the text */
+    width: 1em; /* Also needed for space (tweak if needed) */
+    margin-left: -1em; /* Also needed for space (tweak if needed) */
+}
+
+form {
+    display: inline;
 }

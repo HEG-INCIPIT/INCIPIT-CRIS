@@ -45,14 +45,21 @@
 
 {% block information_relative_data %}
     <p class="title-data"><time datetime="{{ data_dataset.created_date }}">Date de création : </p>
-    <p class="data">{{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/dateCreated/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
+    <ul>
+        <li class="data">{{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/dateCreated/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></li>
+    </ul>
     <p class="title-data"><time datetime="{{ data_dataset.modified_date }}">Date de modification : </p>
-    <p class="data">{{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/dateModified/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
-    
+    <ul>
+        <li class="data">{{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/dateModified/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></li>
+    </ul>
     <p class="title-data">URL des détails : </p>
-    <p class="data"><a class="link-one" href="{{ data_dataset.url }}"> {{ data_dataset.url }}</a> <a class="link-one" href="/datasets/edition/field/url-details/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
+    <ul>
+        <li class="data"><a class="link-one" href="{{ data_dataset.url }}"> {{ data_dataset.url }}</a> <a class="link-one" href="/datasets/edition/field/url-details/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></li>
+    </ul>
     <p class="title-data">URL des données : </p>
-    <p class="data"><a class="link-one" href="{{ data_dataset.data_download.url }}"> {{ data_dataset.data_download.url }}</a> <a class="link-one" href="/datasets/edition/field/url-data-download/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
+    <ul>
+        <li class="data"><a class="link-one" href="{{ data_dataset.data_download.url }}"> {{ data_dataset.data_download.url }}</a> <a class="link-one" href="/datasets/edition/field/url-data-download/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></li>
+    </ul>
 {% endblock %}
 
 {% block information_persons %}
@@ -60,14 +67,13 @@
     <ul>
         {% for creator in data_dataset.creators %}
 
-            <li class="data">
                 <form action="/datasets/edition/field/delete-creator/{{data_dataset.pid}}" method="post">
                     {% csrf_token %}
                     <input type="hidden" id="creatorARK" name="creatorARK" value="{{ creator.0 }}">
-                    <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
-                    <button class="delete"></button>
+                    <li class="data"><a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                    <button class="delete"></button></li>
                 </form>
-            </li>
+            
             {% if not forloop.last %}
                 <img src="{% static 'svg/data_separator.svg' %}" />
             {% endif %}
@@ -78,14 +84,13 @@
     <ul>
         {% for maintainer in data_dataset.maintainers %}
 
-            <li class="data">
                 <form action="/datasets/edition/field/delete-maintainer/{{data_dataset.pid}}" method="post">
                     {% csrf_token %}
                     <input type="hidden" id="maintainerARK" name="maintainerARK" value="{{ maintainer.0 }}">
-                    <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
-                    <button class="delete"></button>
+                    <li class="data"><a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                    <button class="delete"></button></li>
                 </form>
-            </li>
+            
             {% if not forloop.last %}
                 <img src="{% static 'svg/data_separator.svg' %}" />
             {% endif %}
@@ -97,14 +102,13 @@
     <p class="title-data">Projet(s) : <a class="link-one" href="/datasets/edition/field/add-project/{{data_dataset.pid}}"><i class="fas fa-plus-circle"></i></a></p>
     <ul>
         {% for project in data_dataset.projects %}
-            <li class="data">
+        
                 <form action="/datasets/edition/field/delete-project/{{data_dataset.pid}}" method="post">
                     {% csrf_token %}
                     <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
-                    <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
-                    <button class="delete"></button>
+                    <li class="data"><a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                    <button class="delete"></button></li>
                 </form>
-            </li>
             {% if not forloop.last %}
                 <img src="{% static 'svg/data_separator.svg' %}" />
             {% endif %}
@@ -114,21 +118,20 @@
     <p class="title-data">Article(s) : <a class="link-one" href="/datasets/edition/field/add-article/{{data_dataset.pid}}"><i class="fas fa-plus-circle"></i></a></p>
     <ul>
         {% for article in data_dataset.articles %}
-            <li class="data">
-
+            
                 <form action="/datasets/edition/field/delete-article/{{data_dataset.pid}}" method="post">
                     {% csrf_token %}
 
-                            <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
-                            <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
-
-                            <button class="delete"></button>
+                    <input type="hidden" id="articleARK" name="articleARK" value="{{ article.0 }}">
+                    <li class="data"><a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                    <button class="delete"></button></li>
 
                 </form>
-            </li>
+            
             {% if not forloop.last %}
                 <img src="{% static 'svg/data_separator.svg' %}" />
             {% endif %}
         {% endfor %}
+        
     </ul>
 {% endblock %}
