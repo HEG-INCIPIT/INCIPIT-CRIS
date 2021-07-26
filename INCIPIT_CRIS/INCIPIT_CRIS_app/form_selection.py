@@ -70,7 +70,7 @@ def form_selection(request, field_to_edit, data):
             return ArticleDatePublishedForm(old_date_published=data['date_published'])
         elif field_to_edit == 'dateCreated':
             return DatasetCreatedDateForm(old_created_date=data['created_date'])
-        elif field_to_edit == 'dateModied':
+        elif field_to_edit == 'dateModified':
             return DatasetModifiedDateForm(old_modified_date=data['modified_date'])
         
         # Form url

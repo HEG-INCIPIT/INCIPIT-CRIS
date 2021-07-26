@@ -131,7 +131,7 @@ class DatasetCreatedDateForm(forms.Form):
 
 
 class DatasetModifiedDateForm(forms.Form):
-    modified_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de création ', required=False)
+    modified_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de modification ', required=False)
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
