@@ -513,8 +513,8 @@ def project_dataset_addition(request, pid):
                 'button_value': 'Ajouter',
                 'path_name' : ['Projets', 'Profil', 'Edition', 'Ajouter un jeu de données'],
                 'path_url' : ['/projects/', '/projects/'+pid, '/projects/edition/'+pid, '/projects/edition/field/add-dataset/'+pid],
-                'title_data_type_added': 'Dataset',
-                'data_type_added': 'du dataset',
+                'title_data_type_added': 'Jeu de données',
+                'data_type_added': 'du jeu de données',
                 'url_to_return': '/projects/edition/field/add-dataset/{}'.format(pid),
                 'data': datasets
             }

@@ -517,8 +517,8 @@ def article_dataset_addition(request, pid):
                 'button_value': 'Ajouter',
                 'path_name' : ['Articles', 'Profil', 'Edition', 'Ajouter un jeu de données'],
                 'path_url' : ['/articles/', '/articles/'+pid, '/articles/edition/'+pid, '/articles/edition/field/add-dataset/'+pid],
-                'title_data_type_added': 'Projet',
-                'data_type_added': 'du projet',
+                'title_data_type_added': 'Jeu de données',
+                'data_type_added': 'du jeu de données',
                 'url_to_return': '/articles/edition/field/add-dataset/{}'.format(pid),
                 'data': datasets
             }
