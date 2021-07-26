@@ -232,6 +232,8 @@ def article_field_edition(request, field_to_modify, pid):
             context = {
                 'form': form,
                 'button_value': 'Modifier',
+                'path_name' : ['Articles', 'Profil', 'Edition', form.fields[next(iter(form.declared_fields.keys()))].label],
+                'path_url' : ['/articles/', '/articles/'+pid, '/articles/edition/'+pid, '/articles/edition/field/'+field_to_modify+pid],
                 'url_to_return': '/articles/edition/field/{}/{}'.format(field_to_modify, pid)
             }
             # return the form to be completed
@@ -293,6 +295,8 @@ def article_author_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Articles', 'Profil', 'Edition', 'Ajouter un auteur'],
+                'path_url' : ['/articles/', '/articles/'+pid, '/articles/edition/'+pid, '/articles/edition/field/add-author/'+pid],
                 'title_data_type_added': 'Auteur',
                 'data_type_added': 'du projet',
                 'url_to_return': '/articles/edition/field/add-author/{}'.format(pid),
@@ -400,6 +404,8 @@ def article_project_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Articles', 'Profil', 'Edition', 'Ajouter un projet'],
+                'path_url' : ['/articles/', '/articles/'+pid, '/articles/edition/'+pid, '/articles/edition/field/add-project/'+pid],
                 'title_data_type_added': 'Projet',
                 'data_type_added': 'du projet',
                 'url_to_return': '/articles/edition/field/add-project/{}'.format(pid),
@@ -507,6 +513,8 @@ def article_dataset_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Articles', 'Profil', 'Edition', 'Ajouter un jeu de données'],
+                'path_url' : ['/articles/', '/articles/'+pid, '/articles/edition/'+pid, '/articles/edition/field/add-dataset/'+pid],
                 'title_data_type_added': 'Projet',
                 'data_type_added': 'du projet',
                 'url_to_return': '/articles/edition/field/add-dataset/{}'.format(pid),

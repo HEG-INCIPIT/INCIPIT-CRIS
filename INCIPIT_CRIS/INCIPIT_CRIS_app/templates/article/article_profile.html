@@ -16,6 +16,17 @@
 
         
         <section>
+
+            {% block breadcrumb %}
+                <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+                    <ul>
+                        <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+                        <li><a class="link-one" href="/articles/">Articles</a></li>
+                        <li class="is-active"><a href="/articles/{{ data_article.pid }}" aria-current="page">Profil</a></li>
+                    </ul>
+                </nav>
+            {% endblock %}
+
             {% block information %}
             {% endblock %}
             {% block article_information %}
