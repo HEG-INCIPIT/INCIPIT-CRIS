@@ -248,6 +248,8 @@ def dataset_field_edition(request, field_to_modify, pid):
 
             context = {
                 'form': form,
+                'path_name' : ['Données', 'Profil', 'Edition', form.fields[next(iter(form.declared_fields.keys()))].label],
+                'path_url' : ['/datasets/', '/datasets/'+pid, '/datasets/edition/'+pid, '/datasets/edition/field/'+field_to_modify+pid],
                 'button_value': 'Modifier',
                 'url_to_return': '/datasets/edition/field/{}/{}'.format(field_to_modify, pid)
             }
@@ -311,6 +313,8 @@ def dataset_creator_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Données', 'Profil', 'Edition', 'Ajouter un créateur'],
+                'path_url' : ['/datasets/', '/datasets/'+pid, '/datasets/edition/'+pid, '/datasets/edition/field/add-creator/'+pid],
                 'title_data_type_added': 'Créateur',
                 'data_type_added': 'du créateur',
                 'url_to_return': '/datasets/edition/field/add-creator/{}'.format(pid),
@@ -421,8 +425,10 @@ def dataset_maintainer_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
-                'title_data_type_added': 'Créateur',
-                'data_type_added': 'du créateur',
+                'path_name' : ['Données', 'Profil', 'Edition', 'Ajouter un mainteneur'],
+                'path_url' : ['/datasets/', '/datasets/'+pid, '/datasets/edition/'+pid, '/datasets/edition/field/add-maintainer/'+pid],
+                'title_data_type_added': 'Mainteneur',
+                'data_type_added': 'du mainteneur',
                 'url_to_return': '/datasets/edition/field/add-maintainer/{}'.format(pid),
                 'data': persons
             }
@@ -533,6 +539,8 @@ def dataset_project_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Données', 'Profil', 'Edition', 'Ajouter un projet'],
+                'path_url' : ['/datasets/', '/datasets/'+pid, '/datasets/edition/'+pid, '/datasets/edition/field/add-project/'+pid],
                 'title_data_type_added': 'Projet',
                 'data_type_added': 'du projet',
                 'url_to_return': '/datasets/edition/field/add-project/{}'.format(pid),
@@ -644,6 +652,8 @@ def dataset_article_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Données', 'Profil', 'Edition', 'Ajouter un article'],
+                'path_url' : ['/datasets/', '/datasets/'+pid, '/datasets/edition/'+pid, '/datasets/edition/field/add-article/'+pid],
                 'title_data_type_added': 'Projet',
                 'data_type_added': 'du projet',
                 'url_to_return': '/datasets/edition/field/add-article/{}'.format(pid),
