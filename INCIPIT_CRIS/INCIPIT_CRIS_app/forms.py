@@ -172,7 +172,7 @@ class DatasetURLDataForm(forms.Form):
 
 
 class URLForm(forms.Form):
-    url = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'URL', 'class':'textarea'}))
+    url = forms.CharField(label='URL ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'URL', 'class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
