@@ -1,5 +1,16 @@
 {% extends "project/project_profile.html" %}
 
+{% block breadcrumb %}
+    <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+        <ul>
+            <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+            <li><a class="link-one" href="/projects/">Projets</a></li>
+            <li><a class="link-one" href="/projects/{{ data_project.pid }}">Profil</a></li>
+            <li class="is-active"><a href="/projects/{{ data_project.pid }}/edition" aria-current="page">Edition</a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
 {% block information %}
     {{ message }}
 {% endblock %}

@@ -15,6 +15,16 @@
         {% include 'main/navbar.html' %}
 
         <section>
+            {% block breadcrumb %}
+                <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+                    <ul>
+                        <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+                        <li><a class="link-one" href="/projects/">Projets</a></li>
+                        <li class="is-active"><a href="/projects/{{ data_project.pid }}" aria-current="page">Profil</a></li>
+                    </ul>
+                </nav>
+            {% endblock %}
+
             {% block information %}
             {% endblock %}
             {% block project_information %}

@@ -29,6 +29,8 @@ def person_results(request):
     category = categories[0]
     sparql_request = variables.sparql_get_person_object.get_persons()
     context = {
+        'path_name' : ['Personnes'],
+        'path_url' : ['/persons/'],
         'sparql_request': sparql_request,
         'size_sparql_request': len(sparql_request),
         'alphabet_list': alphabet_list,
@@ -165,6 +167,8 @@ def person_field_edition(request, field_to_modify, pid):
 
             context = {
                 'form': form,
+                'path_name' : ['Personnes', 'Profil', 'Edition', form.fields[next(iter(form.declared_fields.keys()))].label],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/'+field_to_modify+pid],
                 'button_value': 'Modifier',
                 'url_to_return': '/persons/edition/profil/{}/{}'.format(field_to_modify, pid)
             }
@@ -265,6 +269,8 @@ def person_article_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un article'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-article/'+pid],
                 'title_data_type_added': 'Article',
                 'data_type_added': 'de l\'article',
                 'url_to_return': '/persons/edition/profil/add-article/{}'.format(pid),
@@ -326,6 +332,8 @@ def person_project_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un projet'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-project/'+pid],
                 'title_data_type_added': 'Projet',
                 'data_type_added': 'du projet',
                 'url_to_return': '/persons/edition/profil/add-project/{}'.format(pid),
@@ -423,6 +431,8 @@ def person_datasets_creator_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un jeu de données en tant que créateur'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-creator/'+pid],
                 'title_data_type_added': 'Jeu de données',
                 'data_type_added': 'du jeu de données',
                 'url_to_return': '/persons/edition/profil/add-dataset-creator/{}'.format(pid),
@@ -521,6 +531,8 @@ def person_datasets_maintainer_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un jeu de données en tant que mainteneur'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-maintainer/'+pid],
                 'title_data_type_added': 'Jeu de données',
                 'data_type_added': 'du jeu de données',
                 'url_to_return': '/persons/edition/profil/add-dataset-maintainer/{}'.format(pid),

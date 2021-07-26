@@ -32,6 +32,8 @@ def article_results(request):
     category = categories[0]
     sparql_request = variables.sparql_get_article_object.get_articles()
     context = {
+        'path_name' : ['Articles'],
+        'path_url' : ['/articles/'],
         'sparql_request': sparql_request,
         'size_sparql_request': len(sparql_request),
         'alphabet_list': alphabet_list,
@@ -231,9 +233,9 @@ def article_field_edition(request, field_to_modify, pid):
 
             context = {
                 'form': form,
-                'button_value': 'Modifier',
                 'path_name' : ['Articles', 'Profil', 'Edition', form.fields[next(iter(form.declared_fields.keys()))].label],
                 'path_url' : ['/articles/', '/articles/'+pid, '/articles/edition/'+pid, '/articles/edition/field/'+field_to_modify+pid],
+                'button_value': 'Modifier',
                 'url_to_return': '/articles/edition/field/{}/{}'.format(field_to_modify, pid)
             }
             # return the form to be completed

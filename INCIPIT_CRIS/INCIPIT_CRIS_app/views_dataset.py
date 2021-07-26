@@ -31,6 +31,8 @@ def dataset_results(request):
     category = categories[0]
     sparql_request = variables.sparql_get_dataset_object.get_datasets()
     context = {
+        'path_name' : ['Données'],
+        'path_url' : ['/datasets/'],
         'sparql_request': sparql_request,
         'size_sparql_request': len(sparql_request),
         'alphabet_list': alphabet_list,

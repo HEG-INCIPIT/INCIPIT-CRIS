@@ -32,6 +32,8 @@ def project_results(request):
     category = categories[0]
     sparql_request = variables.sparql_get_project_object.get_projects()
     context = {
+        'path_name' : ['Projets'],
+        'path_url' : ['/projects/'],
         'sparql_request': sparql_request,
         'size_sparql_request': len(sparql_request),
         'alphabet_list': alphabet_list,
@@ -234,6 +236,8 @@ def project_field_edition(request, field_to_modify, pid):
 
             context = {
                 'form': form,
+                'path_name' : ['Projets', 'Profil', 'Edition', form.fields[next(iter(form.declared_fields.keys()))].label],
+                'path_url' : ['/projects/', '/projects/'+pid, '/projects/edition/'+pid, '/projects/edition/field/'+field_to_modify+pid],
                 'button_value': 'Modifier',
                 'url_to_return': '/projects/edition/field/{}/{}'.format(field_to_modify, pid)
             }
@@ -296,6 +300,8 @@ def project_member_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Projets', 'Profil', 'Edition', 'Ajouter un membre'],
+                'path_url' : ['/projects/', '/projects/'+pid, '/projects/edition/'+pid, '/projects/edition/field/add-member/'+pid],
                 'title_data_type_added': 'Membre',
                 'data_type_added': 'du membre',
                 'url_to_return': '/projects/edition/field/add-member/{}'.format(pid),
@@ -401,6 +407,8 @@ def project_article_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Projets', 'Profil', 'Edition', 'Ajouter un article'],
+                'path_url' : ['/projects/', '/projects/'+pid, '/projects/edition/'+pid, '/projects/edition/field/add-article/'+pid],
                 'title_data_type_added': 'Article',
                 'data_type_added': 'de l\'article',
                 'url_to_return': '/projects/edition/field/add-article/{}'.format(pid),
@@ -503,6 +511,8 @@ def project_dataset_addition(request, pid):
 
             context = {
                 'button_value': 'Ajouter',
+                'path_name' : ['Projets', 'Profil', 'Edition', 'Ajouter un jeu de données'],
+                'path_url' : ['/projects/', '/projects/'+pid, '/projects/edition/'+pid, '/projects/edition/field/add-dataset/'+pid],
                 'title_data_type_added': 'Dataset',
                 'data_type_added': 'du dataset',
                 'url_to_return': '/projects/edition/field/add-dataset/{}'.format(pid),
