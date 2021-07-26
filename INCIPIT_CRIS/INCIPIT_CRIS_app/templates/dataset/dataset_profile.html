@@ -29,11 +29,11 @@
             {% block information %}
             {% endblock %}
             {% block information_header %}
-                <p>
-                    {% if user.is_authenticated and edition_granted or user.is_superuser %}
+                {% if user.is_authenticated and edition_granted or user.is_superuser %}
+                    <p>
                         <a class="button is-primary" href="/datasets/edition/{{ data_dataset.pid }}">Modifier</a>
-                    {% endif %}
-                </p>
+                    </p>
+                {% endif %}
                 <p class="title is-4" align="justify">
                     {{ data_dataset.name }} 
                 </p>
@@ -43,7 +43,7 @@
             <hr>
             
             <div class="columns">
-                <div class="column has-text-justified">
+                <div class="column has-text-justified is-one-third">
                     {% block information_relative_data %}
                         <p class="title-data"><time datetime="{{ data_dataset.created_date }}">Date de création : </p>
                         <ul>
@@ -55,15 +55,15 @@
                         </ul>
                         <p class="title-data">URL des détails : </p>
                         <ul>
-                            <li class="data"><a class="link-one" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></li>
+                            <li class="data"><a class="link-one url" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></li>
                         </ul>
                         <p class="title-data">URL des données : </p>
                         <ul>
-                            <li class="data"><a class="link-one" href="{{ data_dataset.data_download.url }}">{{ data_dataset.data_download.url }}</a></li>
+                            <li class="data"><a class="link-one url" href="{{ data_dataset.data_download.url }}">{{ data_dataset.data_download.url }}</a></li>
                         </ul>
                     {% endblock %}
                 </div>
-                <div class="column has-text-justified">
+                <div class="column has-text-justified is-one-third">
                     {% block information_persons %}
                         <p class="title-data">Créateur(s) : </p>
                         <ul>
@@ -85,8 +85,8 @@
                         </ul>
                     {% endblock %}
                 </div>
-                <div class="column has-text-justified">
-                    {% block information_ %}
+                <div class="column has-text-justified is-one-third">
+                    {% block information_elements_linked %}
                         <p class="title-data">Projet(s) : </p>
                         <ul>
                             {% for project in data_dataset.projects %}

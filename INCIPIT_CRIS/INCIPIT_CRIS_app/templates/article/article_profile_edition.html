@@ -1,5 +1,6 @@
 {% extends "article/article_profile.html" %}
 
+{% load static %}
 
 {% block breadcrumb %}
     <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
@@ -18,7 +19,7 @@
 {% endblock %}
 
 
-{% block article_information %}
+{% block information_header %}
     
     <a class="button is-primary" href="/articles/{{ data_article.pid }}">Voir l'article</a>
 
@@ -29,53 +30,77 @@
     </form>
 
     <p class="title is-4" align="justify">
-        {{ data_article.name }} <a class="link-one title is-6" href="/articles/edition/field/name/{{data_article.pid}}"> Modifer</a>
+        {{ data_article.name }} <a class="link-one title is-6" href="/articles/edition/field/name/{{data_article.pid}}"><i class="fas fa-edit"></i></a>
     </p>
     <p class="subtitle is-6" align="justify">
         {% if data_article.abstract == "" %}
             <a class="link-one" href="/articles/edition/field/abstract/{{data_article.pid}}"> Ajouter un abstract</a>
         {% else %}
             {{ data_article.abstract }} 
-            <a class="link-one" href="/articles/edition/field/abstract/{{data_article.pid}}"> Modifer</a>
+            <a class="link-one" href="/articles/edition/field/abstract/{{data_article.pid}}"><i class="fas fa-edit"></i></a>
         {% endif %}
     </p>
-    <time datetime="{{ data_article.date_published }}">Date de publication : {{ data_article.date_published }} <a class="link-one" href="/articles/edition/field/datePublished/{{data_article.pid}}"> Modifer</a></time>
-    <p>URL : <a class="link-one" href="{{ data_article.url }}">{{ data_article.url }}</a> <a class="link-one" href="/articles/edition/field/url/{{data_article.pid}}"> Modifer</a></p>
-    
-    <p>Auteur(s) : <a class="link-one" href="/articles/edition/field/add-author/{{data_article.pid}}"> Ajouter</a></p>
-    {% for author in data_article.authors %}
-        <p>
+{% endblock %}
+
+{% block information_relative_data %}
+    <p class="title-data"><time datetime="{{ data_article.date_published }}">Date de publication :</time></p>
+    <ul>
+        <li class="data">{{ data_article.date_published }} <a class="link-one" href="/articles/edition/field/datePublished/{{data_article.pid}}"><i class="fas fa-edit"></i></a></li>
+    </ul>
+    <p class="title-data">URL : </a></p>
+    <ul>
+        <li class="data"><a class="link-one url" href="{{ data_article.url }}">{{ data_article.url }}</a> <a class="link-one" href="/articles/edition/field/url/{{data_article.pid}}"><i class="fas fa-edit"></i></a></li>
+    </ul>
+{% endblock %}
+
+{% block information_authors %}
+    <p class="title-data">Auteur(s) : <a class="link-one" href="/articles/edition/field/add-author/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <ul>
+        {% for author in data_article.authors %}
             <form action="/articles/edition/field/delete-author/{{data_article.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="authorARK" name="authorARK" value="{{ author.0 }}">
-                <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
-                <button class="delete"></button>
+                <li class="data"><a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+                <button class="delete"></button></li>
             </form>
-        </p>
-    {% endfor %}
 
-    <p>Projet(s) : <a class="link-one" href="/articles/edition/field/add-project/{{data_article.pid}}"> Ajouter</a></p>
-    {% for project in data_article.projects %}
-        <p>
+            {% if not forloop.last %}
+                <img src="{% static 'svg/data_separator.svg' %}" />
+            {% endif %}
+        {% endfor %}
+    <ul>
+{% endblock %}
+
+{% block information_elements_linked %}
+    <p class="title-data">Projet(s) : <a class="link-one" href="/articles/edition/field/add-project/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <ul>
+        {% for project in data_article.projects %}
             <form action="/articles/edition/field/delete-project/{{data_article.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
-                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
-                <button class="delete"></button>
+                <li class="data"><a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                <button class="delete"></button></li>
             </form>
-        </p>
-    {% endfor %}
 
-    <p>Jeu(x) de données : <a class="link-one" href="/articles/edition/field/add-dataset/{{data_article.pid}}"> Ajouter</a></p>
-    {% for dataset in data_article.datasets %}
-        <p>
+            {% if not forloop.last %}
+                <img src="{% static 'svg/data_separator.svg' %}" />
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <p class="title-data">Jeu(x) de données : <a class="link-one" href="/articles/edition/field/add-dataset/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <ul>
+        {% for dataset in data_article.datasets %}
             <form action="/articles/edition/field/delete-dataset/{{data_article.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="datasetARK" name="datasetARK" value="{{ dataset.0 }}">
-                <a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a>
-                <button class="delete"></button>
+                <li class="data"><a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a>
+                <button class="delete"></button></li>
             </form>
-        </p>
-    {% endfor %}
+
+            {% if not forloop.last %}
+                <img src="{% static 'svg/data_separator.svg' %}" />
+            {% endif %}
+        {% endfor %}
+    </ul>
 {% endblock %}
 

@@ -8,7 +8,7 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/project.css' %}">
+        <link rel="stylesheet" href="{% static 'css/profil.css' %}">
     </head>
     <body>
 
@@ -27,38 +27,77 @@
 
             {% block information %}
             {% endblock %}
-            {% block project_information %}
-                <p>
-                    {% if user.is_authenticated and edition_granted or user.is_superuser %}
+
+            {% block information_header %}
+                {% if user.is_authenticated and edition_granted or user.is_superuser %}
+                    <p>
                         <a class="button is-primary" href="/projects/edition/{{ data_project.pid }}">Modifier</a>
-                    {% endif %}
-                </p>
+                    </p>
+                {% endif %}
                 <p class="title is-4" align="justify">
-                    {{ data_project.name }} 
+                    {{ data_project.name }}
                 </p>
                 <p class="subtitle is-6" align="justify">{{ data_project.description }}</p>
-                <p><time datetime="{{ data_project.founding_date }}">Date de début : {{ data_project.founding_date }}</time></p>
-                <p><time datetime="{{ data_project.dissolution_date }}">Date de fin : {{ data_project.dissolution_date }}</time></p>
-                <p>URL : <a class="link-one" href="{{ data_project.url }}">{{ data_project.url }}</a></p>
-                <p>Membre(s) : </p>
-                {% for member in data_project.members %}
-                    <p>
-                        <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a> 
-                    </p>
-                {% endfor %}
-                <p>Article(s) : </p>
-                {% for article in data_project.articles %}
-                    <p>
-                        <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a> 
-                    </p>
-                {% endfor %}
-                <p>Jeu(x) de données : </p>
-                {% for dataset in data_project.datasets %}
-                    <p>
-                        <a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a> 
-                    </p>
-                {% endfor %}
             {% endblock %}
+
+            <hr>
+
+            <div class="columns">
+                <div class="column has-text-justified is-one-third">
+                    {% block information_relative_data %}
+                        <p class="title-data"><time datetime="{{ data_project.founding_date }}">Date de début :</p>
+                        <ul>
+                            <li class="data">{{ data_project.founding_date }}</time></li>
+                        </ul>
+                        <p class="title-data"><time datetime="{{ data_project.dissolution_date }}">Date de fin :</p>
+                        <ul>
+                            <li class="data">{{ data_project.dissolution_date }}</time></li>
+                        </ul>
+                        <p class="title-data">URL :</p>
+                        <ul>
+                            <li class="data"><a class="link-one url" href="{{ data_project.url }}">{{ data_project.url }}</a></li>
+                        </li>
+                    {% endblock %}
+                </div>
+                <div class="column has-text-justified is-one-third">
+                    {% block information_members %}
+                        <p class="title-data">Membre(s) : </p>
+                        <ul>
+                            {% for member in data_project.members %}
+                                <li class="data"><a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a></li>
+
+                                {% if not forloop.last %}
+                                    <img src="{% static 'svg/data_separator.svg' %}" />
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endblock %}
+                </div>
+                <div class="column has-text-justified is-one-third">
+                    {% block information_elements_linked %} 
+                        <p class="title-data">Article(s) : </p>
+                        <ul>
+                            {% for article in data_project.articles %}
+                                <li class="data"><a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a></li>
+
+                                {% if not forloop.last %}
+                                    <img src="{% static 'svg/data_separator.svg' %}" />
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <p class="title-data">Jeu(x) de données : </p>
+                        <ul>
+                            {% for dataset in data_project.datasets %}
+                                <li class="data"><a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a></li>
+
+                                {% if not forloop.last %}
+                                    <img src="{% static 'svg/data_separator.svg' %}" />
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endblock %}
+                </div>
+            </div>
 
         </section>
         {% include 'main/footer.html' %}
