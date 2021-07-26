@@ -6,14 +6,25 @@
         <title>INCIPIT-CRIS</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         {% load static %}
-        <link rel="stylesheet" href="{% static 'css/form_creation.css' %}">
+        <link rel="stylesheet" href="{% static 'css/form.css' %}">
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/form.css' %}">
     </head>
     <body>
+
+        {% include 'main/navbar.html' %}
+
         <section>
-            {% include 'main/navbar.html' %}
+
+            <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+                <ul>
+                    <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+                    <li><a class="link-one" href="{{ path_url.0 }}">{{ path_name.0 }}</a></li>
+                    <li><a class="link-one" href="{{ path_url.1 }}">{{ path_name.1 }}</a></li>
+                    <li><a class="link-one" href="{{ path_url.2 }}">{{ path_name.2 }}</a></li>
+                    <li class="is-active"><a href="{{ path_url.3 }}" aria-current="page">{{ path_name.3 }}</a></li>
+                </ul>
+            </nav>
 
             <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
                 {% csrf_token %}
