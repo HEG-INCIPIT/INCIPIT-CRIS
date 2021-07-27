@@ -105,6 +105,8 @@ def article_creation(request):
             form = ArticleCreationForm(request.POST)
             if form.is_valid():
                 authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
+                projects = re.findall('"([^"]*)"', request.POST['projectElementsPost'])
+                datasets = re.findall('"([^"]*)"', request.POST['datasetElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
@@ -117,18 +119,28 @@ def article_creation(request):
                                                           form.cleaned_data['date_published'], form.cleaned_data['url'])
                 for author in authors:
                     variables.sparql_post_article_object.add_author_to_article(pid, author.split()[-1])
+                for project in projects:
+                    variables.sparql_post_project_object.add_article_to_project(project.split()[-1], pid)
+                for dataset in datasets:
+                    variables.sparql_post_dataset_object.add_article_to_dataset(dataset.split()[-1], pid)
                 return redirect(views.index)
         else:
             form = ArticleCreationForm()
-        persons_info = variables.sparql_get_person_object.get_persons()
         persons = []
+        persons_info = variables.sparql_get_person_object.get_persons()
         for basic_info_person in persons_info:
             persons.append('''{} {}, {}'''.format(basic_info_person[1], basic_info_person[2], basic_info_person[0]))
+        projects_info = variables.sparql_get_project_object.get_projects()
+        projects = ['''{}, {}'''.format(project[1], project[0]) for project in projects_info]
+        datasets_info = variables.sparql_get_dataset_object.get_datasets()
+        datasets = ['''{}, {}'''.format(dataset[1], dataset[0]) for dataset in datasets_info]
         context = {
             'form': form,
             'button_value': 'Créer',
             'url_to_return': '/articles/creation/',
-            'persons': persons
+            'persons': persons,
+            'projects': projects,
+            'datasets': datasets,
         }
         # return the form to be completed
         return render(request, 'forms/article/article_creation.html', context)

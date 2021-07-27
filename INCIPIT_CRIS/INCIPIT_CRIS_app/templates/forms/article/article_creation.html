@@ -54,13 +54,28 @@
                     <label for="{{ form.date_published.id_for_label }}">Date de publication : </label>
                     {{ form.date_published }}
                 </div>
-                <div class="autocomplete">
+                <div class="autocomplete autocomplete-pos">
                     <label for="authorAutocomplete">Auteur : </label>
                     <input class="input" id="authorInput" type="text" name="authorAutocomplete" placeholder="Nom de l'auteur">
                 </div>
-                <div id="authorElements">
-                </div>
+                <div id="authorElements"></div>
                 <input type="hidden" id="authorElementsPost" name="authorElementsPost">
+
+                <div class="autocomplete autocomplete-pos">
+                    <label for="projectAutocomplete">Projet : </label>
+                    <input class="input" id="projectInput" type="text" name="projectAutocomplete" placeholder="Nom du projet">
+                </div>
+                <div id="projectElements"></div>
+                <input type="hidden" id="projectElementsPost" name="projectElementsPost">
+
+                <div class="autocomplete autocomplete-pos">
+                    <label for="datasetAutocomplete">Données : </label>
+                    <input class="input" id="datasetInput" type="text" name="datasetAutocomplete" placeholder="Nom du jeu de données">
+                </div>
+                <div id="datasetElements"></div>
+                <input type="hidden" id="datasetElementsPost" name="datasetElementsPost">
+
+
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
@@ -73,14 +88,24 @@
 
         function process() {
 
-            document.getElementById("authorElementsPost").value = JSON.stringify(arrayToSend);
+            document.getElementById("authorElementsPost").value = JSON.stringify(arrayPersonsToSend);
+            document.getElementById("projectElementsPost").value = JSON.stringify(arrayProjectsToSend);
+            document.getElementById("datasetElementsPost").value = JSON.stringify(arrayDatasetsToSend);
             return true;
         }
 
-        var array_data = {{ persons|safe }};
-        var arrayToSend = [];
+        var arrayDataPersons = {{ persons|safe }};
+        var arrayPersonsToSend = [];
 
-        autocomplete(document.getElementById("authorInput"), array_data, "authorElements", arrayToSend);
+        var arrayDataProjects = {{ projects|safe }};
+        var arrayProjectsToSend = [];
+
+        var arrayDataDatasets = {{ datasets|safe }};
+        var arrayDatasetsToSend = [];
+
+        autocomplete(document.getElementById("authorInput"), arrayDataPersons, "authorElements", arrayPersonsToSend);
+        autocomplete(document.getElementById("projectInput"), arrayDataProjects, "projectElements", arrayProjectsToSend);
+        autocomplete(document.getElementById("datasetInput"), arrayDataDatasets, "datasetElements", arrayDatasetsToSend);
 
     </script>
 
