@@ -1,9 +1,15 @@
 .horizontal-align-left-edge {
-    padding-left: 50px;
+    padding-left: 5%;
+    padding-right: 5%
 }
 
 h1 {
     font-size: 26px !important;
+}
+
+.breadcrumb {
+    margin-left: 5%;
+    margin-top: 20px;
 }
 
 .leftbox {
@@ -29,7 +35,7 @@ h1 {
 .container {
     width: 90%;
     height: 50%;
-    margin-left: 50px;
+    margin-left: 5%;
     margin-top: 50px;
     margin-bottom: 20px;
     display: table;
