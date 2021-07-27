@@ -76,10 +76,8 @@ def dataset_creation(request):
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
-                        pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
-                            'Creating an ARK in INCIPIT-CRIS for a dataset named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
-                        variables.ark.update('{}'.format(pid), '{}{}'.format(settings.URL, pid), '{} {}'.format(form.cleaned_data['name']), 
-                            'Creating an ARK in INCIPIT-CRIS for a dataset named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
+                        pid = variables.ark.mint(form.cleaned_data['url_data'], '{} {}'.format(request.user.first_name, request.user.first_name), 
+                            form.cleaned_data['name'], form.cleaned_data['created_date'])
                     except:
                         raise Exception
                 variables.sparql_post_dataset_object.create_dataset(pid, form.cleaned_data['name'],

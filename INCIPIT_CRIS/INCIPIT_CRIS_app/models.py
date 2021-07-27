@@ -35,9 +35,9 @@ class User(AbstractUser):
                 
                 try:
                     self.pid = variables.ark.mint('', '{} {}'.format(self.first_name, self.last_name), 
-                        'Creating an ARK in INCIPIT-CRIS for a person named {} {}'.format(self.first_name, self.last_name), '{}'.format(datetime.datetime.now()))
+                        'An ARK created in INCIPIT-CRIS for a person named {} {}'.format(self.first_name, self.last_name), datetime.datetime.now())
                     variables.ark.update('{}'.format(self.pid), '{}{}'.format(settings.URL, self.pid), '{} {}'.format(self.first_name, self.last_name), 
-                        'Creating an ARK in INCIPIT-CRIS for a person named {} {}'.format(self.first_name, self.last_name), '{}'.format(datetime.datetime.now()))
+                        'An ARK created in INCIPIT-CRIS for a person named {} {}'.format(self.first_name, self.last_name), datetime.datetime.now())
                 except:
                     print("ERROR")
                     raise Exception

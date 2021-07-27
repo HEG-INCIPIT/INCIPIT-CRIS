@@ -74,10 +74,8 @@ def project_creation(request):
                 if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
                     try:
-                        pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
-                            'Creating an ARK in INCIPIT-CRIS for a project named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
-                        variables.ark.update('{}'.format(pid), '{}{}'.format(settings.URL, pid), '{} {}'.format(form.cleaned_data['name']), 
-                            'Creating an ARK in INCIPIT-CRIS for an project named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
+                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.first_name), 
+                            form.cleaned_data['name'], form.cleaned_data['founding_date'])
                     except:
                         raise Exception
                 variables.sparql_post_project_object.create_project(pid, form.cleaned_data['name'],

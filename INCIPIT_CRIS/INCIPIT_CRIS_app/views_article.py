@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect
 from .forms import *
 import re
 import string
-import datetime
-from django.conf import settings
 from . import views
 from . import variables
 from . import form_selection
@@ -110,10 +108,8 @@ def article_creation(request):
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
-                        pid = variables.ark.mint('', '{}'.format(form.cleaned_data['name']), 
-                            'Creating an ARK in INCIPIT-CRIS for an article named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
-                        variables.ark.update('{}'.format(pid), '{}{}'.format(settings.URL, pid), '{} {}'.format(form.cleaned_data['name']), 
-                            'Creating an ARK in INCIPIT-CRIS for an article named {}'.format(form.cleaned_data['name']), '{}'.format(datetime.datetime.now()))
+                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.first_name), 
+                            form.cleaned_data['name'], form.cleaned_data['date_published'])
                     except:
                         raise Exception
                 variables.sparql_post_article_object.create_article(pid, form.cleaned_data['name'],
@@ -220,6 +216,16 @@ def article_field_edition(request, field_to_modify, pid):
             # Check the request method
             if request.method == 'POST':
                 if form.is_valid():
+                    try:
+                        if field_to_modify == 'datePublished':
+                            data_article['date_published'] = form.cleaned_data['date_published']
+                        else:
+                            data_article['date_published'] = form.cleaned_data['date_published']
+
+                        variables.ark.update(pid, data_article['url'], '{} {}'.format(request.user.first_name, request.user.first_name), data_article['name'], data_article['date_published'])
+                    except Exception as e:
+                        pass # For debugging purposes, for now it does nothing
+
                     if field_to_modify == 'datePublished':
                         variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['date_published'],
@@ -229,6 +235,7 @@ def article_field_edition(request, field_to_modify, pid):
                         variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
                                                                       form.cleaned_data[field_to_modify],
                                                                       data_article[field_to_modify])
+
                     return redirect(article_edition, pid=pid)
 
             context = {
