@@ -82,4 +82,15 @@ class SparqlGenericPostMethods:
 
         self.sparql.setQuery(sparql_request)
 
+        sparql_request = """
+            {prefix}
+
+            DELETE WHERE {{
+                ?subject ?predicate <{pid}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid)
+
+        self.sparql.setQuery(sparql_request)
+
         return self.sparql.query().response.read()

@@ -90,11 +90,13 @@ def project_creation(request):
         persons = []
         for basic_info_person in persons_info:
             persons.append('''{} {}, {}'''.format(basic_info_person[1], basic_info_person[2], basic_info_person[0]))
+        articles = []
         context = {
             'form': form,
             'button_value': 'Créer',
             'url_to_return': '/projects/creation/',
-            'persons': persons
+            'persons': persons,
+            'articles': articles,
         }
         # return the form to be completed
         return render(request, 'forms/project/project_creation.html', context)

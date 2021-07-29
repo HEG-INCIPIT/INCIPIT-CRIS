@@ -63,9 +63,23 @@
                     <label for="memberAutocomplete">Membre : </label>
                     <input class="input" id="memberInput" type="text" name="memberAutocomplete" placeholder="Nom du membre">
                 </div>
-                <div id="memberElements">
-                </div>
+                <div id="memberElements"></div>
                 <input type="hidden" id="memberElementsPost" name="memberElementsPost">
+
+                <div class="autocomplete">
+                    <label for="articleAutocomplete">Article : </label>
+                    <input class="input" id="articleInput" type="text" name="articleAutocomplete" placeholder="Nom de l'article">
+                </div>
+                <div id="articleElements"></div>
+                <input type="hidden" id="articleElementsPost" name="articleElementsPost">
+
+                <div class="autocomplete">
+                    <label for="datasetAutocomplete">Données : </label>
+                    <input class="input" id="datasetInput" type="text" name="datasetAutocomplete" placeholder="Nom du jeu de données">
+                </div>
+                <div id="datasetElements"></div>
+                <input type="hidden" id="datasetElementsPost" name="datasetElementsPost">
+
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
@@ -77,14 +91,18 @@
 
         function process() {
 
-            document.getElementById("memberElementsPost").value = JSON.stringify(arrayToSend);
+            document.getElementById("memberElementsPost").value = JSON.stringify(arrayPersonToSend);
             return true;
         }
 
-        var array_data = {{ persons|safe }};
-        var arrayToSend = [];
+        var arrayPersonData = {{ persons|safe }};
+        var arrayPersonToSend = [];
+        console.log(arrayPersonData)
 
-        autocomplete(document.getElementById("memberInput"), array_data, "memberElements", arrayToSend);
+        var arrayArticleData = {{ articles|safe }};
+        var arrayArticleToSend = [];
+
+        autocomplete(document.getElementById("memberInput"), arrayPersonData, "memberElements", arrayPersonToSend);
 
     </script>
 
