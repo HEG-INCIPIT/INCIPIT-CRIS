@@ -70,6 +70,8 @@ def project_creation(request):
             form = ProjectCreationForm(request.POST)
             if form.is_valid():
                 members = re.findall('"([^"]*)"', request.POST['memberElementsPost'])
+                articles = re.findall('"([^"]*)"', request.POST['articleElementsPost'])
+                datasets = re.findall('"([^"]*)"', request.POST['datasetElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
@@ -83,6 +85,10 @@ def project_creation(request):
                                                         form.cleaned_data['founding_date'], form.cleaned_data['dissolution_date'], form.cleaned_data['url'])
                 for member in members:
                     variables.sparql_post_project_object.add_member_to_project(pid, member.split()[-1])
+                for article in articles:
+                    variables.sparql_post_project_object.add_article_to_project(pid, article.split()[-1])
+                for dataset in datasets:
+                    variables.sparql_post_dataset_object.add_project_to_dataset(dataset.split()[-1], pid)
                 return redirect(views.index)
         else:
             form = ProjectCreationForm()
@@ -90,13 +96,17 @@ def project_creation(request):
         persons = []
         for basic_info_person in persons_info:
             persons.append('''{} {}, {}'''.format(basic_info_person[1], basic_info_person[2], basic_info_person[0]))
-        articles = []
+        articles_info = variables.sparql_get_article_object.get_articles()
+        articles = ['''{}, {}'''.format(article[1], article[0]) for article in articles_info]
+        datasets_info = variables.sparql_get_dataset_object.get_datasets()
+        datasets = ['''{}, {}'''.format(dataset[1], dataset[0]) for dataset in datasets_info]
         context = {
             'form': form,
             'button_value': 'Créer',
             'url_to_return': '/projects/creation/',
             'persons': persons,
             'articles': articles,
+            'datasets': datasets,
         }
         # return the form to be completed
         return render(request, 'forms/project/project_creation.html', context)

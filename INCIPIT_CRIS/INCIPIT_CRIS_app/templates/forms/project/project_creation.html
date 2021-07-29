@@ -59,21 +59,21 @@
                     <label for="{{ form.dissolution_date.id_for_label }}">Date de fin : </label>
                     {{ form.dissolution_date }}
                 </div>
-                <div class="autocomplete">
+                <div class="autocomplete autocomplete-pos">
                     <label for="memberAutocomplete">Membre : </label>
                     <input class="input" id="memberInput" type="text" name="memberAutocomplete" placeholder="Nom du membre">
                 </div>
                 <div id="memberElements"></div>
                 <input type="hidden" id="memberElementsPost" name="memberElementsPost">
 
-                <div class="autocomplete">
+                <div class="autocomplete autocomplete-pos">
                     <label for="articleAutocomplete">Article : </label>
                     <input class="input" id="articleInput" type="text" name="articleAutocomplete" placeholder="Nom de l'article">
                 </div>
                 <div id="articleElements"></div>
                 <input type="hidden" id="articleElementsPost" name="articleElementsPost">
 
-                <div class="autocomplete">
+                <div class="autocomplete autocomplete-pos">
                     <label for="datasetAutocomplete">Données : </label>
                     <input class="input" id="datasetInput" type="text" name="datasetAutocomplete" placeholder="Nom du jeu de données">
                 </div>
@@ -92,6 +92,8 @@
         function process() {
 
             document.getElementById("memberElementsPost").value = JSON.stringify(arrayPersonToSend);
+            document.getElementById("articleElementsPost").value = JSON.stringify(arrayArticleToSend);
+            document.getElementById("datasetElementsPost").value = JSON.stringify(arrayDatasetToSend);
             return true;
         }
 
@@ -102,7 +104,12 @@
         var arrayArticleData = {{ articles|safe }};
         var arrayArticleToSend = [];
 
+        var arrayDatasetData = {{ datasets|safe }};
+        var arrayDatasetToSend = [];
+
         autocomplete(document.getElementById("memberInput"), arrayPersonData, "memberElements", arrayPersonToSend);
+        autocomplete(document.getElementById("articleInput"), arrayArticleData, "articleElements", arrayArticleToSend);
+        autocomplete(document.getElementById("datasetInput"), arrayDatasetData, "datasetElements", arrayDatasetToSend);
 
     </script>
 

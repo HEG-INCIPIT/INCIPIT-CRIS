@@ -73,6 +73,8 @@ def dataset_creation(request):
             if form.is_valid():
                 maintainers = re.findall('"([^"]*)"', request.POST['maintainerElementsPost'])
                 creators = re.findall('"([^"]*)"', request.POST['creatorElementsPost'])
+                articles = re.findall('"([^"]*)"', request.POST['articleElementsPost'])
+                projects = re.findall('"([^"]*)"', request.POST['projectElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
@@ -90,18 +92,28 @@ def dataset_creation(request):
                     variables.sparql_post_dataset_object.add_maintainer_to_dataset(pid, maintainer.split()[-1])
                 for creator in creators:
                     variables.sparql_post_dataset_object.add_creator_to_dataset(pid, creator.split()[-1])
+                for article in articles:
+                    variables.sparql_post_dataset_object.add_article_to_dataset(pid, article.split()[-1])
+                for project in projects:
+                    variables.sparql_post_dataset_object.add_project_to_dataset(pid, project.split()[-1])
                 return redirect(views.index)
         else:
             form = DatasetCreationForm()
-        persons_info = variables.sparql_get_person_object.get_persons()
         persons = []
+        persons_info = variables.sparql_get_person_object.get_persons()
         for basic_info_person in persons_info:
             persons.append('''{} {}, {}'''.format(basic_info_person[1], basic_info_person[2], basic_info_person[0]))
+        articles_info = variables.sparql_get_article_object.get_articles()
+        articles = ['''{}, {}'''.format(article[1], article[0]) for article in articles_info]
+        projects_info = variables.sparql_get_project_object.get_projects()
+        projects = ['''{}, {}'''.format(project[1], project[0]) for project in projects_info]
         context = {
             'form': form,
             'button_value': 'Créer',
             'url_to_return': '/datasets/creation/',
-            'persons': persons
+            'persons': persons,
+            'articles': articles,
+            'projects': projects,
         }
         # return the form to be completed
         return render(request, 'forms/dataset/dataset_creation.html', context)

@@ -64,20 +64,34 @@
                     <label for="{{ form.modified_date.id_for_label }}">Date de modification : </label>
                     {{ form.modified_date }}
                 </div>
-                <div class="autocomplete">
+                <div class="autocomplete autocomplete-pos">
                     <label for="maintainerAutocomplete">Mainteneur : </label>
                     <input class="input" id="maintainerInput" type="text" name="maintainerAutocomplete" placeholder="Nom du mainteneur">
                 </div>
-                <div id="maintainerElements">
-                </div>
-                <div class="autocomplete">
+                <div id="maintainerElements"></div>
+                <input type="hidden" id="maintainerElementsPost" name="maintainerElementsPost">
+
+                <div class="autocomplete autocomplete-pos">
                     <label for="creatorAutocomplete">Créateur : </label>
                     <input class="input" id="creatorInput" type="text" name="creatorAutocomplete" placeholder="Nom du créateur">
                 </div>
-                <div id="creatorElements">
-                </div>
-                <input type="hidden" id="maintainerElementsPost" name="maintainerElementsPost">
+                <div id="creatorElements"></div>
                 <input type="hidden" id="creatorElementsPost" name="creatorElementsPost">
+
+                <div class="autocomplete autocomplete-pos">
+                    <label for="articleAutocomplete">Article : </label>
+                    <input class="input" id="articleInput" type="text" name="articleAutocomplete" placeholder="Nom de l'article">
+                </div>
+                <div id="articleElements"></div>
+                <input type="hidden" id="articleElementsPost" name="articleElementsPost">
+
+                <div class="autocomplete autocomplete-pos">
+                    <label for="projectAutocomplete">Projet : </label>
+                    <input class="input" id="projectInput" type="text" name="projectAutocomplete" placeholder="Nom du projet">
+                </div>
+                <div id="projectElements"></div>
+                <input type="hidden" id="projectElementsPost" name="projectElementsPost">
+
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
@@ -90,15 +104,25 @@
 
             document.getElementById("maintainerElementsPost").value = JSON.stringify(arrayToSendMaintainer);
             document.getElementById("creatorElementsPost").value = JSON.stringify(arrayToSendCreator);
+            document.getElementById("articleElementsPost").value = JSON.stringify(arrayToSendArticle);
+            document.getElementById("projectElementsPost").value = JSON.stringify(arrayToSendProject);
             return true;
         }
 
-        var array_data = {{ persons|safe }};
+        var arrayPersonData = {{ persons|safe }};
         var arrayToSendMaintainer = [];
         var arrayToSendCreator = [];
 
-        autocomplete(document.getElementById("maintainerInput"), array_data, "maintainerElements", arrayToSendMaintainer);
-        autocomplete(document.getElementById("creatorInput"), array_data, "creatorElements", arrayToSendCreator);
+        var arrayArticleData = {{ articles|safe }};
+        var arrayToSendArticle = [];
+
+        var arrayProjectData = {{ projects|safe }};
+        var arrayToSendProject = [];
+
+        autocomplete(document.getElementById("maintainerInput"), arrayPersonData, "maintainerElements", arrayToSendMaintainer);
+        autocomplete(document.getElementById("creatorInput"), arrayPersonData, "creatorElements", arrayToSendCreator);
+        autocomplete(document.getElementById("articleInput"), arrayArticleData, "articleElements", arrayToSendArticle);
+        autocomplete(document.getElementById("projectInput"), arrayProjectData, "projectElements", arrayToSendProject);
 
     </script>
 
