@@ -8,6 +8,8 @@ from sparql_triplestore.sparql_requests.project.sparql_get_project_methods impor
 from sparql_triplestore.sparql_requests.project.sparql_post_project_methods import SparqlPostProjectMethods
 from sparql_triplestore.sparql_requests.dataset.sparql_get_dataset_methods import SparqlGetDatasetMethods
 from sparql_triplestore.sparql_requests.dataset.sparql_post_dataset_methods import SparqlPostDatasetMethods
+from sparql_triplestore.sparql_requests.institution.sparql_get_institution_methods import SparqlGetInstitutionMethods
+from sparql_triplestore.sparql_requests.institution.sparql_post_institution_methods import SparqlPostInstitutionMethods
 
 
 ark = Ark()
@@ -20,3 +22,5 @@ sparql_get_project_object = SparqlGetProjectMethods()
 sparql_post_project_object = SparqlPostProjectMethods()
 sparql_get_dataset_object = SparqlGetDatasetMethods()
 sparql_post_dataset_object = SparqlPostDatasetMethods()
+sparql_get_institution_object = SparqlGetInstitutionMethods()
+sparql_post_institution_object = SparqlPostInstitutionMethods()
