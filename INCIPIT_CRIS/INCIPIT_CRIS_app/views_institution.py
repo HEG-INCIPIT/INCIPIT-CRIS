@@ -69,7 +69,7 @@ def institution_creation(request):
         if request.method == 'POST':
             form = InstitutionCreationForm(request.POST)
             if form.is_valid():
-                parent_organization = re.findall('"([^"]*)"', request.POST['parentOrganizationElementsPost'])
+                parent_organization = re.findall('"([^"]*)"', request.POST['institutionElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
@@ -81,15 +81,20 @@ def institution_creation(request):
                 variables.sparql_post_institution_object.create_institution(pid, form.cleaned_data['name'],
                                                         form.cleaned_data['alternate_name'],
                                                         form.cleaned_data['description'],
-                                                        form.cleaned_data['founding_date'], form.cleaned_data['url'], parent_organization.split()[-1])
+                                                        form.cleaned_data['founding_date'], form.cleaned_data['url'], request.POST['institutions'])
                 return redirect(views.index)
         else:
             form = InstitutionCreationForm()
         
+        institutions = variables.sparql_get_institution_object.get_institutions()
+        institutions_data = []
+        for institution in institutions:
+            institutions_data.append(variables.sparql_get_institution_object.get_data_institution(institution[0]))
         context = {
             'form': form,
             'button_value': 'Créer',
             'url_to_return': '/institutions/creation/',
+            'institutions': institutions_data,
         }
         # return the form to be completed
         return render(request, 'forms/institution/institution_creation.html', context)
