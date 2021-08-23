@@ -42,11 +42,11 @@ class SparqlPostInstitutionMethods:
                     schema:propertyID 'ARK' ;
                     schema:value "{pid}" .
 
-                <{pid}> a schema:ResearchOrganization ;
+                <{pid}> a schema:CollegeOrUniversity ;
                     schema:name \"\"\"{name}\"\"\" ;
                     schema:alternateName \"\"\"{alternate_name}\"\"\" ;
                     schema:description \"\"\"{description}\"\"\" ;
-                    schema:foundingDate ""{founding_date}"^^xsd:date ;
+                    schema:foundingDate "{founding_date}"^^xsd:date ;
                     schema:url \"\"\"{url}\"\"\" ;
                     {has_upper_organisation}
                     schema:identifier <{pid}ARK> .
@@ -54,6 +54,8 @@ class SparqlPostInstitutionMethods:
             }}
         """.format(prefix=variables.prefix, pid=pid, name=name, alternate_name=alternate_name, description=description, 
         founding_date=founding_date, url=url, has_upper_organisation='' if upper_organisation == '' else 'schema:parentOrganization {} ;'.format(upper_organisation))
+
+        print(sparql_request)
 
         self.sparql.setQuery(sparql_request)
 

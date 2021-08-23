@@ -111,19 +111,24 @@ class SparqlGetInstitutionMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?name ?abstract ?datePublished ?url WHERE
+            SELECT ?name ?alternateName ?description ?foundingDate ?url ?parentOrganization WHERE
             {{
-                <{ark_research}> schema:name ?name ;
-                schema:abstract ?abstract ;
-                schema:datePublished ?datePublished ;
-                schema:url ?url ;
-                schema:parentOrganization .
+                <{ark_research}> schema:name ?name .
+                OPTIONAL {{ <{ark_research}> schema:alternateName ?alternateName }} .
+                OPTIONAL {{ <{ark_research}> schema:description ?description }} .
+                <{ark_research}> schema:foundingDate ?foundingDate .
+                OPTIONAL {{ <{ark_research}> schema:url ?url }} .
+                OPTIONAL {{ <{ark_research}> schema:parentOrganization ?parentOrganization }} .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
         data_institution = parse_get_data_institution(self.sparql.query().response.read())
+
+        print("\n")
+        print(data_institution)
+        print("\n")
 
         projects = variables.sparql_get_institution_object.get_projects_institution(pid)
         

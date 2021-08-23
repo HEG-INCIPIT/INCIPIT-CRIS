@@ -44,9 +44,11 @@ def parse_get_data_institution(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'name': loaded_json['name']['value'],
-        'abstract': loaded_json['abstract']['value'],
-        'date_published': loaded_json['datePublished']['value'][:10],
+        'alternate_name': loaded_json['alternateName']['value'],
+        'description': loaded_json['description']['value'],
+        'founding_date': loaded_json['foundingDate']['value'][:10],
         'url': loaded_json['url']['value'],
+        'parent_organization': loaded_json['parentOrganization']['value'] if 'parentOrganization' in loaded_json else '',
     }
 
     return dict_data
