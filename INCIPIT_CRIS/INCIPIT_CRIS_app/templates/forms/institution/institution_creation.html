@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/form.css' %}">
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    </head>
+    <body>
+        
+        {% include 'main/navbar.html' %}
+
+        <section>
+
+            <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+                <ul>
+                    <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+                    <li><a class="link-one" href="/institutions/">Institutions</a></li>
+                    <li class="is-active"><a href="/institutions/creation/" aria-current="page">Créer une institution</a></li>
+                </ul>
+            </nav>
+
+            <h1 class="title is-4">Créer une institution</h1>
+
+            <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="fieldWrapper">
+                    {{ form.name.errors }}
+                    <label for="{{ form.name.id_for_label }}">Nom de l'institution : </label>
+                    {{ form.name }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.alternate_name.errors }}
+                    <label for="{{ form.alternate_name.id_for_label }}">Nom alternatif de l'institution : </label>
+                    {{ form.alternate_name }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.description.errors }}
+                    <label for="{{ form.description.id_for_label }}">Description : </label>
+                    {{ form.description }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.pid.errors }}
+                    <label for="{{ form.pid.id_for_label }}">ARK de l'institution si existant : </label>
+                    {{ form.pid }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.url.errors }}
+                    <label for="{{ form.url.id_for_label }}">URL : </label>
+                    {{ form.url }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.founding_date.errors }}
+                    <label for="{{ form.founding_date.id_for_label }}">Date de début : </label>
+                    {{ form.founding_date }}
+                </div>
+                <div>
+                    <label for="institutions">Institution parente : </label>
+                    <select name="institutions">
+                        <option value=""></option>
+                        {% for institution in institutions %}
+                            <option value="{{ institution.pid }}">{{ institution.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="institutionElements"></div>
+                <input type="hidden" id="institutionElementsPost" name="institutionElementsPost">
+
+                <input class="button is-primary" type="submit" value="{{ button_value }}">
+            </form>
+        </section>
+        {% include 'main/footer.html' %}
+    </body>
+
+    <script type="text/javascript" src="{% static 'js/autocomplete.js' %}"></script>
+    <script>
+
+        function process() {
+
+            document.getElementById("institutionElementsPost").value = JSON.stringify('');
+            return true;
+        }
+
+    </script>
+
+</html>
