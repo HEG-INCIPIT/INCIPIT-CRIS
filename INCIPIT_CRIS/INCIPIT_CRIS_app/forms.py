@@ -167,9 +167,22 @@ class DatasetURLDataForm(forms.Form):
 
 
 ##################################################
-# Generic forms
+# Institution forms
 ##################################################
 
+class InstitutionCreationForm(forms.Form):
+    name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Nom', 'class':'textarea'}))
+    alternate_name = forms.CharField(label='Titre ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Nom alternatif', 'class':'textarea'}))
+    description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Description', 'class':'textarea'}))
+    pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
+                              help_text='''Indiqué l'ark du projet s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'Laisser vide pour créer automatiquement un ark', 'class':'input'}))
+    founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fondation ', required=True)
+    url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL', 'class':'input'}))
+
+
+##################################################
+# Generic forms
+##################################################
 
 class URLForm(forms.Form):
     url = forms.CharField(label='URL ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'URL', 'class':'textarea'}))
