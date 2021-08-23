@@ -75,6 +75,12 @@
                                 Créer un jeu de données
                             </a>
                             <hr class="navbar-divider">
+                            {% if user.is_superuser %}
+                                <a class="navbar-item" href="/institutions/creation/">
+                                    Créer une institution
+                                </a>
+                                <hr class="navbar-divider">
+                            {% endif %}
                             <div class="navbar-item">
                                 <div class="buttons">
                                     <a class="button is-danger" href="/logout/">
