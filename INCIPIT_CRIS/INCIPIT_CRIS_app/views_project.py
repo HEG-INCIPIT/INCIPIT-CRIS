@@ -76,7 +76,7 @@ def project_creation(request):
                 if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.first_name), 
+                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name), 
                             form.cleaned_data['name'], form.cleaned_data['founding_date'])
                     except:
                         raise Exception

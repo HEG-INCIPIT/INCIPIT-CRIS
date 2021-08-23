@@ -110,7 +110,7 @@ def article_creation(request):
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.first_name), 
+                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name), 
                             form.cleaned_data['name'], form.cleaned_data['date_published'])
                     except:
                         raise Exception

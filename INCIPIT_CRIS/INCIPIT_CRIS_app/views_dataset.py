@@ -78,7 +78,7 @@ def dataset_creation(request):
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url_data'], '{} {}'.format(request.user.first_name, request.user.first_name), 
+                        pid = variables.ark.mint(form.cleaned_data['url_data'], '{} {}'.format(request.user.first_name, request.user.last_name), 
                             form.cleaned_data['name'], form.cleaned_data['created_date'])
                     except:
                         raise Exception
