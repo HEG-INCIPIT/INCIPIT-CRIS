@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, views_person, views_article, views_project, views_dataset
+from . import views, views_person, views_article, views_project, views_dataset, views_institution
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -62,5 +62,8 @@ urlpatterns = [
     path('datasets/edition/field/<str:field_to_modify>/<path:pid>', views_dataset.dataset_field_edition, name='dataset_field_edition'),
     path('datasets/edition/<path:pid>', views_dataset.dataset_edition, name='dataset_edition'),
     path('datasets/<path:pid>', views_dataset.dataset_profile, name='dataset_profile'),
+
+    # Institutions urls
+    path('institutions/', views_institution.institution_results, name='institution_results'),
     
 ]
