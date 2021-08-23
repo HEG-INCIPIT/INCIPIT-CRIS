@@ -47,7 +47,7 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?institution ?name WHERE
             {{
-                ?institution a schema:ResearchOrganization .
+                ?institution a schema:CollegeOrUniversity .
                 ?institution schema:name ?name .
             }}
         """.format(prefix=variables.prefix)
@@ -113,10 +113,11 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?name ?abstract ?datePublished ?url WHERE
             {{
-                <{ark_research}> schema:name ?name .
-                <{ark_research}> schema:abstract ?abstract .
-                <{ark_research}> schema:datePublished ?datePublished .
-                <{ark_research}> schema:url ?url .
+                <{ark_research}> schema:name ?name ;
+                schema:abstract ?abstract ;
+                schema:datePublished ?datePublished ;
+                schema:url ?url ;
+                schema:parentOrganization .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
@@ -139,10 +140,10 @@ class SparqlGetInstitutionMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?researchOrganization WHERE
+            SELECT ?collegeOrUniversity WHERE
             {{
-                <{ark_research}> a ?researchOrganization .
-                FILTER(?researchOrganization = schema:ResearchOrganization)
+                <{ark_research}> a ?collegeOrUniversity .
+                FILTER(?collegeOrUniversity = schema:CollegeOrUniversity)
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
