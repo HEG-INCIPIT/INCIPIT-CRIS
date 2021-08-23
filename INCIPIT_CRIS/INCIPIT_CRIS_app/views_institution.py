@@ -45,6 +45,63 @@ def institution_results(request):
     return render(request, 'generic/results.html', context)
 
 
+def institution_creation(request):
+    '''
+    Create a institution in the triplestore and mint an ARK if it's not given
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
+    context = {}
+    form = forms.Form()
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Check the request method
+        if request.method == 'POST':
+            form = InstitutionCreationForm(request.POST)
+            if form.is_valid():
+                parent_organization = re.findall('"([^"]*)"', request.POST['parentOrganizationElementsPost'])
+                pid = form.cleaned_data['pid']
+                if pid == '':
+                    # Try to mint an ARK with the functions of the app arketype_API
+                    try:
+                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name), 
+                            form.cleaned_data['name'], form.cleaned_data['founding_date'])
+                    except:
+                        raise Exception
+                variables.sparql_post_institution_object.create_institution(pid, form.cleaned_data['name'],
+                                                        form.cleaned_data['alternate_name'],
+                                                        form.cleaned_data['description'],
+                                                        form.cleaned_data['founding_date'], form.cleaned_data['url'], parent_organization.split()[-1])
+                return redirect(views.index)
+        else:
+            form = InstitutionCreationForm()
+        
+        context = {
+            'form': form,
+            'button_value': 'Créer',
+            'url_to_return': '/institutions/creation/',
+        }
+        # return the form to be completed
+        return render(request, 'forms/institution/institution_creation.html', context)
+
+    else:
+        context = {
+            'message': "Connectez-vous pour pourvoir créer des projets"
+        }
+
+        return render(request, 'page_info.html', context)
+
+
 def institution_profile(request, pid):
     '''
     Display a page with all the data of a institution that is given by the pid.
