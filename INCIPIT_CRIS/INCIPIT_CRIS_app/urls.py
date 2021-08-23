@@ -65,5 +65,7 @@ urlpatterns = [
 
     # Institutions urls
     path('institutions/', views_institution.institution_results, name='institution_results'),
+    path('institutions/creation/', views_institution.institution_creation, name='institution_creation'),
+    path('institutions/<path:pid>', views_institution.institution_profile, name='institution_profile'),
     
 ]
