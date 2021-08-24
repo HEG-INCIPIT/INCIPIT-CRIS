@@ -7,6 +7,7 @@ from django.conf import settings
 from . import views
 from . import variables
 from . import form_selection
+import json
 
 
 def institution_results(request):
@@ -28,7 +29,7 @@ def institution_results(request):
     '''
 
     alphabet_list = list(string.ascii_lowercase)
-    categories = ['Institutions', 'HEG', 'UNIGE', 'HEdS', 'HEPIA', 'HETS']
+    categories = ['Institutions']
     category = categories[0]
     sparql_request = variables.sparql_get_institution_object.get_institutions()
     context = {
@@ -69,7 +70,6 @@ def institution_creation(request):
         if request.method == 'POST':
             form = InstitutionCreationForm(request.POST)
             if form.is_valid():
-                parent_organization = re.findall('"([^"]*)"', request.POST['institutionElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
@@ -86,15 +86,16 @@ def institution_creation(request):
         else:
             form = InstitutionCreationForm()
         
-        institutions = variables.sparql_get_institution_object.get_institutions()
-        institutions_data = []
-        for institution in institutions:
-            institutions_data.append(variables.sparql_get_institution_object.get_data_institution(institution[0]))
+        top_lvl_institutions = variables.sparql_get_institution_object.get_top_lvl_institutions()
+        top_lvl_institutions_data = []
+        for top_lvl_institution in top_lvl_institutions:
+            top_lvl_institutions_data.append(variables.sparql_get_institution_object.get_dict_institution(top_lvl_institution[0]))
+
         context = {
             'form': form,
             'button_value': 'Créer',
             'url_to_return': '/institutions/creation/',
-            'institutions': institutions_data,
+            'institutions': json.dumps(top_lvl_institutions_data),
         }
         # return the form to be completed
         return render(request, 'forms/institution/institution_creation.html', context)

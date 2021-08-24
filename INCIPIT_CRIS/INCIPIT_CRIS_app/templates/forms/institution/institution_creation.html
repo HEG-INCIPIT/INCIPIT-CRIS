@@ -26,7 +26,7 @@
 
             <h1 class="title is-4">Créer une institution</h1>
 
-            <form action="{{ url_to_return }}" method="post" autocomplete="off" onsubmit="javascript: return process();">
+            <form action="{{ url_to_return }}" method="post" autocomplete="off">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
                 <div class="fieldWrapper">
@@ -59,17 +59,10 @@
                     <label for="{{ form.founding_date.id_for_label }}">Date de début : </label>
                     {{ form.founding_date }}
                 </div>
-                <div>
-                    <label for="institutions">Institution parente : </label>
-                    <select name="institutions">
-                        <option value=""></option>
-                        {% for institution in institutions %}
-                            <option value="{{ institution.pid }}">{{ institution.name }}</option>
-                        {% endfor %}
-                    </select>
+                <div id="label-institutions">
                 </div>
-                <div id="institutionElements"></div>
-                <input type="hidden" id="institutionElementsPost" name="institutionElementsPost">
+                <div id="institutions" class="select is-fullwidth">
+                </div>
 
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
@@ -80,11 +73,37 @@
     <script type="text/javascript" src="{% static 'js/autocomplete.js' %}"></script>
     <script>
 
-        function process() {
+        institutionsJSON = {{ institutions|safe }};
 
-            document.getElementById("institutionElementsPost").value = JSON.stringify('');
-            return true;
+        var select = document.createElement("select");
+        select.name = "institutions";
+        select.id = "institutions";
+
+        var option = document.createElement("option");
+        option.value = "";
+        option.text = "";
+        select.appendChild(option);
+
+        function readInstitutions(dictionary, cpt) {
+            var option = document.createElement("option");
+            option.value = dictionary["organization"].pid;
+            option.text = dictionary["organization"].name;
+            option.innerHTML = "&nbsp;".repeat(cpt*3)+dictionary["organization"].name
+            select.appendChild(option);
+            for (let i = 0; i < Object.keys(dictionary).length-1; i++) {
+                readInstitutions(dictionary["sub_organization"+i.toString()], cpt+1);
+            }
         }
+        for (let i = 0; i < institutionsJSON.length; i++){
+            readInstitutions(institutionsJSON[i], 0);
+        }
+
+        var label = document.createElement("label");
+        label.innerHTML = "Institution parente : "
+        label.htmlFor = "label-institutions"
+
+        document.getElementById("institutions").appendChild(select);
+        document.getElementById("label-institutions").appendChild(label)
 
     </script>
 
