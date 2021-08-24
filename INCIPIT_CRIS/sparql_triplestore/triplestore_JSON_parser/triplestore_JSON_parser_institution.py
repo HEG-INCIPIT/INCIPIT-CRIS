@@ -9,6 +9,18 @@ def parse_get_full_name_institution(sparql_query_answer):
     return dict_data
 
 
+def parse_get_sub_organization_institution(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_dict_data = []
+    for json_data in loaded_json:
+        if len(json_data) > 0:
+            dict_data = {
+                'sub_organization': json_data['subOrganization']['value'],
+            }
+            array_dict_data.append(dict_data)
+    return array_dict_data
+
+
 def parse_get_institutions(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     array_data_parsed = []
@@ -49,6 +61,7 @@ def parse_get_data_institution(sparql_query_answer):
         'founding_date': loaded_json['foundingDate']['value'][:10],
         'url': loaded_json['url']['value'],
         'parent_organization': loaded_json['parentOrganization']['value'] if 'parentOrganization' in loaded_json else '',
+        'sub_organization': loaded_json['subOrganization']['value'] if 'subOrganization' in loaded_json else '',
     }
 
     return dict_data

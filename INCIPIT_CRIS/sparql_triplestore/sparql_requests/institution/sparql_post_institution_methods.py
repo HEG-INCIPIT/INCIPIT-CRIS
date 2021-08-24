@@ -53,9 +53,7 @@ class SparqlPostInstitutionMethods:
 
             }}
         """.format(prefix=variables.prefix, pid=pid, name=name, alternate_name=alternate_name, description=description, 
-        founding_date=founding_date, url=url, has_upper_organisation='' if upper_organisation == '' else 'schema:parentOrganization {} ;'.format(upper_organisation))
-
-        print(sparql_request)
+        founding_date=founding_date, url=url, has_upper_organisation='' if upper_organisation == '' else 'schema:parentOrganization <{}> ;'.format(upper_organisation))
 
         self.sparql.setQuery(sparql_request)
 

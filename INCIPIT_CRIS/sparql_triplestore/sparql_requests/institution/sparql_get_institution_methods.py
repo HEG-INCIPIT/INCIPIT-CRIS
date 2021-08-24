@@ -45,10 +45,34 @@ class SparqlGetInstitutionMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?institution ?name WHERE
+            SELECT ?institution ?name ?parentOrganization WHERE
             {{
                 ?institution a schema:CollegeOrUniversity .
                 ?institution schema:name ?name .
+            }}
+        """.format(prefix=variables.prefix)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_institutions(self.sparql.query().response.read())
+
+    
+    def get_top_lvl_institutions(self):
+        """
+        Get basic information of an institution : ark, name,
+        And return a list for each institution
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?institution ?name ?parentOrganization WHERE
+            {{
+                ?institution a schema:CollegeOrUniversity .
+                ?institution schema:name ?name .
+                NOT EXISTS {{
+                    ?institution schema:parentOrganization ?parentOrganization
+                }}
             }}
         """.format(prefix=variables.prefix)
 
@@ -102,6 +126,39 @@ class SparqlGetInstitutionMethods:
         return array_projects
 
 
+    def get_dict_institution(self, pid):
+        
+        sparql_request = """
+            {prefix}
+
+            SELECT ?subOrganization WHERE
+            {{
+                OPTIONAL {{ ?subOrganization schema:parentOrganization <{ark_research}> }} .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_sub_organizations = parse_get_sub_organization_institution(self.sparql.query().response.read())
+
+        institution_dict = {}
+        cnt = 0
+
+        data_institution = variables.sparql_get_institution_object.get_data_institution(pid)
+
+        for sub_organization in array_sub_organizations:
+            if len(sub_organization) > 0:
+                institution_dict['sub_organization{}'.format(cnt)] = variables.sparql_get_institution_object.get_dict_institution(sub_organization['sub_organization'])
+            
+            cnt+=1
+
+        institution_dict['organization'] = data_institution
+        
+        return institution_dict
+
+        
+
+
     def get_data_institution(self, pid):
         """
         Get all the information of an institution : ark, name, abstract, date of publication, authors, ...
@@ -111,7 +168,7 @@ class SparqlGetInstitutionMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?name ?alternateName ?description ?foundingDate ?url ?parentOrganization WHERE
+            SELECT ?name ?alternateName ?description ?foundingDate ?url ?parentOrganization ?subOrganization WHERE
             {{
                 <{ark_research}> schema:name ?name .
                 OPTIONAL {{ <{ark_research}> schema:alternateName ?alternateName }} .
@@ -119,16 +176,13 @@ class SparqlGetInstitutionMethods:
                 <{ark_research}> schema:foundingDate ?foundingDate .
                 OPTIONAL {{ <{ark_research}> schema:url ?url }} .
                 OPTIONAL {{ <{ark_research}> schema:parentOrganization ?parentOrganization }} .
+                OPTIONAL {{ ?subOrganization schema:parentOrganization <{ark_research}> }} .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
         data_institution = parse_get_data_institution(self.sparql.query().response.read())
-
-        print("\n")
-        print(data_institution)
-        print("\n")
 
         projects = variables.sparql_get_institution_object.get_projects_institution(pid)
         
