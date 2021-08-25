@@ -1,0 +1,21 @@
+section{
+    margin-top: 20px;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.button {
+    float: right;
+}
+
+.tab-content div {
+    display: none;
+}
+
+.tab-content div.is-active {
+    display: block;
+}
+
+.delete {
+    margin-top: 3px;
+}

@@ -135,7 +135,7 @@ def institution_profile(request, pid):
             edition_granted = True
         context = {
             'edition_granted': edition_granted,
-            'data_institution': data_institution
+            'data_institution': data_institution,
         }
         return render(request, 'institution/institution_profile.html', context)
 
