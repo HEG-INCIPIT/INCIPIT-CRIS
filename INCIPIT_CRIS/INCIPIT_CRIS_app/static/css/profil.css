@@ -38,16 +38,16 @@ a {
     padding-bottom: 5px;
 }
 
-.link-one i {
+.link-one svg {
     color: #cecece;
 }
 
-.title-data i {
+.title-data svg {
     font-size: 1.2rem;
 }
 
 .fa-plus-circle {
-    vertical-align: -2px;
+    vertical-align: -4px;
 }
 
 .columns ul li::before {
