@@ -40,7 +40,7 @@
 
     <p class="subtitle is-6" align="justify">
         {% if data_project.description == "" %}
-            <a class="link-one" href="/projects/edition/field/description/{{data_project.pid}}"> Ajouter un abstract</a>
+            <a class="link-one" href="/projects/edition/field/description/{{data_project.pid}}"> Ajouter une description</a>
         {% else %}
             {{ data_project.description }}
             <a class="link-one" href="/projects/edition/field/description/{{data_project.pid}}"><i class="fas fa-edit"></i></a>
