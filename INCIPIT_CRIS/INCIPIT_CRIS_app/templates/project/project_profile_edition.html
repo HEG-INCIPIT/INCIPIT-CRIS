@@ -22,10 +22,16 @@
 
     <a class="button is-primary" href="/projects/{{ data_project.pid }}">Voir le projet</a>
 
+    <form action="/projects/edition/update-project/{{data_project.pid}}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="projectARK" name="projectARK" value="{{ data_project.pid }}">
+        <input class="shift-button button is-warning" type="submit" value="Mettre à jour">
+    </form>
+
     <form action="/projects/edition/delete-project/{{data_project.pid}}" method="post">
         {% csrf_token %}
         <input type="hidden" id="projectARK" name="projectARK" value="{{ data_project.pid }}">
-        <input class="shift-button button is-danger" type="submit" value="Supprimer">
+        <input class="button is-danger" type="submit" value="Supprimer">
     </form>
 
     <p class="title is-4" align="justify">

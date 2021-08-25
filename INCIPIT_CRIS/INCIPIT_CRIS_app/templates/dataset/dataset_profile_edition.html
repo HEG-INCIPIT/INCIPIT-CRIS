@@ -23,10 +23,16 @@
 
     <a class="button is-primary" href="/datasets/{{ data_dataset.pid }}">Voir le projet</a>
 
+    <form action="/datasets/edition/update-dataset/{{data_dataset.pid}}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="datasetARK" name="datasetARK" value="{{ data_dataset.pid }}">
+        <input class="shift-button button is-warning" type="submit" value="Mettre à jour">
+    </form>
+
     <form action="/datasets/edition/delete-dataset/{{data_dataset.pid}}" method="post">
         {% csrf_token %}
         <input type="hidden" id="datasetARK" name="datasetARK" value="{{ data_dataset.pid }}">
-        <input class="shift-button button is-danger" type="submit" value="Supprimer">
+        <input class="button is-danger" type="submit" value="Supprimer">
     </form>
 
     <p class="title is-4" align="justify">

@@ -23,10 +23,16 @@
     
     <a class="button is-primary" href="/articles/{{ data_article.pid }}">Voir l'article</a>
 
+    <form action="/articles/edition/update-article/{{data_article.pid}}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="articleARK" name="articleARK" value="{{ data_article.pid }}">
+        <input class="shift-button button is-warning" type="submit" value="Mettre à jour">
+    </form>
+
     <form action="/articles/edition/delete-article/{{data_article.pid}}" method="post">
         {% csrf_token %}
         <input type="hidden" id="articleARK" name="articleARK" value="{{ data_article.pid }}">
-        <input class="shift-button button is-danger" type="submit" value="Supprimer">
+        <input class="button is-danger" type="submit" value="Supprimer">
     </form>
 
     <p class="title is-4" align="justify">
