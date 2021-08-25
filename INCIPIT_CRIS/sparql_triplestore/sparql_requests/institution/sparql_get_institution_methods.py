@@ -216,7 +216,7 @@ class SparqlGetInstitutionMethods:
 
         sub_organization_array = []
         for inst in variables.SparqlGetInstitutionMethods.get_sub_organization_institution(self, pid):
-            sub_organization_array.append((inst, variables.SparqlGetInstitutionMethods.get_full_name_institution(self, inst)['name']))
+            sub_organization_array.append((inst, variables.SparqlGetInstitutionMethods.get_full_name_institution(self, inst)))
 
         projects = variables.sparql_get_institution_object.get_projects_institution(pid)
         
