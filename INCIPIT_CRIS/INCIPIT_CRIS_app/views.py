@@ -22,6 +22,8 @@ def index(request):
         the template.
     '''
 
+    insitutions = variables.sparql_get_institution_object.get_institutions()
+
     datasets = variables.sparql_get_dataset_object.get_datasets()
 
     articles = variables.sparql_get_article_object.get_articles()
@@ -50,6 +52,7 @@ def index(request):
     context = {
         'len_persons': len(users),
         'len_datasets': len(datasets),
+        'len_institutions': len(insitutions),
         'len_articles': len(articles),
         'len_projects': len(projects_data),
         'last_users_registered': last_users_registered,
