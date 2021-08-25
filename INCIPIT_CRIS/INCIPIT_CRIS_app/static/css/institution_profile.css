@@ -8,6 +8,11 @@ section{
     float: right;
 }
 
+.shift-button {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
 .tab-content div {
     display: none;
 }

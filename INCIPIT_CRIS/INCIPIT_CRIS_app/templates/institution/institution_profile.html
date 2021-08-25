@@ -142,8 +142,8 @@
                     {% endblock %}
                 </div>
                 <div data-content="data">
-                    <p>Données : </p>
                     {% block dataset %}
+                        <p>Données : </p>
                         {% for creator in data_institution.datasets_creator %}
                             <p>
                                 <a class="link-one" href="/datasets/{{ creator.0 }}">{{ creator.1.name }}</a>

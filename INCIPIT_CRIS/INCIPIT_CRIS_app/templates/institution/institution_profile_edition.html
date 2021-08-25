@@ -1,0 +1,58 @@
+{% extends "institution/institution_profile.html" %}
+
+{% load static %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+        <ul>
+            <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+            <li><a class="link-one" href="/institutions/">Institutions</a></li>
+            <li><a class="link-one" href="/institutions/{{ data_institution.pid }}">Profil</a></li>
+            <li class="is-active"><a href="/institutions/{{ data_institution.pid }}/edition" aria-current="page">Edition</a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block information %}
+    {{ message }}
+{% endblock %}
+
+
+{% block information_header %}
+
+    <a class="button is-primary" href="/institutions/{{ data_institution.pid }}">Voir l'institution</a>
+
+    <form action="/institutions/edition/update-institution/{{data_institution.pid}}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
+        <input class="shift-button button is-warning" type="submit" value="Mettre à jour">
+    </form>
+
+    <form action="/institutions/edition/delete-institution/{{data_institution.pid}}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
+        <input class="button is-danger" type="submit" value="Supprimer">
+    </form>
+
+    <p class="title is-4" align="justify">
+        {{ data_institution.name }} <a class="link-one is-size-6" href="/institutions/edition/field/name/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
+        (
+        {% if data_institution.alternate_name == "" %}
+            <a class="link-one" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"> Ajouter un nom alternatif</a>
+        {% else %}
+            {{ data_institution.alternate_name }}
+            <a class="link-one" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
+        {% endif %}
+        )
+    </p>
+
+    <p class="subtitle is-6" align="justify">
+        {% if data_institution.description == "" %}
+            <a class="link-one" href="/institutions/edition/field/description/{{data_institution.pid}}"> Ajouter une description</a>
+        {% else %}
+            {{ data_institution.description }}
+            <a class="link-one" href="/institutions/edition/field/description/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
+        {% endif %}
+    </p>
+{% endblock %}
+
