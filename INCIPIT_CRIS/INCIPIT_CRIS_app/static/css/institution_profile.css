@@ -4,15 +4,6 @@ section{
     margin-right: 5%;
 }
 
-.button {
-    float: right;
-}
-
-.shift-button {
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
 .tab-content div {
     display: none;
 }
@@ -23,4 +14,26 @@ section{
 
 .delete {
     margin-top: 3px;
+}
+
+.link-one svg {
+    color: #679bff;
+}
+
+.is-gapless .shift {
+    margin-right: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.column {
+    flex-basis: auto !important;
+    flex-grow: 0 !important;
+}
+
+.logo {
+    display: flex;
+}
+
+.edit-institution {
+    align-self: flex-end;
 }

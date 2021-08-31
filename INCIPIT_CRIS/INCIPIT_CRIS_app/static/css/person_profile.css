@@ -52,3 +52,21 @@ h1 {
 .delete {
     margin-top: 3px;
 }
+
+.image {
+    border-radius: 50%;
+    width: 200px;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.right-align {
+    position: absolute;
+    top: auto;
+    right: 5%;
+}
