@@ -81,7 +81,7 @@ def institution_creation(request):
                 variables.sparql_post_institution_object.create_institution(pid, form.cleaned_data['name'],
                                                         form.cleaned_data['alternate_name'],
                                                         form.cleaned_data['description'],
-                                                        form.cleaned_data['founding_date'], form.cleaned_data['url'], request.POST['institutions'])
+                                                        form.cleaned_data['founding_date'], form.cleaned_data['url_organization'], form.cleaned_data['url_logo'], request.POST['institutions'])
                 return redirect(views.index)
         else:
             form = InstitutionCreationForm()
@@ -207,13 +207,10 @@ def institution_field_edition(request, field_to_modify, pid):
     form = forms.Form()
     # Verify that the user is authenticated and has the right to modify the profile
     if request.user.is_authenticated:
-        # Request all the members of the institution
-        members_institution = variables.sparql_get_institution_object.get_members_institution(pid)
         # Verify if the user ark is in the institutions members to grant edition
-        if request.user.pid in [members[0] for members in members_institution] or request.user.is_superuser:
+        if request.user.is_superuser:
 
             data_institution = variables.sparql_get_institution_object.get_data_institution(pid)
-
             form = form_selection.form_selection(request, field_to_modify, data_institution)
             # Check the request method
             if request.method == 'POST':
@@ -223,6 +220,14 @@ def institution_field_edition(request, field_to_modify, pid):
                                                                     form.cleaned_data['founding_date'],
                                                                     str(data_institution['founding_date']) +
                                                                     " 00:00:00+00:00")
+                    elif field_to_modify == 'alternateName':
+                        variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
+                                                                      form.cleaned_data['alternate_name'],
+                                                                      data_institution['alternate_name'])
+                    elif field_to_modify == 'logo':
+                        variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
+                                                                      form.cleaned_data['url'],
+                                                                      data_institution[field_to_modify])
                     else:
                         variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
                                                                       form.cleaned_data[field_to_modify],
