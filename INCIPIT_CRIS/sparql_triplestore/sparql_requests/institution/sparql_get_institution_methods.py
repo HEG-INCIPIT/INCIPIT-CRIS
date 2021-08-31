@@ -198,13 +198,14 @@ class SparqlGetInstitutionMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?name ?alternateName ?description ?foundingDate ?url ?parentOrganization ?subOrganization WHERE
+            SELECT ?name ?alternateName ?description ?foundingDate ?url ?logo ?parentOrganization ?subOrganization WHERE
             {{
                 <{ark_research}> schema:name ?name .
                 OPTIONAL {{ <{ark_research}> schema:alternateName ?alternateName }} .
                 OPTIONAL {{ <{ark_research}> schema:description ?description }} .
                 <{ark_research}> schema:foundingDate ?foundingDate .
                 OPTIONAL {{ <{ark_research}> schema:url ?url }} .
+                OPTIONAL {{ <{ark_research}> schema:logo ?logo }} .
                 OPTIONAL {{ <{ark_research}> schema:parentOrganization ?parentOrganization }} .
                 OPTIONAL {{ ?subOrganization schema:parentOrganization <{ark_research}> }} .
             }}
@@ -218,10 +219,15 @@ class SparqlGetInstitutionMethods:
         for inst in variables.SparqlGetInstitutionMethods.get_sub_organization_institution(self, pid):
             sub_organization_array.append((inst, variables.SparqlGetInstitutionMethods.get_full_name_institution(self, inst)))
 
+        parent_organization_array = []
+        for inst in variables.SparqlGetInstitutionMethods.get_parent_organization_institution(self, pid):
+            parent_organization_array.append((inst, variables.SparqlGetInstitutionMethods.get_full_name_institution(self, inst)))
+
         projects = variables.sparql_get_institution_object.get_projects_institution(pid)
         
         data_institution['projects'] = projects
         data_institution['sub_organizations'] = sub_organization_array
+        data_institution['parent_organizations'] = parent_organization_array
         data_institution['pid'] = pid
         return data_institution
 

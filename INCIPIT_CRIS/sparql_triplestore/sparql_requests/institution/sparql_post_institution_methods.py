@@ -33,7 +33,7 @@ class SparqlPostInstitutionMethods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
-    def create_institution(self, pid, name, alternate_name, description, founding_date, url, upper_organisation):
+    def create_institution(self, pid, name, alternate_name, description, founding_date, url, logo, upper_organisation):
         sparql_request = """
             {prefix}
 
@@ -48,12 +48,13 @@ class SparqlPostInstitutionMethods:
                     schema:description \"\"\"{description}\"\"\" ;
                     schema:foundingDate "{founding_date}"^^xsd:date ;
                     schema:url \"\"\"{url}\"\"\" ;
+                    schema:logo \"\"\"{logo}\"\"\" ;
                     {has_upper_organisation}
                     schema:identifier <{pid}ARK> .
 
             }}
         """.format(prefix=variables.prefix, pid=pid, name=name, alternate_name=alternate_name, description=description, 
-        founding_date=founding_date, url=url, has_upper_organisation='' if upper_organisation == '' else 'schema:parentOrganization <{}> ;'.format(upper_organisation))
+        founding_date=founding_date, url=url, logo=logo, has_upper_organisation='' if upper_organisation == '' else 'schema:parentOrganization <{}> ;'.format(upper_organisation))
 
         self.sparql.setQuery(sparql_request)
 

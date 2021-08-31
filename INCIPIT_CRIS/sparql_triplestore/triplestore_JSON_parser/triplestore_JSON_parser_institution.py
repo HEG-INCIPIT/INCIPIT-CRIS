@@ -2,10 +2,15 @@ import json
 
 
 def parse_get_full_name_institution(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
-    dict_data = {
-        'name': loaded_json['name']['value'],
-    }
+    if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        dict_data = {
+            'name': loaded_json['name']['value'],
+        }
+    else:
+        dict_data = {
+            'name': '',
+        }
     return dict_data
 
 
@@ -78,6 +83,7 @@ def parse_get_data_institution(sparql_query_answer):
         'description': loaded_json['description']['value'],
         'founding_date': loaded_json['foundingDate']['value'][:10],
         'url': loaded_json['url']['value'],
+        'logo': loaded_json['logo']['value'] if 'logo' in loaded_json else '',
         'parent_organization': loaded_json['parentOrganization']['value'] if 'parentOrganization' in loaded_json else '',
         'sub_organization': loaded_json['subOrganization']['value'] if 'subOrganization' in loaded_json else '',
     }
