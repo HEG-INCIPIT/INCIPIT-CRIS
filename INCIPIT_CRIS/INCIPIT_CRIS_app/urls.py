@@ -15,6 +15,10 @@ urlpatterns = [
     path('persons/edition/profil/delete-dataset-maintainer/<path:pid>', views_person.person_datasets_maintainer_deletion, name='person_datasets_maintainer_deletion'),
     path('persons/edition/profil/add-dataset-creator/<path:pid>', views_person.person_datasets_creator_addition, name='person_datasets_creator_addition'),
     path('persons/edition/profil/delete-dataset-creator/<path:pid>', views_person.person_datasets_creator_deletion, name='person_datasets_creator_deletion'),
+    path('persons/edition/profil/add-work/<path:pid>', views_person.person_work_addition, name='person_work_addition'),
+    path('persons/edition/profil/delete-work/<path:pid>', views_person.person_work_deletion, name='person_work_deletion'),
+    path('persons/edition/profil/add-affiliation/<path:pid>', views_person.person_affiliation_addition, name='person_affiliation_addition'),
+    path('persons/edition/profil/delete-affiliation/<path:pid>', views_person.person_affiliation_deletion, name='person_affiliation_deletion'),
     path('persons/edition/profil/<str:field_to_modify>/<path:pid>', views_person.person_field_edition, name='person_field_edition'),
     path('persons/edition/<path:pid>', views_person.person_edition, name='person_edition_display'),
     path('persons/<path:pid>', views_person.person_profile, name='person_profile'),
@@ -66,6 +70,7 @@ urlpatterns = [
     # Institutions urls
     path('institutions/', views_institution.institution_results, name='institution_results'),
     path('institutions/creation/', views_institution.institution_creation, name='institution_creation'),
+    path('institutions/edition/field/<str:field_to_modify>/<path:pid>', views_institution.institution_field_edition, name='institution_field_edition'),
     path('institutions/edition/<path:pid>', views_institution.institution_edition, name='institution_edition'),
     path('institutions/<path:pid>', views_institution.institution_profile, name='institution_profile'),
     
