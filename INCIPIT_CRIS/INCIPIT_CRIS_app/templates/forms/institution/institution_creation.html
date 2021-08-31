@@ -50,9 +50,14 @@
                     {{ form.pid }}
                 </div>
                 <div class="fieldWrapper">
-                    {{ form.url.errors }}
-                    <label for="{{ form.url.id_for_label }}">URL : </label>
-                    {{ form.url }}
+                    {{ form.url_organization.errors }}
+                    <label for="{{ form.url_organization.id_for_label }}">URL : </label>
+                    {{ form.url_organization }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.url_logo.errors }}
+                    <label for="{{ form.url_logo.id_for_label }}">URL : </label>
+                    {{ form.url_logo }}
                 </div>
                 <div class="fieldWrapper">
                     {{ form.founding_date.errors }}
