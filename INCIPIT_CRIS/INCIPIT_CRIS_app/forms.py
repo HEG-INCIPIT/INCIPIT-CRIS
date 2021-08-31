@@ -177,7 +177,8 @@ class InstitutionCreationForm(forms.Form):
     pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark du projet s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'Laisser vide pour créer automatiquement un ark', 'class':'input'}))
     founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fondation ', required=True)
-    url = forms.CharField(label="URL", max_length=200, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL', 'class':'input'}))
+    url = forms.CharField(label='''Lien vers l'institution''', max_length=200, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'Lien vers l\'institution', 'class':'input'}))
+    logo = forms.CharField(label='''URL du logo''', max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL du logo', 'class':'input'}))
 
 
 ##################################################
@@ -185,7 +186,7 @@ class InstitutionCreationForm(forms.Form):
 ##################################################
 
 class URLForm(forms.Form):
-    url = forms.CharField(label='URL ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'URL', 'class':'textarea'}))
+    url = forms.CharField(label='URL ', max_length=400, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'URL', 'class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -206,6 +207,18 @@ class NameForm(forms.Form):
             my_arg = kwargs.pop('old_name')
         super().__init__(*args, **kwargs)
         self.fields['name'].initial = my_arg
+
+
+class AlternateNameForm(forms.Form):
+    alternate_name = forms.CharField(label='Nom alternatif ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Nom alternatif', 'class':'textarea'}))
+
+    def __init__(self, *args, **kwargs):
+        # overload init function to display actual value of the variable in this field
+        my_arg = ''
+        if 'old_alternate_name' in kwargs:
+            my_arg = kwargs.pop('old_alternate_name')
+        super().__init__(*args, **kwargs)
+        self.fields['alternate_name'].initial = my_arg
 
 
 class AbstractForm(forms.Form):

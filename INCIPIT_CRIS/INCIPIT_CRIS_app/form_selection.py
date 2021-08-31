@@ -23,6 +23,8 @@ def form_selection(request, field_to_edit, data):
     if request.method == 'POST':
         if field_to_edit == 'name':
             return NameForm(request.POST)
+        elif field_to_edit == 'alternateName':
+            return AlternateNameForm(request.POST)
         elif field_to_edit == 'abstract':
             return AbstractForm(request.POST)
         elif field_to_edit == 'description':
@@ -49,11 +51,15 @@ def form_selection(request, field_to_edit, data):
             return DatasetURLDataForm(request.POST)
         elif field_to_edit == 'url':
             return URLForm(request.POST)
+        elif field_to_edit == 'logo':
+            return URLForm(request.POST)
 
     # if not a POST it'll create a blank form
     else:
         if field_to_edit == 'name':
             return NameForm(old_name=data[field_to_edit])
+        elif field_to_edit == 'alternateName':
+            return AlternateNameForm(old_alternate_name=data['alternate_name'])
         elif field_to_edit == 'abstract':
             return AbstractForm(old_abstract=data[field_to_edit])
         elif field_to_edit == 'description':
@@ -80,3 +86,5 @@ def form_selection(request, field_to_edit, data):
             return DatasetURLDataForm(old_url_data=data['data_download']['url'])
         elif field_to_edit == 'url':
             return URLForm(old_url=data['url'])
+        elif field_to_edit == 'logo':
+            return URLForm(old_url=data['logo'])
