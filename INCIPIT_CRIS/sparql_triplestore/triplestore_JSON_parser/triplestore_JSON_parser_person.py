@@ -50,6 +50,24 @@ def parse_check_person_ark(sparql_query_answer):
     return False
 
 
+def parse_get_works_person(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_works = []
+    for work in loaded_json:
+        array_works.append(work['work']['value'])
+        
+    return array_works
+
+
+def parse_get_affiliations_person(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_affiliations = []
+    for affiliation in loaded_json:
+        array_affiliations.append(affiliation['affiliation']['value'])
+        
+    return array_affiliations
+
+
 def parse_get_data_person(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {

@@ -55,6 +55,69 @@ class SparqlPostPersonMethods:
 
         return self.sparql.query().response.read()
 
+
+    def add_work_person(self, pid, work_pid):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:worksFor <{work_pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , work_pid=work_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+    
+    def delete_work_person(self, pid, work_pid):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:worksFor <{work_pid}> .
+            }}
+            WHERE {{
+                <{pid}> schema:worksFor <{work_pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , work_pid=work_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_affiliation_person(self, pid, affiliation_pid):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:affiliation <{affiliation_pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , affiliation_pid=affiliation_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+    
+    def delete_affiliation_person(self, pid, affiliation_pid):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:affiliation <{affiliation_pid}> .
+            }}
+            WHERE {{
+                <{pid}> schema:affiliation <{affiliation_pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , affiliation_pid=affiliation_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
     def update_person_string_leaf(self, pid, predicate, new_string, old_string):
         sparql_request = """
             {prefix}

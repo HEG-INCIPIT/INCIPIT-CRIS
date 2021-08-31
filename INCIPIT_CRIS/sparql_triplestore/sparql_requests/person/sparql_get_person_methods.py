@@ -176,6 +176,58 @@ class SparqlGetPersonMethods:
 
         return array_datasets
 
+    
+    def get_work_person(self, pid):
+        """
+        Get all the works for who the person is a maintainer
+        Return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?work WHERE
+            {{
+                <{ark_research}> schema:worksFor ?work .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_works = []
+
+        for work in parse_get_works_person(self.sparql.query().response.read()):
+            data_work = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, work)
+            array_works.append((work, data_work))
+
+        return array_works
+
+
+    def get_affiliation_person(self, pid):
+        """
+        Get all the affiliations for who the person is a maintainer
+        Return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?affiliation WHERE
+            {{
+                <{ark_research}> schema:affiliation ?affiliation .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_affiliations = []
+
+        for affiliation in parse_get_affiliations_person(self.sparql.query().response.read()):
+            data_affiliation = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, affiliation)
+            array_affiliations.append((affiliation, data_affiliation))
+
+        return array_affiliations
+
 
     def get_data_person(self, pid):
         """
@@ -186,13 +238,14 @@ class SparqlGetPersonMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?given_name ?family_name ?email ?telephone ?description WHERE
+            SELECT ?given_name ?family_name ?email ?telephone ?description ?work WHERE
             {{
                 <{ark_research}> schema:givenName ?given_name .
                 <{ark_research}> schema:familyName ?family_name .
                 OPTIONAL {{ <{ark_research}> schema:email ?email }}
                 OPTIONAL {{ <{ark_research}> schema:telephone ?telephone }}
                 OPTIONAL {{ <{ark_research}> schema:description ?description }}
+
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
@@ -204,12 +257,16 @@ class SparqlGetPersonMethods:
         projects = variables.sparql_get_person_object.get_projects_person(pid)
         datasets_creator = variables.sparql_get_person_object.get_datasets_creator_person(pid)
         datasets_maintainer = variables.sparql_get_person_object.get_datasets_maintainer_person(pid)
+        works = variables.sparql_get_person_object.get_work_person(pid)
+        affiliations = variables.sparql_get_person_object.get_affiliation_person(pid)
         
         data_person['pid'] = pid
         data_person['articles'] = articles
         data_person['projects'] = projects
         data_person['datasets_creator'] = datasets_creator
         data_person['datasets_maintainer'] = datasets_maintainer
+        data_person['works'] = works
+        data_person['affiliations'] = affiliations
 
         return data_person
 
