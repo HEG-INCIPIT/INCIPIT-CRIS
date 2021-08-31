@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 import string
 import re
+import json
 from . import variables
 from . import form_selection
 
@@ -181,7 +182,7 @@ def person_field_edition(request, field_to_modify, pid):
             }
         else:
             context = {
-                'message': "Connectez-vous pour modifier votre profil"
+                'message': "Connectez-vous pour modifier ce profil"
             }
         
         return render(request, 'page_info.html', context)
@@ -343,11 +344,11 @@ def person_project_addition(request, pid):
             return render(request, 'forms/autocompletion_group.html', context)
 
         context = {
-            'message': "Vous n'avez pas le droit d'éditer cet person",
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
         return render(request, 'page_info.html', context)
     context = {
-        'message': "Connectez-vous pour pouvoir éditer cet person"
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
 
@@ -379,11 +380,11 @@ def person_project_deletion(request, pid):
             return redirect(person_edition, pid=pid)
 
         context = {
-            'message': "Vous n'avez pas le droit d'éditer cet project",
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
         return render(request, 'page_info.html', context)
     context = {
-        'message': "Connectez-vous pour pouvoir éditer cet project"
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
 
@@ -442,11 +443,11 @@ def person_datasets_creator_addition(request, pid):
             return render(request, 'forms/autocompletion_group.html', context)
 
         context = {
-            'message': "Vous n'avez pas le droit d'éditer cet person",
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
         return render(request, 'page_info.html', context)
     context = {
-        'message': "Connectez-vous pour pouvoir éditer cet person"
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
 
@@ -479,11 +480,11 @@ def person_datasets_creator_deletion(request, pid):
             return redirect(person_edition, pid=pid)
 
         context = {
-            'message': "Vous n'avez pas le droit d'éditer ce dataset",
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
         return render(request, 'page_info.html', context)
     context = {
-        'message': "Connectez-vous pour pouvoir éditer ce dataset"
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
 
@@ -542,11 +543,11 @@ def person_datasets_maintainer_addition(request, pid):
             return render(request, 'forms/autocompletion_group.html', context)
 
         context = {
-            'message': "Vous n'avez pas le droit d'éditer cet person",
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
         return render(request, 'page_info.html', context)
     context = {
-        'message': "Connectez-vous pour pouvoir éditer cet person"
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
 
@@ -579,10 +580,204 @@ def person_datasets_maintainer_deletion(request, pid):
             return redirect(person_edition, pid=pid)
 
         context = {
-            'message': "Vous n'avez pas le droit d'éditer ce dataset",
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
         return render(request, 'page_info.html', context)
     context = {
-        'message': "Connectez-vous pour pouvoir éditer ce dataset"
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_work_addition(request, pid):
+    '''
+    Adds an organisation where the given person works
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                organization = request.POST['institutions']
+                if organization != '':
+                    variables.sparql_post_person_object.add_work_person(pid, organization)
+                elif organization == '':
+                    variables.sparql_post_person_object.delete_work_person(pid, organization)
+
+                return redirect(person_edition, pid=pid)
+
+            top_lvl_institutions = variables.sparql_get_institution_object.get_top_lvl_institutions()
+            top_lvl_institutions_data = []
+            for top_lvl_institution in top_lvl_institutions:
+                top_lvl_institutions_data.append(variables.sparql_get_institution_object.get_dict_institution(top_lvl_institution[0]))
+
+            context = {
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter une institution de travail'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-work/'+pid],
+                'title_data_type_added': 'Institution de travail',
+                'data_type_added': 'de l\'institution de travail',
+                'url_to_return': '/persons/edition/profil/add-work/{}'.format(pid),
+                'button_value': 'Ajouter',
+                'institutions': json.dumps(top_lvl_institutions_data),
+            }
+
+            return render(request, 'forms/select_institution_form.html', context)
+    
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_work_deletion(request, pid):
+    '''
+    Edit an organisation where the given person works
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            # Get the value of a variable in the POST request by its id
+            work = request.POST.get('workARK', '')
+            variables.sparql_post_person_object.delete_work_person(pid, work)
+
+            return redirect(person_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_affiliation_addition(request, pid):
+    '''
+    Adds an organisation where the given person affiliations
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                organization = request.POST['institutions']
+                if organization != '':
+                    variables.sparql_post_person_object.add_affiliation_person(pid, organization)
+                elif organization == '':
+                    variables.sparql_post_person_object.delete_affiliation_person(pid, organization)
+
+                return redirect(person_edition, pid=pid)
+
+            top_lvl_institutions = variables.sparql_get_institution_object.get_top_lvl_institutions()
+            top_lvl_institutions_data = []
+            for top_lvl_institution in top_lvl_institutions:
+                top_lvl_institutions_data.append(variables.sparql_get_institution_object.get_dict_institution(top_lvl_institution[0]))
+
+            context = {
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter une institution de travail'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-affiliation/'+pid],
+                'title_data_type_added': 'Institution de travail',
+                'data_type_added': 'de l\'institution de travail',
+                'url_to_return': '/persons/edition/profil/add-affiliation/{}'.format(pid),
+                'button_value': 'Ajouter',
+                'institutions': json.dumps(top_lvl_institutions_data),
+            }
+
+            return render(request, 'forms/select_institution_form.html', context)
+    
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_affiliation_deletion(request, pid):
+    '''
+    Edit an organisation where the given person affiliations
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            # Get the value of a variable in the POST request by its id
+            affiliation = request.POST.get('affiliationARK', '')
+            variables.sparql_post_person_object.delete_affiliation_person(pid, affiliation)
+
+            return redirect(person_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
