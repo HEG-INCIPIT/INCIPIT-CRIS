@@ -29,20 +29,20 @@
             {% block information %}
             {% endblock %}
 
-            <div class="columns"> 
-                <div class="column is-one-quarter">
-                    <figure class="figure">
-                        <img src="https://www.planetesante.ch/var/ezdemo_site/storage/images/planete-sante/partenaires/hes-so-haute-ecole-specialisee-de-suisse-occidentale/361293-3-fre-CH/HES-SO-Haute-Ecole-Specialisee-de-Suisse-occidentale_ng_image_full.png" width="250" height="250">
-                    </figure>
-                </div>
-                <div class="column">
-                    {% block information_header %}
-                        <div class="middlebox">
-                            {% if user.is_superuser %}
-                                <p>
-                                    <a class="button is-primary" href="/institutions/edition/{{ data_institution.pid }}">Modifier</a>
-                                </p>
+            <div class="columns">
+                {% block information_header %}
+                    <div class="column">
+                        <figure class="figure">
+                            <img src=
+                            {% if data_institution.logo == '' %}
+                                "{% static 'images/university-solid.png' %}"
+                            {% else %}
+                                "{{ data_institution.logo }}"
                             {% endif %}
+                            width="250" height="250">
+                        </figure>
+                    </div>
+                    <div class="column">
                             <p class="title is-4" align="justify">
                                 {{ data_institution.name }}
                                 {% if data_institution.alternate_name != '' %}
@@ -50,9 +50,15 @@
                                 {% endif %}
                             </p>
                             <p class="subtitle is-6" align="justify">{{ data_institution.description }}</p>
-                        </div>
-                    {% endblock %}
-                </div>
+                    </div>
+                    <div class="column">
+                        {% if user.is_superuser %}
+                            <p>
+                                <a class="button is-primary" href="/institutions/edition/{{ data_institution.pid }}">Modifier</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endblock %}
             </div>
         </section>
 
@@ -101,7 +107,13 @@
                         <p>Description : {{ data_institution.description }}</p>
                         <p>Lien vers l'institution : {{ data_institution.url }}</p>
                         <p>Date de fondation : {{ data_institution.founding_date }}</p>
-                        <p>Organisations parente : {{ data_institution.parent_organizations }}</p>
+                        <p>Organisations parente :
+                            {% for organistion in data_institution.parent_organizations %}
+                                <p>
+                                    <a class="link-one" href="/institutions/{{ organistion.0 }}">{{ organistion.1.name }}</a>
+                                </p>
+                            {% endfor %}
+                        </p>
                         <p>Sous-organisations : 
                             {% for organistion in data_institution.sub_organizations %}
                                 <p>

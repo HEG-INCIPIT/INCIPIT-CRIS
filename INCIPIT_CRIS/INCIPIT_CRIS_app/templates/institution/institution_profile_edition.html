@@ -20,39 +20,64 @@
 
 {% block information_header %}
 
-    <a class="button is-primary" href="/institutions/{{ data_institution.pid }}">Voir l'institution</a>
+    <div class="column logo">
+        <figure class="figure">
+            <img src=
+            {% if data_institution.logo == '' %}
+                "{% static 'images/university-solid.png' %}"
+            {% else %}
+                "{{ data_institution.logo }}"
+            {% endif %}
+            width="250" height="250">
+        </figure>
+        <a class="edit-institution link-one is-size-6" href="/institutions/edition/field/logo/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
+    </div>
 
-    <form action="/institutions/edition/update-institution/{{data_institution.pid}}" method="post">
-        {% csrf_token %}
-        <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
-        <input class="shift-button button is-warning" type="submit" value="Mettre à jour">
-    </form>
+    <div class="column">
+        <p class="title is-4" align="justify">
+            {{ data_institution.name }} <a class="link-one is-size-6" href="/institutions/edition/field/name/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
+            (
+            {% if data_institution.alternate_name == "" %}
+                <a class="link-one" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"> Ajouter un nom alternatif</a>
+            {% else %}
+                {{ data_institution.alternate_name }} <a class="link-one is-size-6" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
+            {% endif %}
+            )
+        </p>
 
-    <form action="/institutions/edition/delete-institution/{{data_institution.pid}}" method="post">
-        {% csrf_token %}
-        <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
-        <input class="button is-danger" type="submit" value="Supprimer">
-    </form>
+        <p class="subtitle is-6" align="justify">
+            {% if data_institution.description == "" %}
+                <a class="link-one" href="/institutions/edition/field/description/{{data_institution.pid}}"> Ajouter une description</a>
+            {% else %}
+                {{ data_institution.description }}
+                <a class="link-one" href="/institutions/edition/field/description/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
+            {% endif %}
+        </p>
+    </div>
 
-    <p class="title is-4" align="justify">
-        {{ data_institution.name }} <a class="link-one is-size-6" href="/institutions/edition/field/name/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
-        (
-        {% if data_institution.alternate_name == "" %}
-            <a class="link-one" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"> Ajouter un nom alternatif</a>
-        {% else %}
-            {{ data_institution.alternate_name }}
-            <a class="link-one" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
-        {% endif %}
-        )
-    </p>
+    <div class="column">
+        <div class="columns is-gapless is-multiline">
+            <div class="column shift">
+                <a class="button is-primary" href="/institutions/{{ data_institution.pid }}">Voir l'institution</a>
+            </div>
 
-    <p class="subtitle is-6" align="justify">
-        {% if data_institution.description == "" %}
-            <a class="link-one" href="/institutions/edition/field/description/{{data_institution.pid}}"> Ajouter une description</a>
-        {% else %}
-            {{ data_institution.description }}
-            <a class="link-one" href="/institutions/edition/field/description/{{data_institution.pid}}"><i class="fas fa-edit"></i></a>
-        {% endif %}
-    </p>
+            <div class="column shift">
+                <form action="/institutions/edition/update-institution/{{data_institution.pid}}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
+                    <input class="button is-warning" type="submit" value="Mettre à jour">
+                </form>
+            </div>
+
+            <div class="column">
+                <form action="/institutions/edition/delete-institution/{{data_institution.pid}}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
+                    <input class="button is-danger" type="submit" value="Supprimer">
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
