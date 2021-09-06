@@ -299,7 +299,7 @@
                                 {% endif %}
                             {% endfor %}
                         </p>
-                        <p> Mainteneur :
+                        <p> Mainteneurs :
                             {% for maintainer in dataset.maintainers %}
                                 {% if not forloop.last %}
                                     <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,

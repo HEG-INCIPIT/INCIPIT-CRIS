@@ -221,7 +221,7 @@
                     {% endif %}
                 {% endfor %}
             </p>
-            <p> Mainteneur :
+            <p> Mainteneurs :
                 {% for maintainer in dataset.maintainers %}
                     {% if not forloop.last %}
                         <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
@@ -243,51 +243,5 @@
         {% else %}
             <hr>
         {% endif %}
-    {% endfor %}
-{% endblock %}
-
-
-
-
-
-
-
-{% block projects %}
-    <p>Projets : </p>
-    {% for project in data_person.projects %}
-        <p>
-            <form action="/persons/edition/profil/delete-project/{{data_person.pid}}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="projectARK" name="projectARK" value="{{ project.0 }}">
-                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
-                <button class="delete"></button>
-            </form>
-        </p>
-    {% endfor %}
-{% endblock %}
-
-{% block dataset %}
-    <p>Créateur de : <a class="link-one" href="/persons/edition/profil/add-dataset-creator/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-    {% for dataset_creator in data_person.datasets_creator %}
-        <p>
-            <form action="/persons/edition/profil/delete-dataset-creator/{{data_person.pid}}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="dataset_creatorARK" name="dataset_creatorARK" value="{{ dataset_creator.0 }}">
-                <a class="link-one" href="/dataset_creators/{{ dataset_creator.0 }}">{{ dataset_creator.1.name }}</a>
-                <button class="delete"></button>
-            </form>
-        </p>
-    {% endfor %}
-
-    <p>Mainteneur de : <a class="link-one" href="/persons/edition/profil/add-dataset-maintainer/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-    {% for dataset_maintainer in data_person.datasets_maintainer %}
-        <p>
-            <form action="/persons/edition/profil/delete-dataset-maintainer/{{data_person.pid}}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="dataset_maintainerARK" name="dataset_maintainerARK" value="{{ dataset_maintainer.0 }}">
-                <a class="link-one" href="/dataset_maintainers/{{ dataset_maintainer.0 }}">{{ dataset_maintainer.1.name }}</a>
-                <button class="delete"></button>
-            </form>
-        </p>
     {% endfor %}
 {% endblock %}
