@@ -18,3 +18,11 @@ hr {
     text-align: justify;
     text-justify: inter-word;
 }
+
+.link-one svg {
+    color: #cecece;
+}
+
+.link-one svg:hover {
+    color: #b5b5b5;
+}

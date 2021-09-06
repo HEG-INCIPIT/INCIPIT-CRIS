@@ -17,8 +17,8 @@
     {{ message }}
 {% endblock %}
 
-{% block button_back %}
-    <a class="button is-primary" href="/persons/{{ data_person.pid }}">Voir le profil</a>
+{% block button_navigation %}
+    <a class="right-align little-space-above" href="/persons/{{ data_person.pid }}"><i class="fas fa-user-alt"></i></a>
 {% endblock %}
 
 {% block person_information %}
