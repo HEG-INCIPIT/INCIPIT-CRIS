@@ -90,13 +90,14 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        array_articles = []
+        articles = parse_get_articles_person(self.sparql.query().response.read())
 
-        for article in parse_get_articles_person(self.sparql.query().response.read()):
-            data_article = variables.sparql_get_article_object.get_data_article(article)
-            array_articles.append((article, data_article))
+        articles_sorted = []
+        for article in articles:
+            articles_sorted.append(variables.sparql_get_article_object.get_data_article(article))    
+        articles_sorted.sort(key=lambda item: item['date_published'], reverse=True)
 
-        return array_articles
+        return articles_sorted
 
 
     def get_projects_person(self, pid):
@@ -116,13 +117,14 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        array_projects = []
+        projects = parse_get_projects_person(self.sparql.query().response.read())
 
-        for project in parse_get_projects_person(self.sparql.query().response.read()):
-            data_project = variables.sparql_get_project_object.get_data_project(project)
-            array_projects.append((project, data_project))
+        projects_sorted = []
+        for project in projects:
+            projects_sorted.append(variables.sparql_get_project_object.get_data_project(project))    
+        projects_sorted.sort(key=lambda item: item['founding_date'], reverse=True)
 
-        return array_projects
+        return projects_sorted
 
 
     def get_datasets_creator_person(self, pid):
@@ -142,13 +144,13 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        array_datasets = []
+        datasets = parse_get_datasets_person(self.sparql.query().response.read())
 
-        for dataset in parse_get_datasets_person(self.sparql.query().response.read()):
-            data_dataset = variables.sparql_get_dataset_object.get_data_dataset(dataset)
-            array_datasets.append((dataset, data_dataset))
+        datasets_sorted = []
+        for dataset in datasets:
+            datasets_sorted.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
 
-        return array_datasets
+        return datasets_sorted
 
 
     def get_datasets_maintainer_person(self, pid):
@@ -168,13 +170,13 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        array_datasets = []
+        datasets = parse_get_datasets_person(self.sparql.query().response.read())
 
-        for dataset in parse_get_datasets_person(self.sparql.query().response.read()):
-            data_dataset = variables.sparql_get_dataset_object.get_data_dataset(dataset)
-            array_datasets.append((dataset, data_dataset))
+        datasets_sorted = []
+        for dataset in datasets:
+            datasets_sorted.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
 
-        return array_datasets
+        return datasets_sorted
 
     
     def get_work_person(self, pid):
@@ -197,8 +199,8 @@ class SparqlGetPersonMethods:
         array_works = []
 
         for work in parse_get_works_person(self.sparql.query().response.read()):
-            data_work = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, work)
-            array_works.append((work, data_work))
+            data_work = variables.SparqlGetInstitutionMethods.get_data_institution(self, work)
+            array_works.append(data_work)
 
         return array_works
 
@@ -223,8 +225,8 @@ class SparqlGetPersonMethods:
         array_affiliations = []
 
         for affiliation in parse_get_affiliations_person(self.sparql.query().response.read()):
-            data_affiliation = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, affiliation)
-            array_affiliations.append((affiliation, data_affiliation))
+            data_affiliation = variables.SparqlGetInstitutionMethods.get_data_institution(self, affiliation)
+            array_affiliations.append(data_affiliation)
 
         return array_affiliations
 
@@ -259,12 +261,20 @@ class SparqlGetPersonMethods:
         datasets_maintainer = variables.sparql_get_person_object.get_datasets_maintainer_person(pid)
         works = variables.sparql_get_person_object.get_work_person(pid)
         affiliations = variables.sparql_get_person_object.get_affiliation_person(pid)
+
+        # Concatenate the two arrays of datasets in only one with only one recurrency
+        datasets = datasets_maintainer
+        datasets_maintainer_pid = [ dataset['pid'] for dataset in datasets_maintainer ]
+        for dataset in datasets_creator:
+            if not (dataset['pid'] in datasets_maintainer_pid):
+                datasets.append(dataset)
+        datasets.sort(key=lambda item: item['modified_date'], reverse=True)
+
         
         data_person['pid'] = pid
         data_person['articles'] = articles
         data_person['projects'] = projects
-        data_person['datasets_creator'] = datasets_creator
-        data_person['datasets_maintainer'] = datasets_maintainer
+        data_person['datasets'] = datasets
         data_person['works'] = works
         data_person['affiliations'] = affiliations
 
