@@ -1,44 +1,10 @@
 .horizontal-align-left-edge {
-    padding-left: 5%;
-    padding-right: 5%
-}
-
-h1 {
-    font-size: 26px !important;
+    margin-top: 20px;
 }
 
 .breadcrumb {
     margin-left: 5%;
     margin-top: 20px;
-}
-
-.leftbox {
-    float: left; 
-    width: 33%;
-    height: 30%;
-}
-
-.middlebox {
-    float: left; 
-    width: 33%;
-    height: 30%;
-    padding-left: 20px;
-}
-
-.rightbox {
-    float:left;
-    width:33%;
-    height:30%;
-    padding-left: 20px;
-}
-
-.container {
-    width: 90%;
-    height: 50%;
-    margin-left: 5%;
-    margin-top: 50px;
-    margin-bottom: 20px;
-    display: table;
 }
 
 .tab-content div {
@@ -53,20 +19,181 @@ h1 {
     margin-top: 3px;
 }
 
-.image {
+.profile-photo {
     border-radius: 50%;
+    border: 5px solid white;
     width: 200px;
-    align-items: center;
+    margin-bottom: -20px;
+    margin-left: 15%;
 }
 
 .header {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+}
+
+.align-image-text {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.center-div {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
 }
 
 .right-align {
     position: absolute;
-    top: auto;
-    right: 5%;
+    margin-top: -10px;
+    right: 7%;
+    color: #679bff;
+}
+
+.break {
+    flex-basis: 100%;
+    height: 0;
+}
+
+.break-logo {
+    flex-basis: 100%;
+    height: 0;
+    text-align: center;
+}
+
+.institution-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+}
+
+.image.is-48x48 {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    margin-right: 10px;
+}
+
+.parallax {
+    background-color: lightgray;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-top: 100px;
+    margin-left: 5%;
+    margin-right: 5%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.box {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.name {
+    margin-top: 0px;
+}
+
+.domains {
+    margin-top: 15px;
+}
+
+.link-one svg {
+    color: #cecece;
+}
+
+.icon-institution {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.top-box {
+    margin-bottom: 24px;
+}
+
+#more, #more-article, #more-project, #more-dataset {
+    display: none;
+}
+
+.myBtn-div {
+    margin-top: 20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: -20px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #eeeeee;
+    text-align: center;
+    color: #727272;
+}
+
+.myBtn-div:hover {
+    background-color: #e6e6e6;
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+    color: #727272;
+}
+  
+  .separator::before,
+  .separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #eeeeee;
+}
+  
+  .separator:not(:empty)::before {
+    margin-right: .5em;
+}
+  
+  .separator:not(:empty)::after {
+    margin-left: .5em;
+}
+
+  .center-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    flex-direction: column-reverse;
+}
+
+  .space-below {
+      margin-bottom: 20px;
+}
+
+  .little-space-below {
+    margin-bottom: 5px;
+}
+
+.little-space-above {
+    margin-top: -5px;
+}
+
+.align-button-centered {
+    margin-left: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    margin-top: -2px;
+}
+
+.link-one .fa-plus-circle {
+    color: #cecece;
+    font-size: 1.2rem;
+    vertical-align: -4px;
 }

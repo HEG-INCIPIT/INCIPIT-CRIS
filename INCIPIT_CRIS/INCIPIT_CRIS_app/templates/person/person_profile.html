@@ -29,138 +29,324 @@
             {% block information %}
             {% endblock %}
 
-            <div class="container"> 
-                <div class="boxes">
-                    <div class="leftbox">
-                            <figure class="figure">
-                                <img src="{% static 'images/blank-profile-picture.png' %}" width="250" height="250">
-                            </figure>
-                        </div> 
-                        
-                        <div class="middlebox">
-                            <h1>
-                                {{ data_person.given_name }} {{ data_person.family_name }}
-                                {% block button_back %}
-                                    {% if can_edit %}
-                                        <a class="button is-primary" href="/persons/edition/{{ data_person.pid }}">Modifier</a>
+
+            <div class="parallax">
+            <section class="header">
+                    <figure class="figure">
+                        <img class="image profile-photo" src="{% static 'images/blank-profile-picture.png' %}">
+                    </figure>
+            </section>
+            </div>
+
+            <section class="box top-box">
+                <div class="columns">
+                    {% if can_edit %}
+                        <a class="right-align little-space-above" href="/persons/edition/{{ data_person.pid }}"><i class="fas fa-user-edit"></i></a>
+                    {% endif %}
+                    
+                    <div class="column">
+                        {% block person_information %}
+                            <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
+                            <p>Nom du poste</p>
+                            <p class="domains">Domaines : LOD, PID</p>
+                        {% endblock %}
+                    </div>
+                    
+                    <div class="column is-one-third header">
+                    {% for work in data_person.works %}
+                        <div class="align-image-text">
+                            <figure class="image is-48x48">
+                                    <img src=
+                                    {% if work.logo == '' %}
+                                        "{% static 'images/university-solid.png' %}"
+                                    {% else %}
+                                        "{{ work.logo }}"
                                     {% endif %}
-                                {% endblock %}
-                            </h1>
-                            <br>
-                            {% block person_left_information %}
-                                <p class="subtitle is-6">Email : {{ data_person.email }}</p>
-                                <p class="subtitle is-6">Téléphone : {{ data_person.telephone }}</p>
-                            {% endblock %}
+                                    >
+                            </figure>
+                            <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
                         </div>
-                        <div class="rightbox">
-                            <h1 style="visibility: hidden">
-                                {{ data_person.given_name }} {{ data_person.family_name }}
-                                {% if can_edit %}
-                                    <a class="button is-primary" href="/persons/edition/{{ data_person.pid }}">Modifier</a>
+                    {% endfor %}
+                    <p class="break-logo"></p>
+                    {% for affiliation in data_person.affiliations %}
+                        <div class="align-image-text">
+                            <figure class="image is-48x48">
+                                <img src=
+                                {% if affiliation.logo == '' %}
+                                    "{% static 'images/university-solid.png' %}"
+                                {% else %}
+                                    "{{ affiliation.logo }}"
                                 {% endif %}
-                            </h1>
-                            <br>
-                            {% block person_right_information %}
-                                <p class="subtitle is-6">Domaines : ...</p>
-                                <p class="subtitle is-6">Institution : Haute Ecole de Gestion</p>
-                            {% endblock %}
+                                >
+                            </figure>
+                            <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
                         </div>
+                    {% endfor %}
                     </div>
                 </div>
-            </div>
+            </section>
         </section>
 
-        <section class="horizontal-align-left-edge">
+        <section class="data-box btn-see-more box">
+            <p class="title is-5">A propos</p>
+            {% block person_description %}
+                <p class="space-below">Description :</p>
+                <p class="justified">{{ data_person.description }}</p>
+            {% endblock %}
+            
+            <span id="more">
 
-            <div class="tabs is-boxed">
-                <ul>
-                    <li class="is-active" data-tab="apropos">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>A propos</span>
-                    </a>
-                    </li>
-                    <li data-tab="publications">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Publications</span>
-                    </a>
-                    </li>
-                    <li data-tab="projects">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Projets</span>
-                    </a>
-                    </li>
-                    <li data-tab="data">
-                    <a>
-                        <span class=""><i class="-alt" aria-hidden="true"></i></span>
-                        <span>Données</span>
-                    </a>
-                    </li>
-                </ul>
+            <div class="separator">Informations personnelles</div>
+
+            {% block person_personal_information %}
+                <div class="columns is-multiline">
+                    <div class="column is-one-third">
+
+                        <p>Titre : M</p>
+                    </div>
+
+                    <div class="column is-one-third">
+                        <p>Prénom : {{ data_person.given_name }}</p>
+                    </div>
+
+                    <div class="column is-one-third">
+                        <p>Nom : {{ data_person.family_name }}</p>
+                    </div>
+
+                    <div class="column is-one-third">
+                        <p>Poste : Nom du poste</p>
+                    </div>
+                </div>
+            {% endblock %}
+
+            <div class="separator">Contact</div>
+
+            {% block person_contact %}
+                <div class="columns">
+                    <div class="column center-div">
+
+                        <p>Email : {{ data_person.email }}</p>
+
+                    </div>
+                    <div class="column center-div">
+
+                        <p>Téléphone : {{ data_person.telephone }}</p>
+                    </div>
+
+                    <div class="column center-div">
+                        <i class="fab fa-linkedin fa-3x"></i>
+                    </div>
+                </div>
+            {% endblock %}
+
+            <div class="separator">Institutions</div>
+
+            <div class="columns">
+                <div class="column">
+                    {% block person_work %}
+                        <p class="subtitle is-6">Travail :</p>
+                        {% for work in data_person.works %}
+                            <div class="align-image-text">
+                                <figure class="image is-48x48">
+                                        <img src=
+                                        {% if work.logo == '' %}
+                                            "{% static 'images/university-solid.png' %}"
+                                        {% else %}
+                                            "{{ work.logo }}"
+                                        {% endif %}
+                                        >
+                                </figure>
+                                <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                            </div>
+                        {% endfor %}
+                    {% endblock %}
+
+                </div>
+                <div class="column">
+
+                    {% block person_affiliation %}
+                        <p class="subtitle is-6">Affiliation :</p>
+                        {% for affiliation in data_person.affiliations %}
+                            <div class="align-image-text">
+                                <figure class="image is-48x48">
+                                    <img src=
+                                    {% if affiliation.logo == '' %}
+                                        "{% static 'images/university-solid.png' %}"
+                                    {% else %}
+                                        "{{ affiliation.logo }}"
+                                    {% endif %}
+                                    >
+                                </figure>
+                                <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
+                            </div>
+                        {% endfor %}
+                    {% endblock %}
+                </div>
             </div>
 
-            <div class="tab-content">
-                <div class="is-active" data-content="apropos">
-                    {% block apropos %}
-                        <p>Description : {{ data_person.description }}</p>
-                    {% endblock %}
+            </span>
+
+            <a onclick="displayMore('more', 'myBtn-div')" class="myBtn" id="myBtn">
+                <div class="title is-6 myBtn-div" id="myBtn-div">
+                    Voir plus
                 </div>
-                <div data-content="publications">
-                    {% block articles %}
-                        Articles :
-                        {% for article in data_person.articles %}
-                            <p>
-                                <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
-                            </p>
-                        {% endfor %}
-                    {% endblock %}
+            </a>
+        </section>
+
+        <section class="data-box btn-see-more box">
+            {% block person_articles %}
+                <p class="title is-5">Articles</p>
+
+                {% for article in data_person.articles %}
+                
+                    <div>
+                        <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
+                        <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        <p class="justified little-space-below">{{ article.abstract }}</p>
+                        <p>
+                            {% for author in article.authors %}
+                                {% if not forloop.last %}
+                                    <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>,
+                                {% else %}
+                                    <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+                                {% endif %}
+                                
+                            {% endfor %}
+                        </p>
+                        <i>Editeur, {{ article.date_published }}</i>
+                    </div>
+
+                    {% if forloop.first %}
+                        <span id="more-article">
+                    {% endif %}
+
+                    {% if forloop.last %}
+                        </span>
+                    {% else %}
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            {% endblock %}
+
+            <a onclick="displayMore('more-article', 'myBtn-div-article')" class="myBtn" id="myBtn">
+                <div class="title is-6 myBtn-div" id="myBtn-div-article">
+                    Voir plus
                 </div>
-                <div data-content="projects">
-                    {% block projects %}
-                        <p>Projets : </p>
-                        {% for project in data_person.projects %}
-                            <p>
-                                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
-                            </p>
-                        {% endfor %}
-                    {% endblock %}
+            </a>
+        </section>
+
+
+        <section class="data-box btn-see-more box">
+            {% block person_projects %}
+                <p class="title is-5">Projets</p>
+
+                {% for project in data_person.projects %}
+                
+                    <div>
+                        <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
+                        <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        <p class="justified little-space-below">{{ project.description }}</p>
+                        <p>
+                            {% for member in project.members %}
+                                {% if not forloop.last %}
+                                    <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
+                                {% else %}
+                                    <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+                        <p>Financement : Bailleurs de fonds</p>
+                    </div>
+
+                    {% if forloop.first %}
+                        <span id="more-project">
+                    {% endif %}
+
+                    {% if forloop.last %}
+                        </span>
+                    {% else %}
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            {% endblock %}
+
+            <a onclick="displayMore('more-project', 'myBtn-div-project')" class="myBtn" id="myBtn">
+                <div class="title is-6 myBtn-div" id="myBtn-div-project">
+                    Voir plus
                 </div>
-                <div data-content="data">
-                    <p>Données : </p>
-                    {% block dataset %}
-                        <p>Créateur :</p>
-                        {% for creator in data_person.datasets_creator %}
-                            <p>
-                                <a class="link-one" href="/datasets/{{ creator.0 }}">{{ creator.1.name }}</a>
-                            </p>
-                        {% endfor %}
-                        <p>Mainteneur :</p>
-                        {% for maintainer in data_person.datasets_maintainer %}
-                            <p>
-                                <a class="link-one" href="/datasets/{{ maintainer.0 }}">{{ maintainer.1.name }}</a>
-                            </p>
-                        {% endfor %}
-                    {% endblock %}
+            </a>
+        </section>
+
+
+        <section class="data-box btn-see-more box">
+            {% block person_datasets %}
+                <p class="title is-5">Données</p>
+                
+                {% for dataset in data_person.datasets %}
+                
+                    <div>
+                        <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
+                        <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
+                        <p class="justified little-space-below">{{ dataset.abstract }}</p>
+                        <p> Créateurs :
+                            {% for creator in dataset.creators %}
+                                {% if not forloop.last %}
+                                    <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
+                                {% else %}
+                                    <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p> Mainteneur :
+                            {% for maintainer in dataset.maintainers %}
+                                {% if not forloop.last %}
+                                    <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
+                                {% else %}
+                                    <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p>Création : {{ dataset.created_date }}</p>
+                        <p>Dernière modification : {{ dataset.modified_date }}</p>
+                    </div>
+
+                    {% if forloop.first %}
+                        <span id="more-dataset">
+                    {% endif %}
+
+                    {% if forloop.last %}
+                        </span>
+                    {% else %}
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            {% endblock %}
+
+            <a onclick="displayMore('more-dataset', 'myBtn-div-dataset')" class="myBtn" id="myBtn">
+                <div class="title is-6 myBtn-div" id="myBtn-div-dataset">
+                    Voir plus
                 </div>
-            </div>
+            </a>
         </section>
         
         {% include 'main/footer.html' %}
     </body>
     
     <script>
-        $(document).ready(function() {
-            $('.tabs li').on('click', function() {
-                var tab = $(this).data('tab');
 
-                $('.tabs li').removeClass('is-active');
-                $(this).addClass('is-active');
+        function displayMore(spanId, btn) {
+            var moreText = document.getElementById(spanId);
+            var btnText = document.getElementById(btn);
 
-                $('.tab-content div').removeClass('is-active');
-                $('div[data-content="' + tab + '"]').addClass('is-active');
-            });
-        });
+            if (moreText.style.display === "inline") {
+                moreText.style.display = "none";
+                btnText.innerHTML = "Voir plus";
+            } else {
+                moreText.style.display = "inline";
+                btnText.innerHTML = "Voir moins";
+            }
+        }
     </script>
 </html>
