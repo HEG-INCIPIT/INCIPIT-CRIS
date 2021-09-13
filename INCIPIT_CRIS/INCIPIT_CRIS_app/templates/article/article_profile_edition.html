@@ -104,7 +104,7 @@
             <form action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="institutionARK" name="institutionARK" value="{{ institution.pid }}">
-                <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} {{ institution.alternateName }}</a>
+                <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} ({{ institution.alternate_name }})</a>
                 <button class="delete"></button></li>
             </form>
         {% endfor %}

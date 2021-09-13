@@ -98,7 +98,10 @@ class SparqlGetInstitutionMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_full_name_institution(self.sparql.query().response.read())
+        dict_institution = parse_get_full_name_institution(self.sparql.query().response.read())
+        dict_institution['pid'] = pid
+
+        return dict_institution
 
 
     def get_projects_institution(self, pid):

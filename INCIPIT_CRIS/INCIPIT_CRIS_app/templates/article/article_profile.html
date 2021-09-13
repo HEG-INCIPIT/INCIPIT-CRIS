@@ -86,7 +86,7 @@
                         <p class="title-data">Institution(s) : </p>
                         <ul>
                             {% for institution in data_article.institutions %}
-                                <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} {{ institution.alternateName }}</a></li>
+                                <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} ({{ institution.alternate_name }})</a></li>
                             {% endfor %}
                         </ul>
                     {% endblock %}
