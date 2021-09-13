@@ -638,6 +638,47 @@ def article_institution_addition(request, pid):
     return render(request, 'page_info.html', context)
 
 
+def article_institution_deletion(request, pid):
+    '''
+    Deletes a institution of the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of an article.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the authors of the article
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
+        # Verify if the user ark is in the articles institutions to grant edition
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
+            institution = request.POST.get('institutionARK', '')
+            variables.sparql_post_article_object.delete_institution_of_article(institution, pid)
+
+            return redirect(article_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet article",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet article"
+    }
+    return render(request, 'page_info.html', context)
+
+
 def article_deletion(request, pid):
     '''
     Deletes the given article
