@@ -264,7 +264,7 @@ def person_article_addition(request, pid):
             # Request all the articles of the person
             articles_person = variables.sparql_get_person_object.get_articles_person(pid)
             for basic_info_article in articles_info:
-                if not (basic_info_article[0] in [article[0] for article in articles_person]):
+                if not (basic_info_article[0] in [article['pid'] for article in articles_person]):
                     articles.append(
                         '''{}, {}'''.format(basic_info_article[1], basic_info_article[0]))
 
@@ -327,7 +327,7 @@ def person_project_addition(request, pid):
             # Request all the projects of the person
             projects_person = variables.sparql_get_person_object.get_projects_person(pid)
             for basic_info_project in projects_info:
-                if not (basic_info_project[0] in [project[0] for project in projects_person]):
+                if not (basic_info_project[0] in [project['pid'] for project in projects_person]):
                     projects.append(
                         '''{}, {}'''.format(basic_info_project[1], basic_info_project[0]))
 
@@ -389,7 +389,7 @@ def person_project_deletion(request, pid):
     return render(request, 'page_info.html', context)
 
 
-def person_datasets_creator_addition(request, pid):
+def person_datasets_addition(request, pid):
     '''
     Adds a dataset as creator to a given person
 
@@ -411,12 +411,20 @@ def person_datasets_creator_addition(request, pid):
     if request.user.is_authenticated:
         # Verify if the user as the right to modify the profile
         if request.user.is_superuser:
-
             # Check the request method
             if request.method == 'POST':
                 datasets = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
-                for dataset in datasets:
-                    variables.sparql_post_dataset_object.add_creator_to_dataset(dataset.split()[-1], pid)
+                person_status = request.POST['personStatus']
+                if person_status == 'creator':
+                    for dataset in datasets:
+                        variables.sparql_post_dataset_object.add_creator_to_dataset(dataset.split()[-1], pid)
+                elif person_status == 'maintainer':
+                    for dataset in datasets:
+                        variables.sparql_post_dataset_object.add_maintainer_to_dataset(dataset.split()[-1], pid)
+                elif person_status == 'creator_and_maintainer':
+                    for dataset in datasets:
+                        variables.sparql_post_dataset_object.add_creator_to_dataset(dataset.split()[-1], pid)
+                        variables.sparql_post_dataset_object.add_maintainer_to_dataset(dataset.split()[-1], pid)
 
                 return redirect(person_edition, pid=pid)
 
@@ -426,21 +434,21 @@ def person_datasets_creator_addition(request, pid):
             # Request all the datasets of the person
             datasets_person = variables.sparql_get_person_object.get_datasets_creator_person(pid)
             for basic_info_dataset in datasets_info:
-                if not (basic_info_dataset[0] in [dataset[0] for dataset in datasets_person]):
+                if not (basic_info_dataset[0] in [dataset['pid'] for dataset in datasets_person]):
                     datasets.append(
                         '''{}, {}'''.format(basic_info_dataset[1], basic_info_dataset[0]))
 
             context = {
                 'button_value': 'Ajouter',
-                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un jeu de données en tant que créateur'],
-                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-creator/'+pid],
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un jeu de données'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-dataset/'+pid],
                 'title_data_type_added': 'Jeu de données',
                 'data_type_added': 'du jeu de données',
-                'url_to_return': '/persons/edition/profil/add-dataset-creator/{}'.format(pid),
+                'url_to_return': '/persons/edition/profil/add-dataset/{}'.format(pid),
                 'data': datasets
             }
             # return the form to be completed
-            return render(request, 'forms/autocompletion_group.html', context)
+            return render(request, 'forms/person_dataset_addition.html', context)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer ce profil",
@@ -452,7 +460,7 @@ def person_datasets_creator_addition(request, pid):
     return render(request, 'page_info.html', context)
 
 
-def person_datasets_creator_deletion(request, pid):
+def person_datasets_deletion(request, pid):
     '''
     Deletes a dataset of a given person
 
@@ -474,8 +482,9 @@ def person_datasets_creator_deletion(request, pid):
         # Verify that the edition of profile is made by the legitimate user or admin
         if request.user.pid == pid or request.user.is_superuser:
 
-            dataset = request.POST.get('dataset_creatorARK', '')
+            dataset = request.POST.get('dataset_ARK', '')
             variables.sparql_post_dataset_object.delete_creator_of_dataset(dataset, pid)
+            variables.sparql_post_dataset_object.delete_maintainer_of_dataset(dataset, pid)
 
             return redirect(person_edition, pid=pid)
 
@@ -541,43 +550,6 @@ def person_datasets_maintainer_addition(request, pid):
             }
             # return the form to be completed
             return render(request, 'forms/autocompletion_group.html', context)
-
-        context = {
-            'message': "Vous n'avez pas le droit d'éditer ce profil",
-        }
-        return render(request, 'page_info.html', context)
-    context = {
-        'message': "Connectez-vous pour pouvoir éditer ce profil"
-    }
-    return render(request, 'page_info.html', context)
-
-
-def person_datasets_maintainer_deletion(request, pid):
-    '''
-    Deletes a dataset of the given person
-
-    Parameters
-    ----------
-    request : HttpRequest
-        It is the metadata of the request.
-    pid: String
-        It's a string representing the PID of the current object.
-
-    Returns
-    -------
-    HttpResponseRedirect
-        A HttpResponseRedirect object that redirect to the page of edition of a person.
-    '''
-    
-    # Verify that the user is authenticated and has the right to modify the profile
-    if request.user.is_authenticated:
-        # Verify that the edition of profile is made by the legitimate user or admin
-        if request.user.pid == pid or request.user.is_superuser:
-
-            dataset = request.POST.get('dataset_maintainerARK', '')
-            variables.sparql_post_dataset_object.delete_maintainer_of_dataset(dataset, pid)
-
-            return redirect(person_edition, pid=pid)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer ce profil",

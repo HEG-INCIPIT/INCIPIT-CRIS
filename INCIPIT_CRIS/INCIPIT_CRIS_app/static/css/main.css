@@ -8,6 +8,10 @@ body {
     color: #679bff !important;
 }
 
+.link-one:hover {
+    color: #3479ff !important;
+}
+
 hr {
     color: #f5f5f5;
     margin-left: 50px;

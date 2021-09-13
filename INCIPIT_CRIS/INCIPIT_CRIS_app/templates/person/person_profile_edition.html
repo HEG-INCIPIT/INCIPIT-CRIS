@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block button_navigation %}
-    <a class="right-align little-space-above" href="/persons/{{ data_person.pid }}"><i class="fas fa-user-alt"></i></a>
+    <a class="link-one right-align little-space-above" href="/persons/{{ data_person.pid }}"><i class="fas fa-user-alt"></i></a>
 {% endblock %}
 
 {% block person_information %}
@@ -205,7 +205,7 @@
         <div>
             <form action="/persons/edition/profil/delete-dataset/{{data_person.pid}}" method="post">
                 {% csrf_token %}
-                <input type="hidden" id="dataset_creatorARK" name="dataset_creatorARK" value="{{ dataset_creator.pid }}">
+                <input type="hidden" id="dataset_ARK" name="dataset_ARK" value="{{ dataset_creator.pid }}">
                 <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
                 <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
                 <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
