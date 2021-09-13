@@ -59,22 +59,6 @@ def parse_check_institution_ark(sparql_query_answer):
     return False
 
 
-def parse_get_projects_institution(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_projects = []
-    for project in loaded_json:
-        array_projects.append(project['project']['value'])
-    return array_projects
-
-
-def parse_get_datasets_institution(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_datasets = []
-    for dataset in loaded_json:
-        array_datasets.append(dataset['dataset']['value'])
-    return array_datasets
-
-
 def parse_get_data_institution(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
@@ -89,3 +73,39 @@ def parse_get_data_institution(sparql_query_answer):
     }
 
     return dict_data
+
+
+def parse_get_persons_institution(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_persons = []
+    for person in loaded_json:
+        array_persons.append(person['person']['value'])
+        
+    return array_persons
+
+
+def parse_get_articles_institution(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_articles = []
+    for article in loaded_json:
+        array_articles.append(article['article']['value'])
+        
+    return array_articles
+
+
+def parse_get_projects_institution(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_projects = []
+    for project in loaded_json:
+        array_projects.append(project['sponsor']['value'])
+        
+    return array_projects
+
+
+def parse_get_datasets_institution(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_datasets = []
+    for dataset in loaded_json:
+        array_datasets.append(dataset['dataset']['value'])
+        
+    return array_datasets

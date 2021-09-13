@@ -72,10 +72,16 @@
                         <span>A propos</span>
                     </a>
                     </li>
-                    <li data-tab="members">
+                    <li data-tab="workers">
                     <a>
                         <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Membres</span>
+                        <span>Employés</span>
+                    </a>
+                    </li>
+                    <li data-tab="affiliates">
+                    <a>
+                        <span class=""><i class="" aria-hidden="true"></i></span>
+                        <span>Affiliés</span>
                     </a>
                     </li>
                     <li data-tab="publications">
@@ -123,12 +129,22 @@
                         </p>
                     {% endblock %}
                 </div>
-                <div data-content="members">
-                    {% block members %}
-                        Membres :
-                        {% for member in data_institution.members %}
+                <div data-content="workers">
+                    {% block workers %}
+                        Employés :
+                        {% for worker in data_institution.workers %}
                             <p>
-                                <a class="link-one" href="/members/{{ member.0 }}">{{ member.1.name }}</a>
+                                <a class="link-one" href="/persons/{{ worker.pid }}">{{ worker.given_name }} {{ worker.family_name }}</a>
+                            </p>
+                        {% endfor %}
+                    {% endblock %}
+                </div>
+                <div data-content="affiliates">
+                    {% block affiliates %}
+                        Affiliés :
+                        {% for affiliate in data_institution.affiliates %}
+                            <p>
+                                <a class="link-one" href="/persons/{{ affiliate.pid }}">{{ affiliate.given_name }} {{ affiliate.family_name }}</a>
                             </p>
                         {% endfor %}
                     {% endblock %}

@@ -189,6 +189,141 @@ class SparqlGetInstitutionMethods:
         return institution_dict
 
 
+    def get_workers_institution(self, pid):
+        """
+        Get all the works for who the person is a maintainer
+        Return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?person WHERE
+            {{
+                ?person schema:worksFor <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_persons = []
+
+        for worker in parse_get_persons_institution(self.sparql.query().response.read()):
+            print("\n")
+            print(worker)
+            print("\n")
+            data_person = variables.SparqlGetPersonMethods.get_full_name_person(self, worker)
+            array_persons.append(data_person)
+
+        return array_persons
+
+    
+    def get_affiliates_institution(self, pid):
+        """
+        Get all the affiliations for who the person is a maintainer
+        Return an array with tuples (identifier, dictionnary)
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?person WHERE
+            {{
+                ?person schema:affiliation <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_affiliates = []
+
+        for affiliate in parse_get_persons_institution(self.sparql.query().response.read()):
+            data_affiliate = variables.SparqlGetPersonMethods.get_full_name_person(self, affiliate)
+            array_affiliates.append(data_affiliate)
+
+        return array_affiliates
+
+
+    def get_articles_institution(self, pid):
+        """
+        Get all the articles of the institution for who the authors were working for
+        Return a dictionnary
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?article WHERE
+            {{
+                ?article schema:sourceOrganisation <{ark_research}> .
+                FILTER (?article a schema:ScholarlyArticle)
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_articles = []
+
+        for article in parse_get_articles_institution(self.sparql.query().response.read()):
+            data_article = variables.SparqlGetArticleMethods.get_full_name_article(self, article)
+            array_articles.append(data_article)
+
+        return array_articles
+
+
+    def get_projects_institution(self, pid):
+        """
+        Get all the projects of the institution for who the creators were working for
+        Return a dictionnary
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?project WHERE
+            {{
+                ?project schema:sponsor <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_projects = []
+
+        for project in parse_get_projects_institution(self.sparql.query().response.read()):
+            data_project = variables.SparqlGetProjectMethods.get_full_name_project(self, project)
+            array_projects.append(data_project)
+
+        return array_projects
+
+
+    def get_datasets_institution(self, pid):
+        """
+        Get all the datasets of the institution for who the creators were working for
+        Return a dictionnary
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?dataset WHERE
+            {{
+                ?dataset schema:sourceOrganisation <{ark_research}> .
+                FILTER (?dataset a schema:ResearchProject)
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_datasets = []
+
+        for dataset in parse_get_datasets_institution(self.sparql.query().response.read()):
+            data_dataset = variables.SparqlGetDatasetMethods.get_full_name_dataset(self, dataset)
+            array_datasets.append(data_dataset)
+
+        return array_datasets
+
+
     def get_data_institution(self, pid):
         """
         Get all the information of an institution : ark, name, abstract, date of publication, authors, ...
@@ -224,8 +359,12 @@ class SparqlGetInstitutionMethods:
             parent_organization_array.append((inst, variables.SparqlGetInstitutionMethods.get_full_name_institution(self, inst)))
 
         projects = variables.sparql_get_institution_object.get_projects_institution(pid)
+        workers = variables.sparql_get_institution_object.get_workers_institution(pid)
+        affiliates = variables.sparql_get_institution_object.get_affiliates_institution(pid)
         
         data_institution['projects'] = projects
+        data_institution['workers'] = workers
+        data_institution['affiliates'] = affiliates
         data_institution['sub_organizations'] = sub_organization_array
         data_institution['parent_organizations'] = parent_organization_array
         data_institution['pid'] = pid

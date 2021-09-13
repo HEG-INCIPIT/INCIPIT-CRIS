@@ -71,7 +71,10 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_full_name_person(self.sparql.query().response.read())
+        dict_name = parse_get_full_name_person(self.sparql.query().response.read())
+        dict_name['pid'] = pid
+
+        return dict_name
 
     def get_articles_person(self, pid):
         """
