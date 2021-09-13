@@ -30,6 +30,7 @@ urlpatterns = [
     path('articles/edition/field/delete-project/<path:pid>', views_article.article_project_deletion, name='article_project_deletion'),
     path('articles/edition/field/add-dataset/<path:pid>', views_article.article_dataset_addition, name='article_dataset_addition'),
     path('articles/edition/field/delete-dataset/<path:pid>', views_article.article_dataset_deletion, name='article_dataset_deletion'),
+    path('articles/edition/field/add-institution/<path:pid>', views_article.article_institution_addition, name='article_institution_addition'),
     path('articles/edition/delete-article/<path:pid>', views_article.article_deletion, name='article_deletion'),
     path('articles/edition/field/<str:field_to_modify>/<path:pid>', views_article.article_field_edition, name='article_field_edition'),
     path('articles/edition/<path:pid>', views_article.article_edition, name='article_edition'),

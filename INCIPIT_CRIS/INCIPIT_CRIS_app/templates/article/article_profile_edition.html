@@ -69,10 +69,6 @@
                 <li class="data"><a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
                 <button class="delete"></button></li>
             </form>
-
-            {% if not forloop.last %}
-                <img src="{% static 'svg/data_separator.svg' %}" />
-            {% endif %}
         {% endfor %}
     <ul>
 {% endblock %}
@@ -87,12 +83,9 @@
                 <li class="data"><a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
                 <button class="delete"></button></li>
             </form>
-
-            {% if not forloop.last %}
-                <img src="{% static 'svg/data_separator.svg' %}" />
-            {% endif %}
         {% endfor %}
     </ul>
+
     <p class="title-data">Jeu(x) de données : <a class="link-one" href="/articles/edition/field/add-dataset/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
     <ul>
         {% for dataset in data_article.datasets %}
@@ -102,10 +95,18 @@
                 <li class="data"><a class="link-one" href="/datasets/{{ dataset.0 }}">{{ dataset.1.name }}</a>
                 <button class="delete"></button></li>
             </form>
+        {% endfor %}
+    </ul>
 
-            {% if not forloop.last %}
-                <img src="{% static 'svg/data_separator.svg' %}" />
-            {% endif %}
+    <p class="title-data">Institution(s) : <a class="link-one" href="/articles/edition/field/add-institution/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <ul>
+        {% for institution in data_article.institutions %}
+            <form action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="institutionARK" name="institutionARK" value="{{ institution.pid }}">
+                <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} {{ institution.alternateName }}</a>
+                <button class="delete"></button></li>
+            </form>
         {% endfor %}
     </ul>
 {% endblock %}

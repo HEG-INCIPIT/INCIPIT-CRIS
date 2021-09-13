@@ -154,6 +154,32 @@ class SparqlGetArticleMethods:
         return array_datasets
 
 
+    def get_institutions_article(self, pid):
+        """
+        Get all the institutions of the article for who the authors were working for
+        Return a dictionnary
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?sourceOrganisation WHERE
+            {{
+                <{ark_research}> schema:sourceOrganisation ?sourceOrganisation .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_institutions = []
+
+        for institution in parse_get_institutions_institution(self.sparql.query().response.read()):
+            data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
+            array_institutions.append(data_institution)
+
+        return array_institutions
+
+
     def get_data_article(self, pid):
         """
         Get all the information of an article : ark, name, abstract, date of publication, authors, ...
@@ -179,12 +205,16 @@ class SparqlGetArticleMethods:
         authors = variables.sparql_get_article_object.get_authors_article(pid)
         projects = variables.sparql_get_article_object.get_projects_article(pid)
         datasets = variables.sparql_get_article_object.get_datasets_article(pid)
+        institutions = variables.sparql_get_article_object.get_institutions_article(pid)
         
         data_article['authors'] = authors
         data_article['projects'] = projects
         data_article['datasets'] = datasets
+        data_article['institutions'] = institutions
         data_article['pid'] = pid
+        
         return data_article
+
 
     def check_article_ark(self, pid):
         """

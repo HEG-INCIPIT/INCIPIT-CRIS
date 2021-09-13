@@ -89,9 +89,10 @@ class SparqlGetInstitutionMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?name WHERE
+            SELECT ?name ?alternateName WHERE
             {{
                 <{ark_research}> schema:name ?name .
+                <{ark_research}> schema:alternateName ?alternateName .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 

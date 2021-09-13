@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 import re
 import string
+import json
 from . import views
 from . import variables
 from . import form_selection
@@ -584,6 +585,48 @@ def article_dataset_deletion(request, pid):
             variables.sparql_post_dataset_object.delete_article_from_dataset(dataset, pid)
 
             return redirect(article_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet article",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet article"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def article_institution_addition(request, pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the authors of the article
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
+        # Verify if the user ark is in the articles datasets to grant edition
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
+
+            # Check the request method
+            if request.method == 'POST':
+                variables.sparql_post_article_object.add_institution_to_article(pid, request.POST['institutions'])
+
+                return redirect(article_edition, pid=pid)
+
+            top_lvl_institutions = variables.sparql_get_institution_object.get_top_lvl_institutions()
+            top_lvl_institutions_data = []
+            for top_lvl_institution in top_lvl_institutions:
+                top_lvl_institutions_data.append(variables.sparql_get_institution_object.get_dict_institution(top_lvl_institution[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'path_name' : ['Articles', 'Profil', 'Edition', 'Ajouter un jeu de données'],
+                'path_url' : ['/articles/', '/articles/'+pid, '/articles/edition/'+pid, '/articles/edition/field/add-institution/'+pid],
+                'title_data_type_added': 'Institution',
+                'data_type_added': 'de l\'institution',
+                'url_to_return': '/articles/edition/field/add-institution/{}'.format(pid),
+                'institutions': json.dumps(top_lvl_institutions_data),
+            }
+            # return the form to be completed
+            return render(request, 'forms/select_institution_form.html', context)
 
         context = {
             'message': "Vous n'avez pas le droit d'éditer cet article",

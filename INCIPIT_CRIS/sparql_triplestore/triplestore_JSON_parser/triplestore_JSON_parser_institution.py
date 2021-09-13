@@ -6,10 +6,12 @@ def parse_get_full_name_institution(sparql_query_answer):
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
         dict_data = {
             'name': loaded_json['name']['value'],
+            'alternate_name': loaded_json['alternateNamed']['value'] if 'alternateNamed' in loaded_json else '',
         }
     else:
         dict_data = {
             'name': '',
+            'alternate_name': '',
         }
     return dict_data
 

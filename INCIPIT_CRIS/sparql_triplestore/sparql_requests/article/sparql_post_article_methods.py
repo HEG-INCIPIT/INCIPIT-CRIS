@@ -87,3 +87,37 @@ class SparqlPostArticleMethods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
+
+
+    def add_institution_to_article(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:sourceOrganisation <{institution}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_institution_of_article(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:sourceOrganisation <{institution}> .
+
+            }}
+            WHERE
+            {{
+                <{pid}> schema:sourceOrganisation <{institution}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
