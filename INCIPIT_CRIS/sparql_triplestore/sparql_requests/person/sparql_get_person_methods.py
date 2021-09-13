@@ -273,8 +273,11 @@ class SparqlGetPersonMethods:
         
         data_person['pid'] = pid
         data_person['articles'] = articles
+        data_person['len_articles'] = len(articles)
         data_person['projects'] = projects
+        data_person['len_projects'] = len(projects)
         data_person['datasets'] = datasets
+        data_person['len_datasets'] = len(datasets)
         data_person['works'] = works
         data_person['affiliations'] = affiliations
 

@@ -199,6 +199,11 @@
             {% block person_articles %}
                 <p class="title is-5">Articles</p>
 
+                {% if data_person.len_articles == 0 %}
+                        <span id="more-article">
+                        </span>
+                {% endif %}
+
                 {% for article in data_person.articles %}
                 
                     <div>
@@ -242,6 +247,11 @@
             {% block person_projects %}
                 <p class="title is-5">Projets</p>
 
+                {% if data_person.len_projects == 0 %}
+                        <span id="more-project">
+                        </span>
+                {% endif %}
+
                 {% for project in data_person.projects %}
                 
                     <div>
@@ -284,6 +294,11 @@
         <section class="data-box btn-see-more box">
             {% block person_datasets %}
                 <p class="title is-5">Données</p>
+
+                {% if data_person.len_datasets == 0 %}
+                        <span id="more-dataset">
+                        </span>
+                {% endif %}
                 
                 {% for dataset in data_person.datasets %}
                 
