@@ -88,9 +88,25 @@
     background-size: cover;
 }
 
-.box {
+.data-box, .top-box, .align-box {
     margin-left: 5%;
     margin-right: 5%;
+}
+
+.columns {
+    margin-bottom: -.75rem !important;
+}
+
+.column-left-align {
+    margin-left: 5%;
+}
+
+.column-right-align {
+    margin-right: 5%;
+}
+
+.box:last-child {
+    margin-bottom: 1.5rem;
 }
 
 .name {
@@ -192,4 +208,29 @@
     color: #cecece;
     font-size: 1.2rem;
     vertical-align: -4px;
+}
+
+a.articles {
+    display: block;
+    position: relative;
+    top: -50px;
+    visibility: hidden;
+}
+
+a.projects {
+    display: block;
+    position: relative;
+    top: -50px;
+    visibility: hidden;
+}
+
+a.datasets {
+    display: block;
+    position: relative;
+    top: -50px;
+    visibility: hidden;
+}
+
+.stats .box {
+    padding: 1rem;
 }

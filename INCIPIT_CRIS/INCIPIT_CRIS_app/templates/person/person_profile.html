@@ -55,39 +55,60 @@
                     </div>
                     
                     <div class="column is-one-third header">
-                    {% for work in data_person.works %}
-                        <div class="align-image-text">
-                            <figure class="image is-48x48">
+                        {% for work in data_person.works %}
+                            <div class="align-image-text">
+                                <figure class="image is-48x48">
+                                        <img src=
+                                        {% if work.logo == '' %}
+                                            "{% static 'images/university-solid.png' %}"
+                                        {% else %}
+                                            "{{ work.logo }}"
+                                        {% endif %}
+                                        >
+                                </figure>
+                                <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                            </div>
+                        {% endfor %}
+                        <p class="break-logo"></p>
+                        {% for affiliation in data_person.affiliations %}
+                            <div class="align-image-text">
+                                <figure class="image is-48x48">
                                     <img src=
-                                    {% if work.logo == '' %}
+                                    {% if affiliation.logo == '' %}
                                         "{% static 'images/university-solid.png' %}"
                                     {% else %}
-                                        "{{ work.logo }}"
+                                        "{{ affiliation.logo }}"
                                     {% endif %}
                                     >
-                            </figure>
-                            <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
-                        </div>
-                    {% endfor %}
-                    <p class="break-logo"></p>
-                    {% for affiliation in data_person.affiliations %}
-                        <div class="align-image-text">
-                            <figure class="image is-48x48">
-                                <img src=
-                                {% if affiliation.logo == '' %}
-                                    "{% static 'images/university-solid.png' %}"
-                                {% else %}
-                                    "{{ affiliation.logo }}"
-                                {% endif %}
-                                >
-                            </figure>
-                            <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
-                        </div>
-                    {% endfor %}
+                                </figure>
+                                <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </section>
         </section>
+
+        <div class="columns is-mobile has-text-centered stats">
+            <a href="#Articles" id="articlesStats" name="articlesStats" class="column column-left-align">
+                <article class="box">
+                    <p class="title">{{ data_person.len_articles }}</p>
+                    <p class="heading">Articles</p>
+                </article>
+            </a>
+            <a href="#Projects" id="projectsStats" name="projectsStats" class="column">
+                <article class="box">
+                    <p class="title">{{ data_person.len_projects }}</p>
+                    <p class="heading">Projets</p>
+                </article>
+            </a>
+            <a href="#Datasets" id="datasetsStats" name="datasetsStats" class="column column-right-align">
+                <article class="box">
+                    <p class="title">{{ data_person.len_datasets }}</p>
+                    <p class="heading">Données</p>
+                </article>
+            </a>
+        </div>
 
         <section class="data-box btn-see-more box">
             <p class="title is-5">A propos</p>
@@ -195,6 +216,8 @@
             </a>
         </section>
 
+        <a class="articles" id="Articles"></a>
+
         <section class="data-box btn-see-more box">
             {% block person_articles %}
                 <p class="title is-5">Articles</p>
@@ -242,6 +265,7 @@
             </a>
         </section>
 
+        <a class="projects" id="Projects"></a>
 
         <section class="data-box btn-see-more box">
             {% block person_projects %}
@@ -290,6 +314,7 @@
             </a>
         </section>
 
+        <a class="datasets" id="Datasets"></a>
 
         <section class="data-box btn-see-more box">
             {% block person_datasets %}
