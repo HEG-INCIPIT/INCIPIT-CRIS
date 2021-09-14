@@ -665,7 +665,7 @@ def article_institution_deletion(request, pid):
         # Verify if the user ark is in the articles institutions to grant edition
         if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
             institution = request.POST.get('institutionARK', '')
-            variables.sparql_post_article_object.delete_institution_of_article(institution, pid)
+            variables.sparql_post_article_object.delete_institution_from_article(pid, institution)
 
             return redirect(article_edition, pid=pid)
 

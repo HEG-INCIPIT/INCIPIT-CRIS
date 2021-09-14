@@ -104,7 +104,7 @@ class SparqlPostArticleMethods:
         return self.sparql.query().response.read()
 
 
-    def delete_institution_of_article(self, pid, institution):
+    def delete_institution_from_article(self, pid, institution):
         sparql_request = """
             {prefix}
 

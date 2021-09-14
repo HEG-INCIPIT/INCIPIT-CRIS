@@ -173,7 +173,7 @@ class SparqlGetArticleMethods:
 
         array_institutions = []
 
-        for institution in parse_get_institutions_institution(self.sparql.query().response.read()):
+        for institution in parse_get_institutions_article(self.sparql.query().response.read()):
             data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
             array_institutions.append(data_institution)
 
