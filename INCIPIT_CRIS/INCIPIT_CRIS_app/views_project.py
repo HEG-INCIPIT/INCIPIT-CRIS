@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 import re
 import string
-import datetime
+import json
 from django.conf import settings
 from . import views
 from . import variables
@@ -566,6 +566,104 @@ def project_dataset_deletion(request, pid):
         if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
             dataset = request.POST.get('datasetARK', '')
             variables.sparql_post_dataset_object.delete_project_from_dataset(dataset, pid)
+
+            return redirect(project_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce project"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def project_institution_addition(request, pid):
+    '''
+    Adds a institution to the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
+        # Verify if the user ark is in the projects institutions to grant edition
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                variables.sparql_post_project_object.add_institution_to_project(pid, request.POST['institutions'])
+
+                return redirect(project_edition, pid=pid)
+
+            top_lvl_institutions = variables.sparql_get_institution_object.get_top_lvl_institutions()
+            top_lvl_institutions_data = []
+            for top_lvl_institution in top_lvl_institutions:
+                top_lvl_institutions_data.append(variables.sparql_get_institution_object.get_dict_institution(top_lvl_institution[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'path_name' : ['Projets', 'Profil', 'Edition', 'Ajouter une institution'],
+                'path_url' : ['/projects/', '/projects/'+pid, '/projects/edition/'+pid, '/projects/edition/field/add-institution/'+pid],
+                'title_data_type_added': 'Institutions',
+                'data_type_added': 'de l\'institution',
+                'url_to_return': '/projects/edition/field/add-institution/{}'.format(pid),
+                'institutions': json.dumps(top_lvl_institutions_data),
+            }
+            # return the form to be completed
+            return render(request, 'forms/select_institution_form.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce project"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def project_institution_deletion(request, pid):
+    '''
+    Deletes an institution of the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the members of the project
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
+        # Verify if the user ark is in the projects members to grant edition
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
+            institution = request.POST.get('institutionARK', '')
+            variables.sparql_post_project_object.delete_institution_from_project(pid, institution)
 
             return redirect(project_edition, pid=pid)
 

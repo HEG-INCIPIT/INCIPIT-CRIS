@@ -59,3 +59,12 @@ def parse_get_data_project(sparql_query_answer):
     }
 
     return dict_data
+
+
+def parse_get_institutions_project(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_institutions = []
+    for institution in loaded_json:
+        array_institutions.append(institution['sponsor']['value'])
+        
+    return array_institutions

@@ -124,6 +124,20 @@ class SparqlPostProjectMethods:
         return self.sparql.query().response.read()
 
 
+    def add_institution_to_project(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:sponsor <{institution}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
     def delete_project(self, pid):
         sparql_request = """
             {prefix}
@@ -132,6 +146,25 @@ class SparqlPostProjectMethods:
                 <{pid}> ?predicate ?object .
             }}
         """.format(prefix=variables.prefix, pid=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_institution_from_project(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:sponsor <{institution}> .
+
+            }}
+            WHERE
+            {{
+                <{pid}> schema:sponsor <{institution}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
 
         self.sparql.setQuery(sparql_request)
 

@@ -155,6 +155,32 @@ class SparqlGetProjectMethods:
         return array_datasets
 
 
+    def get_institutions_project(self, pid):
+        """
+        Get all the institutions of the project for who the authors were working for
+        Return a dictionnary
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?sponsor WHERE
+            {{
+                <{ark_research}> schema:sponsor ?sponsor .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_institutions = []
+
+        for institution in parse_get_institutions_project(self.sparql.query().response.read()):
+            data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
+            array_institutions.append(data_institution)
+
+        return array_institutions
+
+
     def get_data_project(self, pid):
         """
         Get all the information of a project : ark, name, abstract, date of publication, members, ...
@@ -179,10 +205,12 @@ class SparqlGetProjectMethods:
         members = variables.sparql_get_project_object.get_members_project(pid)
         articles = variables.sparql_get_project_object.get_articles_project(pid)
         datasets = variables.sparql_get_project_object.get_datasets_project(pid)
+        institutions = variables.sparql_get_project_object.get_institutions_project(pid)
         
         data_project['members'] = members
         data_project['articles'] = articles
         data_project['datasets'] = datasets
+        data_project['institutions'] = institutions
         data_project['pid'] = pid
         
         return data_project
