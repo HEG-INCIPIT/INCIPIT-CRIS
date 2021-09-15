@@ -197,3 +197,37 @@ class SparqlPostDatasetMethods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
+
+
+    def add_institution_to_dataset(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:sourceOrganization <{institution}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+        
+        return self.sparql.query().response.read()
+
+
+    def delete_institution_from_dataset(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:sourceOrganization <{institution}> .
+
+            }}
+            WHERE
+            {{
+                <{pid}> schema:sourceOrganization <{institution}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()

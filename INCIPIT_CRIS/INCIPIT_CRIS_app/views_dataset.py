@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 import re
 import string
-import datetime
+import json
 from django.conf import settings
 from . import views
 from . import variables
@@ -724,6 +724,89 @@ def dataset_article_deletion(request, pid):
         return render(request, 'page_info.html', context)
     context = {
         'message': "Connectez-vous pour pouvoir éditer ce dataset"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def dataset_institution_addition(request, pid):
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the creators of the dataset
+        creators_dataset = variables.sparql_get_dataset_object.get_creators_dataset(pid)
+        # Verify if the user ark is in the datasets datasets to grant edition
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset]:
+
+            # Check the request method
+            if request.method == 'POST':
+                variables.sparql_post_dataset_object.add_institution_to_dataset(pid, request.POST['institutions'])
+
+                return redirect(dataset_edition, pid=pid)
+
+            top_lvl_institutions = variables.sparql_get_institution_object.get_top_lvl_institutions()
+            top_lvl_institutions_data = []
+            for top_lvl_institution in top_lvl_institutions:
+                top_lvl_institutions_data.append(variables.sparql_get_institution_object.get_dict_institution(top_lvl_institution[0]))
+
+            context = {
+                'button_value': 'Ajouter',
+                'path_name' : ['Données', 'Profil', 'Edition', 'Ajouter une institution'],
+                'path_url' : ['/datasets/', '/datasets/'+pid, '/datasets/edition/'+pid, '/datasets/edition/field/add-institution/'+pid],
+                'title_data_type_added': 'Institution',
+                'data_type_added': 'de l\'institution',
+                'url_to_return': '/datasets/edition/field/add-institution/{}'.format(pid),
+                'institutions': json.dumps(top_lvl_institutions_data),
+            }
+            # return the form to be completed
+            return render(request, 'forms/select_institution_form.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet dataset",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet dataset"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def dataset_institution_deletion(request, pid):
+    '''
+    Deletes a institution of the given dataset
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of an dataset.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the creators of the dataset
+        creators_dataset = variables.sparql_get_dataset_object.get_creators_dataset(pid)
+        # Verify if the user ark is in the datasets institutions to grant edition
+        if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset]:
+            institution = request.POST.get('institutionARK', '')
+            variables.sparql_post_dataset_object.delete_institution_from_dataset(pid, institution)
+
+            return redirect(dataset_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cet dataset",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cet dataset"
     }
     return render(request, 'page_info.html', context)
 

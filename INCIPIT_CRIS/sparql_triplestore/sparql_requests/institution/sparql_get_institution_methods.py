@@ -115,7 +115,7 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?project WHERE
             {{
-                ?project schema:subjectOf <{ark_research}> .
+                ?project schema:sponsor <{ark_research}> .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 

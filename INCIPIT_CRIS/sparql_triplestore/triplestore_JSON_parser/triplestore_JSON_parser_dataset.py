@@ -1,4 +1,5 @@
 import json
+from ssl import OP_ALL
 
 
 def parse_get_full_name_dataset(sparql_query_answer):
@@ -74,3 +75,12 @@ def parse_get_data_download_dataset(sparql_query_answer):
         'url': loaded_json['url']['value'],
     }
     return dict_data
+
+
+def parse_get_institutions_dataset(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
+    array_institutions = []
+    for institution in loaded_json:
+        array_institutions.append(institution['sourceOrganization']['value'])
+        
+    return array_institutions

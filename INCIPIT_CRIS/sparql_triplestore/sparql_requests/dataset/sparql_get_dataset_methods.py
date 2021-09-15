@@ -180,6 +180,32 @@ class SparqlGetDatasetMethods:
         return array_articles
 
 
+    def get_institutions_dataset(self, pid):
+        """
+        Get all the institutions of the dataset for who the authors were working for
+        Return a dictionnary
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?sourceOrganization WHERE
+            {{
+                <{ark_research}> schema:sourceOrganization ?sourceOrganization .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_institutions = []
+
+        for institution in parse_get_institutions_dataset(self.sparql.query().response.read()):
+            data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
+            array_institutions.append(data_institution)
+
+        return array_institutions
+
+
     def get_data_dataset(self, pid):
         """
         Get all the information of an dataset : ark, name, abstract, date of publication, maintainers, ...
@@ -208,11 +234,14 @@ class SparqlGetDatasetMethods:
         projects = variables.sparql_get_dataset_object.get_projects_dataset(pid)
         articles = variables.sparql_get_dataset_object.get_articles_dataset(pid)
         data_download = variables.sparql_get_dataset_object.get_data_download_dataset(pid)
+        institutions = variables.sparql_get_dataset_object.get_institutions_dataset(pid)
+
         
         data_dataset['maintainers'] = maintainers
         data_dataset['creators'] = creators
         data_dataset['projects'] = projects
         data_dataset['articles'] = articles
+        data_dataset['institutions'] = institutions
         data_dataset['pid'] = pid
         data_dataset['data_download'] = data_download
         return data_dataset
