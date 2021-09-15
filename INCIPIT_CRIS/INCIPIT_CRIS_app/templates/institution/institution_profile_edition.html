@@ -81,3 +81,24 @@
 
 {% endblock %}
 
+{% block apropos %}
+    <p>Nom : {{ data_institution.name }} <a class="link-one is-size-6" href="/institutions/edition/field/name/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+    <p>Nom alternatif : {{ data_institution.alternate_name }} <a class="link-one is-size-6" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+    <p>Description : {{ data_institution.description }} <a class="link-one" href="/institutions/edition/field/description/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+    <p>Lien vers l'institution : {{ data_institution.url }} <a class="edit-institution link-one is-size-6" href="/institutions/edition/field/url/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+    <p>Date de fondation : {{ data_institution.founding_date }}</p>
+    <p>Organisations parente :
+        {% for organistion in data_institution.parent_organizations %}
+            <p>
+                <a class="link-one" href="/institutions/{{ organistion.0 }}">{{ organistion.1.name }}</a>
+            </p>
+        {% endfor %}
+    </p>
+    <p>Sous-organisations : 
+        {% for organistion in data_institution.sub_organizations %}
+            <p>
+                <a class="link-one" href="/institutions/{{ organistion.0 }}">{{ organistion.1.name }}</a>
+            </p>
+        {% endfor %}
+    </p>
+{% endblock %}

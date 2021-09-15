@@ -371,12 +371,6 @@ class SparqlGetInstitutionMethods:
         articles = variables.sparql_get_institution_object.get_articles_institution(pid)
         projects = variables.sparql_get_institution_object.get_projects_institution(pid)
         datasets = variables.sparql_get_institution_object.get_datasets_institution(pid)
-
-        print("\n")
-        print(articles)
-        print(projects)
-        print(datasets)
-        print("\n")
         
         data_institution['workers'] = workers
         data_institution['affiliates'] = affiliates

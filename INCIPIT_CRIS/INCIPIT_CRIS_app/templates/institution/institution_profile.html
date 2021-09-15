@@ -154,7 +154,7 @@
                         Articles :
                         {% for article in data_institution.articles %}
                             <p>
-                                <a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a>
+                                <a class="link-one" href="/articles/{{ article.pid }}">{{ article.name }}</a>
                             </p>
                         {% endfor %}
                     {% endblock %}
@@ -164,7 +164,7 @@
                         <p>Projets : </p>
                         {% for project in data_institution.projects %}
                             <p>
-                                <a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a>
+                                <a class="link-one" href="/projects/{{ project.pid }}">{{ project.name }}</a>
                             </p>
                         {% endfor %}
                     {% endblock %}
@@ -172,9 +172,9 @@
                 <div data-content="data">
                     {% block dataset %}
                         <p>Données : </p>
-                        {% for creator in data_institution.datasets_creator %}
+                        {% for dataset in data_institution.datasets %}
                             <p>
-                                <a class="link-one" href="/datasets/{{ creator.0 }}">{{ creator.1.name }}</a>
+                                <a class="link-one" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
                             </p>
                         {% endfor %}
                     {% endblock %}
