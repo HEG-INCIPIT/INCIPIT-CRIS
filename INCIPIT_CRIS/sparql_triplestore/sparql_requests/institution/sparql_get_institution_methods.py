@@ -259,20 +259,21 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?article WHERE
             {{
-                ?article schema:sourceOrganisation <{ark_research}> .
-                FILTER (?article a schema:ScholarlyArticle)
+                ?article a schema:ScholarlyArticle ;
+                    schema:sourceOrganization <{ark_research}> .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
-        array_articles = []
+        articles = parse_get_articles_institution(self.sparql.query().response.read())
 
-        for article in parse_get_articles_institution(self.sparql.query().response.read()):
-            data_article = variables.SparqlGetArticleMethods.get_full_name_article(self, article)
-            array_articles.append(data_article)
+        articles_sorted = []
+        for article in articles:
+            articles_sorted.append(variables.sparql_get_article_object.get_data_article(article))    
+        articles_sorted.sort(key=lambda item: item['date_published'], reverse=True)
 
-        return array_articles
+        return articles_sorted
 
 
     def get_projects_institution(self, pid):
@@ -292,13 +293,14 @@ class SparqlGetInstitutionMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        array_projects = []
+        projects = parse_get_projects_institution(self.sparql.query().response.read())
 
-        for project in parse_get_projects_institution(self.sparql.query().response.read()):
-            data_project = variables.SparqlGetProjectMethods.get_full_name_project(self, project)
-            array_projects.append(data_project)
+        projects_sorted = []
+        for project in projects:
+            projects_sorted.append(variables.sparql_get_project_object.get_data_project(project))    
+        projects_sorted.sort(key=lambda item: item['founding_date'], reverse=True)
 
-        return array_projects
+        return projects_sorted
 
 
     def get_datasets_institution(self, pid):
@@ -312,20 +314,21 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?dataset WHERE
             {{
-                ?dataset schema:sourceOrganisation <{ark_research}> .
-                FILTER (?dataset a schema:ResearchProject)
+                ?dataset a schema:Dataset ;
+                    schema:sourceOrganization <{ark_research}> .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
 
-        array_datasets = []
+        datasets = parse_get_datasets_institution(self.sparql.query().response.read())
 
-        for dataset in parse_get_datasets_institution(self.sparql.query().response.read()):
-            data_dataset = variables.SparqlGetDatasetMethods.get_full_name_dataset(self, dataset)
-            array_datasets.append(data_dataset)
+        datasets_sorted = []
+        for dataset in datasets:
+            datasets_sorted.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))    
+        datasets_sorted.sort(key=lambda item: item['modified_date'], reverse=True)
 
-        return array_datasets
+        return datasets_sorted
 
 
     def get_data_institution(self, pid):
@@ -362,15 +365,26 @@ class SparqlGetInstitutionMethods:
         for inst in variables.SparqlGetInstitutionMethods.get_parent_organization_institution(self, pid):
             parent_organization_array.append((inst, variables.SparqlGetInstitutionMethods.get_full_name_institution(self, inst)))
 
-        projects = variables.sparql_get_institution_object.get_projects_institution(pid)
         workers = variables.sparql_get_institution_object.get_workers_institution(pid)
         affiliates = variables.sparql_get_institution_object.get_affiliates_institution(pid)
+
+        articles = variables.sparql_get_institution_object.get_articles_institution(pid)
+        projects = variables.sparql_get_institution_object.get_projects_institution(pid)
+        datasets = variables.sparql_get_institution_object.get_datasets_institution(pid)
+
+        print("\n")
+        print(articles)
+        print(projects)
+        print(datasets)
+        print("\n")
         
-        data_institution['projects'] = projects
         data_institution['workers'] = workers
         data_institution['affiliates'] = affiliates
         data_institution['sub_organizations'] = sub_organization_array
         data_institution['parent_organizations'] = parent_organization_array
+        data_institution['articles'] = articles
+        data_institution['projects'] = projects
+        data_institution['datasets'] = datasets
         data_institution['pid'] = pid
         return data_institution
 
