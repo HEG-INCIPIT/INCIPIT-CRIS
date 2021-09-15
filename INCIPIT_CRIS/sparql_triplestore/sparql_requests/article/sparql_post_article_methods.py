@@ -94,7 +94,7 @@ class SparqlPostArticleMethods:
             {prefix}
 
             INSERT DATA {{
-                <{pid}> schema:sourceOrganisation <{institution}> .
+                <{pid}> schema:sourceOrganization <{institution}> .
 
             }}
         """.format(prefix=variables.prefix, pid=pid, institution=institution)
@@ -109,12 +109,12 @@ class SparqlPostArticleMethods:
             {prefix}
 
             DELETE {{
-                <{pid}> schema:sourceOrganisation <{institution}> .
+                <{pid}> schema:sourceOrganization <{institution}> .
 
             }}
             WHERE
             {{
-                <{pid}> schema:sourceOrganisation <{institution}> .
+                <{pid}> schema:sourceOrganization <{institution}> .
             }}
         """.format(prefix=variables.prefix, pid=pid, institution=institution)
 

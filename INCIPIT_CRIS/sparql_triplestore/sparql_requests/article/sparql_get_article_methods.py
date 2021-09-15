@@ -163,9 +163,9 @@ class SparqlGetArticleMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?sourceOrganisation WHERE
+            SELECT ?sourceOrganization WHERE
             {{
-                <{ark_research}> schema:sourceOrganisation ?sourceOrganisation .
+                <{ark_research}> schema:sourceOrganization ?sourceOrganization .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 

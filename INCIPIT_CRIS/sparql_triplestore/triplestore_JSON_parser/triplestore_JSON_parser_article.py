@@ -64,6 +64,7 @@ def parse_get_institutions_article(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     array_institutions = []
     for institution in loaded_json:
-        array_institutions.append(institution['sourceOrganisation']['value'])
+        array_institutions.append(institution['sourceOrganization']['value'])
         
     return array_institutions
+    
