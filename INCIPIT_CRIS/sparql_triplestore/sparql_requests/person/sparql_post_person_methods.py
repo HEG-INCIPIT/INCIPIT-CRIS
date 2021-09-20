@@ -65,6 +65,10 @@ class SparqlPostPersonMethods:
             }}
         """.format(prefix=variables.prefix, pid=pid , work_pid=work_pid)
 
+        print("\n")
+        print(sparql_request)
+        print("\n")
+
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()

@@ -33,6 +33,7 @@ class SparqlPostInstitutionMethods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
+
     def create_institution(self, pid, name, alternate_name, description, founding_date, url, logo, upper_organisation):
         sparql_request = """
             {prefix}
@@ -55,6 +56,74 @@ class SparqlPostInstitutionMethods:
             }}
         """.format(prefix=variables.prefix, pid=pid, name=name, alternate_name=alternate_name, description=description, 
         founding_date=founding_date, url=url, logo=logo, has_upper_organisation='' if upper_organisation == '' else 'schema:parentOrganization <{}> ;'.format(upper_organisation))
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_parent_institution_to_institution(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:parentOrganization <{institution}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+        
+        return self.sparql.query().response.read()
+
+
+    def delete_parent_institution_to_institution(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:parentOrganization <{institution}> .
+
+            }}
+            WHERE
+            {{
+                <{pid}> schema:parentOrganization <{institution}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_sub_institution_to_institution(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{institution}> schema:parentOrganization <{pid}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+        
+        return self.sparql.query().response.read()
+
+
+    def delete_sub_institution_to_institution(self, pid, institution):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{institution}> schema:parentOrganization <{pid}> .
+
+            }}
+            WHERE
+            {{
+                <{institution}> schema:parentOrganization <{pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, institution=institution)
 
         self.sparql.setQuery(sparql_request)
 

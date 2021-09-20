@@ -212,10 +212,9 @@ class SparqlGetInstitutionMethods:
 
         array_persons = []
 
-        for worker in parse_get_persons_institution(self.sparql.query().response.read()):
-            print("\n")
-            print(worker)
-            print("\n")
+        result_sparql_request_parser = parse_get_persons_institution(self.sparql.query().response.read())
+
+        for worker in result_sparql_request_parser:
             data_person = variables.SparqlGetPersonMethods.get_full_name_person(self, worker)
             array_persons.append(data_person)
 

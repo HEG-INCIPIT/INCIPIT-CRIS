@@ -178,7 +178,7 @@ class InstitutionCreationForm(forms.Form):
                               help_text='''Indiqué l'ark du projet s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'Laisser vide pour créer automatiquement un ark', 'class':'input'}))
     founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fondation ', required=True)
     url = forms.CharField(label='''Lien vers l'institution''', max_length=200, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'Lien vers l\'institution', 'class':'input'}))
-    logo = forms.CharField(label='''URL du logo''', max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL du logo', 'class':'input'}))
+    url_logo = forms.CharField(label='''URL du logo''', max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL du logo', 'class':'input'}))
 
 
 ##################################################
