@@ -108,6 +108,7 @@ def article_creation(request):
                 authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
                 projects = re.findall('"([^"]*)"', request.POST['projectElementsPost'])
                 datasets = re.findall('"([^"]*)"', request.POST['datasetElementsPost'])
+                institutions = re.findall('"([^"]*)"', request.POST['institutionElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
@@ -124,6 +125,8 @@ def article_creation(request):
                     variables.sparql_post_project_object.add_article_to_project(project.split()[-1], pid)
                 for dataset in datasets:
                     variables.sparql_post_dataset_object.add_article_to_dataset(dataset.split()[-1], pid)
+                for institution in institutions:
+                    variables.sparql_post_article_object.add_institution_to_article(pid, institution.split()[-1])
                 return redirect(views.index)
         else:
             form = ArticleCreationForm()
@@ -135,6 +138,8 @@ def article_creation(request):
         projects = ['''{}, {}'''.format(project[1], project[0]) for project in projects_info]
         datasets_info = variables.sparql_get_dataset_object.get_datasets()
         datasets = ['''{}, {}'''.format(dataset[1], dataset[0]) for dataset in datasets_info]
+        institutions_info = variables.sparql_get_institution_object.get_institutions()
+        institutions =  ['''{} ({}), {}'''.format(institution[1], institution[2], institution[0]) for institution in institutions_info]
         context = {
             'form': form,
             'button_value': 'Créer',
@@ -142,6 +147,7 @@ def article_creation(request):
             'persons': persons,
             'projects': projects,
             'datasets': datasets,
+            'institutions': institutions,
         }
         # return the form to be completed
         return render(request, 'forms/article/article_creation.html', context)
