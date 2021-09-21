@@ -80,6 +80,13 @@
                 <div id="datasetElements"></div>
                 <input type="hidden" id="datasetElementsPost" name="datasetElementsPost">
 
+                <div class="autocomplete autocomplete-pos">
+                    <label for="institutionAutocomplete">Institution : </label>
+                    <input class="input" id="institutionInput" type="text" name="institutionAutocomplete" placeholder="Nom de l'institution">
+                </div>
+                <div id="institutionElements"></div>
+                <input type="hidden" id="institutionElementsPost" name="institutionElementsPost">
+
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
@@ -94,6 +101,7 @@
             document.getElementById("memberElementsPost").value = JSON.stringify(arrayPersonToSend);
             document.getElementById("articleElementsPost").value = JSON.stringify(arrayArticleToSend);
             document.getElementById("datasetElementsPost").value = JSON.stringify(arrayDatasetToSend);
+            document.getElementById("institutionElementsPost").value = JSON.stringify(arrayInstitutionsToSend);
             return true;
         }
 
@@ -107,9 +115,13 @@
         var arrayDatasetData = {{ datasets|safe }};
         var arrayDatasetToSend = [];
 
+        var arrayDataInstitutions = {{ institutions|safe }};
+        var arrayInstitutionsToSend = [];
+
         autocomplete(document.getElementById("memberInput"), arrayPersonData, "memberElements", arrayPersonToSend);
         autocomplete(document.getElementById("articleInput"), arrayArticleData, "articleElements", arrayArticleToSend);
         autocomplete(document.getElementById("datasetInput"), arrayDatasetData, "datasetElements", arrayDatasetToSend);
+        autocomplete(document.getElementById("institutionInput"), arrayDataInstitutions, "institutionElements", arrayInstitutionsToSend);
 
     </script>
 

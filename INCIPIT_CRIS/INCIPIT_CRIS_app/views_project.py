@@ -72,6 +72,7 @@ def project_creation(request):
                 members = re.findall('"([^"]*)"', request.POST['memberElementsPost'])
                 articles = re.findall('"([^"]*)"', request.POST['articleElementsPost'])
                 datasets = re.findall('"([^"]*)"', request.POST['datasetElementsPost'])
+                institutions = re.findall('"([^"]*)"', request.POST['institutionElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
@@ -89,6 +90,8 @@ def project_creation(request):
                     variables.sparql_post_project_object.add_article_to_project(pid, article.split()[-1])
                 for dataset in datasets:
                     variables.sparql_post_dataset_object.add_project_to_dataset(dataset.split()[-1], pid)
+                for institution in institutions:
+                    variables.sparql_post_project_object.add_institution_to_project(pid, institution.split()[-1])
                 return redirect(views.index)
         else:
             form = ProjectCreationForm()
@@ -100,6 +103,8 @@ def project_creation(request):
         articles = ['''{}, {}'''.format(article[1], article[0]) for article in articles_info]
         datasets_info = variables.sparql_get_dataset_object.get_datasets()
         datasets = ['''{}, {}'''.format(dataset[1], dataset[0]) for dataset in datasets_info]
+        institutions_info = variables.sparql_get_institution_object.get_institutions()
+        institutions =  ['''{} ({}), {}'''.format(institution[1], institution[2], institution[0]) for institution in institutions_info]
         context = {
             'form': form,
             'button_value': 'Créer',
@@ -107,6 +112,7 @@ def project_creation(request):
             'persons': persons,
             'articles': articles,
             'datasets': datasets,
+            'institutions': institutions,
         }
         # return the form to be completed
         return render(request, 'forms/project/project_creation.html', context)
