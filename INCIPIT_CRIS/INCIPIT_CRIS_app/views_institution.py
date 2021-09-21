@@ -43,7 +43,7 @@ def institution_results(request):
         'url':'/institutions/',
     }
 
-    return render(request, 'generic/results.html', context)
+    return render(request, 'institution/institution_results.html', context)
 
 
 def institution_creation(request):

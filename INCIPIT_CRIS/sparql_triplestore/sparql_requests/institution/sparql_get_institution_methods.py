@@ -45,10 +45,11 @@ class SparqlGetInstitutionMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?institution ?name ?parentOrganization WHERE
+            SELECT ?institution ?name ?alternateName WHERE
             {{
                 ?institution a schema:CollegeOrUniversity .
                 ?institution schema:name ?name .
+                ?institution schema:alternateName ?alternateName .
             }}
         """.format(prefix=variables.prefix)
 
