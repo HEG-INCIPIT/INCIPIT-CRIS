@@ -75,6 +75,7 @@ def dataset_creation(request):
                 creators = re.findall('"([^"]*)"', request.POST['creatorElementsPost'])
                 articles = re.findall('"([^"]*)"', request.POST['articleElementsPost'])
                 projects = re.findall('"([^"]*)"', request.POST['projectElementsPost'])
+                institutions = re.findall('"([^"]*)"', request.POST['institutionElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
@@ -96,6 +97,8 @@ def dataset_creation(request):
                     variables.sparql_post_dataset_object.add_article_to_dataset(pid, article.split()[-1])
                 for project in projects:
                     variables.sparql_post_dataset_object.add_project_to_dataset(pid, project.split()[-1])
+                for institution in institutions:
+                    variables.sparql_post_dataset_object.add_institution_to_dataset(pid, institution.split()[-1])
                 return redirect(views.index)
         else:
             form = DatasetCreationForm()
@@ -107,6 +110,8 @@ def dataset_creation(request):
         articles = ['''{}, {}'''.format(article[1], article[0]) for article in articles_info]
         projects_info = variables.sparql_get_project_object.get_projects()
         projects = ['''{}, {}'''.format(project[1], project[0]) for project in projects_info]
+        institutions_info = variables.sparql_get_institution_object.get_institutions()
+        institutions =  ['''{} ({}), {}'''.format(institution[1], institution[2], institution[0]) for institution in institutions_info]
         context = {
             'form': form,
             'button_value': 'Créer',
@@ -114,6 +119,7 @@ def dataset_creation(request):
             'persons': persons,
             'articles': articles,
             'projects': projects,
+            'institutions': institutions,
         }
         # return the form to be completed
         return render(request, 'forms/dataset/dataset_creation.html', context)

@@ -92,6 +92,13 @@
                 <div id="projectElements"></div>
                 <input type="hidden" id="projectElementsPost" name="projectElementsPost">
 
+                <div class="autocomplete autocomplete-pos">
+                    <label for="institutionAutocomplete">Institution : </label>
+                    <input class="input" id="institutionInput" type="text" name="institutionAutocomplete" placeholder="Nom de l'institution">
+                </div>
+                <div id="institutionElements"></div>
+                <input type="hidden" id="institutionElementsPost" name="institutionElementsPost">
+
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
@@ -106,6 +113,7 @@
             document.getElementById("creatorElementsPost").value = JSON.stringify(arrayToSendCreator);
             document.getElementById("articleElementsPost").value = JSON.stringify(arrayToSendArticle);
             document.getElementById("projectElementsPost").value = JSON.stringify(arrayToSendProject);
+            document.getElementById("institutionElementsPost").value = JSON.stringify(arrayInstitutionsToSend);
             return true;
         }
 
@@ -119,10 +127,14 @@
         var arrayProjectData = {{ projects|safe }};
         var arrayToSendProject = [];
 
+        var arrayDataInstitutions = {{ institutions|safe }};
+        var arrayInstitutionsToSend = [];
+
         autocomplete(document.getElementById("maintainerInput"), arrayPersonData, "maintainerElements", arrayToSendMaintainer);
         autocomplete(document.getElementById("creatorInput"), arrayPersonData, "creatorElements", arrayToSendCreator);
         autocomplete(document.getElementById("articleInput"), arrayArticleData, "articleElements", arrayToSendArticle);
         autocomplete(document.getElementById("projectInput"), arrayProjectData, "projectElements", arrayToSendProject);
+        autocomplete(document.getElementById("institutionInput"), arrayDataInstitutions, "institutionElements", arrayInstitutionsToSend);
 
     </script>
 
