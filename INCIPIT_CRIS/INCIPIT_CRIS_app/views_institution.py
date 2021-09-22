@@ -43,7 +43,7 @@ def institution_results(request):
         'url':'/institutions/',
     }
 
-    return render(request, 'institution/institution_results.html', context)
+    return render(request, 'generic/organization_results.html', context)
 
 
 def institution_creation(request):
@@ -932,6 +932,80 @@ def institution_dataset_deletion(request, pid):
             # Get the value of a variable in the POST request by its id
             dataset = request.POST.get('datasetARK', '')
             variables.sparql_post_dataset_object.delete_institution_from_dataset(dataset, pid)
+
+            return redirect(institution_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def institution_funder_addition(request, pid):
+    '''
+    Edit an organisation where the given funder funders
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a funder.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            if request.method == 'POST':
+                variables.sparql_post_funder_object.define_funder(pid)
+
+            return redirect(institution_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def institution_funder_deletion(request, pid):
+    '''
+    Edit an organisation where the given funder funders
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a funder.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            if request.method == 'POST':
+                variables.sparql_post_funder_object.delete_funder(pid)
 
             return redirect(institution_edition, pid=pid)
 

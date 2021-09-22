@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, views_person, views_article, views_project, views_dataset, views_institution
+from . import views, views_person, views_article, views_project, views_dataset, views_institution, views_funder
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -88,8 +88,14 @@ urlpatterns = [
     path('institutions/edition/field/delete-project/<path:pid>', views_institution.institution_project_deletion, name='institution_project_deletion'),
     path('institutions/edition/field/add-dataset/<path:pid>', views_institution.institution_dataset_addition, name='institution_dataset_addition'),
     path('institutions/edition/field/delete-dataset/<path:pid>', views_institution.institution_dataset_deletion, name='institution_dataset_deletion'),
+    path('institutions/edition/field/add-funder/<path:pid>', views_institution.institution_funder_addition, name='institution_funder_addition'),
+    path('institutions/edition/field/delete-funder/<path:pid>', views_institution.institution_funder_deletion, name='institution_funder_deletion'),
     path('institutions/edition/field/<str:field_to_modify>/<path:pid>', views_institution.institution_field_edition, name='institution_field_edition'),
     path('institutions/edition/<path:pid>', views_institution.institution_edition, name='institution_edition'),
     path('institutions/<path:pid>', views_institution.institution_profile, name='institution_profile'),
     
+
+    # Funders urls
+    path('funders/', views_funder.funder_results, name='funder_results'),
+
 ]

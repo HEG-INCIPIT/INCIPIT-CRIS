@@ -111,6 +111,22 @@
             {% endfor %}
         </ul>
     </p>
+    <p class="funder-form">Bailleur de fonds :
+        {% if data_institution.funder %}
+            {{ data_institution.funder }}
+            <form class="funder-form link-one" action="/institutions/edition/field/delete-funder/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <button><i class="far fa-check-square"></i></button>
+            </form>
+        {% else %}
+            {{ data_institution.funder }}
+            <form class="funder-form link-one" action="/institutions/edition/field/add-funder/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <button><i class="far fa-square"></i> </button>
+            </form>
+        {% endif %}
+        
+    </p>
 {% endblock %}
 
 {% block workers %}
