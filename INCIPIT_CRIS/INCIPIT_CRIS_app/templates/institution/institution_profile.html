@@ -87,7 +87,7 @@
                     <li data-tab="publications">
                     <a>
                         <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Publications</span>
+                        <span>Articles</span>
                     </a>
                     </li>
                     <li data-tab="projects">
@@ -98,10 +98,18 @@
                     </li>
                     <li data-tab="data">
                     <a>
-                        <span class=""><i class="-alt" aria-hidden="true"></i></span>
+                        <span class=""><i class="" aria-hidden="true"></i></span>
                         <span>Données</span>
                     </a>
                     </li>
+                    {% if data_institution.funder %}
+                        <li data-tab="funder">
+                            <a>
+                                <span class=""><i class="" aria-hidden="true"></i></span>
+                                <span>Projet(s) Financé(s)</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
 
@@ -180,6 +188,18 @@
                         {% endfor %}
                     {% endblock %}
                 </div>
+                {% if data_institution.funder %}
+                    <div data-content="funder">
+                        {% block funder %}
+                            <p>Projet(s) Financé(s) : </p>
+                            {% for project_funded in data_institution.projects_funded %}
+                            <p>
+                                <a class="link-one" href="/projects/{{ project_funded.pid }}">{{ project_funded.name }}</a>
+                            </p>
+                        {% endfor %}
+                        {% endblock %}
+                    </div>
+                {% endif %}
             </div>
         </section>
         

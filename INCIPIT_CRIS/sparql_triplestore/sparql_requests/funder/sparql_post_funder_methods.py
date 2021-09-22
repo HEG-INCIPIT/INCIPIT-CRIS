@@ -34,7 +34,7 @@ class SparqlPostFunderMethods:
         self.sparql.setMethod(POST)
 
 
-    def define_funder(self, pid):
+    def define_institution_funder(self, pid):
         sparql_request = """
             {prefix}
 
@@ -49,7 +49,7 @@ class SparqlPostFunderMethods:
         return self.sparql.query().response.read()
 
 
-    def delete_funder(self, pid):
+    def delete_institution_funder(self, pid):
         sparql_request = """
             {prefix}
 
@@ -62,6 +62,40 @@ class SparqlPostFunderMethods:
                 <{pid}> a schema:FundingScheme .
             }}
         """.format(prefix=variables.prefix, pid=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_project_to_funder(self, pid, project):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{project}> schema:funder <{pid}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, project=project)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_project_from_funder(self, pid, project):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{project}> schema:funder <{pid}> .
+
+            }}
+            WHERE
+            {{
+                <{project}> schema:funder <{pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, project=project)
 
         self.sparql.setQuery(sparql_request)
 

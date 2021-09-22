@@ -91,6 +91,13 @@
                                 <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} ({{ institution.alternate_name }})</a></li>
                             {% endfor %}
                         </ul>
+
+                        <p class="title-data">Bailleur(s) de fonds : </p>
+                        <ul>
+                            {% for funder in data_project.funders %}
+                                <li class="data"><a class="link-one" href="/institutions/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a></li>
+                            {% endfor %}
+                        </ul>
                     {% endblock %}
                 </div>
             </div>

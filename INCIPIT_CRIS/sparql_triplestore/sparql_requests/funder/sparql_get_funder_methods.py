@@ -76,3 +76,30 @@ class SparqlGetFunderMethods:
 
         self.sparql.setQuery(sparql_request)
         return parse_check_institution_ark(self.sparql.query().response.read())
+
+
+    def get_projects_funder(self, pid):
+        """
+        Get all the projects of the institution for who the creators were working for
+        Return a dictionnary
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?project WHERE
+            {{
+                ?project schema:funder <{ark_research}> .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        projects = parse_get_projects_institution(self.sparql.query().response.read())
+
+        projects_sorted = []
+        for project in projects:
+            projects_sorted.append(variables.sparql_get_project_object.get_data_project(project))    
+        projects_sorted.sort(key=lambda item: item['founding_date'], reverse=True)
+
+        return projects_sorted

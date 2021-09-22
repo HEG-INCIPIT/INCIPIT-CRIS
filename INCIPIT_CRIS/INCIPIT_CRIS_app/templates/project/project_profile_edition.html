@@ -108,7 +108,19 @@
             <form action="/projects/edition/field/delete-institution/{{data_project.pid}}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="institutionARK" name="institutionARK" value="{{ institution.pid }}">
-                <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} {{ institution.alternate_name }}</a>
+                <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} ({{ institution.alternate_name }})</a>
+                <button class="delete"></button></li>
+            </form>
+        {% endfor %}
+    </ul>
+
+    <p class="title-data">Bailleur(s) de fonds : <a class="link-one" href="/projects/edition/field/add-funder/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <ul>
+        {% for funder in data_project.funders %}
+            <form action="/projects/edition/field/delete-funder/{{data_project.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="funderARK" name="funderARK" value="{{ funder.pid }}">
+                <li class="data"><a class="link-one" href="/institutions/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
                 <button class="delete"></button></li>
             </form>
         {% endfor %}

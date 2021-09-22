@@ -683,6 +683,104 @@ def project_institution_deletion(request, pid):
     return render(request, 'page_info.html', context)
 
 
+def project_funder_addition(request, pid):
+    '''
+    Adds a funder to the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
+    context = {}
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
+        # Verify if the user ark is in the projects funders to grant edition
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                print("\n")
+                print([i for i in request.POST])
+                print("\n")
+                variables.sparql_post_project_object.add_funder_to_project(pid, request.POST['funders'])
+
+                return redirect(project_edition, pid=pid)
+
+            funders = variables.sparql_get_funder_object.get_funders()
+
+            context = {
+                'button_value': 'Ajouter',
+                'path_name' : ['Projets', 'Profil', 'Edition', 'Ajouter une funder'],
+                'path_url' : ['/projects/', '/projects/'+pid, '/projects/edition/'+pid, '/projects/edition/field/add-funder/'+pid],
+                'title_data_type_added': 'Bailleur de fonds',
+                'data_type_added': 'du bailleur de fonds',
+                'url_to_return': '/projects/edition/field/add-funder/{}'.format(pid),
+                'funders': funders,
+            }
+            # return the form to be completed
+            return render(request, 'forms/select_funder_form.html', context)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce project"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def project_funder_deletion(request, pid):
+    '''
+    Deletes an funder of the given project
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing an ARK.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a project.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the members of the project
+        members_project = variables.sparql_get_project_object.get_members_project(pid)
+        # Verify if the user ark is in the projects members to grant edition
+        if request.user.pid in [members[0] for members in members_project] or request.user.is_superuser:
+            funder = request.POST.get('funderARK', '')
+            variables.sparql_post_project_object.delete_funder_from_project(pid, funder)
+
+            return redirect(project_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce project",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce project"
+    }
+    return render(request, 'page_info.html', context)
+
+
 def project_deletion(request, pid):
     '''
     Deletes completely an project and all his leafs

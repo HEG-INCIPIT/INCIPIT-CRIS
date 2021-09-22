@@ -968,7 +968,7 @@ def institution_funder_addition(request, pid):
         if request.user.pid == pid or request.user.is_superuser:
 
             if request.method == 'POST':
-                variables.sparql_post_funder_object.define_funder(pid)
+                variables.sparql_post_funder_object.define_institution_funder(pid)
 
             return redirect(institution_edition, pid=pid)
 
@@ -1005,7 +1005,7 @@ def institution_funder_deletion(request, pid):
         if request.user.pid == pid or request.user.is_superuser:
 
             if request.method == 'POST':
-                variables.sparql_post_funder_object.delete_funder(pid)
+                variables.sparql_post_funder_object.delete_institution_funder(pid)
 
             return redirect(institution_edition, pid=pid)
 

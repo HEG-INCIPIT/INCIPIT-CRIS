@@ -49,6 +49,8 @@ urlpatterns = [
     path('projects/edition/field/delete-dataset/<path:pid>', views_project.project_dataset_deletion, name='project_dataset_deletion'),
     path('projects/edition/field/add-institution/<path:pid>', views_project.project_institution_addition, name='project_institution_addition'),
     path('projects/edition/field/delete-institution/<path:pid>', views_project.project_institution_deletion, name='project_institution_deletion'),
+    path('projects/edition/field/add-funder/<path:pid>', views_project.project_funder_addition, name='project_funder_addition'),
+    path('projects/edition/field/delete-funder/<path:pid>', views_project.project_funder_deletion, name='project_funder_deletion'),
     path('projects/edition/field/<str:field_to_modify>/<path:pid>', views_project.project_field_edition, name='project_field_edition'),
     path('projects/edition/<path:pid>', views_project.project_edition, name='project_edition'),
     path('projects/<path:pid>', views_project.project_profile, name='project_profile'),
@@ -97,5 +99,7 @@ urlpatterns = [
 
     # Funders urls
     path('funders/', views_funder.funder_results, name='funder_results'),
+    path('funders/edition/field/add-project/<path:pid>', views_funder.funder_project_addition, name='funder_project_addition'),
+    path('funders/edition/field/delete-project/<path:pid>', views_funder.funder_project_deletion, name='funder_project_deletion'),
 
 ]

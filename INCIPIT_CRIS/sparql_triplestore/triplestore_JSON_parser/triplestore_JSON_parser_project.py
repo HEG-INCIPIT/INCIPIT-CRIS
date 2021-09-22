@@ -65,6 +65,6 @@ def parse_get_institutions_project(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     array_institutions = []
     for institution in loaded_json:
-        array_institutions.append(institution['sponsor']['value'])
+        array_institutions.append(institution['project']['value'])
         
     return array_institutions

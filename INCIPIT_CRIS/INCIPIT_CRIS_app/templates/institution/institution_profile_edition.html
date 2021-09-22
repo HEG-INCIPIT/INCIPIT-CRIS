@@ -209,3 +209,20 @@
         </ul>
     </p>
 {% endblock %}
+
+{% block funder %}
+    <p>Projet(s) Financé(s) : <a class="link-one" href="/funders/edition/field/add-project/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a>
+        <ul>
+            {% for project_funded in data_institution.projects_funded %}
+                <form action="/funders/edition/field/delete-project/{{data_institution.pid}}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="project_fundedARK" name="project_fundedARK" value="{{ project_funded.pid }}">
+                    <li class="data">
+                        <a class="link-one" href="/projects/{{ project_funded.pid }}">{{ project_funded.name }}</a>
+                        <button class="delete"></button>
+                    </li>
+                </form>
+            {% endfor %}
+        </ul>
+    </p>
+{% endblock %}

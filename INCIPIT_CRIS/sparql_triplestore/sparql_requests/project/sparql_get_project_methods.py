@@ -164,9 +164,9 @@ class SparqlGetProjectMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?sponsor WHERE
+            SELECT ?project WHERE
             {{
-                <{ark_research}> schema:sponsor ?sponsor .
+                <{ark_research}> schema:sponsor ?project .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
@@ -179,6 +179,32 @@ class SparqlGetProjectMethods:
             array_institutions.append(data_institution)
 
         return array_institutions
+
+    
+    def get_funders_project(self, pid):
+        """
+        Get all the funders of the project for who the authors were working for
+        Return a dictionnary
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?project WHERE
+            {{
+                <{ark_research}> schema:funder ?project .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        array_funders = []
+
+        for funder in parse_get_institutions_project(self.sparql.query().response.read()):
+            data_funder = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, funder)
+            array_funders.append(data_funder)
+
+        return array_funders
 
 
     def get_data_project(self, pid):
@@ -206,11 +232,13 @@ class SparqlGetProjectMethods:
         articles = variables.sparql_get_project_object.get_articles_project(pid)
         datasets = variables.sparql_get_project_object.get_datasets_project(pid)
         institutions = variables.sparql_get_project_object.get_institutions_project(pid)
+        funders = variables.sparql_get_project_object.get_funders_project(pid)
         
         data_project['members'] = members
         data_project['articles'] = articles
         data_project['datasets'] = datasets
         data_project['institutions'] = institutions
+        data_project['funders'] = funders
         data_project['pid'] = pid
         
         return data_project

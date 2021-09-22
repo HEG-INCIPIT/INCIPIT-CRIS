@@ -371,7 +371,10 @@ class SparqlGetInstitutionMethods:
         articles = variables.sparql_get_institution_object.get_articles_institution(pid)
         projects = variables.sparql_get_institution_object.get_projects_institution(pid)
         datasets = variables.sparql_get_institution_object.get_datasets_institution(pid)
+        projects_funded = variables.sparql_get_funder_object.get_projects_funder(pid)
         funder = variables.sparql_get_funder_object.check_funder_ark(pid)
+
+
         
         data_institution['workers'] = workers
         data_institution['affiliates'] = affiliates
@@ -380,6 +383,7 @@ class SparqlGetInstitutionMethods:
         data_institution['articles'] = articles
         data_institution['projects'] = projects
         data_institution['datasets'] = datasets
+        data_institution['projects_funded'] = projects_funded
         data_institution['funder'] = funder
         data_institution['pid'] = pid
         return data_institution

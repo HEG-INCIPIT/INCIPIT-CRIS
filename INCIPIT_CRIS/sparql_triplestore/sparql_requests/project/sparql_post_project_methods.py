@@ -138,20 +138,6 @@ class SparqlPostProjectMethods:
         return self.sparql.query().response.read()
 
 
-    def delete_project(self, pid):
-        sparql_request = """
-            {prefix}
-
-            DELETE WHERE {{
-                <{pid}> ?predicate ?object .
-            }}
-        """.format(prefix=variables.prefix, pid=pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        return self.sparql.query().response.read()
-
-
     def delete_institution_from_project(self, pid, institution):
         sparql_request = """
             {prefix}
@@ -165,6 +151,53 @@ class SparqlPostProjectMethods:
                 <{pid}> schema:sponsor <{institution}> .
             }}
         """.format(prefix=variables.prefix, pid=pid, institution=institution)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+    
+    def add_funder_to_project(self, pid, funder):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:funder <{funder}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, funder=funder)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_funder_from_project(self, pid, funder):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:funder <{funder}> .
+
+            }}
+            WHERE
+            {{
+                <{pid}> schema:funder <{funder}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, funder=funder)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_project(self, pid):
+        sparql_request = """
+            {prefix}
+
+            DELETE WHERE {{
+                <{pid}> ?predicate ?object .
+            }}
+        """.format(prefix=variables.prefix, pid=pid)
 
         self.sparql.setQuery(sparql_request)
 
