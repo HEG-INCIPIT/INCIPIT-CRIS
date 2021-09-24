@@ -85,19 +85,17 @@
                 <div id="articleElements"></div>
                 <input type="hidden" id="articleElementsPost" name="articleElementsPost">
 
-                <div class="autocomplete autocomplete-pos">
+                <div class="autocomplete autocomplete-pos fieldWrapper">
                     <label for="projectAutocomplete">Projet : </label>
                     <input class="input" id="projectInput" type="text" name="projectAutocomplete" placeholder="Nom du projet">
                 </div>
                 <div id="projectElements"></div>
                 <input type="hidden" id="projectElementsPost" name="projectElementsPost">
 
-                <div class="autocomplete autocomplete-pos">
-                    <label for="institutionAutocomplete">Institution : </label>
-                    <input class="input" id="institutionInput" type="text" name="institutionAutocomplete" placeholder="Nom de l'institution">
+                <div id="label-institutions">
                 </div>
-                <div id="institutionElements"></div>
-                <input type="hidden" id="institutionElementsPost" name="institutionElementsPost">
+                <div id="institutions" class="fieldWrapper select is-fullwidth">
+                </div>
 
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
@@ -113,7 +111,6 @@
             document.getElementById("creatorElementsPost").value = JSON.stringify(arrayToSendCreator);
             document.getElementById("articleElementsPost").value = JSON.stringify(arrayToSendArticle);
             document.getElementById("projectElementsPost").value = JSON.stringify(arrayToSendProject);
-            document.getElementById("institutionElementsPost").value = JSON.stringify(arrayInstitutionsToSend);
             return true;
         }
 
@@ -127,14 +124,42 @@
         var arrayProjectData = {{ projects|safe }};
         var arrayToSendProject = [];
 
-        var arrayDataInstitutions = {{ institutions|safe }};
-        var arrayInstitutionsToSend = [];
-
         autocomplete(document.getElementById("maintainerInput"), arrayPersonData, "maintainerElements", arrayToSendMaintainer);
         autocomplete(document.getElementById("creatorInput"), arrayPersonData, "creatorElements", arrayToSendCreator);
         autocomplete(document.getElementById("articleInput"), arrayArticleData, "articleElements", arrayToSendArticle);
         autocomplete(document.getElementById("projectInput"), arrayProjectData, "projectElements", arrayToSendProject);
-        autocomplete(document.getElementById("institutionInput"), arrayDataInstitutions, "institutionElements", arrayInstitutionsToSend);
+
+        institutionsJSON = {{ institutions|safe }};
+
+        var select = document.createElement("select");
+        select.name = "institutions";
+        select.id = "institutions";
+
+        var option = document.createElement("option");
+        option.value = "";
+        option.text = "";
+        select.appendChild(option);
+
+        function readInstitutions(dictionary, cpt) {
+            var option = document.createElement("option");
+            option.value = dictionary["organization"].pid;
+            option.text = dictionary["organization"].name;
+            option.innerHTML = "&nbsp;".repeat(cpt*3)+dictionary["organization"].name
+            select.appendChild(option);
+            for (let i = 0; i < Object.keys(dictionary).length-1; i++) {
+                readInstitutions(dictionary["sub_organization"+i.toString()], cpt+1);
+            }
+        }
+        for (let i = 0; i < institutionsJSON.length; i++){
+            readInstitutions(institutionsJSON[i], 0);
+        }
+
+        var label = document.createElement("label");
+        label.innerHTML = "Institution parente : "
+        label.htmlFor = "label-institutions"
+
+        document.getElementById("institutions").appendChild(select);
+        document.getElementById("label-institutions").appendChild(label)
 
     </script>
 

@@ -108,7 +108,6 @@ def article_creation(request):
                 authors = re.findall('"([^"]*)"', request.POST['authorElementsPost'])
                 projects = re.findall('"([^"]*)"', request.POST['projectElementsPost'])
                 datasets = re.findall('"([^"]*)"', request.POST['datasetElementsPost'])
-                institutions = re.findall('"([^"]*)"', request.POST['institutionElementsPost'])
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
@@ -120,13 +119,27 @@ def article_creation(request):
                                                           form.cleaned_data['abstract'],
                                                           form.cleaned_data['date_published'], form.cleaned_data['url'])
                 for author in authors:
+                    print("\n")
+                    print(author)
+                    print("\n")
                     variables.sparql_post_article_object.add_author_to_article(pid, author.split()[-1])
                 for project in projects:
+                    print("\n")
+                    print(project)
+                    print("\n")
                     variables.sparql_post_project_object.add_article_to_project(project.split()[-1], pid)
                 for dataset in datasets:
+                    print("\n")
+                    print(dataset)
+                    print("\n")
                     variables.sparql_post_dataset_object.add_article_to_dataset(dataset.split()[-1], pid)
-                for institution in institutions:
-                    variables.sparql_post_article_object.add_institution_to_article(pid, institution.split()[-1])
+                print("\n")
+                print("ICI")
+                print(request.POST['institutions'])
+                print("\n")
+                if request.POST['institutions'] != '':
+                    variables.sparql_post_article_object.add_institution_to_article(pid, request.POST['institutions'])
+
                 return redirect(views.index)
         else:
             form = ArticleCreationForm()
@@ -138,8 +151,10 @@ def article_creation(request):
         projects = ['''{}, {}'''.format(project[1], project[0]) for project in projects_info]
         datasets_info = variables.sparql_get_dataset_object.get_datasets()
         datasets = ['''{}, {}'''.format(dataset[1], dataset[0]) for dataset in datasets_info]
-        institutions_info = variables.sparql_get_institution_object.get_institutions()
-        institutions =  ['''{} ({}), {}'''.format(institution[1], institution[2], institution[0]) for institution in institutions_info]
+        top_lvl_institutions = variables.sparql_get_institution_object.get_top_lvl_institutions()
+        top_lvl_institutions_data = []
+        for top_lvl_institution in top_lvl_institutions:
+            top_lvl_institutions_data.append(variables.sparql_get_institution_object.get_dict_institution(top_lvl_institution[0]))
         context = {
             'form': form,
             'button_value': 'Créer',
@@ -147,7 +162,7 @@ def article_creation(request):
             'persons': persons,
             'projects': projects,
             'datasets': datasets,
-            'institutions': institutions,
+            'institutions': json.dumps(top_lvl_institutions_data),
         }
         # return the form to be completed
         return render(request, 'forms/article/article_creation.html', context)

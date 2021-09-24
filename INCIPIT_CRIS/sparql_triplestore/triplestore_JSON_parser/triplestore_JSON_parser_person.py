@@ -11,9 +11,6 @@ def parse_get_persons(sparql_query_answer):
 
 
 def parse_get_full_name_person(sparql_query_answer):
-    print("\n")
-    print(sparql_query_answer)
-    print("\n")
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'given_name': loaded_json['given_name']['value'],
