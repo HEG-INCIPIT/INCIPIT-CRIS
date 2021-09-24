@@ -712,7 +712,9 @@ def article_deletion(request, pid):
         # Verify if the user ark is in the articles authors to grant edition
         if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
             variables.sparql_generic_post_object.delete_subject(pid)
+            variables.sparql_generic_post_object.delete_object(pid)
             variables.sparql_generic_post_object.delete_subject(pid+"ARK")
+            variables.sparql_generic_post_object.delete_object(pid+"ARK")
 
             return redirect(views.index)
 

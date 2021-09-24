@@ -75,18 +75,21 @@ class SparqlGenericPostMethods:
             {prefix}
 
             DELETE WHERE {{
-                <{pid}> ?predicate ?object .
+                <{pid}> ?predicate ?object 
 
             }}
         """.format(prefix=variables.prefix, pid=pid)
 
         self.sparql.setQuery(sparql_request)
 
+        return self.sparql.query().response.read()
+
+    def delete_object(self, pid):
         sparql_request = """
             {prefix}
 
             DELETE WHERE {{
-                ?subject ?predicate <{pid}> .
+                ?subject ?predicate <{pid}> 
 
             }}
         """.format(prefix=variables.prefix, pid=pid)

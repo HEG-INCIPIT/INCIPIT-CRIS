@@ -847,8 +847,11 @@ def dataset_deletion(request, pid):
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
 
             variables.sparql_generic_post_object.delete_subject(pid)
+            variables.sparql_generic_post_object.delete_object(pid)
             variables.sparql_generic_post_object.delete_subject(pid+"ARK")
+            variables.sparql_generic_post_object.delete_object(pid+"ARK")
             variables.sparql_generic_post_object.delete_subject(pid+"DD")
+            variables.sparql_generic_post_object.delete_object(pid+"DD")
 
             return redirect(views.index)
 

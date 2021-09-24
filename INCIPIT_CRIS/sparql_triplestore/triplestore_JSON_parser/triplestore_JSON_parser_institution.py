@@ -50,7 +50,7 @@ def parse_get_institutions(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     array_data_parsed = []
     for json_data in loaded_json:
-        array_data_parsed.append([json_data['institution']['value'], json_data['name']['value'], json_data['alternateName']['value'] if 'alternateName' in loaded_json else ''])
+        array_data_parsed.append([json_data['institution']['value'], json_data['name']['value'], json_data['alternateName']['value'] if 'alternateName' in json_data else ''])
     return array_data_parsed
 
 

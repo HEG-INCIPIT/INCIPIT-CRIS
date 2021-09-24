@@ -92,6 +92,7 @@ urlpatterns = [
     path('institutions/edition/field/delete-dataset/<path:pid>', views_institution.institution_dataset_deletion, name='institution_dataset_deletion'),
     path('institutions/edition/field/add-funder/<path:pid>', views_institution.institution_funder_addition, name='institution_funder_addition'),
     path('institutions/edition/field/delete-funder/<path:pid>', views_institution.institution_funder_deletion, name='institution_funder_deletion'),
+    path('institutions/edition/delete-institution/<path:pid>', views_institution.institution_deletion, name='institution_deletion'),
     path('institutions/edition/field/<str:field_to_modify>/<path:pid>', views_institution.institution_field_edition, name='institution_field_edition'),
     path('institutions/edition/<path:pid>', views_institution.institution_edition, name='institution_edition'),
     path('institutions/<path:pid>', views_institution.institution_profile, name='institution_profile'),

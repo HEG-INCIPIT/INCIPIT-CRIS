@@ -1020,3 +1020,45 @@ def institution_funder_deletion(request, pid):
         'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
+
+
+def institution_deletion(request, pid):
+    '''
+    Deletes the given institution
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the index page.
+        HTTPResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display and a dictionnary with all the data needed to fulfill the template.
+    '''
+
+    # Verify that the user is authenticated
+    if request.user.is_authenticated:
+        # Verify if the user is admin to grant deletion
+        if request.user.is_superuser:
+
+            variables.sparql_generic_post_object.delete_subject(pid)
+            variables.sparql_generic_post_object.delete_object(pid)
+            variables.sparql_generic_post_object.delete_subject(pid+"ARK")
+            variables.sparql_generic_post_object.delete_object(pid+"ARK")
+
+            return redirect(views.index)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer cette institution",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer cette institution"
+    }
+    return render(request, 'page_info.html', context)

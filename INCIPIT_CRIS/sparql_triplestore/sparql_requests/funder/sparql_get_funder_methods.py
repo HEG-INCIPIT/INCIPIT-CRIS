@@ -39,8 +39,8 @@ class SparqlGetFunderMethods:
 
     def get_funders(self):
         """
-        Get basic information of an institution : ark, name,
-        And return a list for each institution
+        Get basic information of a funder : ark, name,
+        And return a list for each funder
         """
 
         sparql_request = """
