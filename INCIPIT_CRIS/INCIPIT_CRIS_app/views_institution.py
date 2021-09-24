@@ -77,11 +77,14 @@ def institution_creation(request):
                         pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name), 
                             form.cleaned_data['name'], form.cleaned_data['founding_date'])
                     except:
-                        raise Exception
+                        raise Exception 
                 variables.sparql_post_institution_object.create_institution(pid, form.cleaned_data['name'],
                                                         form.cleaned_data['alternate_name'],
                                                         form.cleaned_data['description'],
                                                         form.cleaned_data['founding_date'], form.cleaned_data['url'], form.cleaned_data['url_logo'], request.POST['institutions'])
+                if request.POST['funder'] == 'on':
+                    variables.sparql_post_funder_object.define_institution_funder(pid)
+
                 return redirect(views.index)
         else:
             form = InstitutionCreationForm()
