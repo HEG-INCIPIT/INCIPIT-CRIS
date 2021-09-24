@@ -65,4 +65,6 @@ class User(AbstractUser):
 @receiver(pre_delete, sender=User)
 def delete_in_sparql(sender, instance, using, **kwargs):
     variables.sparql_generic_post_object.delete_subject(str(instance))
+    variables.sparql_generic_post_object.delete_object(str(instance))
     variables.sparql_generic_post_object.delete_subject(str(instance)+"ARK")
+    variables.sparql_generic_post_object.delete_object(str(instance)+"ARK")
