@@ -1,5 +1,6 @@
 .DS_Store
 env/
+fuseki/run/configuration/
 fuseki/dataset/
 fuseki/run/backups/
 INCIPIT_CRIS/**/__pycache__/
