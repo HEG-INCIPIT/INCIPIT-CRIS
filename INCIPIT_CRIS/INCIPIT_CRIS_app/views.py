@@ -1,7 +1,13 @@
-from django.shortcuts import render
+from SPARQLWrapper.Wrapper import ADD
+from django.shortcuts import redirect, render
 from .forms import *
 from django.contrib.auth import get_user_model
 from . import variables
+from django.core.files.storage import FileSystemStorage
+from os import listdir
+from os.path import isfile, join
+from django.conf import settings
+import requests
 
 
 def index(request):
@@ -63,3 +69,51 @@ def index(request):
         'project_data': projects_data[:5],
     }
     return render(request, 'main/index.html', context)
+
+
+def import_data(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            if request.method == 'POST':
+                data_file = request.FILES['data_file']
+                fs = FileSystemStorage()
+                filename = fs.save(data_file.name, data_file)
+                uploaded_file_url = fs.url(filename)
+                return render(request, 'forms/import/import_data.html', {'uploaded_file_url': uploaded_file_url})
+            return render(request, 'forms/import/import_data.html')
+
+
+def manage_data(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            media_path = settings.MEDIA_ROOT
+            my_files = [f for f in listdir(media_path) if isfile(join(media_path, f))]
+
+            return render(request, 'data/manage_data.html', {'my_files': my_files})
+
+
+def populate_triplestore(request):
+    rdf_format_dictionnary = {
+        'ttl': 'text/turtle;charset=utf-8',
+        'n3': 'text/n3; charset=utf-8',
+        'nt': 'text/plain',
+        'rdf': 'application/rdf+xml',
+        'owl': 'application/rdf+xml',
+        'nq': 'application/n-quads',
+        'trig': 'application/trig',
+        'jsonld': 'application/ld+json',
+    }
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            if request.method == 'POST':
+                media_path = settings.MEDIA_ROOT
+                print(request.POST['file_name'])
+                if isfile(join(media_path, request.POST['file_name'])):
+                    extension = request.POST['file_name'].split('.')[-1]
+                    if extension in rdf_format_dictionnary:
+                        data = open(join(media_path, request.POST['file_name'])).read()
+                        headers = {'Content-Type': rdf_format_dictionnary[extension]}
+                        r = requests.post(variables.sparql_variables.url_endpoint, auth=(variables.sparql_variables.admin, variables.sparql_variables.password), data=data.encode('utf-8'), headers=headers)
+                        print(r.status_code)
+
+        return redirect(manage_data)

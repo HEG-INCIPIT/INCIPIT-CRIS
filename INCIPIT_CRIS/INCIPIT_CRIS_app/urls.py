@@ -3,7 +3,15 @@ from django.urls import path
 from . import views, views_person, views_article, views_project, views_dataset, views_institution, views_funder
 
 urlpatterns = [
+    # Index page
     path('', views.index, name='index'),
+
+    # Import data
+    path('import-data/', views.import_data, name='import_data'),
+
+    # Manage data
+    path('manage-data/', views.manage_data, name='manage_data'),
+    path('populate-triplestore/', views.populate_triplestore, name='populate_triplestore'),
 
     # Persons urls
     path('persons/', views_person.person_results, name='person_results'),

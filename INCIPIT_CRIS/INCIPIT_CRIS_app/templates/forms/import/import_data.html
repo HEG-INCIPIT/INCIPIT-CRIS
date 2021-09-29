@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/form.css' %}">
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    </head>
+    <body>
+        
+        {% include 'main/navbar.html' %}
+
+        <section>
+
+            <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+                <ul>
+                    <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+                    <li class="is-active"><a href="/import-data/" aria-current="page">Importer des données</a></li>
+                </ul>
+            </nav>
+
+            <h1 class="title is-4">Importer des données</h1>
+
+            <form action="/import-data/" method="post" id="data" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="data_file" accept=".n3, .nt, .rdf, .owl, .nq, .trig, .jsonld">
+                <input class="button is-primary" type="submit" value="Importer">
+            </form>
+
+            {% if uploaded_file_url %}
+                <p>Fichier importé : <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+            {% endif %}
+        </section>
+        {% include 'main/footer.html' %}
+    </body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>INCIPIT-CRIS</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/manage_data.css' %}">
+    </head>
+    <body>
+
+        {% include 'main/navbar.html' %}
+
+        
+        <section>
+
+            <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+                <ul>
+                    <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+                    <li class="is-active"><a href="/manage-data/" aria-current="page">Gestion des données</a></li>
+                </ul>
+            </nav>
+
+            {% for file in my_files %}
+                <div>
+                    {{ file }}
+                    <form action="/populate-triplestore/" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" id="file_name" name="file_name" value="{{ file }}">
+                        <button class="button is-primary">Peupler le triplestore</button>
+                    </form>
+                </div>
+            {% endfor %}
+
+
+        </section>
+        
+        {% include 'main/footer.html' %}
+    </body>
+</html>

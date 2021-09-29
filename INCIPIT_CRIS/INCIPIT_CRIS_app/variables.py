@@ -12,6 +12,7 @@ from sparql_triplestore.sparql_requests.institution.sparql_get_institution_metho
 from sparql_triplestore.sparql_requests.institution.sparql_post_institution_methods import SparqlPostInstitutionMethods
 from sparql_triplestore.sparql_requests.funder.sparql_get_funder_methods import SparqlGetFunderMethods
 from sparql_triplestore.sparql_requests.funder.sparql_post_funder_methods import SparqlPostFunderMethods
+import sparql_triplestore.sparql_requests.variables as sparql_variables
 
 
 ark = Ark()
