@@ -1,5 +1,6 @@
 .DS_Store
 env/
+fuseki/run/databases/
 fuseki/run/configuration/
 fuseki/dataset/
 fuseki/run/backups/
