@@ -195,7 +195,23 @@ class SparqlPostProjectMethods:
             {prefix}
 
             DELETE WHERE {{
-                <{pid}> ?predicate ?object .
+                <{pid}> a schema:ResearchProject ;
+                schema:name ?name ;
+                schema:description ?description ;
+                schema:foundingDate ?foundingDate ;
+                schema:dissolutionDate ?dissolutionDate ;
+                schema:url ?url ;
+                schema:member ?member;
+                schema:subjectOf ?subjectOf;
+                schema:sponsor ?sponsor;
+                schema:funder ?funder;
+                schema:identifier <{pid}ARK> .
+
+                <{pid}ARK> a schema:PropertyValue ;
+                schema:propertyID 'ARK' ;
+                schema:value "{pid}" .
+
+                
             }}
         """.format(prefix=variables.prefix, pid=pid)
 

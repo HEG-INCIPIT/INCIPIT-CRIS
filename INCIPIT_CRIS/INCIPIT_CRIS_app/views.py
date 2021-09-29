@@ -113,7 +113,7 @@ def populate_triplestore(request):
                     if extension in rdf_format_dictionnary:
                         data = open(join(media_path, request.POST['file_name'])).read()
                         headers = {'Content-Type': rdf_format_dictionnary[extension]}
-                        r = requests.post(variables.sparql_variables.url_endpoint, auth=(variables.sparql_variables.admin, variables.sparql_variables.password), data=data.encode('utf-8'), headers=headers)
+                        r = requests.post('http://localhost:3030/INCIPIT-CRIS/data?default', auth=(variables.sparql_variables.admin, variables.sparql_variables.password), data=data.encode('utf-8'), headers=headers)
                         print(r.status_code)
 
         return redirect(manage_data)

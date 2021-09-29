@@ -80,7 +80,11 @@ class SparqlGenericPostMethods:
             }}
         """.format(prefix=variables.prefix, pid=pid)
 
+        print("Deleting : {}".format(pid))
+
         self.sparql.setQuery(sparql_request)
+
+        print("Deleted : {}".format(pid))
 
         return self.sparql.query().response.read()
 
@@ -94,6 +98,10 @@ class SparqlGenericPostMethods:
             }}
         """.format(prefix=variables.prefix, pid=pid)
 
+        print("Deleting : {}".format(pid))
+
         self.sparql.setQuery(sparql_request)
+
+        print("Deleted : {}".format(pid))
 
         return self.sparql.query().response.read()
