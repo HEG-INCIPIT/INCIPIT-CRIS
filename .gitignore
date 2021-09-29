@@ -5,3 +5,4 @@ fuseki/run/backups/
 INCIPIT_CRIS/**/__pycache__/
 INCIPIT_CRIS/**/migrations/
 fuseki/run/system/tdb.lock
+media/
