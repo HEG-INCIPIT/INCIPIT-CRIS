@@ -32,6 +32,11 @@
                         <input type="hidden" id="file_name" name="file_name" value="{{ file }}">
                         <button class="button is-primary">Peupler le triplestore</button>
                     </form>
+                    <form action="/delete-data/" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" id="file_name" name="file_name" value="{{ file }}">
+                        <button class="button is-danger">Supprimer le fichier</button>
+                    </form>
                 </div>
             {% endfor %}
 

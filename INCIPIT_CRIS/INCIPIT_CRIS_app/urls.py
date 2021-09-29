@@ -12,6 +12,7 @@ urlpatterns = [
     # Manage data
     path('manage-data/', views.manage_data, name='manage_data'),
     path('populate-triplestore/', views.populate_triplestore, name='populate_triplestore'),
+    path('delete-data/', views.delete_data, name='delete_data'),
 
     # Persons urls
     path('persons/', views_person.person_results, name='person_results'),

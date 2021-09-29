@@ -4,7 +4,7 @@ from .forms import *
 from django.contrib.auth import get_user_model
 from . import variables
 from django.core.files.storage import FileSystemStorage
-from os import listdir
+from os import listdir, remove, path
 from os.path import isfile, join
 from django.conf import settings
 import requests
@@ -107,13 +107,24 @@ def populate_triplestore(request):
         if request.user.is_superuser:
             if request.method == 'POST':
                 media_path = settings.MEDIA_ROOT
-                print(request.POST['file_name'])
                 if isfile(join(media_path, request.POST['file_name'])):
                     extension = request.POST['file_name'].split('.')[-1]
                     if extension in rdf_format_dictionnary:
-                        data = open(join(media_path, request.POST['file_name'])).read()
+                        f = open(join(media_path, request.POST['file_name']), 'r')
+                        data = f.read()
+                        f.close()
                         headers = {'Content-Type': rdf_format_dictionnary[extension]}
                         r = requests.post('http://localhost:3030/INCIPIT-CRIS/data?default', auth=(variables.sparql_variables.admin, variables.sparql_variables.password), data=data.encode('utf-8'), headers=headers)
                         print(r.status_code)
 
         return redirect(manage_data)
+
+
+def delete_data(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            media_path = settings.MEDIA_ROOT
+            if isfile(join(media_path, request.POST['file_name'])):
+                remove(path.join(settings.MEDIA_ROOT, request.POST['file_name']))
+
+            return redirect(manage_data)
