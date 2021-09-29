@@ -36,6 +36,8 @@ def index(request):
 
     articles = variables.sparql_get_article_object.get_articles()
 
+    users_triplestore = variables.sparql_get_person_object.get_persons()
+
     articles_data = []
     for article in articles:
         articles_data.append(variables.sparql_get_article_object.get_data_article(article[0]))
@@ -58,7 +60,7 @@ def index(request):
     projects_data.sort(key=lambda item: item['founding_date'], reverse=True)
 
     context = {
-        'len_persons': len(users),
+        'len_persons': len(users_triplestore),
         'len_datasets': len(datasets),
         'len_institutions': len(institutions),
         'len_funders': len(funders),
