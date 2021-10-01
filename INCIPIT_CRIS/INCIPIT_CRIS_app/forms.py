@@ -77,6 +77,7 @@ class ProjectCreationForm(forms.Form):
     founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de début ', required=True)
     dissolution_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fin ', required=True)
     url = forms.CharField(label="URL", max_length=200, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL', 'class':'input'}))
+    url_logo = forms.CharField(label='''URL du logo''', max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL du logo', 'class':'input'}))
 
 
 class ProjectFoundingDateForm(forms.Form):

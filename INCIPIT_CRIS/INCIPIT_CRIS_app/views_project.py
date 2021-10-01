@@ -82,7 +82,7 @@ def project_creation(request):
                         raise Exception
                 variables.sparql_post_project_object.create_project(pid, form.cleaned_data['name'],
                                                         form.cleaned_data['description'],
-                                                        form.cleaned_data['founding_date'], form.cleaned_data['dissolution_date'], form.cleaned_data['url'])
+                                                        form.cleaned_data['founding_date'], form.cleaned_data['dissolution_date'], form.cleaned_data['url'], form.cleaned_data['url_logo'])
                 for member in members:
                     variables.sparql_post_project_object.add_member_to_project(pid, member.split()[-1])
                 for article in articles:
@@ -252,6 +252,10 @@ def project_field_edition(request, field_to_modify, pid):
                                                                     form.cleaned_data['dissolution_date'],
                                                                     str(data_project['dissolution_date']) +
                                                                     " 00:00:00+00:00")
+                    elif field_to_modify == 'logo':
+                        variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
+                                                                      form.cleaned_data['url'],
+                                                                      data_project[field_to_modify])
                     else:
                         variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
                                                                       form.cleaned_data[field_to_modify],

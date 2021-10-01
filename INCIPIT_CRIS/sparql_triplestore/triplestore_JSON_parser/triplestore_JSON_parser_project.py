@@ -56,6 +56,7 @@ def parse_get_data_project(sparql_query_answer):
         'founding_date': loaded_json['foundingDate']['value'][:10],
         'dissolution_date': loaded_json['dissolutionDate']['value'][:10],
         'url': loaded_json['url']['value'],
+        'logo': loaded_json['logo']['value'] if 'logo' in loaded_json else '',
     }
 
     return dict_data

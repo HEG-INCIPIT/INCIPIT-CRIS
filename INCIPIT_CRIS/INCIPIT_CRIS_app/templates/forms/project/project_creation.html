@@ -50,6 +50,11 @@
                     {{ form.url }}
                 </div>
                 <div class="fieldWrapper">
+                    {{ form.url_logo.errors }}
+                    <label for="{{ form.url_logo.id_for_label }}">URL du logo: </label>
+                    {{ form.url_logo }}
+                </div>
+                <div class="fieldWrapper">
                     {{ form.founding_date.errors }}
                     <label for="{{ form.founding_date.id_for_label }}">Date de début : </label>
                     {{ form.founding_date }}

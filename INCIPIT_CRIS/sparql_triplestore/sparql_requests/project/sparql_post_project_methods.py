@@ -34,7 +34,7 @@ class SparqlPostProjectMethods:
         self.sparql.setMethod(POST)
 
 
-    def create_project(self, pid, name, description, founding_date, dissolution_date, url):
+    def create_project(self, pid, name, description, founding_date, dissolution_date, url, logo):
         sparql_request = """
             {prefix}
 
@@ -49,9 +49,10 @@ class SparqlPostProjectMethods:
                     schema:foundingDate "{founding_date}"^^xsd:date ;
                     schema:dissolutionDate "{dissolution_date}"^^xsd:date ;
                     schema:url \"\"\"{url}\"\"\" ;
+                    schema:logo \"\"\"{logo}\"\"\" ;
                     schema:identifier <{pid}ARK> .
             }}
-        """.format(prefix=variables.prefix, pid=pid, name=name, description=description, founding_date=founding_date, dissolution_date=dissolution_date, url=url)
+        """.format(prefix=variables.prefix, pid=pid, name=name, description=description, founding_date=founding_date, dissolution_date=dissolution_date, url=url, logo=logo)
 
         self.sparql.setQuery(sparql_request)
 

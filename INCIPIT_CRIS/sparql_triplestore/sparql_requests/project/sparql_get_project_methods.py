@@ -215,13 +215,14 @@ class SparqlGetProjectMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?name ?description ?foundingDate ?dissolutionDate ?url WHERE
+            SELECT ?name ?description ?foundingDate ?dissolutionDate ?url ?logo WHERE
             {{
                 <{ark_research}> schema:name ?name .
                 <{ark_research}> schema:description ?description .
                 <{ark_research}> schema:foundingDate ?foundingDate .
                 <{ark_research}> schema:dissolutionDate ?dissolutionDate .
                 <{ark_research}> schema:url ?url .
+                OPTIONAL {{ <{ark_research}> schema:logo ?logo }} .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 

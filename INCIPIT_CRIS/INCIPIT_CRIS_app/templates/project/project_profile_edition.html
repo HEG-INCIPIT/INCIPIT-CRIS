@@ -20,6 +20,19 @@
 
 {% block information_header %}
 
+    <div class="column logo">
+        <figure class="figure">
+            <img src=
+            {% if data_project.logo == '' %}
+                "{% static 'images/folder-solid.png' %}"
+            {% else %}
+                "{{ data_project.logo }}"
+            {% endif %}
+            width="100" height="100">
+        </figure>
+        <a class="edit-project link-one is-size-6" href="/projects/edition/field/logo/{{data_project.pid}}"><i class="fas fa-edit"></i></a>
+    </div>
+
     <a class="button is-primary" href="/projects/{{ data_project.pid }}">Voir le projet</a>
 
     <form action="/projects/edition/update-project/{{data_project.pid}}" method="post">

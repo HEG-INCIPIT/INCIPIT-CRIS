@@ -29,6 +29,19 @@
             {% endblock %}
 
             {% block information_header %}
+
+                <div class="column logo">
+                    <figure class="figure">
+                        <img src=
+                        {% if data_project.logo == '' %}
+                            "{% static 'images/folder-solid.png' %}"
+                        {% else %}
+                            "{{ data_project.logo }}"
+                        {% endif %}
+                        width="100" height="100">
+                    </figure>
+                </div>
+
                 {% if user.is_authenticated and edition_granted or user.is_superuser %}
                     <p>
                         <a class="button is-primary" href="/projects/edition/{{ data_project.pid }}">Modifier</a>
