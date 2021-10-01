@@ -15,13 +15,22 @@ User/Password are available in the file `fuseki/run/shiro.ini`.
 
 ## How tu run
 
-Actually the shell script INCIPIT-CRIS_launcher.sh launch fuseki and django localhost on the port 8000. The only manipulation you have to do is to access to web interface of fuseki on the address
-`localhost:3030` then click on `dataset -> upload files -> select files...` and add the ontology schemaorg-20210511.ttl. Then upload the file and it's done !
+Actually the shell script INCIPIT-CRIS_launcher.sh launch fuseki and django localhost on the port 8000.
+
 Make sure to execute the script being in the folder, that it has the permissions to be run, and that the package virtualenv is already intalled. Then simply enter 
 
 ```bash
 ./INCIPIT-CRIS_launcher.sh
 ```
 
-in the terminal, on your favourite navigator reach `localhost:8000` and enjoy !
+in the terminal.
+
+If it's the first time that you run INCIPIT-CRIS you will need to add the schema.org ontology in the triplestore. To do so,
+go in the folder `INCIPIT-CRIS` and run the following command :
+
+```bash
+python3 manage.py add_schema_to_cris
+```
+
+once you've done that, you're done and you can reach `localhost:8000` on your favourite navigator and enjoy !
 
