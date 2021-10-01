@@ -11,11 +11,11 @@ class Command(BaseCommand):
             if isfile(join(settings.SCHEMA_ROOT, settings.SCHEMA_FILE_NAME)):
                 f = open(join(settings.SCHEMA_ROOT, settings.SCHEMA_FILE_NAME), 'r')
                 data = f.read()
-                f.close()
                 headers = {'Content-Type': 'text/turtle;charset=utf-8'}
                 r = requests.post('http://localhost:3030/INCIPIT-CRIS/data?default', auth=(settings.FUSEKI_USER, settings.FUSEKI_PASSWORD), data=data.encode('utf-8'), headers=headers)
                 if r.status_code == 200:
                     print('Succesfull')
+                f.close()
             else:
                 print('File not found')
         except:
