@@ -65,10 +65,6 @@ class SparqlPostPersonMethods:
             }}
         """.format(prefix=variables.prefix, pid=pid , work_pid=work_pid)
 
-        print("\n")
-        print(sparql_request)
-        print("\n")
-
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
@@ -116,6 +112,24 @@ class SparqlPostPersonMethods:
                 <{pid}> schema:affiliation <{affiliation_pid}> .
             }}
         """.format(prefix=variables.prefix, pid=pid , affiliation_pid=affiliation_pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+    
+    def add_IN_information_person(self, pid, url):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}IN> a schema:PropertyValue ;
+                    schema:name 'IN' ;
+                    schema:url "{url}" .
+                
+                <{pid}> schema:identifier <{pid}IN> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, url=url)
 
         self.sparql.setQuery(sparql_request)
 

@@ -233,6 +233,25 @@ class SparqlGetPersonMethods:
 
         return array_affiliations
 
+    
+    def get_IN_information_person(self, pid):
+        """
+        Get information about the LinkedIn information of the given person
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?url WHERE
+            {{
+                <{pid}IN> schema:url ?url .
+            }}
+        """.format(prefix=variables.prefix, pid=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_IN_information(self.sparql.query().response.read())
+
 
     def get_data_person(self, pid):
         """

@@ -88,6 +88,7 @@ class SparqlGenericPostMethods:
 
         return self.sparql.query().response.read()
 
+
     def delete_object(self, pid):
         sparql_request = """
             {prefix}
