@@ -139,3 +139,9 @@ URL = 'http://www.localhost:8000/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SCHEMA_FILE_NAME = 'schemaorg-20210511.ttl'
+SCHEMA_ROOT = os.path.join(BASE_DIR, '')[:-13] + 'schema_ontology/'
+
+FUSEKI_USER = 'admin'
+FUSEKI_PASSWORD = 'pw'
