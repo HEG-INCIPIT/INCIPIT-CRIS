@@ -49,8 +49,8 @@ class ArticleCreationForm(forms.Form):
     abstract = forms.CharField(label='Abstract ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Résumé', 'class':'textarea'}))
     pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark de l'article s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'Laisser vide pour créer automatiquement un ark', 'class':'input'}))
-    date_published = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de publication ', required=True)
-    url = forms.CharField(label="URL", max_length=1000, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL', 'class':'input'}))
+    date_published = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de publication ', required=False)
+    url = forms.CharField(label="URL", max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL', 'class':'input'}))
 
 
 class ArticleDatePublishedForm(forms.Form):
@@ -74,9 +74,9 @@ class ProjectCreationForm(forms.Form):
     description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Description', 'class':'textarea'}))
     pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark du projet s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'Laisser vide pour créer automatiquement un ark', 'class':'input'}))
-    founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de début ', required=True)
-    dissolution_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fin ', required=True)
-    url = forms.CharField(label="URL", max_length=1000, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL', 'class':'input'}))
+    founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de début ', required=False)
+    dissolution_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fin ', required=False)
+    url = forms.CharField(label="URL", max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL', 'class':'input'}))
     url_logo = forms.CharField(label='''URL du logo''', max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL du logo', 'class':'input'}))
 
 
@@ -113,10 +113,10 @@ class DatasetCreationForm(forms.Form):
     abstract = forms.CharField(label='Abstract ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'class':'textarea'}))
     pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark du jeu de données s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'Laisser vide pour créer automatiquement un ark', 'class':'input'}))
-    created_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de création ', required=True)
-    modified_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de modification ', required=True)
-    url_details = forms.CharField(label="URL", max_length=1000, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des détails', 'class':'input'}))
-    url_data = forms.CharField(label="URL", max_length=1000, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des données', 'class':'input'}))
+    created_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de création ', required=False)
+    modified_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de modification ', required=False)
+    url_details = forms.CharField(label="URL", max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des détails', 'class':'input'}))
+    url_data = forms.CharField(label="URL", max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des données', 'class':'input'}))
 
 
 class DatasetCreatedDateForm(forms.Form):
@@ -144,7 +144,7 @@ class DatasetModifiedDateForm(forms.Form):
 
 
 class DatasetURLDetailsForm(forms.Form):
-    url_details = forms.CharField(label="URL de détails", max_length=1000, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL de détails', 'class':'input'}))
+    url_details = forms.CharField(label="URL de détails", max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL de détails', 'class':'input'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -156,7 +156,7 @@ class DatasetURLDetailsForm(forms.Form):
 
 
 class DatasetURLDataForm(forms.Form):
-    url_data = forms.CharField(label="URL des données", max_length=1000, required=True, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des données', 'class':'input'}))
+    url_data = forms.CharField(label="URL des données", max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL des données', 'class':'input'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
@@ -177,7 +177,7 @@ class InstitutionCreationForm(forms.Form):
     description = forms.CharField(label='Description ', max_length=2500, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Description', 'class':'textarea'}))
     pid = forms.CharField(label='Ark ', max_length=100, required=False, validators=[not_quotes_regex],
                               help_text='''Indiqué l'ark du projet s'il existe, sinon laissez le champs vide''', widget=forms.TextInput(attrs={'placeholder': 'Laisser vide pour créer automatiquement un ark', 'class':'input'}))
-    founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fondation ', required=True)
+    founding_date = forms.DateTimeField(widget=DateInput(attrs={'class':'input'}), label='Date de fondation ', required=False)
     url = forms.CharField(label='''Lien vers l'institution''', max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'Lien vers l\'institution', 'class':'input'}))
     url_logo = forms.CharField(label='''URL du logo''', max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.TextInput(attrs={'placeholder': 'URL du logo', 'class':'input'}))
 
@@ -211,7 +211,7 @@ class NameForm(forms.Form):
 
 
 class AlternateNameForm(forms.Form):
-    alternate_name = forms.CharField(label='Nom alternatif ', max_length=200, required=True, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Nom alternatif', 'class':'textarea'}))
+    alternate_name = forms.CharField(label='Nom alternatif ', max_length=200, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder':'Nom alternatif', 'class':'textarea'}))
 
     def __init__(self, *args, **kwargs):
         # overload init function to display actual value of the variable in this field
