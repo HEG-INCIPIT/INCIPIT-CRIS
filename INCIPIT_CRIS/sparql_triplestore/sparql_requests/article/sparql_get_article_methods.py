@@ -99,6 +99,9 @@ class SparqlGetArticleMethods:
             full_name = variables.sparql_get_person_object.get_full_name_person(author)
             array_authors.append([author, full_name])
 
+        # Sort array by alphabetical order taking the family name to do it
+        array_authors.sort(key=lambda author: author[1]['family_name'])
+
         return array_authors
 
 

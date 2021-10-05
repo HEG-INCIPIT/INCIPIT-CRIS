@@ -119,24 +119,11 @@ def article_creation(request):
                                                           form.cleaned_data['abstract'],
                                                           form.cleaned_data['date_published'], form.cleaned_data['url'])
                 for author in authors:
-                    print("\n")
-                    print(author)
-                    print("\n")
                     variables.sparql_post_article_object.add_author_to_article(pid, author.split()[-1])
                 for project in projects:
-                    print("\n")
-                    print(project)
-                    print("\n")
                     variables.sparql_post_project_object.add_article_to_project(project.split()[-1], pid)
                 for dataset in datasets:
-                    print("\n")
-                    print(dataset)
-                    print("\n")
                     variables.sparql_post_dataset_object.add_article_to_dataset(dataset.split()[-1], pid)
-                print("\n")
-                print("ICI")
-                print(request.POST['institutions'])
-                print("\n")
                 if request.POST['institutions'] != '':
                     variables.sparql_post_article_object.add_institution_to_article(pid, request.POST['institutions'])
 
