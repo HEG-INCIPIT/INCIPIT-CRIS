@@ -44,8 +44,6 @@ then
         virtualenv -p python3 env
         pip install -r requirements.txt
     fi
-
-#elif [ "$OS" == "WindowsNT" ]
 fi
 
 python3 INCIPIT_CRIS/manage.py runserver 0.0.0.0:8000
