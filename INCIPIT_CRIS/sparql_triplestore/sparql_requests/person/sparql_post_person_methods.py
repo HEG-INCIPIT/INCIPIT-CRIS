@@ -117,6 +117,37 @@ class SparqlPostPersonMethods:
 
         return self.sparql.query().response.read()
 
+
+    def add_job_title_person(self, pid, job_title):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:jobTitle \"""{job_title}\""" .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , job_title=job_title)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+    
+    def delete_job_title_person(self, pid, job_title):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:jobTitle \"""{job_title}\""" .
+            }}
+            WHERE {{
+                <{pid}> schema:jobTitle \"""{job_title}\""" .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , job_title=job_title)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
     
     def add_IN_information_person(self, pid, url):
         sparql_request = """

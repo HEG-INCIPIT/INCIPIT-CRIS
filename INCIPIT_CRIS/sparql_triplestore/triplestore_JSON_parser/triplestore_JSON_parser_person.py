@@ -68,6 +68,11 @@ def parse_get_affiliations_person(sparql_query_answer):
     return array_affiliations
 
 
+def parse_get_job_title(sparql_query_answer):
+    loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+    return {'job_title': loaded_json['jobTitle']['value']}
+
+
 def parse_get_IN_information(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     return {'IN_url': loaded_json['url']['value']}
