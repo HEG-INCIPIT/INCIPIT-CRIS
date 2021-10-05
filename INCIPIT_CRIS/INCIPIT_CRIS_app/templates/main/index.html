@@ -33,7 +33,7 @@
                     </div>
                     <div class="align-text-left">
                         <ul>
-                            {% for user in last_users_registered %}
+                            {% for user in random_persons %}
                                 <li class="display-content"><a class="link-one" href="/persons/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
                                 <img src="{% static 'svg/data_separator.svg' %}" />
                             {% endfor %}

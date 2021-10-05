@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from os import listdir, remove, path
 from os.path import isfile, join
 from django.conf import settings
+from random import sample
 import requests
 
 
@@ -36,21 +37,25 @@ def index(request):
 
     articles = variables.sparql_get_article_object.get_articles()
 
-    users_triplestore = variables.sparql_get_person_object.get_persons()
+    persons_triplestore = variables.sparql_get_person_object.get_persons()
 
     articles_data = []
     for article in articles:
         articles_data.append(variables.sparql_get_article_object.get_data_article(article[0]))
     articles_data.sort(key=lambda item: item['date_published'], reverse=True)
 
-    user_model = get_user_model()
+    # Filter users in database by their joined date
+    """user_model = get_user_model()
     users = user_model.objects.all().filter(is_staff=False).order_by('date_joined')
 
     last_users_registered = []
     for i in range(1, min(5+1, len(users)+1)):
         last_users_registered.append([users.values('pid')[len(users) - i]['pid'],
                                       users.values('first_name')[len(users) - i]['first_name'],
-                                      users.values('last_name')[len(users) - i]['last_name']])
+                                      users.values('last_name')[len(users) - i]['last_name']])"""
+
+    # Sample randomly but uniquely Persons
+    random_persons = [persons_triplestore[i] for i in sample(range(0,len(persons_triplestore)), 5)]
 
     projects = variables.sparql_get_project_object.get_projects()
 
@@ -60,13 +65,13 @@ def index(request):
     projects_data.sort(key=lambda item: item['founding_date'], reverse=True)
 
     context = {
-        'len_persons': len(users_triplestore),
+        'len_persons': len(persons_triplestore),
         'len_datasets': len(datasets),
         'len_institutions': len(institutions),
         'len_funders': len(funders),
         'len_articles': len(articles),
         'len_projects': len(projects_data),
-        'last_users_registered': last_users_registered,
+        'random_persons': random_persons,
         'last_publications': articles_data[:5],
         'project_data': projects_data[:5],
     }
