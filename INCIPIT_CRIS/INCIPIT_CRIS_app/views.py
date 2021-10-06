@@ -55,7 +55,7 @@ def index(request):
                                       users.values('last_name')[len(users) - i]['last_name']])"""
 
     # Sample randomly but uniquely Persons
-    random_persons = [persons_triplestore[i] for i in sample(range(0,len(persons_triplestore)), 5)]
+    random_persons = [persons_triplestore[i] for i in sample(range(0,len(persons_triplestore)), min(len(persons_triplestore),5))]
 
     projects = variables.sparql_get_project_object.get_projects()
 
