@@ -1,13 +1,8 @@
-#!/bin/bash
-
 echo "START"
 service mysql start
-if [ "`mysql -e "SHOW DATABASES" | grep -w "incipit_cris"`" != "incipit_cris" ]
-then
-    mysql -e "CREATE DATABASE incipit_cris;"
-    mysql -e "CREATE USER 'INCIPIT-CRIS'@'localhost' IDENTIFIED BY 'password';"
-    mysql -e "GRANT ALL ON *.* TO 'INCIPIT-CRIS'@'localhost';"
-fi
+mysql -e "CREATE DATABASE incipit_cris;"
+mysql -e "CREATE USER 'INCIPIT-CRIS'@'localhost' IDENTIFIED BY 'password';"
+mysql -e "GRANT ALL ON *.* TO 'INCIPIT-CRIS'@'localhost';"
 
 echo "RUN FUSEKI"
 

@@ -1,49 +1,126 @@
 #!/usr/bin/env bash
 
-OS="`uname`"
+############################################################
+# Help                                                     #
+############################################################
+help()
+{
+    # Display Help
+    echo "This script fully deploy and run the INCIPIT-CRIS, it is possible to only run some parts of the script."
+    echo
+    echo "Syntax: scriptTemplate [-a|d|f|h|s]"
+    echo "options:"
+    echo "a     Execute all the steps to deploy the CRIS"
+    echo "d     Launch only Django"
+    echo "f     Launch only Fuseki"
+    echo "h     Print this Help"
+    echo "m     Launch only Mysql"
+    echo "s     Skip the mysql database verification"
+    echo
+}
 
-if [ "$OS" == "Darwin" ]
-then
+############################################################
+############################################################
+# Main program                                             #
+############################################################
+############################################################
 
-    exit_script() {
-        kill `ps -ef | grep 'java.*fuseki' | grep -v grep | awk '{ print $2 }'`
-        kill $FIND_PID
-    }
+mysql()
+{
+    echo "Checking mysql databases, you will be asked for the root password"
 
-    trap exit_script SIGTERM SIGINT
+    if [ `mysql -u root -p -e "SHOW DATABASES" | grep -w "incipit_cris"` != "incipit_cris" ]
+    then
+        echo "Creating database and user with privelegies, you will be asked for the root password"
+        mysql -u root -p -e "CREATE DATABASE incipit_cris; CREATE USER 'INCIPIT-CRIS'@'localhost' IDENTIFIED BY 'password'; GRANT ALL ON *.* TO 'INCIPIT-CRIS'@'localhost';"
+    fi
+}
 
+fuseki()
+{
     cd fuseki/
     ./fuseki-server &
 
     cd ..
+}
 
-    if [ -d "env/" ]; then
-        . env/bin/activate
-    else
-        virtualenv -p python3 env
-        pip install -r requirements.txt
-    fi
-elif [ "$OS" == "Linux" ]
-then
-    exit_script() {
-        kill `ps -ef | grep 'java.*fuseki' | grep -v grep | awk '{ print $2 }'`
-        kill $FIND_PID
-    }
-    kill $(pgrep java)
-    trap exit_script SIGTERM SIGINT
-
-
-    cd fuseki
-    ./fuseki-server &
-
-    cd ..
-
+django()
+{
     if [ -d "env/" ]; then
         source env/bin/activate
     else
         virtualenv -p python3 env
-        pip install -r requirements.txt
+        source env/bin/activate
+        pip3 install -r requirements.txt
+        python3 INCIPIT_CRIS/manage.py migrate
+        DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=pw DJANGO_SUPERUSER_EMAIL=admin@incipit-cris.com python3 INCIPIT_CRIS/manage.py createsuperuser --noinput
+        python3 INCIPIT_CRIS/manage.py add_schema_to_cris
     fi
+
+    python3 INCIPIT_CRIS/manage.py runserver 0.0.0.0:8000 &
+}
+
+terminate() {
+    if [ "`ps -ef | grep 'java.*fuseki' | grep -v grep | awk '{ print $2 }'`" ]
+    then
+        kill `ps -ef | grep 'java.*fuseki' | grep -v grep | awk '{ print $2 }'`
+    fi
+
+    if [ "`ps -ef | grep 'python' | grep -v grep | awk '{ print $2 }'`" ]
+    then
+        kill `ps -ef | grep 'python' | grep -v grep | awk '{ print $2 }'`
+    fi
+    exit
+}
+
+trap terminate SIGTERM SIGINT
+
+############################################################
+# Process the input options.                               #
+############################################################
+
+PARAMS=""
+
+
+while getopts "adfhms" opt; do
+    case $opt in
+        a)
+            mysql
+            fuseki
+            django
+            ;;
+        d)
+            django
+            ;;
+        f)
+            fuseki
+            ;;
+        h)
+            help
+            ;;
+        m)
+            mysql
+            exit
+            ;;
+        s)
+            fuseki
+            django
+            ;;
+        \?) # unsupported flags
+            echo "Error: Unsupported flag $1" >&2
+            echo
+            help
+            exit 1
+            ;;
+    esac
+done
+
+if [ "$#" -gt "0" ]
+then
+    while :; do sleep 10000d; done
 fi
 
-python3 INCIPIT_CRIS/manage.py runserver 0.0.0.0:8000
+# set positional arguments in their proper place
+eval set -- "$PARAMS"
+
+help
