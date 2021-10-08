@@ -2,10 +2,10 @@
 
 echo "START"
 service mysql start
-first_launch= false
+first_launch=false
 if [ "`mysql -e "SHOW DATABASES" | grep -w "incipit_cris"`" != "incipit_cris" ]
 then
-    first_launch= true
+    first_launch=true
     mysql -e "CREATE DATABASE incipit_cris;"
     mysql -e "CREATE USER 'INCIPIT-CRIS'@'localhost' IDENTIFIED BY 'password';"
     mysql -e "GRANT ALL ON *.* TO 'INCIPIT-CRIS'@'localhost';"
@@ -25,7 +25,7 @@ pip3 install -r requirements.txt
 echo "SETUP DJANGO ENVIRONEMENT"
 python3.7 INCIPIT_CRIS/manage.py makemigrations INCIPIT_CRIS_app
 python3.7 INCIPIT_CRIS/manage.py migrate
-if [ $first_launch ]
+if [ "$first_launch" = true ]
 then
     DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=pw DJANGO_SUPERUSER_EMAIL=admin@incipit-cris.com python3.7 INCIPIT_CRIS/manage.py createsuperuser --noinput
 fi
