@@ -2,6 +2,9 @@
 
 echo "START"
 service mysql start
+echo
+echo "`mysql -e "SHOW DATABASES" | grep -w "incipit_cris"`"
+echo
 if [ "`mysql -e "SHOW DATABASES" | grep -w "incipit_cris"`" != "incipit_cris" ]
 then
     echo
