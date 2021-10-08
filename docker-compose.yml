@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - db:/var/lib/mysql/incipit_cris
+      - db:/var/lib/mysql
       - fuseki:/app/fuseki
 
 volumes:

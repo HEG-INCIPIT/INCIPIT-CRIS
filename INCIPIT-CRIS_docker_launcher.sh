@@ -2,14 +2,8 @@
 
 echo "START"
 service mysql start
-echo
-echo "`mysql -e "SHOW DATABASES" | grep -w "incipit_cris"`"
-echo
 if [ "`mysql -e "SHOW DATABASES" | grep -w "incipit_cris"`" != "incipit_cris" ]
 then
-    echo
-    echo OKAY
-    echo
     mysql -e "CREATE DATABASE incipit_cris;"
     mysql -e "CREATE USER 'INCIPIT-CRIS'@'localhost' IDENTIFIED BY 'password';"
     mysql -e "GRANT ALL ON *.* TO 'INCIPIT-CRIS'@'localhost';"
