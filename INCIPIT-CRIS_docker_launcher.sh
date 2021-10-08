@@ -1,8 +1,11 @@
 echo "START"
 service mysql start
-mysql -e "CREATE DATABASE incipit_cris;"
-mysql -e "CREATE USER 'INCIPIT-CRIS'@'localhost' IDENTIFIED BY 'password';"
-mysql -e "GRANT ALL ON *.* TO 'INCIPIT-CRIS'@'localhost';"
+if [ `mysql -e "SHOW DATABASES" | grep -w "incipit_cris"` != "incipit_cris" ]
+then
+    mysql -e "CREATE DATABASE incipit_cris;"
+    mysql -e "CREATE USER 'INCIPIT-CRIS'@'localhost' IDENTIFIED BY 'password';"
+    mysql -e "GRANT ALL ON *.* TO 'INCIPIT-CRIS'@'localhost';"
+fi
 
 echo "RUN FUSEKI"
 
@@ -25,7 +28,10 @@ else
     pip3 install -r requirements.txt
     echo "SETUP DJANGO ENVIRONEMENT"
     python3.7 INCIPIT_CRIS/manage.py migrate
-    DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=pw DJANGO_SUPERUSER_EMAIL=admin@incipit-cris.com python3.7 INCIPIT_CRIS/manage.py createsuperuser --noinput
+    if [ `mysql -e "SHOW DATABASES" | grep -w "incipit_cris"` != "incipit_cris" ]
+    then
+        DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=pw DJANGO_SUPERUSER_EMAIL=admin@incipit-cris.com python3.7 INCIPIT_CRIS/manage.py createsuperuser --noinput
+    fi
     echo "INSERTING SCHEMA.ORG ONTOLOGY INTO CRIS"
     python3.7 INCIPIT_CRIS/manage.py add_schema_to_cris
 fi
