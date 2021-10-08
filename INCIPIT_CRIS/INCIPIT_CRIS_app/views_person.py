@@ -26,7 +26,7 @@ def person_results(request):
     '''
 
     alphabet_list = list(string.ascii_lowercase)
-    categories = ['Personnes', 'Professeurs ordinaire', 'Assistants HES']
+    categories = ['Personnes']
     category = categories[0]
     sparql_request = variables.sparql_get_person_object.get_persons()
     context = {

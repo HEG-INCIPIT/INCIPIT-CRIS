@@ -244,7 +244,7 @@ class SparqlGetPersonMethods:
 
             SELECT ?jobTitle WHERE
             {{
-                <{pid}IN> schema:jobTitle ?jobTitle .
+                <{pid}> schema:jobTitle ?jobTitle .
             }}
         """.format(prefix=variables.prefix, pid=pid)
 
