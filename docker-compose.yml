@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  cris:
+    image: "ghcr.io/heg-incipit/incipit-cris:main"
+    ports:
+      - "8000:8000"
+    volumes:
+      - db:/var/lib/mysql/incipit_cris
+      - fuseki:/app/fuseki
+
+volumes:
+  db:
+  fuseki:
