@@ -60,16 +60,37 @@ django()
     python3 INCIPIT_CRIS/manage.py runserver 0.0.0.0:8000 &
 }
 
-terminate() {
-    if [ "`ps -ef | grep 'java.*fuseki' | grep -v grep | awk '{ print $2 }'`" ]
-    then
-        kill `ps -ef | grep 'java.*fuseki' | grep -v grep | awk '{ print $2 }'`
-    fi
 
+kill_django(){
     if [ "`ps -ef | grep 'python' | grep -v grep | awk '{ print $2 }'`" ]
     then
         kill `ps -ef | grep 'python' | grep -v grep | awk '{ print $2 }'`
     fi
+}
+
+
+kill_fuseki(){
+    if [ "`ps -ef | grep 'java.*fuseki' | grep -v grep | awk '{ print $2 }'`" ]
+    then
+        kill `ps -ef | grep 'java.*fuseki' | grep -v grep | awk '{ print $2 }'`
+    fi
+}
+
+
+terminate() {
+
+    case $flags in
+        -d)
+            kill_django
+            ;;
+        -f)
+            kill_fuseki
+            ;;
+        -*)
+            kill_django
+            kill_fuseki
+            ;;
+    esac
     exit
 }
 
@@ -79,8 +100,7 @@ trap terminate SIGTERM SIGINT
 # Process the input options.                               #
 ############################################################
 
-PARAMS=""
-
+flags=$1
 
 while getopts "adfhms" opt; do
     case $opt in
@@ -119,8 +139,5 @@ if [ "$#" -gt "0" ]
 then
     while :; do sleep 10000d; done
 fi
-
-# set positional arguments in their proper place
-eval set -- "$PARAMS"
 
 help
