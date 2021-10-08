@@ -33,7 +33,7 @@ else
     pip3 install -r requirements.txt
     echo "SETUP DJANGO ENVIRONEMENT"
     python3.7 INCIPIT_CRIS/manage.py migrate
-    if [ `mysql -e "SHOW DATABASES" | grep -w "incipit_cris"` != "incipit_cris" ]
+    if [ "`mysql -e "SHOW DATABASES" | grep -w "incipit_cris"`" != "incipit_cris" ]
     then
         DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=pw DJANGO_SUPERUSER_EMAIL=admin@incipit-cris.com python3.7 INCIPIT_CRIS/manage.py createsuperuser --noinput
     fi
