@@ -52,6 +52,7 @@ django()
         virtualenv -p python3 env
         source env/bin/activate
         pip3 install -r requirements.txt
+        python3 INCIPIT_CRIS/manage.py makemigrations INCIPIT_CRIS_app
         python3 INCIPIT_CRIS/manage.py migrate
         DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=pw DJANGO_SUPERUSER_EMAIL=admin@incipit-cris.com python3 INCIPIT_CRIS/manage.py createsuperuser --noinput
         python3 INCIPIT_CRIS/manage.py add_schema_to_cris
