@@ -29,7 +29,7 @@ mysql()
 {
     echo "Checking mysql databases, you will be asked for the root password"
 
-    if [ `mysql -u root -p -e "SHOW DATABASES" | grep -w "incipit_cris"` != "incipit_cris" ]
+    if [ "`mysql -u root -p -e "SHOW DATABASES" | grep -w "incipit_cris"`" != "incipit_cris" ]
     then
         echo "Creating database and user with privelegies, you will be asked for the root password"
         mysql -u root -p -e "CREATE DATABASE incipit_cris; CREATE USER 'INCIPIT-CRIS'@'localhost' IDENTIFIED BY 'password'; GRANT ALL ON *.* TO 'INCIPIT-CRIS'@'localhost';"
