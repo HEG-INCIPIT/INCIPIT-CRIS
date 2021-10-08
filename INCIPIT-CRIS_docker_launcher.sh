@@ -23,6 +23,7 @@ echo "PYTHON"
 echo "REQUIREMENTS"
 pip3 install -r requirements.txt
 echo "SETUP DJANGO ENVIRONEMENT"
+python3.7 INCIPIT_CRIS/manage.py makemigrations INCIPIT_CRIS_app
 python3.7 INCIPIT_CRIS/manage.py migrate
 if [ $first_launch ]
 then
