@@ -90,10 +90,12 @@ def import_data(request):
             return render(request, 'forms/import/import_data.html')
 
 
+
 def manage_data(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             media_path = settings.MEDIA_ROOT
+            my_files = []
             if path.isdir(media_path):
                 my_files = [f for f in listdir(media_path) if isfile(join(media_path, f))]
 
