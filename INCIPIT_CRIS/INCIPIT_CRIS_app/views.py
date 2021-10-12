@@ -94,7 +94,8 @@ def manage_data(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             media_path = settings.MEDIA_ROOT
-            my_files = [f for f in listdir(media_path) if isfile(join(media_path, f))]
+            if path.isdir(media_path):
+                my_files = [f for f in listdir(media_path) if isfile(join(media_path, f))]
 
             return render(request, 'data/manage_data.html', {'my_files': my_files})
 
