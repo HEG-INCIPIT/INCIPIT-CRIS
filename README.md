@@ -1,6 +1,6 @@
 # INCIPIT-CRIS
 
-## INCIPIT-CRIS
+## About INCIPIT-CRIS
 
 INCIPIT-CRIS is a project developed at the HEG of Geneva. The purpose is to develop a Current Research Information System (CRIS) based on a triplestore and using ARKs to identify the different ressources that use ARKetype, a swiss option for creating Archival Resource Keys (ARKs).
 
@@ -13,24 +13,39 @@ Interaction scheme :
 Fuseki is used as a standalone server. It is already configured to use one graph and an OWL reasoner.
 User/Password are available in the file `fuseki/run/shiro.ini`.
 
-## How tu run
+## How to deploy
 
-Actually the shell script INCIPIT-CRIS_launcher.sh launch fuseki and django localhost on the port 8000.
-
-Make sure to execute the script being in the folder, that it has the permissions to be run, and that the package `virtualenv` is already intalled (if you can install it using pip : `pip install virtualenv`). Then simply enter 
+The easiest way to deploy INCIPIT-CRIS is to only download the file `docker-compose.yml`, and run it in docker with the command :
 
 ```bash
-./INCIPIT-CRIS_launcher.sh
+docker-compose up
 ```
 
-in the terminal.
+It will automatically download the last docker image and run an instance of INCIPIT-CRIS on `localhost` and `localhost:8000`.
 
-If it's the first time that you run INCIPIT-CRIS you will need to add the schema.org ontology in the triplestore. To do so,
-go in the folder `INCIPIT-CRIS` and run the following command :
+If you want it to run on an defined URL you can edit the `docker-compose.yml` as indicated in the comments of the file.
+
+## For development purposes
+
+If you want to edit INCIPIT-CRIS to, for example, add a features that is not implemented, you can use the file `INCIPIT-CRIS_launcher.sh` that allows you to run localy and in an virtual environment the project. 
 
 ```bash
-python3 manage.py add_schema_to_cris
+./INCIPIT-CRIS_launcher.sh 
 ```
 
-once you've done that, you're done and you can reach `localhost:8000` on your favourite navigator and enjoy !
+Make sure to run it in its repertory **and** that the file has the rights to be executed, if not you can give it the rights using the `chmod` command :
 
+```bash
+chmod +x INCIPIT-CRIS_launcher.sh
+```
+
+### INCIPIT-CRIS_launcher.sh usage
+
+- `a` : Execute all the steps to deploy the CRIS
+- `d` : Launch only Django
+- `f` : Launch only Fuseki
+- `h` : Print this Help
+- `m` : Launch only Mysql
+- `s` : Skip the mysql database verification
+
+You can combine flags.
