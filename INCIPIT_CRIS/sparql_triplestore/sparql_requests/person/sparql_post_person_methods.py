@@ -45,8 +45,8 @@ class SparqlPostPersonMethods:
                     schema:givenName "{given_name}" ;
                     schema:familyName "{family_name}" ;
                     schema:email "{email}" ;
-                    schema:description \"\"\"\"\"\";
-                    schema:telephone \"\"\"\"\"\";
+                    schema:description \"""\""";
+                    schema:telephone \"""\""";
                     schema:identifier <{pid}ARK> .
             }}
         """.format(prefix=variables.prefix, pid=pid, given_name=given_name, family_name=family_name, email=email)
@@ -143,6 +143,37 @@ class SparqlPostPersonMethods:
                 <{pid}> schema:jobTitle \"""{job_title}\""" .
             }}
         """.format(prefix=variables.prefix, pid=pid , job_title=job_title)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_title_person(self, pid, title):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:honorificPrefix \"""{title}\""" .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , title=title)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+    
+    def delete_title_person(self, pid, title):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{
+                <{pid}> schema:honorificPrefix \"""{title}\""" .
+            }}
+            WHERE {{
+                <{pid}> schema:honorificPrefix \"""{title}\""" .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , title=title)
 
         self.sparql.setQuery(sparql_request)
 

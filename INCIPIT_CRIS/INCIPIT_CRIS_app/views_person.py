@@ -5,6 +5,7 @@ import re
 import json
 from . import variables
 from . import form_selection
+from INCIPIT_CRIS_app.models import Title
 
 
 def person_results(request):
@@ -169,7 +170,7 @@ def person_field_edition(request, field_to_modify, pid):
             context = {
                 'form': form,
                 'path_name' : ['Personnes', 'Profil', 'Edition', form.fields[next(iter(form.declared_fields.keys()))].label],
-                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/'+field_to_modify+pid],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profil/'+field_to_modify+pid],
                 'button_value': 'Modifier',
                 'url_to_return': '/persons/edition/profil/{}/{}'.format(field_to_modify, pid)
             }
@@ -271,7 +272,7 @@ def person_article_addition(request, pid):
             context = {
                 'button_value': 'Ajouter',
                 'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un article'],
-                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-article/'+pid],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profil/add-article/'+pid],
                 'title_data_type_added': 'Article',
                 'data_type_added': 'de l\'article',
                 'url_to_return': '/persons/edition/profil/add-article/{}'.format(pid),
@@ -334,7 +335,7 @@ def person_project_addition(request, pid):
             context = {
                 'button_value': 'Ajouter',
                 'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un projet'],
-                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-project/'+pid],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profil/add-project/'+pid],
                 'title_data_type_added': 'Projet',
                 'data_type_added': 'du projet',
                 'url_to_return': '/persons/edition/profil/add-project/{}'.format(pid),
@@ -441,7 +442,7 @@ def person_datasets_addition(request, pid):
             context = {
                 'button_value': 'Ajouter',
                 'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un jeu de données'],
-                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-dataset/'+pid],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profil/add-dataset/'+pid],
                 'title_data_type_added': 'Jeu de données',
                 'data_type_added': 'du jeu de données',
                 'url_to_return': '/persons/edition/profil/add-dataset/{}'.format(pid),
@@ -542,7 +543,7 @@ def person_datasets_maintainer_addition(request, pid):
             context = {
                 'button_value': 'Ajouter',
                 'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un jeu de données en tant que mainteneur'],
-                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-maintainer/'+pid],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profil/add-maintainer/'+pid],
                 'title_data_type_added': 'Jeu de données',
                 'data_type_added': 'du jeu de données',
                 'url_to_return': '/persons/edition/profil/add-dataset-maintainer/{}'.format(pid),
@@ -600,7 +601,7 @@ def person_work_addition(request, pid):
 
             context = {
                 'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter une institution de travail'],
-                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-work/'+pid],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profil/add-work/'+pid],
                 'title_data_type_added': 'Institution de travail',
                 'data_type_added': 'de l\'institution de travail',
                 'url_to_return': '/persons/edition/profil/add-work/{}'.format(pid),
@@ -697,7 +698,7 @@ def person_affiliation_addition(request, pid):
 
             context = {
                 'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter une institution de travail'],
-                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/field/add-affiliation/'+pid],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profil/add-affiliation/'+pid],
                 'title_data_type_added': 'Institution de travail',
                 'data_type_added': 'de l\'institution de travail',
                 'url_to_return': '/persons/edition/profil/add-affiliation/{}'.format(pid),
@@ -753,3 +754,62 @@ def person_affiliation_deletion(request, pid):
         'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
+
+
+def person_title_addition(request, pid):
+    '''
+    Adds an title where the given person works
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                title = request.POST['select-data']
+                if title != '':
+                    #variables.sparql_post_person_object.add_title_person(pid, title)
+                    print(title)
+
+                return redirect(person_edition, pid=pid)
+
+            titles = list(Title.objects.order_by('title').values_list('title', flat=True))
+
+            context = {
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un titre'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profile/add-title/'+pid],
+                'title_data_type_added': 'Ajouter un titre',
+                'data_type_added': 'Titre',
+                'url_to_return': '/persons/edition/profil/add-title/{}'.format(pid),
+                'button_value': 'Ajouter',
+                'data': titles,
+            }
+
+            return render(request, 'forms/select_form_from_array.html', context)
+    
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_title_deletion(request, pid):
+    pass

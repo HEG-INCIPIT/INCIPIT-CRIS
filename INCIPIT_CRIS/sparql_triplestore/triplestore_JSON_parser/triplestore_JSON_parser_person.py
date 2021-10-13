@@ -74,6 +74,12 @@ def parse_get_job_title(sparql_query_answer):
         return {'job_title': loaded_json['jobTitle']['value'] if 'jobTitle' in loaded_json else ''}
 
 
+def parse_get_title(sparql_query_answer):
+    if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        return {'title': loaded_json['honorificPrefix']['value'] if 'honorificPrefix' in loaded_json else ''}
+
+
 def parse_get_IN_information(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     return {'IN_url': loaded_json['url']['value']}

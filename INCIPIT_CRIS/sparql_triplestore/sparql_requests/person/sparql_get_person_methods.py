@@ -253,6 +253,25 @@ class SparqlGetPersonMethods:
         return parse_get_job_title(self.sparql.query().response.read())
 
 
+    def get_title_person(self, pid):
+        """
+        Get information about the job title of the given person
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?honorificPrefix WHERE
+            {{
+                <{pid}> schema:honorificPrefix ?honorificPrefix .
+            }}
+        """.format(prefix=variables.prefix, pid=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_title(self.sparql.query().response.read())
+
+
     def get_IN_information_person(self, pid):
         """
         Get information about the LinkedIn information of the given person
@@ -303,6 +322,7 @@ class SparqlGetPersonMethods:
         works = variables.sparql_get_person_object.get_work_person(pid)
         affiliations = variables.sparql_get_person_object.get_affiliation_person(pid)
         job_title = variables.sparql_get_person_object.get_job_title_person(pid)
+        title = variables.sparql_get_person_object.get_title_person(pid)
 
         # Concatenate the two arrays of datasets in only one with only one recurrency
         datasets = datasets_maintainer
@@ -323,6 +343,7 @@ class SparqlGetPersonMethods:
         data_person['works'] = works
         data_person['affiliations'] = affiliations
         data_person['job_title'] = job_title
+        data_person['title'] = title
 
         return data_person
 
