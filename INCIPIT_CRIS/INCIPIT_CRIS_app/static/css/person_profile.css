@@ -234,3 +234,7 @@ a.datasets {
 .stats .box {
     padding: 1rem;
 }
+
+.form-in-line {
+    display: inline-block;
+}

@@ -31,7 +31,18 @@
     <div class="columns is-multiline">
         <div class="column is-one-third">
 
-            <p>Titre : <a class="link-one" href="/persons/edition/profil/add-title/{{ data_person.pid }}"><i class="fas fa-edit"></i></a></p>
+            <div>
+                Titre : 
+                {% for title in data_person.title %}
+                    <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-title/{{ data_person.pid }}" method="post">
+                        {% csrf_token %}
+                        {{ title }}
+                        <input type="hidden" id="title" name="title" value="{{ title }}">
+                        <button class="delete"></button>
+                    </form>
+                {% endfor %}
+                <a class="link-one" href="/persons/edition/profil/add-title/{{ data_person.pid }}"><i class="fas fa-edit"></i></a>
+            </div>
         </div>
 
         <div class="column is-one-third">

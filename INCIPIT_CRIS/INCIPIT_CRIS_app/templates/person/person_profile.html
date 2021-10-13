@@ -125,7 +125,12 @@
                 <div class="columns is-multiline">
                     <div class="column is-one-third">
 
-                        <p>Titre : M</p>
+                        <div>
+                            Titre :
+                            {% for title in data_person.title %}
+                                {{ title }}
+                            {% endfor %}
+                        </div>
                     </div>
 
                     <div class="column is-one-third">
