@@ -25,7 +25,7 @@ help()
 ############################################################
 ############################################################
 
-mysql()
+mysql_f()
 {
     echo "Checking mysql databases, you will be asked for the root password"
 
@@ -106,7 +106,7 @@ flags=$1
 while getopts "adfhms" opt; do
     case $opt in
         a)
-            mysql
+            mysql_f
             fuseki
             django
             ;;
@@ -118,10 +118,11 @@ while getopts "adfhms" opt; do
             ;;
         h)
             help
+            exit 0
             ;;
         m)
-            mysql
-            exit
+            mysql_f
+            exit 0
             ;;
         s)
             fuseki
