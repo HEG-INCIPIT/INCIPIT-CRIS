@@ -21,7 +21,10 @@ The easiest way to deploy INCIPIT-CRIS is to only download the file `docker-comp
 docker-compose up
 ```
 
-It will automatically download the last docker image and run an instance of INCIPIT-CRIS on `localhost` and `localhost:8000`.
+It will automatically download the last docker image and run an instance of INCIPIT-CRIS on `localhost` and `localhost:8000`. 
+Make sure that the ports `8000`, `80` and `443` are free.
+With this configuration, as localhost has no certificates, it will notify it was unable to generate a certificate for the domain localhost.
+However it will not entrave with the proper functioning of the CRIS.
 
 If you want it to run on an defined URL you can edit the `docker-compose.yml` as indicated in the comments of the file.
 
