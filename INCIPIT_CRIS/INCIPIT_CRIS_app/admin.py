@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
+from .models import Title, User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
@@ -25,3 +25,4 @@ class UserAdmin(BaseUserAdmin):
         BaseUserAdmin.list_display = list(BaseUserAdmin.list_display)
 
 admin.register(UserAdmin)
+admin.site.register(Title)

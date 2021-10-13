@@ -68,3 +68,10 @@ def delete_in_sparql(sender, instance, using, **kwargs):
     variables.sparql_generic_post_object.delete_object(str(instance))
     variables.sparql_generic_post_object.delete_subject(str(instance)+"ARK")
     variables.sparql_generic_post_object.delete_object(str(instance)+"ARK")
+
+
+class Title(models.Model):
+    title = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.title
