@@ -99,6 +99,8 @@ class SparqlGetDatasetMethods:
             full_name = variables.sparql_get_person_object.get_full_name_person(maintainer)
             array_maintainers.append([maintainer, full_name])
 
+        array_maintainers.sort(key=lambda maintainer: maintainer[1]['family_name'])
+
         return array_maintainers
 
 
@@ -124,6 +126,8 @@ class SparqlGetDatasetMethods:
         for creator in parse_get_creators_dataset(self.sparql.query().response.read()):
             full_name = variables.sparql_get_person_object.get_full_name_person(creator)
             array_creators.append([creator, full_name])
+
+        array_creators.sort(key=lambda creator: creator[1]['family_name'])
 
         return array_creators
 

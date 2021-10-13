@@ -100,6 +100,8 @@ class SparqlGetProjectMethods:
             full_name = variables.sparql_get_person_object.get_full_name_person(member)
             array_members.append([member, full_name])
 
+        array_members.sort(key=lambda member: member[1]['family_name'])
+
         return array_members
 
 
