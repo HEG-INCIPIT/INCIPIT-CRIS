@@ -17,9 +17,9 @@ class User(AbstractUser):
     pid = models.CharField(blank=True, max_length=100)
 
     # variables to verify at each save of a user if those elements changed
-    __original_email = None
-    __original_first_name = None
-    __original_last_name = None
+    __original_email = ""
+    __original_first_name = ""
+    __original_last_name = ""
 
 
     def __init__(self, *args, **kwargs):
@@ -43,15 +43,15 @@ class User(AbstractUser):
                     raise Exception
 
             variables.sparql_post_person_object.init_person(self.pid, self.first_name, self.last_name, self.email)
-            if self.email != self.__original_email:
-                variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'email', self.email,
-                                                                        self.__original_email)
-            if self.first_name != self.__original_first_name:
-                variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'givenName', self.first_name,
-                                                                        self.__original_first_name)
-            if self.last_name != self.__original_last_name:
-                variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'familyName', self.last_name,
-                                                                        self.__original_last_name)
+        if self.email != self.__original_email:
+            variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'email', self.email,
+                                                                    self.__original_email)
+        if self.first_name != self.__original_first_name:
+            variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'givenName', self.first_name,
+                                                                    self.__original_first_name)
+        if self.last_name != self.__original_last_name:
+            variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'familyName', self.last_name,
+                                                                    self.__original_last_name)
 
         super().save(*args, **kwargs)
         self.__original_email = self.email
@@ -73,5 +73,44 @@ def delete_in_sparql(sender, instance, using, **kwargs):
 class Title(models.Model):
     title = models.CharField(max_length=50)
 
+    __original_title = ""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_title = self.title
+
+    def save(self, *args, **kwargs):
+
+        if self.title != self.__original_title:
+            variables.sparql_post_person_object.update_person_string_leaf_without_pid('honorificPrefix', self.title,
+                                                                    self.__original_title)
+
+        super().save(*args, **kwargs)
+        self.__original_title = self.title
+
+
     def __str__(self):
         return self.title
+
+
+class JobTitle(models.Model):
+    job_title = models.CharField(max_length=100)
+
+    __original_job_title = ""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_job_title = self.job_title
+
+    def save(self, *args, **kwargs):
+
+        if self.job_title != self.__original_job_title:
+            variables.sparql_post_person_object.update_person_string_leaf_without_pid('jobTitle', self.job_title,
+                                                                    self.__original_job_title)
+
+        super().save(*args, **kwargs)
+        self.__original_job_title = self.job_title
+
+
+    def __str__(self):
+        return self.job_title

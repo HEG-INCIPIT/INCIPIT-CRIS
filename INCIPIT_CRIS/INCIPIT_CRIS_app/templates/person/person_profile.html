@@ -49,7 +49,11 @@
                     <div class="column">
                         {% block person_information %}
                             <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
-                            <p>Nom du poste</p>
+                            {% if data_person.job_title != None %}
+                                <p>{{ data_person.job_title }}</p>
+                            {% else %}
+                                <p style="visibility: hidden">{{ data_person.job_title }}</p>
+                            {% endif %}
                             <p class="domains">Domaines : LOD, PID</p>
                         {% endblock %}
                     </div>

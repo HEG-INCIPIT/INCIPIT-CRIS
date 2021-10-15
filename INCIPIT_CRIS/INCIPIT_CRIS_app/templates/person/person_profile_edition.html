@@ -23,7 +23,16 @@
 
 {% block person_information %}
     <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
-    <p>Nom du poste</p>
+    {% if data_person.job_title != None %}
+        {{ data_person.job_title }}
+        <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-job-title/{{ data_person.pid }}" method="post">
+            {% csrf_token %}
+            <input type="hidden" id="job_title" name="job_title" value="{{ data_person.job_title }}">
+            <button class="delete"></button>
+        </form>
+    {% else %}
+        Ajouter un poste de travail <a class="link-one" href="/persons/edition/profil/add-job-title/{{ data_person.pid }}"><i class="fas fa-edit"></i></a>
+    {% endif %}
     <p class="domains">Domaines : LOD, PID</p>
 {% endblock %}
 

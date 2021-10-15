@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
+
 from .forms import *
 import string
 import re
 import json
 from . import variables
 from . import form_selection
-from INCIPIT_CRIS_app.models import Title
+from INCIPIT_CRIS_app.models import Title, JobTitle
 
 
 def person_results(request):
@@ -836,6 +837,98 @@ def person_title_deletion(request, pid):
             title = request.POST['title']
             print(title)
             variables.sparql_post_person_object.delete_title_person(pid, title)
+
+            return redirect(person_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+
+
+def person_job_title_addition(request, pid):
+    '''
+    Adds an job_title where the given person works
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            # Check the request method
+            if request.method == 'POST':
+                job_title = request.POST['select-data']
+                if job_title != '':
+                    variables.sparql_post_person_object.add_job_title_person(pid, job_title)
+
+                return redirect(person_edition, pid=pid)
+
+            job_titles = list(JobTitle.objects.order_by('job_title').values_list('job_title', flat=True))
+
+            context = {
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un titre'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profile/add-job-title/'+pid],
+                'title_data_type_added': 'Ajouter un poste de travail',
+                'data_type_added': 'Poste de travail',
+                'url_to_return': '/persons/edition/profil/add-job-title/{}'.format(pid),
+                'button_value': 'Ajouter',
+                'data': job_titles,
+            }
+
+            return render(request, 'forms/select_form_from_array.html', context)
+    
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_job_title_deletion(request, pid):
+    '''
+    Delete the job_title of a given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            # Get the value of a variable in the POST request by its id
+            job_title = request.POST['job_title']
+            print(job_title)
+            variables.sparql_post_person_object.delete_job_title_person(pid, job_title)
 
             return redirect(person_edition, pid=pid)
 

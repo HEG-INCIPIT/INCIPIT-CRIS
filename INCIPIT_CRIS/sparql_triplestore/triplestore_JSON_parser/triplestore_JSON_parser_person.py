@@ -71,7 +71,7 @@ def parse_get_affiliations_person(sparql_query_answer):
 def parse_get_job_title(sparql_query_answer):
     if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
-        return {'job_title': loaded_json['jobTitle']['value'] if 'jobTitle' in loaded_json else ''}
+        return loaded_json['jobTitle']['value']
 
 
 def parse_get_title(sparql_query_answer):
