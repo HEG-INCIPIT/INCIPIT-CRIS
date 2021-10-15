@@ -146,7 +146,13 @@
                     </div>
 
                     <div class="column is-one-third">
-                        <p>Poste : Nom du poste</p>
+                        <p>Poste : 
+                            {% if data_person.job_title != None %}
+                                <p>{{ data_person.job_title }}</p>
+                            {% else %}
+                                <p style="visibility: hidden">{{ data_person.job_title }}</p>
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             {% endblock %}

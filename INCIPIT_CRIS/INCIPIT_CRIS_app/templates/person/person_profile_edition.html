@@ -24,14 +24,9 @@
 {% block person_information %}
     <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
     {% if data_person.job_title != None %}
-        {{ data_person.job_title }}
-        <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-job-title/{{ data_person.pid }}" method="post">
-            {% csrf_token %}
-            <input type="hidden" id="job_title" name="job_title" value="{{ data_person.job_title }}">
-            <button class="delete"></button>
-        </form>
+        <p>{{ data_person.job_title }}</p>
     {% else %}
-        Ajouter un poste de travail <a class="link-one" href="/persons/edition/profil/add-job-title/{{ data_person.pid }}"><i class="fas fa-edit"></i></a>
+        <p style="visibility: hidden">{{ data_person.job_title }}</p>
     {% endif %}
     <p class="domains">Domaines : LOD, PID</p>
 {% endblock %}
@@ -63,7 +58,18 @@
         </div>
 
         <div class="column is-one-third">
-            <p>Poste : Nom du poste <a class="link-one" href=""><i class="fas fa-edit"></i></a></p>
+            <div>Poste : 
+                {% if data_person.job_title != None %}
+                    <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-job-title/{{ data_person.pid }}" method="post">
+                        {% csrf_token %}
+                        {{ data_person.job_title }}
+                        <input type="hidden" id="job_title" name="job_title" value="{{ data_person.job_title }}">
+                        <button class="delete"></button>
+                    </form>
+                {% else %}
+                    <a class="link-one" href="/persons/edition/profil/add-job-title/{{ data_person.pid }}"><i class="fas fa-edit"></i></a>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}
