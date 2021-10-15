@@ -47,6 +47,7 @@ class SparqlPostPersonMethods:
                     schema:email "{email}" ;
                     schema:description \"""\""";
                     schema:telephone \"""\""";
+                    schema:address \"""\""";
                     schema:identifier <{pid}ARK> .
             }}
         """.format(prefix=variables.prefix, pid=pid, given_name=given_name, family_name=family_name, email=email)

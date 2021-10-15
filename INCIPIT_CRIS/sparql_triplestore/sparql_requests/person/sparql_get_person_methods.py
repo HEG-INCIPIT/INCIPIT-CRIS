@@ -300,13 +300,14 @@ class SparqlGetPersonMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?given_name ?family_name ?email ?telephone ?description ?work WHERE
+            SELECT ?given_name ?family_name ?email ?telephone ?description ?address WHERE
             {{
                 <{ark_research}> schema:givenName ?given_name .
                 <{ark_research}> schema:familyName ?family_name .
                 OPTIONAL {{ <{ark_research}> schema:email ?email }}
                 OPTIONAL {{ <{ark_research}> schema:telephone ?telephone }}
                 OPTIONAL {{ <{ark_research}> schema:description ?description }}
+                OPTIONAL {{ <{ark_research}> schema:address ?address }}
 
             }}
         """.format(prefix=variables.prefix, ark_research=pid)

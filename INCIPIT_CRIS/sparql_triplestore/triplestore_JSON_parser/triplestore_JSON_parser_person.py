@@ -114,4 +114,10 @@ def parse_get_data_person(sparql_query_answer):
     else:
         dict_data['description'] = ''
 
+    # If address has a value in triplestore, the value is inserted in dict, if not empty string is inserted
+    if loaded_json.get('address') is not None:
+        dict_data['address'] = loaded_json['address']['value']
+    else:
+        dict_data['address'] = ''
+
     return dict_data

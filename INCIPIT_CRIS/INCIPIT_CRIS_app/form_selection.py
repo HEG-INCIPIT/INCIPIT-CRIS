@@ -31,6 +31,8 @@ def form_selection(request, field_to_edit, data):
             return DescriptionForm(request.POST)
         elif field_to_edit == 'telephone':
             return TelephoneForm(request.POST)
+        elif field_to_edit == 'address':
+            return AddressForm(request.POST)
         
         # Form date
         elif field_to_edit == 'foundingDate':
@@ -66,6 +68,8 @@ def form_selection(request, field_to_edit, data):
             return DescriptionForm(old_description=data[field_to_edit])
         elif field_to_edit == 'telephone':
             return TelephoneForm(old_telephone=data[field_to_edit])
+        elif field_to_edit == 'address':
+            return AddressForm(old_address=data[field_to_edit])
         
         # Form date
         elif field_to_edit == 'foundingDate':

@@ -40,6 +40,18 @@ class TelephoneForm(forms.Form):
         self.fields['telephone'].initial = my_arg
 
 
+class AddressForm(forms.Form):
+    address = forms.CharField(label='Adresse ', max_length=1000, required=False, validators=[not_quotes_regex], widget=forms.Textarea(attrs={'placeholder': 'Ajoutez votre adresse', 'class':'textarea'}))
+
+    def __init__(self, *args, **kwargs):
+        # overload init function to display actual value of the variable in this field
+        my_arg = ''
+        if 'old_address' in kwargs:
+            my_arg = kwargs.pop('old_address')
+        super().__init__(*args, **kwargs)
+        self.fields['address'].initial = my_arg
+
+
 ##################################################
 # Article forms
 ##################################################
