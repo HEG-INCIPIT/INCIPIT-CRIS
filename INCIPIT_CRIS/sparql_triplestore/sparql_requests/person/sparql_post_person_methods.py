@@ -214,3 +214,21 @@ class SparqlPostPersonMethods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
+
+
+    def update_person_string_leaf_without_pid(self, predicate, new_string, old_string):
+        sparql_request = """
+            {prefix}
+
+            DELETE {{ ?person schema:{predicate} \"\"\"{old_string}\"\"\" }}
+            INSERT {{ ?person schema:{predicate} \"\"\"{new_string}\"\"\" }}
+            WHERE
+            {{
+                ?person schema:{predicate} \"\"\"{old_string}\"\"\"
+            }}
+
+        """.format(prefix=variables.prefix, predicate=predicate, old_string=old_string, new_string=new_string)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
