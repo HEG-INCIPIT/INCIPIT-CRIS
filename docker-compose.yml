@@ -4,6 +4,9 @@ services:
     image: "ghcr.io/heg-incipit/incipit-cris:main"
     ports: # Comment this section when deployed on a production server
       - "8000:8000" # If you want to see the CRIS via the port
+    environment:
+      username: "admin"
+      password: "pw"
     volumes:
       - db:/var/lib/mysql
       - fuseki:/app/fuseki
