@@ -14,6 +14,9 @@ urlpatterns = [
     path('populate-triplestore/', views.populate_triplestore, name='populate_triplestore'),
     path('delete-data/', views.delete_data, name='delete_data'),
 
+    # Link ORCID
+    path('orcid/', views.orcid, name='orcid'),
+
     # Persons urls
     path('persons/', views_person.person_results, name='person_results'),
     path('persons/edition/profil/add-article/<path:pid>', views_person.person_article_addition, name='person_article_addition'),

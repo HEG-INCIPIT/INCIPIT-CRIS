@@ -138,3 +138,7 @@ def delete_data(request):
                 remove(path.join(settings.MEDIA_ROOT, request.POST['file_name']))
 
             return redirect(manage_data)
+
+
+def orcid(request):
+    return redirect(index)
