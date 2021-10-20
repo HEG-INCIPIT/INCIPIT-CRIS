@@ -28,6 +28,7 @@ python3.7 INCIPIT_CRIS/manage.py migrate
 if [ "$first_launch" = true ]
 then
     DJANGO_SUPERUSER_USERNAME=$username DJANGO_SUPERUSER_PASSWORD=$password DJANGO_SUPERUSER_EMAIL=admin@incipit-cris.com python3.7 INCIPIT_CRIS/manage.py createsuperuser --noinput
+    python3.7 INCIPIT_CRIS/manage.py add_ark_to_admin
 fi
 echo "INSERTING SCHEMA.ORG ONTOLOGY INTO CRIS"
 python3.7 INCIPIT_CRIS/manage.py add_schema_to_cris

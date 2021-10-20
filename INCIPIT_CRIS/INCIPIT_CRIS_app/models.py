@@ -30,7 +30,7 @@ class User(AbstractUser):
 
 
     def save(self, *args, **kwargs):
-        if not variables.sparql_get_person_object.check_person_ark(self.pid) and not self.is_staff:
+        if  not self.is_staff and not variables.sparql_get_person_object.check_person_ark(self.pid):
             if self.pid == '':
                 
                 try:
