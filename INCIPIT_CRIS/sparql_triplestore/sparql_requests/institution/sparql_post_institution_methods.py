@@ -43,7 +43,7 @@ class SparqlPostInstitutionMethods:
                     schema:propertyID 'ARK' ;
                     schema:value "{pid}" .
 
-                <{pid}> a schema:CollegeOrUniversity ;
+                <{pid}> a schema:Organization ;
                     schema:name \"\"\"{name}\"\"\" ;
                     schema:alternateName \"\"\"{alternate_name}\"\"\" ;
                     schema:description \"\"\"{description}\"\"\" ;

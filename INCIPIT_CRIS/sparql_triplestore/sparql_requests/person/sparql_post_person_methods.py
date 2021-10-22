@@ -62,7 +62,7 @@ class SparqlPostPersonMethods:
             {prefix}
 
             INSERT DATA {{
-                <{pid}> schema:worksFor <{work_pid}> .
+                <{work_pid}> schema:worksFor <{pid}> .
             }}
         """.format(prefix=variables.prefix, pid=pid , work_pid=work_pid)
 
@@ -76,10 +76,10 @@ class SparqlPostPersonMethods:
             {prefix}
 
             DELETE {{
-                <{pid}> schema:worksFor <{work_pid}> .
+                <{work_pid}> schema:worksFor <{pid}> .
             }}
             WHERE {{
-                <{pid}> schema:worksFor <{work_pid}> .
+                <{work_pid}> schema:worksFor <{pid}> .
             }}
         """.format(prefix=variables.prefix, pid=pid , work_pid=work_pid)
 
@@ -93,7 +93,7 @@ class SparqlPostPersonMethods:
             {prefix}
 
             INSERT DATA {{
-                <{pid}> schema:affiliation <{affiliation_pid}> .
+                <{affiliation_pid}> schema:affiliation <{pid}> .
             }}
         """.format(prefix=variables.prefix, pid=pid , affiliation_pid=affiliation_pid)
 
@@ -107,10 +107,10 @@ class SparqlPostPersonMethods:
             {prefix}
 
             DELETE {{
-                <{pid}> schema:affiliation <{affiliation_pid}> .
+                <{affiliation_pid}> schema:affiliation <{pid}> .
             }}
             WHERE {{
-                <{pid}> schema:affiliation <{affiliation_pid}> .
+                <{affiliation_pid}> schema:affiliation <{pid}> .
             }}
         """.format(prefix=variables.prefix, pid=pid , affiliation_pid=affiliation_pid)
 

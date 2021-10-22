@@ -193,7 +193,7 @@ class SparqlGetPersonMethods:
 
             SELECT ?work WHERE
             {{
-                <{ark_research}> schema:worksFor ?work .
+                ?work schema:worksFor <{ark_research}> .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
@@ -219,7 +219,7 @@ class SparqlGetPersonMethods:
 
             SELECT ?affiliation WHERE
             {{
-                <{ark_research}> schema:affiliation ?affiliation .
+                ?affiliation schema:affiliation <{ark_research}> .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 

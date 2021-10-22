@@ -65,7 +65,7 @@ def parse_get_data_institution(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'name': loaded_json['name']['value'],
-        'alternate_name': loaded_json['alternateName']['value'],
+        'alternate_name': loaded_json['alternateName']['value'] if 'alternateName' in loaded_json else '',
         'description': loaded_json['description']['value'],
         'founding_date': loaded_json['foundingDate']['value'][:10],
         'url': loaded_json['url']['value'],

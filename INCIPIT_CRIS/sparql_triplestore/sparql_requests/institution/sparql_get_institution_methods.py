@@ -47,7 +47,7 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?institution ?name ?alternateName WHERE
             {{
-                ?institution a schema:CollegeOrUniversity .
+                ?institution a schema:Organization .
                 ?institution schema:name ?name .
                 ?institution schema:alternateName ?alternateName .
             }}
@@ -69,7 +69,7 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?institution ?name ?parentOrganization WHERE
             {{
-                ?institution a schema:CollegeOrUniversity .
+                ?institution a schema:Organization .
                 ?institution schema:name ?name .
                 NOT EXISTS {{
                     ?institution schema:parentOrganization ?parentOrganization
@@ -205,7 +205,7 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?person WHERE
             {{
-                ?person schema:worksFor <{ark_research}> .
+                <{ark_research}> schema:worksFor ?person .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
@@ -235,7 +235,7 @@ class SparqlGetInstitutionMethods:
 
             SELECT ?person WHERE
             {{
-                ?person schema:affiliation <{ark_research}> .
+                <{ark_research}> schema:affiliation ?person .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
@@ -399,10 +399,10 @@ class SparqlGetInstitutionMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?collegeOrUniversity WHERE
+            SELECT ?Organization WHERE
             {{
-                <{ark_research}> a ?collegeOrUniversity .
-                FILTER(?collegeOrUniversity = schema:CollegeOrUniversity)
+                <{ark_research}> a ?Organization .
+                FILTER(?Organization = schema:Organization)
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
