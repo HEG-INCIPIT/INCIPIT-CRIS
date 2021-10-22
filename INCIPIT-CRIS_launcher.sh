@@ -56,6 +56,7 @@ django()
         python3 INCIPIT_CRIS/manage.py migrate
         DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=pw DJANGO_SUPERUSER_EMAIL=admin@incipit-cris.com python3 INCIPIT_CRIS/manage.py createsuperuser --noinput
         python3 INCIPIT_CRIS/manage.py add_schema_to_cris
+        python3 INCIPIT_CRIS/manage.py add_ark_to_admin
     fi
 
     python3 INCIPIT_CRIS/manage.py runserver 0.0.0.0:8000 &
