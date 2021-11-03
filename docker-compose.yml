@@ -7,9 +7,13 @@ services:
     environment:
       username: "admin"
       password: "pw"
+      client_id: ""
+      client_secret: ""
+      redirect_uri: "https://localhost/orcid/"
     volumes:
       - db:/var/lib/mysql
       - fuseki:/app/fuseki
+      - /Users/david/Documents/HEG/Code/INCIPIT-CRIS/INCIPIT_CRIS:/app/INCIPIT_CRIS
     deploy:
       placement:
         constraints:
