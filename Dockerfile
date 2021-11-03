@@ -3,6 +3,10 @@ FROM openjdk:11-jre-slim-buster
 ENV username=admin
 ENV password=pw
 
+RUN export client_id
+RUN export client_secret
+RUN export redirect_uri
+
 # Installation of dependencies
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install grep procps -y
