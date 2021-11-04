@@ -1,9 +1,10 @@
 version: "3.9"
 services:
   cris:
-    image: "ghcr.io/heg-incipit/incipit-cris:main"
+    image: cris:latest
     ports: # Comment this section when deployed on a production server
       - "8000:8000" # If you want to see the CRIS via the port
+      - "3030:3030"
     environment:
       username: "admin"
       password: "pw"
@@ -13,7 +14,6 @@ services:
     volumes:
       - db:/var/lib/mysql
       - fuseki:/app/fuseki
-      - /Users/david/Documents/HEG/Code/INCIPIT-CRIS/INCIPIT_CRIS:/app/INCIPIT_CRIS
     deploy:
       placement:
         constraints:
@@ -26,34 +26,6 @@ services:
           - "traefik.http.routers.cris.tls=true"
           - "traefik.http.routers.cris.tls.certresolver=myresolver"
           - "traefik.http.services.cris.loadbalancer.server.port=8000"
-
-  reverse_proxy:
-    image: traefik:latest
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.watch=true"
-      - "--providers.docker.exposedbydefault=true"
-      - "--providers.docker.defaultrule=Host(`localhost`)" # Change url here
-      - "--entrypoints.ssh.address=:22"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--certificatesresolvers.myresolver=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-    ports:
-        - 80:80
-        - 443:443
-        #- 8080:8080 # To show Dashboard or not
-    volumes:
-        - /var/run/docker.sock:/var/run/docker.sock:ro # Share the host docker to allow Traefik to recognize other container
-    deploy:
-      placement:
-        constraints:
-          - node.role==manager
-
 volumes:
   db:
   fuseki:

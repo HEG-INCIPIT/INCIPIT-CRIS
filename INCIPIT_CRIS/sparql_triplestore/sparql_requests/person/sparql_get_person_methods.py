@@ -97,7 +97,7 @@ class SparqlGetPersonMethods:
 
         articles_sorted = []
         for article in articles:
-            articles_sorted.append(variables.sparql_get_article_object.get_data_article(article))    
+            articles_sorted.append(variables.sparql_get_article_object.get_data_article(article))
         articles_sorted.sort(key=lambda item: item['date_published'], reverse=True)
 
         return articles_sorted
@@ -124,7 +124,7 @@ class SparqlGetPersonMethods:
 
         projects_sorted = []
         for project in projects:
-            projects_sorted.append(variables.sparql_get_project_object.get_data_project(project))    
+            projects_sorted.append(variables.sparql_get_project_object.get_data_project(project))
         projects_sorted.sort(key=lambda item: item['founding_date'], reverse=True)
 
         return projects_sorted
@@ -181,7 +181,7 @@ class SparqlGetPersonMethods:
 
         return datasets_sorted
 
-    
+
     def get_work_person(self, pid):
         """
         Get all the works for who the person is a maintainer
@@ -233,7 +233,7 @@ class SparqlGetPersonMethods:
 
         return array_affiliations
 
-    
+
     def get_job_title_person(self, pid):
         """
         Get information about the job title of the given person
@@ -333,7 +333,7 @@ class SparqlGetPersonMethods:
                 datasets.append(dataset)
         datasets.sort(key=lambda item: item['modified_date'], reverse=True)
 
-        
+
         data_person['pid'] = pid
         data_person['articles'] = articles
         data_person['len_articles'] = len(articles)
