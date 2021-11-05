@@ -23,6 +23,21 @@
 
 {% block person_information %}
     <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
+
+    <figure class="image is-24x24">
+        <img src="{% static 'images/orcid-logo.png'%}">
+    </figure>
+    {% if data_person.orcid == '' %}
+        <a href="{{ url_auth }}">Lier son compte ORCID</a>
+    {% else %}
+        <form class="align-button-centered form-in-line" action="/delete-orcid/{{ data_person.pid }}" method="post">
+            {% csrf_token %}
+            {{ data_person.orcid }}
+            <input type="hidden" id="orcid" name="orcid" value="{{ data_person.orcid }}">
+            <button class="delete"></button>
+        </form>
+    {% endif %}
+    
     {% if data_person.job_title != None %}
         <p>{{ data_person.job_title }}</p>
     {% else %}
