@@ -67,10 +67,10 @@ def article_profile(request, pid):
     if variables.sparql_get_article_object.check_article_ark(pid):
         data_article = variables.sparql_get_article_object.get_data_article(pid)
         # Verify if the user as the rights to edit the article
-        edition_granted = request.user.is_authenticated and request.user.pid in [authors[0] for authors in data_article['authors']] or request.user.is_superuser
-        
+        can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
+
         context = {
-            'edition_granted': edition_granted,
+            'can_edit': can_edit,
             'data_article': data_article
         }
         return render(request, 'article/article_profile.html', context)
@@ -111,7 +111,7 @@ def article_creation(request):
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name), 
+                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name),
                             form.cleaned_data['name'], form.cleaned_data['date_published'])
                     except:
                         raise Exception
