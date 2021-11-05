@@ -40,6 +40,10 @@ class SparqlPostPersonMethods:
                 <{pid}ARK> a schema:PropertyValue ;
                     schema:propertyID 'ARK' ;
                     schema:value "{pid}" .
+
+                <{pid}ORCID> a schema:PropertyValue ;
+                    schema:name 'ORCID' ;
+                    schema:propertyID "" .
                 
                 <{pid}> a schema:Person ;
                     schema:givenName "{given_name}" ;
@@ -48,7 +52,8 @@ class SparqlPostPersonMethods:
                     schema:description \"""\""";
                     schema:telephone \"""\""";
                     schema:address \"""\""";
-                    schema:identifier <{pid}ARK> .
+                    schema:identifier <{pid}ARK> ;
+                    schema:identifier <{pid}ORCID> .
             }}
         """.format(prefix=variables.prefix, pid=pid, given_name=given_name, family_name=family_name, email=email)
 

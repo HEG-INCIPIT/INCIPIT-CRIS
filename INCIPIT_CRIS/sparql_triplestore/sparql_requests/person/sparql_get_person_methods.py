@@ -272,6 +272,25 @@ class SparqlGetPersonMethods:
         return parse_get_title(self.sparql.query().response.read())
 
 
+    def get_ORCID_information_person(self, pid):
+        """
+        Get information about the LinkedIn information of the given person
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?propertyID WHERE
+            {{
+                <{pid}ORCID> schema:propertyID ?propertyID .
+            }}
+        """.format(prefix=variables.prefix, pid=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_ORCID_information(self.sparql.query().response.read())
+
+
     def get_IN_information_person(self, pid):
         """
         Get information about the LinkedIn information of the given person
@@ -324,6 +343,7 @@ class SparqlGetPersonMethods:
         affiliations = variables.sparql_get_person_object.get_affiliation_person(pid)
         job_title = variables.sparql_get_person_object.get_job_title_person(pid)
         title = variables.sparql_get_person_object.get_title_person(pid)
+        orcid = variables.sparql_get_person_object.get_ORCID_information_person(pid)
 
         # Concatenate the two arrays of datasets in only one with only one recurrency
         datasets = datasets_maintainer
@@ -345,6 +365,7 @@ class SparqlGetPersonMethods:
         data_person['affiliations'] = affiliations
         data_person['job_title'] = job_title
         data_person['title'] = title
+        data_person['orcid'] = orcid
 
         return data_person
 
