@@ -13,6 +13,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password', 'pid')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('ORCID info', {'fields': ('access_token_orcid', 'refresh_token_orcid', 'expires_in_orcid', 'orcid')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )

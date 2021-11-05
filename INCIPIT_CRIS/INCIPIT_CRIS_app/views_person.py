@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
-
-from .forms import *
 import string
 import re
 import json
+import os
+import requests
+from .models import User
+from django.shortcuts import render, redirect
+from .forms import *
+from .views import index
 from . import variables
 from . import form_selection
 from INCIPIT_CRIS_app.models import Title, JobTitle
@@ -112,9 +115,16 @@ def person_edition(request, pid):
         context = {}
         if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser):
             data_person = variables.sparql_get_person_object.get_data_person(pid)
-            context = {
-                'data_person': data_person,
-            }
+            try:
+                context = {
+                    'data_person': data_person,
+                    'url_auth': os.environ['url_auth']
+                }
+            except:
+                context = {
+                    'data_person': data_person,
+                    'url_auth': '/'
+                }
             return render(request, 'person/person_profile_edition.html', context)
         else:
             if request.user.is_authenticated:
@@ -939,3 +949,53 @@ def person_job_title_deletion(request, pid):
     context = {
         'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
+
+def orcid(request):
+
+    if not request.user.is_superuser:
+    
+        code = request.GET.get('code', '')
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Charset': 'UTF-8'
+        }
+
+        try:
+            data = {'client_id': os.environ['client_id'], 'client_secret': os.environ['client_secret'], 'grant_type': 'authorization_code', 'code': code, 'redirect_uri': os.environ['redirect_uri']}
+
+            response = requests.post(url='https://orcid.org/oauth/token', headers=headers, data=data, allow_redirects=True, verify=False)
+
+            if response.status_code == 200:
+
+                user = User.objects.filter(pid=request.user.pid)
+                user.update(access_token_orcid=response.json()['access_token'])
+                user.update(refresh_token_orcid=response.json()['refresh_token'])
+                user.update(expires_in_orcid=response.json()['expires_in'])
+                user.update(orcid=response.json()['orcid'])
+
+                data_person = variables.sparql_get_person_object.get_data_person(request.user.pid)
+
+                variables.sparql_post_person_object.update_person_string_leaf(request.user.pid+"ORCID", "propertyID", response.json()['orcid'], data_person['orcid'])
+
+                return redirect(person_edition, request.user.pid)
+        except:
+
+            return render(request, 'page_404.html')
+    
+    return redirect(index)
+
+
+def delete_orcid(request, pid):
+    user = User.objects.filter(pid=pid)
+    user.update(access_token_orcid='')
+    user.update(refresh_token_orcid='')
+    user.update(expires_in_orcid='')
+    user.update(orcid='')
+
+    orcid = request.POST['orcid']
+
+    variables.sparql_post_person_object.update_person_string_leaf(pid+"ORCID", "propertyID", '', orcid)
+
+    return redirect(person_edition, pid)

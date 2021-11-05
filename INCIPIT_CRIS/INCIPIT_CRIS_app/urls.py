@@ -15,7 +15,8 @@ urlpatterns = [
     path('delete-data/', views.delete_data, name='delete_data'),
 
     # Link ORCID
-    path('orcid/', views.orcid, name='orcid'),
+    path('orcid/', views_person.orcid, name='orcid'),
+    path('delete-orcid/<path:pid>', views_person.delete_orcid, name='delete_orcid'),
 
     # Persons urls
     path('persons/', views_person.person_results, name='person_results'),
