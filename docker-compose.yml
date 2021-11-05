@@ -4,16 +4,20 @@ services:
     image: "ghcr.io/heg-incipit/incipit-cris:main"
     ports: # Comment this section when deployed on a production server
       - "8000:8000" # If you want to see the CRIS via the port
+      - "3030:3030"
     environment:
+      # Username of the admin account of the CRIS
       username: "admin"
+      # Password of the admin account of the CRIS
       password: "pw"
+      # Credentials for ORCID API
       client_id: ""
       client_secret: ""
+      url_auth: ""
       redirect_uri: "https://localhost/orcid/"
     volumes:
       - db:/var/lib/mysql
       - fuseki:/app/fuseki
-      - /Users/david/Documents/HEG/Code/INCIPIT-CRIS/INCIPIT_CRIS:/app/INCIPIT_CRIS
     deploy:
       placement:
         constraints:
