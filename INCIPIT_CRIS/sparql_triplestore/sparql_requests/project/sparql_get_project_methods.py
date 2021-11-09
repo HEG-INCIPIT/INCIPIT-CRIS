@@ -182,7 +182,7 @@ class SparqlGetProjectMethods:
 
         return array_institutions
 
-    
+
     def get_funders_project(self, pid):
         """
         Get all the funders of the project for who the authors were working for
@@ -236,14 +236,19 @@ class SparqlGetProjectMethods:
         datasets = variables.sparql_get_project_object.get_datasets_project(pid)
         institutions = variables.sparql_get_project_object.get_institutions_project(pid)
         funders = variables.sparql_get_project_object.get_funders_project(pid)
-        
+
         data_project['members'] = members
+        data_project['len_members'] = len(members)
         data_project['articles'] = articles
+        data_project['len_articles'] = len(articles)
         data_project['datasets'] = datasets
+        data_project['len_datasets'] = len(datasets)
         data_project['institutions'] = institutions
+        data_project['len_institutions'] = len(institutions)
         data_project['funders'] = funders
+        data_project['len_funders'] = len(funders)
         data_project['pid'] = pid
-        
+
         return data_project
 
 
@@ -263,5 +268,5 @@ class SparqlGetProjectMethods:
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
-        
+
         return parse_check_project_ark(self.sparql.query().response.read())
