@@ -4,7 +4,6 @@ services:
     image: cris:latest
     ports: # Comment this section when deployed on a production server
       - "8000:8000" # If you want to see the CRIS via the port
-      - "3030:3030"
     environment:
       # Username of the admin account of the CRIS
       username: "admin"
