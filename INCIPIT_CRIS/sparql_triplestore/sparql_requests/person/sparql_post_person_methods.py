@@ -204,6 +204,24 @@ class SparqlPostPersonMethods:
         return self.sparql.query().response.read()
 
 
+    def delete_IN_information_person(self, pid, url):
+        sparql_request = """
+            {prefix}
+
+            DELETE WHERE {{
+                <{pid}IN> a schema:PropertyValue ;
+                    schema:name 'IN' ;
+                    schema:url "{url}" .
+                
+                <{pid}> schema:identifier <{pid}IN> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, url=url)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
     def update_person_string_leaf(self, pid, predicate, new_string, old_string):
         sparql_request = """
             {prefix}

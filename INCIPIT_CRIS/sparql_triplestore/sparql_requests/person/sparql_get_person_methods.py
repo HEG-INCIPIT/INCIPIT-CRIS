@@ -344,6 +344,7 @@ class SparqlGetPersonMethods:
         job_title = variables.sparql_get_person_object.get_job_title_person(pid)
         title = variables.sparql_get_person_object.get_title_person(pid)
         orcid = variables.sparql_get_person_object.get_ORCID_information_person(pid)
+        linkedin = variables.sparql_get_person_object.get_IN_information_person(pid)
 
         # Concatenate the two arrays of datasets in only one with only one recurrency
         datasets = datasets_maintainer
@@ -366,6 +367,7 @@ class SparqlGetPersonMethods:
         data_person['job_title'] = job_title
         data_person['title'] = title
         data_person['orcid'] = orcid
+        data_person['linkedin'] = linkedin
 
         return data_person
 
