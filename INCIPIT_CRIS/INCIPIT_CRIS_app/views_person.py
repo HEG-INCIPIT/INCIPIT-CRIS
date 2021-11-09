@@ -3,6 +3,7 @@ import re
 import json
 import os
 import requests
+from .forms import URLForm
 from .models import User
 from django.shortcuts import render, redirect
 from .forms import *
@@ -123,7 +124,7 @@ def person_edition(request, pid):
             except:
                 context = {
                     'data_person': data_person,
-                    'url_auth': '/'
+                    'url_auth': ''
                 }
             return render(request, 'person/person_profile_edition.html', context)
         else:
@@ -845,7 +846,6 @@ def person_title_deletion(request, pid):
 
             # Get the value of a variable in the POST request by its id
             title = request.POST['title']
-            print(title)
             variables.sparql_post_person_object.delete_title_person(pid, title)
 
             return redirect(person_edition, pid=pid)
@@ -937,7 +937,6 @@ def person_job_title_deletion(request, pid):
 
             # Get the value of a variable in the POST request by its id
             job_title = request.POST['job_title']
-            print(job_title)
             variables.sparql_post_person_object.delete_job_title_person(pid, job_title)
 
             return redirect(person_edition, pid=pid)
@@ -949,6 +948,8 @@ def person_job_title_deletion(request, pid):
     context = {
         'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
+    return render(request, 'page_info.html', context)
+
 
 def orcid(request):
 
@@ -999,3 +1000,96 @@ def delete_orcid(request, pid):
     variables.sparql_post_person_object.update_person_string_leaf(pid+"ORCID", "propertyID", '', orcid)
 
     return redirect(person_edition, pid)
+
+
+def person_linkedin_addition(request, pid):
+    '''
+    Adds a linkedin url to the given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+            data_person = variables.sparql_get_person_object.get_data_person(pid)
+            # Check the request method
+            if request.method == 'POST':
+                form = URLForm(request.POST)
+                if form.is_valid():
+                    linkedin_url = form.cleaned_data['url']
+                    if linkedin_url != '':
+                        variables.sparql_post_person_object.add_IN_information_person(pid, linkedin_url)
+
+                    return redirect(person_edition, pid=pid)
+            
+            form = URLForm(old_url=data_person['linkedin'])
+
+            context = {
+                'form': form,
+                'path_name' : ['Personnes', 'Profil', 'Edition', 'Ajouter un profil LinkedIn'],
+                'path_url' : ['/persons/', '/persons/'+pid, '/persons/edition/'+pid, '/persons/edition/profil/add-linkedin-profile/'+pid],
+                'title_data_type_added': 'Ajouter un profil LinkedIn',
+                'data_type_added': 'url du profil LinkedIn',
+                'url_to_return': '/persons/edition/profil/add-linkedin-profile/{}'.format(pid),
+                'button_value': 'Ajouter',
+            }
+
+            return render(request, 'forms/edited_form.html', context)
+    
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def person_linkedin_deletion(request, pid):
+    '''
+    Delete the linkedin url of the given person
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Verify that the edition of profile is made by the legitimate user or admin
+        if request.user.pid == pid or request.user.is_superuser:
+
+            # Get the value of a variable in the POST request by its id
+            linkedin = request.POST.get('linkedin', '')
+            variables.sparql_post_person_object.delete_IN_information_person(pid, linkedin)
+
+            return redirect(person_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
