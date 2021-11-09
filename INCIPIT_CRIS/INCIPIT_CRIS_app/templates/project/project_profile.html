@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>INCIPIT-CRIS</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/profil.css' %}">
+        <link rel="stylesheet" href="{% static 'css/person_profile.css' %}">
     </head>
     <body>
 
         {% include 'main/navbar.html' %}
-
         <section>
             {% block breadcrumb %}
                 <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
@@ -27,6 +27,53 @@
 
             {% block information %}
             {% endblock %}
+
+            <div class="parallax">
+            <section class="header">
+               <figure class="figure">
+                   <img class="image profile-photo" src=
+                   {% if data_project.logo == '' %}
+                       "{% static 'images/folder-solid.png' %}"
+                   {% else %}
+                       "{{ data_project.logo }}"
+                   {% endif %}>
+               </figure>
+            </section>
+            </div>
+
+            <section class="box top-box">
+                <div class="columns">
+                    {% block button_navigation %}
+                        {% if can_edit %}
+                            <a class="link-one right-align little-space-above" href="/projects/edition/{{ data_project.pid }}"><i class="fas fa-user-edit"></i></a>
+                        {% endif %}
+                    {% endblock %}
+
+                    <div class="column">
+                        {% block project_information %}
+                            <p class="title is-4 name">{{ data_project.name }}</p>
+                            <p style="visibility: hidden"></p>
+                        {% endblock %}
+                    </div>
+
+                    <div class="column is-one-third header">
+                        {% for work in data_project.institutions %}
+                            <div class="align-image-text">
+                                <figure class="image is-48x48">
+                                        <img src=
+                                        {% if work.logo == '' %}
+                                            "{% static 'images/university-solid.png' %}"
+                                        {% else %}
+                                            "{{ work.logo }}"
+                                        {% endif %}
+                                        >
+                                </figure>
+                                <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
 
             {% block information_header %}
 
@@ -83,14 +130,14 @@
                     {% endblock %}
                 </div>
                 <div class="column has-text-justified is-one-third">
-                    {% block information_elements_linked %} 
+                    {% block information_elements_linked %}
                         <p class="title-data">Article(s) : </p>
                         <ul>
                             {% for article in data_project.articles %}
                                 <li class="data"><a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a></li>
                             {% endfor %}
                         </ul>
-                        
+
                         <p class="title-data">Jeu(x) de données : </p>
                         <ul>
                             {% for dataset in data_project.datasets %}
@@ -117,5 +164,20 @@
 
         </section>
         {% include 'main/footer.html' %}
+        <script>
+
+           function displayMore(spanId, btn) {
+                var moreText = document.getElementById(spanId);
+                var btnText = document.getElementById(btn);
+
+                if (moreText.style.display === "inline") {
+                    moreText.style.display = "none";
+                    btnText.innerHTML = "Voir plus";
+                } else {
+                    moreText.style.display = "inline";
+                    btnText.innerHTML = "Voir moins";
+                }
+           }
+        </script>
     </body>
 </html>
