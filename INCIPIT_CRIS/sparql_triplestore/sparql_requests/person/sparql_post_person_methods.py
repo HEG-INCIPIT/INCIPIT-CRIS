@@ -38,8 +38,8 @@ class SparqlPostPersonMethods:
 
             INSERT DATA {{
                 <{pid}ARK> a schema:PropertyValue ;
-                    schema:propertyID 'ARK' ;
-                    schema:value "{pid}" .
+                    schema:name 'ARK' ;
+                    schema:propertyID "{pid}" .
 
                 <{pid}ORCID> a schema:PropertyValue ;
                     schema:name 'ORCID' ;
