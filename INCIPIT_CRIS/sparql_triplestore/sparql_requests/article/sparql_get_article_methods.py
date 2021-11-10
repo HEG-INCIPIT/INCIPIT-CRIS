@@ -108,7 +108,7 @@ class SparqlGetArticleMethods:
     def get_projects_article(self, pid):
         """
         Get all the projects of an article
-        And return an array with tuples (identifier, dictionnary)
+        And return a dictionary with the data of each project
         """
 
         sparql_request = """
@@ -174,7 +174,7 @@ class SparqlGetArticleMethods:
         array_institutions = []
 
         for institution in parse_get_institutions_article(self.sparql.query().response.read()):
-            data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
+            data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
         return array_institutions
