@@ -17,6 +17,37 @@
     {{ message }}
 {% endblock %}
 
+{% block button_navigation %}
+   <a class="link-one right-align little-space-above" href="/projects/{{ data_project.pid }}"><i class="fas fa-user-alt"></i></a>
+{% endblock %}
+{% block project_information %}
+    <p class="title is-4 name">{{ data_project.name }} <a class="link-one" href="/projects/edition/field/name/{{data_project.pid}}"><i class="fas fa-edit"></i></a></p>
+    <p style="visibility: hidden"></p>
+{% endblock %}
+
+{% block article_description %}
+    <p class="space-below">Description : <a class="link-one" href="/projects/edition/field/description/{{ data_project.pid }}"><i class="fas fa-edit"></i></a></p>
+    <p class="justified">{{ data_project.description }}</p>
+{% endblock %}
+
+{% block article_informations %}
+    <div class="columns is-multiline">
+        <div class="column is-one-third">
+           <div>
+                <p>Date de début : <time datetime="{{ data_project.founding_date }}">{{ data_project.founding_date }}</time> <a class="link-one" href="/projects/edition/field/foundingDate/{{data_project.pid}}"><i class="fas fa-edit"></i></a></p>
+           </div>
+        </div>
+        <div class="column is-one-third">
+           <div>
+              <p>Date de fin : <time datetime="{{ data_project.dissolution_date }}">{{ data_project.dissolution_date }}</time> <a class="link-one" href="/projects/edition/field/dissolutionDate/{{data_project.pid}}"><i class="fas fa-edit"></i></a></p>
+         </div>
+        </div>
+        <div class="column is-one-third">
+           <p>URL : <a class="link-one url" href="{{ data_project.url }}">{{ data_project.url }}</a> <a class="link-one" href="/projects/edition/field/url/{{data_project.pid}}"><i class="fas fa-edit"></i></a></p>
+        </div>
+
+    </div>
+{% endblock %}
 
 {% block information_header %}
 
@@ -90,7 +121,7 @@
     </ul>
 {% endblock %}
 
-{% block information_elements_linked %} 
+{% block information_elements_linked %}
     <p class="title-data">Article(s) : <a class="link-one" href="/projects/edition/field/add-article/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
     <ul>
         {% for article in data_project.articles %}
