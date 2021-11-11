@@ -15,7 +15,8 @@ urlpatterns = [
     path('delete-data/', views.delete_data, name='delete_data'),
 
     # Link ORCID
-    path('orcid/', views.orcid, name='orcid'),
+    path('orcid/', views_person.orcid, name='orcid'),
+    path('delete-orcid/<path:pid>', views_person.delete_orcid, name='delete_orcid'),
 
     # Persons urls
     path('persons/', views_person.person_results, name='person_results'),
@@ -33,6 +34,8 @@ urlpatterns = [
     path('persons/edition/profil/delete-title/<path:pid>', views_person.person_title_deletion, name='person_title_deletion'),
     path('persons/edition/profil/add-job-title/<path:pid>', views_person.person_job_title_addition, name='person_job_title_addition'),
     path('persons/edition/profil/delete-job-title/<path:pid>', views_person.person_job_title_deletion, name='person_job_title_deletion'),
+    path('persons/edition/profil/add-linkedin-profile/<path:pid>', views_person.person_linkedin_addition, name='person_linkedin_addition'),
+    path('persons/edition/profil/delete-linkedin-profile/<path:pid>', views_person.person_linkedin_deletion, name='person_linkedin_deletion'),
     path('persons/edition/profil/<str:field_to_modify>/<path:pid>', views_person.person_field_edition, name='person_field_edition'),
     path('persons/edition/<path:pid>', views_person.person_edition, name='person_edition_display'),
     path('persons/<path:pid>', views_person.person_profile, name='person_profile'),

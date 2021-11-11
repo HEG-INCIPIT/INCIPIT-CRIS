@@ -49,6 +49,14 @@
                     <div class="column">
                         {% block person_information %}
                             <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
+                            
+                            {% if data_person.orcid != '' %}
+                                <figure class="image is-24x24">
+                                    <img src="{% static 'images/orcid-logo.png'%}">
+                                </figure>
+                                {{ data_person.orcid }}
+                            {% endif %}
+
                             {% if data_person.job_title != None %}
                                 <p>{{ data_person.job_title }}</p>
                             {% else %}

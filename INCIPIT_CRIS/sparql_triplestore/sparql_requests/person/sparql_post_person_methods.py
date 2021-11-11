@@ -38,8 +38,12 @@ class SparqlPostPersonMethods:
 
             INSERT DATA {{
                 <{pid}ARK> a schema:PropertyValue ;
-                    schema:propertyID 'ARK' ;
-                    schema:value "{pid}" .
+                    schema:name 'ARK' ;
+                    schema:propertyID "{pid}" .
+
+                <{pid}ORCID> a schema:PropertyValue ;
+                    schema:name 'ORCID' ;
+                    schema:propertyID "" .
                 
                 <{pid}> a schema:Person ;
                     schema:givenName "{given_name}" ;
@@ -48,7 +52,8 @@ class SparqlPostPersonMethods:
                     schema:description \"""\""";
                     schema:telephone \"""\""";
                     schema:address \"""\""";
-                    schema:identifier <{pid}ARK> .
+                    schema:identifier <{pid}ARK> ;
+                    schema:identifier <{pid}ORCID> .
             }}
         """.format(prefix=variables.prefix, pid=pid, given_name=given_name, family_name=family_name, email=email)
 
@@ -186,6 +191,24 @@ class SparqlPostPersonMethods:
             {prefix}
 
             INSERT DATA {{
+                <{pid}IN> a schema:PropertyValue ;
+                    schema:name 'IN' ;
+                    schema:url "{url}" .
+                
+                <{pid}> schema:identifier <{pid}IN> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, url=url)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_IN_information_person(self, pid, url):
+        sparql_request = """
+            {prefix}
+
+            DELETE WHERE {{
                 <{pid}IN> a schema:PropertyValue ;
                     schema:name 'IN' ;
                     schema:url "{url}" .

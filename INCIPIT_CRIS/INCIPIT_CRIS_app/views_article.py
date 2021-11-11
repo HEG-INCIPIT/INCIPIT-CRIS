@@ -428,7 +428,7 @@ def article_project_addition(request, pid):
             # Request all the projects of the article
             projects_article = variables.sparql_get_article_object.get_projects_article(pid)
             for basic_info_project in projects_info:
-                if not (basic_info_project[0] in [project[0] for project in projects_article]):
+                if not (basic_info_project[0] in [project['pid'] for project in projects_article]):
                     projects.append(
                         '''{}, {}'''.format(basic_info_project[1], basic_info_project[0]))
 

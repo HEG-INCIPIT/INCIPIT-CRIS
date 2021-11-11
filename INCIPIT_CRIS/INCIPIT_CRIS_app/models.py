@@ -16,10 +16,20 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, blank=False, null=False)
     pid = models.CharField(blank=True, max_length=100)
 
+    # Photo
+    #photo = models.ImageField(upload_to='profile_photos/')
+
+    # ORCID
+    access_token_orcid = models.CharField(max_length=100, blank=True)
+    refresh_token_orcid = models.CharField(max_length=100, blank=True)
+    expires_in_orcid = models.CharField(max_length=100, blank=True)
+    orcid = models.CharField(max_length=30, blank=True)
+
     # variables to verify at each save of a user if those elements changed
-    __original_email = ""
-    __original_first_name = ""
-    __original_last_name = ""
+    __original_email = ''
+    __original_first_name = ''
+    __original_last_name = ''
+    __original_orcid = ''
 
 
     def __init__(self, *args, **kwargs):
@@ -27,6 +37,7 @@ class User(AbstractUser):
         self.__original_email = self.email
         self.__original_first_name = self.first_name
         self.__original_last_name = self.last_name
+        self.__original_orcid = self.orcid
 
 
     def save(self, *args, **kwargs):
@@ -52,11 +63,15 @@ class User(AbstractUser):
         if self.last_name != self.__original_last_name:
             variables.sparql_post_person_object.update_person_string_leaf(self.pid, 'familyName', self.last_name,
                                                                     self.__original_last_name)
+        if self.orcid != self.__original_orcid:
+            variables.sparql_post_person_object.update_person_string_leaf(self.pid+'ORCID', 'propertyID', self.orcid, self.__original_orcid)
+
 
         super().save(*args, **kwargs)
         self.__original_email = self.email
         self.__original_first_name = self.first_name
         self.__original_last_name = self.last_name
+        self.__original_orcid = self.orcid
 
 
     def __str__(self):

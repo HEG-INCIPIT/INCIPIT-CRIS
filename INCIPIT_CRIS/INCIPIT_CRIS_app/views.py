@@ -1,7 +1,6 @@
 from SPARQLWrapper.Wrapper import ADD
 from django.shortcuts import redirect, render
 from .forms import *
-from django.contrib.auth import get_user_model
 from . import variables
 from django.core.files.storage import FileSystemStorage
 from os import listdir, remove, path
@@ -138,7 +137,3 @@ def delete_data(request):
                 remove(path.join(settings.MEDIA_ROOT, request.POST['file_name']))
 
             return redirect(manage_data)
-
-
-def orcid(request):
-    return redirect(index)

@@ -83,10 +83,18 @@ def parse_get_title(sparql_query_answer):
         
         return array_titles
 
+def parse_get_ORCID_information(sparql_query_answer):
+    if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        return loaded_json['propertyID']['value']
+    return ''
+
 
 def parse_get_IN_information(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
-    return {'IN_url': loaded_json['url']['value']}
+    if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        return loaded_json['url']['value']
+    return ''
 
 
 def parse_get_data_person(sparql_query_answer):

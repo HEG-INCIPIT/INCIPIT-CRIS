@@ -391,6 +391,36 @@ class SparqlGetInstitutionMethods:
         return data_institution
 
 
+    def get_minimum_data_institution(self, pid):
+        """
+        Get all the information of an institution : ark, name, abstract, date of publication, authors, ...
+        And return a dictionnary with all elements
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?name ?alternateName ?description ?foundingDate ?url ?logo ?parentOrganization ?subOrganization WHERE
+            {{
+                <{ark_research}> schema:name ?name .
+                OPTIONAL {{ <{ark_research}> schema:alternateName ?alternateName }} .
+                OPTIONAL {{ <{ark_research}> schema:description ?description }} .
+                <{ark_research}> schema:foundingDate ?foundingDate .
+                OPTIONAL {{ <{ark_research}> schema:url ?url }} .
+                OPTIONAL {{ <{ark_research}> schema:logo ?logo }} .
+                OPTIONAL {{ <{ark_research}> schema:parentOrganization ?parentOrganization }} .
+                OPTIONAL {{ ?subOrganization schema:parentOrganization <{ark_research}> }} .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        data_institution = parse_get_data_institution(self.sparql.query().response.read())
+        data_institution['pid'] = pid
+        
+        return data_institution
+
+
     def check_institution_ark(self, pid):
         """
         Return a boolean

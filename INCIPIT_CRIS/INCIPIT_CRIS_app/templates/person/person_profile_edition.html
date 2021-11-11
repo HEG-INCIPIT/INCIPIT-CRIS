@@ -23,6 +23,21 @@
 
 {% block person_information %}
     <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
+
+    <figure class="image is-24x24">
+        <img src="{% static 'images/orcid-logo.png'%}">
+    </figure>
+    {% if data_person.orcid == '' %}
+        <a href="{{ url_auth }}">Lier son compte ORCID</a>
+    {% else %}
+        <form class="align-button-centered form-in-line" action="/delete-orcid/{{ data_person.pid }}" method="post">
+            {% csrf_token %}
+            {{ data_person.orcid }}
+            <input type="hidden" id="orcid" name="orcid" value="{{ data_person.orcid }}">
+            <button class="delete"></button>
+        </form>
+    {% endif %}
+    
     {% if data_person.job_title != None %}
         <p>{{ data_person.job_title }}</p>
     {% else %}
@@ -96,9 +111,20 @@
             <p>Adresse professionnelle : {{ data_person.address }} <a class="link-one" href="/persons/edition/profil/address/{{ data_person.pid }}"><i class="fas fa-edit"></i></a></p>
         </div>
 
-        <div class="column center-div">
-            <i class="fab fa-linkedin fa-3x"></i>
-        </div>
+        {% if data_person.linkedin != '' %}
+            <div class="column center-div">
+                <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-linkedin-profile/{{ data_person.pid }}" method="post">
+                    {% csrf_token %}
+                    <a class="" href="{{ data_person.linkedin }}">
+                        <i class="fab fa-linkedin fa-3x"></i>
+                    </a>
+                    <input type="hidden" id="linkedin" name="linkedin" value="{{ data_person.linkedin }}">
+                    <button class="delete"></button>
+                </form>
+            </div>
+        {% else %}
+            <a href="/persons/edition/profil/add-linkedin-profile/{{ data_person.pid }}">Ajouter un lien vers son compte LinkedIn</a>
+        {% endif %}
     </div>
 {% endblock %}
 
