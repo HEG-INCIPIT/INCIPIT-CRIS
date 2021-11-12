@@ -89,6 +89,44 @@ class SparqlPostArticleMethods:
         return self.sparql.query().response.read()
 
 
+    def add_DOI_article(self, pid, doi_value):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}DOI> a schema:PropertyValue ;
+                    schema:name 'DOI' ;
+                    schema:propertyID "{doi_value}" .
+                
+                <{pid}> schema:identifier <{pid}DOI> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, doi_value=doi_value)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def delete_DOI_article(self, pid, doi_value):
+        sparql_request = """
+            {prefix}
+
+            DELETE WHERE {{
+                <{pid}DOI> a schema:PropertyValue ;
+                    schema:name 'DOI' ;
+                    schema:propertyID "{doi_value}" .
+                
+                <{pid}> schema:identifier <{pid}DOI> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, doi_value=doi_value)
+
+        print(sparql_request)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
     def add_institution_to_article(self, pid, institution):
         sparql_request = """
             {prefix}

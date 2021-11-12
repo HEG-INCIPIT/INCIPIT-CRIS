@@ -179,6 +179,25 @@ class SparqlGetArticleMethods:
 
         return array_institutions
 
+    
+    def get_DOI_article(self, pid):
+        """
+        Get information about the doi information of the given article
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?value WHERE
+            {{
+                <{pid}DOI> schema:propertyID ?value .
+            }}
+        """.format(prefix=variables.prefix, pid=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_DOI_information(self.sparql.query().response.read())
+
 
     def get_data_article(self, pid):
         """
@@ -206,6 +225,7 @@ class SparqlGetArticleMethods:
         projects = variables.sparql_get_article_object.get_projects_article(pid)
         datasets = variables.sparql_get_article_object.get_datasets_article(pid)
         institutions = variables.sparql_get_article_object.get_institutions_article(pid)
+        doi = variables.sparql_get_article_object.get_DOI_article(pid)
 
 
 
@@ -216,6 +236,7 @@ class SparqlGetArticleMethods:
         data_article['datasets'] = datasets
         data_article['len_datasets'] = len(datasets)
         data_article['institutions'] = institutions
+        data_article['doi'] = doi
         data_article['pid'] = pid
 
         return data_article

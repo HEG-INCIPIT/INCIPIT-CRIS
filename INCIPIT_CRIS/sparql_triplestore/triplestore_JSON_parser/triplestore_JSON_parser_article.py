@@ -60,6 +60,13 @@ def parse_get_data_article(sparql_query_answer):
     return dict_data
 
 
+def parse_get_DOI_information(sparql_query_answer):
+    if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        return loaded_json['value']['value']
+    return ''
+
+
 def parse_get_institutions_article(sparql_query_answer):
     loaded_json = json.loads(sparql_query_answer)['results']['bindings']
     array_institutions = []
