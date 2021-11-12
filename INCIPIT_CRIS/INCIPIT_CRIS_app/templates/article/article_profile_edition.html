@@ -24,6 +24,16 @@
 
 {% block article_information %}
     <p class="title is-4 name">{{ data_article.name }} <a class="link-one" href="/articles/edition/field/name/{{data_article.pid}}"><i class="fas fa-edit"></i></a></p>
+    {% if data_article.doi == '' %}
+        <a href="/articles/edition/field/add-doi/{{data_article.pid}}">Ajouter un DOI</a>
+    {% else %}
+        <form class="align-button-centered" action="/articles/edition/field/delete-doi/{{data_article.pid}}" method="post">
+            {% csrf_token %}
+            <p>{{ data_article.doi }}</p>
+            <input type="hidden" id="doi" name="doi" value="{{ data_article.doi }}">
+            <button class="delete"></button>
+        </form>
+    {% endif %}
 {% endblock %}
 
 {% block article_description %}
