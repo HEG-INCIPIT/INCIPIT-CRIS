@@ -126,8 +126,8 @@ class SparqlGetProjectMethods:
 
         articles_sorted = []
         for article in articles:
-            articles_sorted.append([article,variables.sparql_get_article_object.get_full_name_article(article)])
-        #articles_sorted.sort(key=lambda item: item['date_published'], reverse=True)
+            articles_sorted.append(variables.sparql_get_article_object.get_minimum_data_article(article))
+        articles_sorted.sort(key=lambda item: item['date_published'], reverse=True)
 
         return articles_sorted
 
@@ -176,7 +176,7 @@ class SparqlGetProjectMethods:
         array_institutions = []
 
         for institution in parse_get_institutions_project(self.sparql.query().response.read()):
-            data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
+            data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
         return array_institutions
@@ -202,7 +202,7 @@ class SparqlGetProjectMethods:
         array_funders = []
 
         for funder in parse_get_institutions_project(self.sparql.query().response.read()):
-            data_funder = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, funder)
+            data_funder = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, funder)
             array_funders.append(data_funder)
 
         return array_funders

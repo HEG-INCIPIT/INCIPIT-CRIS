@@ -179,7 +179,7 @@ class SparqlGetArticleMethods:
 
         return array_institutions
 
-    
+
     def get_DOI_article(self, pid):
         """
         Get information about the doi information of the given article
@@ -241,6 +241,37 @@ class SparqlGetArticleMethods:
 
         return data_article
 
+    def get_minimum_data_article(self, pid):
+        """
+        Get all the information of an article : ark, name, abstract, date of publication, authors, ...
+        And return a dictionnary with all elements
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?name ?abstract ?datePublished ?url WHERE
+            {{
+                <{ark_research}> schema:name ?name .
+                <{ark_research}> schema:abstract ?abstract .
+                <{ark_research}> schema:datePublished ?datePublished .
+                <{ark_research}> schema:url ?url .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        data_article = parse_get_data_article(self.sparql.query().response.read())
+
+        authors = variables.sparql_get_article_object.get_authors_article(pid)
+        doi = variables.sparql_get_article_object.get_DOI_article(pid)
+
+        data_article['authors'] = authors
+        data_article['len_authors'] = len(authors)
+        data_article['doi'] = doi
+        data_article['pid'] = pid
+
+        return data_article
 
     def check_article_ark(self, pid):
         """
