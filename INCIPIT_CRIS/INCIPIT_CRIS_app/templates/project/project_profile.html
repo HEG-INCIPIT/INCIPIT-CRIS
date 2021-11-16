@@ -203,8 +203,7 @@
          <p class="title is-5">Membres</p>
 
          {% if data_project.len_members == 0 %}
-         <span id="more-member">
-         </span>
+            <p>Il n'y a pas encore de membres associés</p>
          {% endif %}
 
          {% for member in data_project.members %}
@@ -243,8 +242,7 @@
          <p class="title is-5">Articles</p>
 
          {% if data_project.len_articles == 0 %}
-         <span id="more-article">
-         </span>
+            <p>Il n'y a pas encore d'articles associés</p>
          {% endif %}
 
          {% for article in data_project.articles %}
@@ -294,8 +292,7 @@
          <p class="title is-5">Données</p>
 
          {% if data_project.len_datasets == 0 %}
-         <span id="more-dataset">
-         </span>
+            <p>Il n'y a pas encore de données associés</p>
          {% endif %}
 
          {% for dataset in data_project.datasets %}
