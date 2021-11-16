@@ -227,11 +227,13 @@
          {% endfor %}
          {% endblock %}
 
-         <a onclick="displayMore('more-member', 'myBtn-div-member')" class="myBtn" id="myBtn">
-            <div class="title is-6 myBtn-div" id="myBtn-div-member">
-               Voir plus
-            </div>
-         </a>
+         {% if data_project.len_members > 1 %}
+            <a onclick="displayMore('more-member', 'myBtn-div-member')" class="myBtn" id="myBtn">
+               <div class="title is-6 myBtn-div" id="myBtn-div-member">
+                  Voir plus
+               </div>
+            </a>
+         {% endif %}
       </section>
 
       <a class="articles" id="Articles"></a>
@@ -276,11 +278,13 @@
          {% endfor %}
          {% endblock %}
 
-         <a onclick="displayMore('more-article', 'myBtn-div-article')" class="myBtn" id="myBtn">
-            <div class="title is-6 myBtn-div" id="myBtn-div-article">
-               Voir plus
-            </div>
-         </a>
+         {% if data_project.len_articles > 1 %}
+            <a onclick="displayMore('more-article', 'myBtn-div-article')" class="myBtn" id="myBtn">
+               <div class="title is-6 myBtn-div" id="myBtn-div-article">
+                  Voir plus
+               </div>
+            </a>
+         {% endif %}
       </section>
 
       <a class="datasets" id="Datasets"></a>
@@ -335,11 +339,13 @@
          {% endfor %}
          {% endblock %}
 
-         <a onclick="displayMore('more-dataset', 'myBtn-div-dataset')" class="myBtn" id="myBtn">
-            <div class="title is-6 myBtn-div" id="myBtn-div-dataset">
-               Voir plus
-            </div>
-         </a>
+         {% if data_project.len_datasets > 1 %}
+            <a onclick="displayMore('more-dataset', 'myBtn-div-dataset')" class="myBtn" id="myBtn">
+               <div class="title is-6 myBtn-div" id="myBtn-div-dataset">
+                  Voir plus
+               </div>
+            </a>
+         {% endif %}
       </section>
    </div>
 </div>
