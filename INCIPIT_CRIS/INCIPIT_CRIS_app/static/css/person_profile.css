@@ -1,3 +1,9 @@
+@media only screen and (max-width: 600px) {
+    .orcid {
+        margin-top: -260px !important;
+    }
+  }
+
 .horizontal-align-left-edge {
     margin-top: 20px;
 }
@@ -24,7 +30,7 @@
     border: 5px solid white;
     width: 200px;
     margin-bottom: -20px;
-    margin-left: 15%;
+    margin-left: 3%;
 }
 
 .header {
@@ -80,15 +86,13 @@
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     padding-top: 100px;
-    margin-left: 5%;
-    margin-right: 5%;
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-.data-box, .top-box, .align-box {
+.data-box, .top-box, .align-box, .parallax {
     margin-left: 5%;
     margin-right: 5%;
 }
@@ -127,6 +131,8 @@
 
 .top-box {
     margin-bottom: 24px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 
 #more, #more-article, #more-project, #more-dataset {
@@ -188,7 +194,7 @@
       margin-bottom: 20px;
 }
 
-  .little-space-below {
+.little-space-below {
     margin-bottom: 5px;
 }
 
@@ -237,4 +243,30 @@ a.datasets {
 
 .form-in-line {
     display: inline-block;
+}
+
+.orcid {
+    margin-top: -27px;
+    border-radius: 15px;
+    padding-left: 10px;
+}
+
+.is-background-green {
+    background-color: #a6ce39;
+}
+
+.is-green{
+    color: #a6ce39;
+}
+
+.is-red {
+    color: #E84D35;
+}
+
+.fa-orcid {
+    font-size: 30px !important;
+    vertical-align: -8px;
+    border-radius: 50%;
+    border: 1px solid #e4e6e7;
+    background-color: white;
 }

@@ -29,14 +29,26 @@
             {% block information %}
             {% endblock %}
 
-
-            <div class="parallax">
-            <section class="header">
+            <section>
+                <div class="parallax">
                     <figure class="figure">
                         <img class="image profile-photo" src="{% static 'images/blank-profile-picture.png' %}">
                     </figure>
+                    <div class="right-align">
+                        {% if data_person.orcid != '' %}
+                            <p class="orcid is-background-green title is-5">
+                                {{ data_person.orcid }}
+                                <i class="fab is-green fa-orcid"></i>
+                            </p>
+                        {% else %}
+                            <p class="orcid title is-5">
+                                <i class="fab is-red fa-orcid"></i>
+                            </p>
+                        {% endif %}
+                            
+                    </div>
+                </div>
             </section>
-            </div>
 
             <section class="box top-box">
                 <div class="columns">
@@ -49,20 +61,12 @@
                     <div class="column">
                         {% block person_information %}
                             <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
-                            
-                            {% if data_person.orcid != '' %}
-                                <figure class="image is-24x24">
-                                    <img src="{% static 'images/orcid-logo.png'%}">
-                                </figure>
-                                {{ data_person.orcid }}
-                            {% endif %}
 
                             {% if data_person.job_title != None %}
                                 <p>{{ data_person.job_title }}</p>
                             {% else %}
                                 <p style="visibility: hidden">{{ data_person.job_title }}</p>
                             {% endif %}
-                            <p class="domains">Domaines : LOD, PID</p>
                         {% endblock %}
                     </div>
                     
@@ -453,5 +457,6 @@
                 btnText.innerHTML = "Voir moins";
             }
         }
+
     </script>
 </html>
