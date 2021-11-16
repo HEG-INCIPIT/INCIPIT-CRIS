@@ -27,6 +27,7 @@
     <figure class="image is-24x24">
         <img src="{% static 'images/orcid-logo.png'%}">
     </figure>
+    {{ data_person.orcid }}
     {% if data_person.orcid == '' %}
         <a href="{{ url_auth }}">Lier son compte ORCID</a>
     {% else %}
