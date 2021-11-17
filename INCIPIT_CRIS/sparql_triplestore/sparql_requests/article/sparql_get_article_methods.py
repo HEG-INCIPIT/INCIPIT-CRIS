@@ -108,7 +108,7 @@ class SparqlGetArticleMethods:
     def get_projects_article(self, pid):
         """
         Get all the projects of an article
-        And return an array with tuples (identifier, dictionnary)
+        And return a dictionary with the data of each project
         """
 
         sparql_request = """
@@ -125,36 +125,33 @@ class SparqlGetArticleMethods:
         array_projects = []
 
         for project in parse_get_projects_article(self.sparql.query().response.read()):
-            name = variables.sparql_get_project_object.get_full_name_project(project)
-            array_projects.append([project, name])
-
+            array_projects.append( variables.sparql_get_project_object.get_data_project(project))
+        array_projects.sort(key=lambda item: item['founding_date'], reverse=True)
         return array_projects
 
-
     def get_datasets_article(self, pid):
-        """
-        Get all the datasets of an article
-        And return an array with tuples (identifier, dictionnary)
-        """
+            """
+            Get all the datasets of an article
+            And return an array with tuples (identifier, dictionnary)
+            """
 
-        sparql_request = """
-            {prefix}
+            sparql_request = """
+                {prefix}
 
-            SELECT ?dataset WHERE
-            {{
-                <{ark_research}> schema:isBasedOn ?dataset .
-            }}
-        """.format(prefix=variables.prefix, ark_research=pid)
+                SELECT ?dataset WHERE
+                {{
+                    <{ark_research}> schema:isBasedOn ?dataset .
+                }}
+            """.format(prefix=variables.prefix, ark_research=pid)
 
-        self.sparql.setQuery(sparql_request)
+            self.sparql.setQuery(sparql_request)
 
-        array_datasets = []
+            array_datasets = []
 
-        for dataset in parse_get_datasets_article(self.sparql.query().response.read()):
-            name = variables.sparql_get_dataset_object.get_full_name_dataset(dataset)
-            array_datasets.append([dataset, name])
+            for dataset in parse_get_datasets_article(self.sparql.query().response.read()):
+                array_datasets.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
 
-        return array_datasets
+            return array_datasets
 
 
     def get_institutions_article(self, pid):
@@ -177,10 +174,29 @@ class SparqlGetArticleMethods:
         array_institutions = []
 
         for institution in parse_get_institutions_article(self.sparql.query().response.read()):
-            data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
+            data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
         return array_institutions
+
+    
+    def get_DOI_article(self, pid):
+        """
+        Get information about the doi information of the given article
+        """
+
+        sparql_request = """
+            {prefix}
+
+            SELECT ?value WHERE
+            {{
+                <{pid}DOI> schema:propertyID ?value .
+            }}
+        """.format(prefix=variables.prefix, pid=pid)
+
+        self.sparql.setQuery(sparql_request)
+
+        return parse_get_DOI_information(self.sparql.query().response.read())
 
 
     def get_data_article(self, pid):
@@ -209,13 +225,20 @@ class SparqlGetArticleMethods:
         projects = variables.sparql_get_article_object.get_projects_article(pid)
         datasets = variables.sparql_get_article_object.get_datasets_article(pid)
         institutions = variables.sparql_get_article_object.get_institutions_article(pid)
-        
+        doi = variables.sparql_get_article_object.get_DOI_article(pid)
+
+
+
         data_article['authors'] = authors
+        data_article['len_authors'] = len(authors)
         data_article['projects'] = projects
+        data_article['len_projects'] = len(projects)
         data_article['datasets'] = datasets
+        data_article['len_datasets'] = len(datasets)
         data_article['institutions'] = institutions
+        data_article['doi'] = doi
         data_article['pid'] = pid
-        
+
         return data_article
 
 

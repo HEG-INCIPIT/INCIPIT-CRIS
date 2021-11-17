@@ -18,32 +18,15 @@
 {% endblock %}
 
 {% block button_navigation %}
-    <a class="link-one right-align little-space-above" href="/persons/{{ data_person.pid }}"><i class="fas fa-user-alt"></i></a>
+    <a title="Aller sur le profil" class="link-one right-align little-space-above" href="/persons/{{ data_person.pid }}"><i class="fas fa-user-alt"></i></a>
 {% endblock %}
 
-{% block person_information %}
-    <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
-
-    <figure class="image is-24x24">
-        <img src="{% static 'images/orcid-logo.png'%}">
-    </figure>
-    {% if data_person.orcid == '' %}
-        <a href="{{ url_auth }}">Lier son compte ORCID</a>
-    {% else %}
-        <form class="align-button-centered form-in-line" action="/delete-orcid/{{ data_person.pid }}" method="post">
-            {% csrf_token %}
-            {{ data_person.orcid }}
-            <input type="hidden" id="orcid" name="orcid" value="{{ data_person.orcid }}">
-            <button class="delete"></button>
-        </form>
+{% block person_description %}
+    <div class="separator">Description</div>
+    <p class="justified">{{ data_person.description }} <a title="Modifier la description" class="link-one" href="/persons/edition/profil/description/{{ data_person.pid }}"><i class="fas fa-edit"></i></a></p>
+    {% if data_person.description != '' %}
+        <span id="more">
     {% endif %}
-    
-    {% if data_person.job_title != None %}
-        <p>{{ data_person.job_title }}</p>
-    {% else %}
-        <p style="visibility: hidden">{{ data_person.job_title }}</p>
-    {% endif %}
-    <p class="domains">Domaines : LOD, PID</p>
 {% endblock %}
 
 {% block person_personal_information %}
@@ -51,75 +34,104 @@
         <div class="column is-one-third">
 
             <div>
-                Titre : 
+                Titre : <a title="Ajouter un titre" class="link-one" href="/persons/edition/profil/add-title/{{ data_person.pid }}"><i class="fas fa-plus-circle"></i></a>
                 {% for title in data_person.title %}
                     <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-title/{{ data_person.pid }}" method="post">
                         {% csrf_token %}
                         {{ title }}
                         <input type="hidden" id="title" name="title" value="{{ title }}">
-                        <button class="delete"></button>
+                        <button title="Supprimer un titre" class="delete"></button>
                     </form>
                 {% endfor %}
-                <a class="link-one" href="/persons/edition/profil/add-title/{{ data_person.pid }}"><i class="fas fa-edit"></i></a>
             </div>
         </div>
 
-        <div class="column is-one-third">
-            <p>Prénom : {{ data_person.given_name }} <a class="link-one" href=""><i class="fas fa-edit"></i></a></p>
+        <div class="column keep-it-inline-parent">
+            <p class="keep-it-inline">Prénom : {{ data_person.given_name }} <a title="Modifier le prénom" class="link-one" href=""><i class="fas fa-edit"></i></a></p>
         </div>
 
-        <div class="column is-one-third">
-            <p>Nom : {{ data_person.family_name }} <a class="link-one" href=""><i class="fas fa-edit"></i></a></p>
+        <div class="column keep-it-inline-parent">
+            <p class="keep-it-inline">Nom : {{ data_person.family_name }} <a title="Modifier le nom" class="link-one" href=""><i class="fas fa-edit"></i></a></p>
         </div>
 
-        <div class="column is-one-third">
-            <div>Poste : 
+        <div class="column keep-it-inline-parent">
+            <p class="keep-it-inline">Poste : 
                 {% if data_person.job_title != None %}
                     <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-job-title/{{ data_person.pid }}" method="post">
                         {% csrf_token %}
                         {{ data_person.job_title }}
                         <input type="hidden" id="job_title" name="job_title" value="{{ data_person.job_title }}">
-                        <button class="delete"></button>
+                        <button title="Supprimer le poste" class="delete"></button>
                     </form>
                 {% else %}
-                    <a class="link-one" href="/persons/edition/profil/add-job-title/{{ data_person.pid }}"><i class="fas fa-edit"></i></a>
+                    <a title="Ajouter un poste" class="link-one" href="/persons/edition/profil/add-job-title/{{ data_person.pid }}"><i class="fas fa-edit"></i></a>
                 {% endif %}
-            </div>
+            </p>
+        </div>
+
+        <div class="column keep-it-inline-parent">
+            <p class="keep-it-inline">ORCID :
+                {% if data_person.orcid == '' %}
+                    <a title="Lier son compte ORCID au CRIS" class="link-one" href="{{ url_auth }}"><i class="fas fa-plus-circle"></i></a>
+                {% else %}
+                    <form class="align-button-centered form-in-line" action="/delete-orcid/{{ data_person.pid }}" method="post">
+                        {% csrf_token %}
+                        {{ data_person.orcid }}
+                        <input type="hidden" id="orcid" name="orcid" value="{{ data_person.orcid }}">
+                        <button title="Supprimer son compte ORCID du CRIS" class="delete"></button>
+                    </form>
+                {% endif %}
+            </p>
         </div>
     </div>
-{% endblock %}
-
-{% block person_description %}
-    <p class="space-below">Description : <a class="link-one" href="/persons/edition/profil/description/{{ data_person.pid }}"><i class="fas fa-edit"></i></a></p>
-    <p class="justified">{{ data_person.description }}</p>
 {% endblock %}
 
 {% block person_contact %}
     <div class="columns">
         <div class="column center-div">
 
-            <p>Email : {{ data_person.email }} <a class="link-one" href=""><i class="fas fa-edit"></i></a></p>
+            <p>Email : {{ data_person.email }} <a title="Modifier son email" class="link-one" href=""><i class="fas fa-edit"></i></a></p>
 
         </div>
         <div class="column center-div">
 
-            <p>Téléphone : {{ data_person.telephone }} <a class="link-one" href="/persons/edition/profil/telephone/{{ data_person.pid }}"><i class="fas fa-edit"></i></a></p>
+            <p>Téléphone : {{ data_person.telephone }} <a title="Modifier son téléphone" class="link-one" href="/persons/edition/profil/telephone/{{ data_person.pid }}"><i class="fas fa-edit"></i></a></p>
         </div>
 
         <div class="column center-div">
 
-            <p>Adresse professionnelle : {{ data_person.address }} <a class="link-one" href="/persons/edition/profil/address/{{ data_person.pid }}"><i class="fas fa-edit"></i></a></p>
+            <p>Adresse professionnelle : {{ data_person.address }} <a title="Modifier son adresse professionnelle" class="link-one" href="/persons/edition/profil/address/{{ data_person.pid }}"><i class="fas fa-edit"></i></a></p>
         </div>
 
-        <div class="column center-div">
-            <i class="fab fa-linkedin fa-3x"></i>
-        </div>
+        {% if data_person.linkedin != '' %}
+            <div class="column center-div">
+                <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-linkedin-profile/{{ data_person.pid }}" method="post">
+                    {% csrf_token %}
+                    <a class="" href="{{ data_person.linkedin }}">
+                        <i class="fab fa-linkedin fa-3x"></i>
+                    </a>
+                    <input type="hidden" id="linkedin" name="linkedin" value="{{ data_person.linkedin }}">
+                    <button class="delete align-on-logo"></button>
+                </form>
+            </div>
+        {% else %}
+            <div class="column center-div">
+                <i class="fab fa-linkedin fa-3x"></i>
+                <a title="Ajouter un lien vers son compte LinkedIn" href="/persons/edition/profil/add-linkedin-profile/{{ data_person.pid }}" class="link-one">
+                    <i class="fas fa-plus-circle align-on-logo"></i>
+                </a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 
+{% if data_person.description == '' %}
+    <span id="more">
+{% endif %}
+
 
 {% block person_work %}
-    <p class="subtitle is-6">Travail : <a class="link-one" href="/persons/edition/profil/add-work/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="subtitle is-6">Travail : <a title="Ajouter une institution de travail" class="link-one" href="/persons/edition/profil/add-work/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
         {% for work in data_person.works %}
             <div class="align-image-text">
             <figure class="image is-48x48">
@@ -136,14 +148,14 @@
             <form class="align-button-centered" action="/persons/edition/profil/delete-work/{{ data_person.pid }}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="workARK" name="workARK" value="{{ work.pid }}">
-                <button class="delete"></button>
+                <button title="Supprimer {{ work.name }} ({{ work.alternate_name }}) comme institution de travail" class="delete"></button>
             </form>
             </div>
         {% endfor %}
 {% endblock %}
 
 {% block person_affiliation %}
-    <p class="subtitle is-6">Affiliation : <a class="link-one" href="/persons/edition/profil/add-affiliation/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="subtitle is-6">Affiliation : <a title="Ajouter une institution d'affiliation" class="link-one" href="/persons/edition/profil/add-affiliation/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
     {% for affiliation in data_person.affiliations %}
         <div class="align-image-text">
             <figure class="image is-48x48">
@@ -159,14 +171,14 @@
             <form class="align-button-centered" action="/persons/edition/profil/delete-affiliation/{{ data_person.pid }}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="affiliationARK" name="affiliationARK" value="{{ affiliation.pid }}">
-                <button class="delete"></button>
+                <button title="Supprimer l'affiliation à {{ affiliation.name }} ({{ affiliation.alternate_name }})" class="delete"></button>
             </form>
         </div>
     {% endfor %}
 {% endblock %}
 
 {% block person_articles %}
-    <p class="title is-5">Articles <a class="link-one" href="/persons/edition/profil/add-article/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="title is-5">Articles <a title="Ajouter un article" class="link-one" href="/persons/edition/profil/add-article/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
     {% if data_person.len_articles == 0 %}
         <span id="more-article">
@@ -179,9 +191,8 @@
             <form action="/persons/edition/profil/delete-article/{{data_person.pid}}" method="post">
                 {% csrf_token %}
                 <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
-                <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
                 <input type="hidden" id="articleARK" name="articleARK" value="{{ article.pid }}">
-                <button class="delete"></button>
+                <button title="Supprimer {{ article.name }} de ses articles" class="delete"></button>
             </form>
             <p class="justified little-space-below">{{ article.abstract }}</p>
             <p>
@@ -194,7 +205,7 @@
                     
                 {% endfor %}
             </p>
-            <i>Editeur, {{ article.date_published }}</i>
+            <i>{{ article.date_published }}</i>
         </div>
 
         {% if forloop.first %}
@@ -210,7 +221,7 @@
 {% endblock %}
 
 {% block person_projects %}
-    <p class="title is-5">Projets <a class="link-one" href="/persons/edition/profil/add-project/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="title is-5">Projets <a title="Ajouter un projet" class="link-one" href="/persons/edition/profil/add-project/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
     {% if data_person.len_projects == 0 %}
             <span id="more-project">
@@ -224,8 +235,7 @@
                 {% csrf_token %}
                 <input type="hidden" id="projectARK" name="projectARK" value="{{ project.pid }}">
                 <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-                <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
-                <button class="delete"></button>
+                <button title="Supprimer {{ project.name }} de ses projets" class="delete"></button>
             </form>
             <p class="justified little-space-below">{{ project.description }}</p>
             <p>
@@ -254,7 +264,7 @@
 {% endblock %}
 
 {% block person_datasets %}
-    <p class="title is-5">Données <a class="link-one" href="/persons/edition/profil/add-dataset/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="title is-5">Données <a title="Ajouter un jeu de données" class="link-one" href="/persons/edition/profil/add-dataset/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
     
     {% if data_person.len_datasets == 0 %}
             <span id="more-dataset">
@@ -268,9 +278,7 @@
                 {% csrf_token %}
                 <input type="hidden" id="dataset_ARK" name="dataset_ARK" value="{{ dataset_creator.pid }}">
                 <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
-                <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
-                <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
-                <button class="delete"></button>
+                <button title="Supprimer {{ dataset.name }} de ses jeux de données" class="delete"></button>
             </form>
             <p class="justified little-space-below">{{ dataset.abstract }}</p>
             <p> Créateurs :

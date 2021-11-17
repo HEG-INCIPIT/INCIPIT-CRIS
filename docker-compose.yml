@@ -9,7 +9,7 @@ services:
       username: "admin"
       # Password of the admin account of the CRIS
       password: "pw"
-      # Credentials for ORCID API
+      # Credentials for ORCID API
       client_id: ""
       client_secret: ""
       url_auth: ""

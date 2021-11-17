@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top">
+<html class="has-navbar-fixed-top" lang="fr">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,40 +29,43 @@
             {% block information %}
             {% endblock %}
 
-
-            <div class="parallax">
-            <section class="header">
+            <section>
+                <div class="parallax">
                     <figure class="figure">
                         <img class="image profile-photo" src="{% static 'images/blank-profile-picture.png' %}">
                     </figure>
+                    <div class="right-align">
+                        {% if data_person.orcid != '' %}
+                            <p class="orcid is-background-green title is-5">
+                                <a title="Accèder au profil ORCID" class="police-color" href="https://orcid.org/{{ data_person.orcid }}">{{ data_person.orcid }}</a>
+                                <i class="fab is-green fa-orcid"></i>
+                            </p>
+                        {% else %}
+                            <p class="orcid title is-5">
+                                <i class="fab is-red fa-orcid"></i>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
             </section>
-            </div>
 
             <section class="box top-box">
                 <div class="columns">
                     {% block button_navigation %}
                         {% if can_edit %}
-                            <a class="link-one right-align little-space-above" href="/persons/edition/{{ data_person.pid }}"><i class="fas fa-user-edit"></i></a>
+                            <a title="Editer le profil" class="link-one right-align little-space-above" href="/persons/edition/{{ data_person.pid }}"><i class="fas fa-user-edit"></i></a>
                         {% endif %}
                     {% endblock %}
                     
                     <div class="column">
                         {% block person_information %}
                             <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
-                            
-                            {% if data_person.orcid != '' %}
-                                <figure class="image is-24x24">
-                                    <img src="{% static 'images/orcid-logo.png'%}">
-                                </figure>
-                                {{ data_person.orcid }}
-                            {% endif %}
 
                             {% if data_person.job_title != None %}
                                 <p>{{ data_person.job_title }}</p>
                             {% else %}
                                 <p style="visibility: hidden">{{ data_person.job_title }}</p>
                             {% endif %}
-                            <p class="domains">Domaines : LOD, PID</p>
                         {% endblock %}
                     </div>
                     
@@ -78,7 +81,7 @@
                                         {% endif %}
                                         >
                                 </figure>
-                                <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                                <a title="Accèder au profil de l'institution : {{ work.name }} ({{ work.alternate_name }})" class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
                             </div>
                         {% endfor %}
                         <p class="break-logo"></p>
@@ -93,7 +96,7 @@
                                     {% endif %}
                                     >
                                 </figure>
-                                <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
+                                <a title="Accèder au profil de l'institution : {{ affiliation.name }} ({{ affiliation.alternate_name }})" class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
                             </div>
                         {% endfor %}
                     </div>
@@ -125,68 +128,86 @@
         <section class="data-box btn-see-more box">
             <p class="title is-5">A propos</p>
             {% block person_description %}
-                <p class="space-below">Description :</p>
-                <p class="justified">{{ data_person.description }}</p>
+                {% if data_person.description != '' %}
+                    <div class="separator">Description</div>
+                    <p class="justified">{{ data_person.description }}</p>
+                    <span id="more">
+                {% endif %}
             {% endblock %}
-            
-            <span id="more">
 
-            <div class="separator">Informations personnelles</div>
+            <div class="separator">Informations</div>
 
             {% block person_personal_information %}
                 <div class="columns is-multiline">
-                    <div class="column is-one-third">
-
-                        <div>
-                            Titre :
-                            {% for title in data_person.title %}
-                                {{ title }}
-                            {% endfor %}
+                    {% if data_person.title != None %}
+                        <div class="column">
+                            <div>
+                                Titre :
+                                {% for title in data_person.title %}
+                                    {{ title }}
+                                {% endfor %}
+                            </div>
                         </div>
+                    {% endif %}
+
+                    <div class="column keep-it-inline-parent">
+                        <p class="keep-it-inline">Prénom : {{ data_person.given_name }}</p>
                     </div>
 
-                    <div class="column is-one-third">
-                        <p>Prénom : {{ data_person.given_name }}</p>
+                    <div class="column keep-it-inline-parent">
+                        <p class="keep-it-inline-parent">Nom : {{ data_person.family_name }}</p>
                     </div>
 
-                    <div class="column is-one-third">
-                        <p>Nom : {{ data_person.family_name }}</p>
-                    </div>
+                    {% if data_person.job_title != None %}
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">Poste :
+                                {{ data_person.job_title }}
+                            </p>
+                        </div>
+                    {% endif %}
 
-                    <div class="column is-one-third">
-                        <p>Poste : 
-                            {% if data_person.job_title != None %}
-                                <p>{{ data_person.job_title }}</p>
-                            {% else %}
-                                <p style="visibility: hidden">{{ data_person.job_title }}</p>
-                            {% endif %}
-                        </p>
-                    </div>
+                    {% if data_person.orcid != '' %}
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">ORCID :
+                                {{ data_person.orcid }}
+                            </p>
+                        </div>
+                    {% endif %}
                 </div>
             {% endblock %}
+
+            {% if data_person.description == '' %}
+                <span id="more">
+            {% endif %}
 
             <div class="separator">Contact</div>
 
             {% block person_contact %}
                 <div class="columns">
-                    <div class="column center-div">
 
-                        <p>Email : {{ data_person.email }}</p>
+                    {% if data_person.email != '' %}
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">Email : {{ data_person.email }}</p>
+                        </div>
+                    {% endif %}
+                    
+                    {% if data_person.telephone != '' %}
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">Téléphone : {{ data_person.telephone }}</p>
+                        </div>
+                    {% endif %}
 
-                    </div>
-                    <div class="column center-div">
+                    {% if data_person.address != '' %}
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">Adresse professionnelle : {{ data_person.address }}</p>
+                        </div>
+                    {% endif %}
 
-                        <p>Téléphone : {{ data_person.telephone }}</p>
-                    </div>
-
-                    <div class="column center-div">
-
-                        <p>Adresse professionnelle : {{ data_person.address }}</p>
-                    </div>
-
-                    <div class="column center-div">
-                        <i class="fab fa-linkedin fa-3x"></i>
-                    </div>
+                    {% if data_person.linkedin != '' %}
+                        <div class="column">
+                            <a class="" href="{{ data_person.linkedin }}"><i class="fab fa-linkedin fa-3x"></i></a>
+                        </div>
+                    {% endif %}
                 </div>
             {% endblock %}
 
@@ -251,27 +272,28 @@
                 <p class="title is-5">Articles</p>
 
                 {% if data_person.len_articles == 0 %}
-                        <span id="more-article">
-                        </span>
+                        <p>Il n'y a pas encore d'articles associés</p>
                 {% endif %}
 
                 {% for article in data_person.articles %}
                 
                     <div>
                         <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
-                        <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        {% if article.url != '' %}
+                            <a title="Accèder au site de l'article {{ article.name }}" class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        {% endif %}
                         <p class="justified little-space-below">{{ article.abstract }}</p>
                         <p>
                             {% for author in article.authors %}
                                 {% if not forloop.last %}
-                                    <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>,
+                                    <a class="link-one" href="/persons/{{ author.1.pid }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>,
                                 {% else %}
-                                    <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+                                    <a class="link-one" href="/persons/{{ author.1.pid }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
                                 {% endif %}
                                 
                             {% endfor %}
                         </p>
-                        <i>Editeur, {{ article.date_published }}</i>
+                        <i>{{ article.date_published }}</i>
                     </div>
 
                     {% if forloop.first %}
@@ -286,11 +308,13 @@
                 {% endfor %}
             {% endblock %}
 
-            <a onclick="displayMore('more-article', 'myBtn-div-article')" class="myBtn" id="myBtn">
-                <div class="title is-6 myBtn-div" id="myBtn-div-article">
-                    Voir plus
-                </div>
-            </a>
+            {% if data_person.len_articles > 1 %}
+                <a onclick="displayMore('more-article', 'myBtn-div-article')" class="myBtn" id="myBtn">
+                    <div class="title is-6 myBtn-div" id="myBtn-div-article">
+                        Voir plus
+                    </div>
+                </a>
+            {% endif %}
         </section>
 
         <a class="projects" id="Projects"></a>
@@ -300,27 +324,36 @@
                 <p class="title is-5">Projets</p>
 
                 {% if data_person.len_projects == 0 %}
-                        <span id="more-project">
-                        </span>
+                        <p>Il n'y a pas encore de projets associés</p>
                 {% endif %}
 
                 {% for project in data_person.projects %}
                 
                     <div>
                         <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-                        <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        {% if project.url != '' %}
+                            <a title="Accèder au site du projet {{ project.name }}" class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        {% endif %}
                         <p class="justified little-space-below">{{ project.description }}</p>
-                        <p>
+                        <p> Membres :
                             {% for member in project.members %}
                                 {% if not forloop.last %}
-                                    <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
+                                    <a class="link-one" href="/persons/{{ member.1.pid }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
                                 {% else %}
-                                    <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
+                                    <a class="link-one" href="/persons/{{ member.1.pid }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
                                 {% endif %}
                             {% endfor %}
                         </p>
                         <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
-                        <p>Financement : Bailleurs de fonds</p>
+                        <p>Financement : 
+                            {% for funder in project.funders %}
+                                {% if not forloop.last %}
+                                    <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+                                {% else %}
+                                    <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                {% endif %}
+                            {% endfor %}
+                        </p></p>
                     </div>
 
                     {% if forloop.first %}
@@ -335,11 +368,13 @@
                 {% endfor %}
             {% endblock %}
 
-            <a onclick="displayMore('more-project', 'myBtn-div-project')" class="myBtn" id="myBtn">
-                <div class="title is-6 myBtn-div" id="myBtn-div-project">
-                    Voir plus
-                </div>
-            </a>
+            {% if data_person.len_projects > 1 %}
+                <a onclick="displayMore('more-project', 'myBtn-div-project')" class="myBtn" id="myBtn">
+                    <div class="title is-6 myBtn-div" id="myBtn-div-project">
+                        Voir plus
+                    </div>
+                </a>
+            {% endif %}
         </section>
 
         <a class="datasets" id="Datasets"></a>
@@ -349,37 +384,48 @@
                 <p class="title is-5">Données</p>
 
                 {% if data_person.len_datasets == 0 %}
-                        <span id="more-dataset">
-                        </span>
+                        <p>Il n'y a pas encore de jeux de données associés</p>
                 {% endif %}
                 
                 {% for dataset in data_person.datasets %}
                 
                     <div>
                         <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
-                        <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
-                        <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
+                        {% if dataset.url != '' %}
+                            <a title="Accèder au site du jeu de données {{ dataset.name }}" class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        {% endif %}
+                        {% if dataset.data_download.url != '' %}
+                            <a title="Télécharger le jeu de données {{ dataset.name }}" class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
+                        {% endif %}
                         <p class="justified little-space-below">{{ dataset.abstract }}</p>
-                        <p> Créateurs :
-                            {% for creator in dataset.creators %}
-                                {% if not forloop.last %}
-                                    <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
-                                {% else %}
-                                    <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
-                                {% endif %}
-                            {% endfor %}
-                        </p>
-                        <p> Mainteneurs :
-                            {% for maintainer in dataset.maintainers %}
-                                {% if not forloop.last %}
-                                    <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
-                                {% else %}
-                                    <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
-                                {% endif %}
-                            {% endfor %}
-                        </p>
-                        <p>Création : {{ dataset.created_date }}</p>
-                        <p>Dernière modification : {{ dataset.modified_date }}</p>
+                        {% if dataset.creators != None %}
+                            <p> Créateurs :
+                                {% for creator in dataset.creators %}
+                                    {% if not forloop.last %}
+                                        <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
+                                    {% else %}
+                                        <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                        {% if dataset.maintainers != None %}
+                            <p> Mainteneurs :
+                                {% for maintainer in dataset.maintainers %}
+                                    {% if not forloop.last %}
+                                        <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
+                                    {% else %}
+                                        <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                        {% if dataset.created_date != '' %}
+                            <p>Création : {{ dataset.created_date }}</p>
+                        {% endif %}
+                        {% if dataset.modified_date != '' %}
+                            <p>Dernière modification : {{ dataset.modified_date }}</p>
+                        {% endif %}
                     </div>
 
                     {% if forloop.first %}
@@ -394,11 +440,13 @@
                 {% endfor %}
             {% endblock %}
 
-            <a onclick="displayMore('more-dataset', 'myBtn-div-dataset')" class="myBtn" id="myBtn">
-                <div class="title is-6 myBtn-div" id="myBtn-div-dataset">
-                    Voir plus
-                </div>
-            </a>
+            {% if data_person.len_datasets > 1 %}
+                <a onclick="displayMore('more-dataset', 'myBtn-div-dataset')" class="myBtn" id="myBtn">
+                    <div class="title is-6 myBtn-div" id="myBtn-div-dataset">
+                        Voir plus
+                    </div>
+                </a>
+            {% endif %}
         </section>
         
         {% include 'main/footer.html' %}
@@ -418,5 +466,6 @@
                 btnText.innerHTML = "Voir moins";
             }
         }
+
     </script>
 </html>

@@ -76,7 +76,7 @@ def project_creation(request):
                 if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name), 
+                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name),
                             form.cleaned_data['name'], form.cleaned_data['founding_date'])
                     except:
                         raise Exception
@@ -89,7 +89,7 @@ def project_creation(request):
                     variables.sparql_post_project_object.add_article_to_project(pid, article.split()[-1])
                 for dataset in datasets:
                     variables.sparql_post_dataset_object.add_project_to_dataset(dataset.split()[-1], pid)
-                
+
                 if request.POST['institutions'] != '':
                     variables.sparql_post_project_object.add_institution_to_project(pid, request.POST['institutions'])
 
@@ -155,12 +155,14 @@ def project_profile(request, pid):
     sparql_request_check_project_ark = variables.sparql_get_project_object.check_project_ark(pid)
     if sparql_request_check_project_ark:
         data_project = variables.sparql_get_project_object.get_data_project(pid)
+        can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
         edition_granted = False
         if request.user.is_superuser or request.user.is_authenticated and request.user.pid in [members[0] for members in data_project['members']]:
             edition_granted = True
         context = {
             'edition_granted': edition_granted,
-            'data_project': data_project
+            'data_project': data_project,
+            'can_edit': can_edit,
         }
         return render(request, 'project/project_profile.html', context)
 

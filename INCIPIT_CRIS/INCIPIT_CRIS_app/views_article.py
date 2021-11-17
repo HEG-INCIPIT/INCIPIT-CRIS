@@ -67,10 +67,10 @@ def article_profile(request, pid):
     if variables.sparql_get_article_object.check_article_ark(pid):
         data_article = variables.sparql_get_article_object.get_data_article(pid)
         # Verify if the user as the rights to edit the article
-        edition_granted = request.user.is_authenticated and request.user.pid in [authors[0] for authors in data_article['authors']] or request.user.is_superuser
-        
+        can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
+
         context = {
-            'edition_granted': edition_granted,
+            'can_edit': can_edit,
             'data_article': data_article
         }
         return render(request, 'article/article_profile.html', context)
@@ -111,7 +111,7 @@ def article_creation(request):
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name), 
+                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name),
                             form.cleaned_data['name'], form.cleaned_data['date_published'])
                     except:
                         raise Exception
@@ -428,7 +428,7 @@ def article_project_addition(request, pid):
             # Request all the projects of the article
             projects_article = variables.sparql_get_article_object.get_projects_article(pid)
             for basic_info_project in projects_info:
-                if not (basic_info_project[0] in [project[0] for project in projects_article]):
+                if not (basic_info_project[0] in [project['pid'] for project in projects_article]):
                     projects.append(
                         '''{}, {}'''.format(basic_info_project[1], basic_info_project[0]))
 
@@ -683,6 +683,103 @@ def article_institution_deletion(request, pid):
         return render(request, 'page_info.html', context)
     context = {
         'message': "Connectez-vous pour pouvoir éditer cet article"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def article_doi_addition(request, pid):
+    '''
+    Adds a doi to the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a article.
+    '''
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the authors of the article
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
+        # Verify if the user ark is in the articles institutions to grant edition
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
+            doi = variables.sparql_get_article_object.get_DOI_article(pid)
+            # Check the request method
+            if request.method == 'POST':
+                form = URLForm(request.POST)
+                if form.is_valid():
+                    doi_data = form.cleaned_data['url']
+                    if doi_data != '':
+                        variables.sparql_post_article_object.add_DOI_article(pid, doi_data)
+
+                    return redirect(article_edition, pid=pid)
+            
+            form = URLForm(old_url=doi)
+
+            context = {
+                'form': form,
+                'path_name' : ['Articles', 'Profil', 'Edition', 'Ajouter un identifiant DOI'],
+                'path_url' : ['/articles/', '/articles/'+pid, '/articles/edition/'+pid, '/articles/edition/profil/add-doi/'+pid],
+                'title_data_type_added': 'Ajouter un identifiant DOI',
+                'data_type_added': 'Identifiant DOI',
+                'url_to_return': '/articles/edition/field/add-doi/{}'.format(pid),
+                'button_value': 'Ajouter',
+            }
+
+            return render(request, 'forms/edited_form.html', context)
+    
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
+    }
+    return render(request, 'page_info.html', context)
+
+
+def article_doi_deletion(request, pid):
+    '''
+    Delete the doi url of the given article
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: String
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a article.
+    '''
+
+    # Verify that the user is authenticated and has the right to modify the profile
+    if request.user.is_authenticated:
+        # Request all the authors of the article
+        authors_article = variables.sparql_get_article_object.get_authors_article(pid)
+        # Verify if the user ark is in the articles institutions to grant edition
+        if request.user.is_superuser or request.user.pid in [authors[0] for authors in authors_article]:
+
+            # Get the value of a variable in the POST request by its id
+            doi = request.POST.get('doi', '')
+            variables.sparql_post_article_object.delete_DOI_article(pid, doi)
+
+            return redirect(article_edition, pid=pid)
+
+        context = {
+            'message': "Vous n'avez pas le droit d'éditer ce profil",
+        }
+        return render(request, 'page_info.html', context)
+    context = {
+        'message': "Connectez-vous pour pouvoir éditer ce profil"
     }
     return render(request, 'page_info.html', context)
 
