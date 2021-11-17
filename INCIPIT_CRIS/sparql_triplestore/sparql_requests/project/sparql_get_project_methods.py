@@ -122,14 +122,14 @@ class SparqlGetProjectMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        array_articles = []
+        articles = parse_get_articles_project(self.sparql.query().response.read())
 
-        for article in parse_get_articles_project(self.sparql.query().response.read()):
-            full_name = variables.sparql_get_article_object.get_full_name_article(article)
-            array_articles.append([article, full_name])
+        articles_sorted = []
+        for article in articles:
+            articles_sorted.append(variables.sparql_get_article_object.get_minimum_data_article(article))
+        articles_sorted.sort(key=lambda item: item['date_published'], reverse=True)
 
-        return array_articles
-
+        return articles_sorted
 
     def get_datasets_project(self, pid):
         """
@@ -151,8 +151,7 @@ class SparqlGetProjectMethods:
         array_datasets = []
 
         for dataset in parse_get_datasets_project(self.sparql.query().response.read()):
-            full_name = variables.sparql_get_dataset_object.get_full_name_dataset(dataset)
-            array_datasets.append([dataset, full_name])
+            array_datasets.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
 
         return array_datasets
 
@@ -177,7 +176,7 @@ class SparqlGetProjectMethods:
         array_institutions = []
 
         for institution in parse_get_institutions_project(self.sparql.query().response.read()):
-            data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
+            data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
         return array_institutions
@@ -203,7 +202,7 @@ class SparqlGetProjectMethods:
         array_funders = []
 
         for funder in parse_get_institutions_project(self.sparql.query().response.read()):
-            data_funder = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, funder)
+            data_funder = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, funder)
             array_funders.append(data_funder)
 
         return array_funders

@@ -135,7 +135,7 @@
     border-top-right-radius: 0;
 }
 
-#more, #more-article, #more-project, #more-dataset {
+#more, #more-member, #more-article, #more-project, #more-dataset {
     display: none;
 }
 
@@ -167,18 +167,18 @@
     margin-right: 50px;
     color: #727272;
 }
-  
+
   .separator::before,
   .separator::after {
     content: '';
     flex: 1;
     border-bottom: 1px solid #eeeeee;
 }
-  
+
   .separator:not(:empty)::before {
     margin-right: .5em;
 }
-  
+
   .separator:not(:empty)::after {
     margin-left: .5em;
 }
