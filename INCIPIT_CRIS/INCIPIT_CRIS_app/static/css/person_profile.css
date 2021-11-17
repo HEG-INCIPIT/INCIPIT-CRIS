@@ -270,3 +270,21 @@ a.datasets {
     border: 1px solid #e4e6e7;
     background-color: white;
 }
+
+.keep-it-inline-parent {
+    white-space: nowrap;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.keep-it-inline {
+    display: inline-block;
+}
+
+.police-color {
+    color: #363636;
+}
+
+.align-logo-with-text {
+    padding-top: 10px;
+}

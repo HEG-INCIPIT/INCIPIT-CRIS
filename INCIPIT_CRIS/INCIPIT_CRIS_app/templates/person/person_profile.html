@@ -37,7 +37,7 @@
                     <div class="right-align">
                         {% if data_person.orcid != '' %}
                             <p class="orcid is-background-green title is-5">
-                                {{ data_person.orcid }}
+                                <a class="police-color" href="https://orcid.org/{{ data_person.orcid }}">{{ data_person.orcid }}</a>
                                 <i class="fab is-green fa-orcid"></i>
                             </p>
                         {% else %}
@@ -151,18 +151,26 @@
                         </div>
                     {% endif %}
 
-                    <div class="column">
-                        <p>Prénom : {{ data_person.given_name }}</p>
+                    <div class="column keep-it-inline-parent">
+                        <p class="keep-it-inline">Prénom : {{ data_person.given_name }}</p>
                     </div>
 
-                    <div class="column">
-                        <p>Nom : {{ data_person.family_name }}</p>
+                    <div class="column keep-it-inline-parent">
+                        <p class="keep-it-inline-parent">Nom : {{ data_person.family_name }}</p>
                     </div>
 
                     {% if data_person.job_title != None %}
-                        <div class="column">
-                            <p>Poste :
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">Poste :
                                 {{ data_person.job_title }}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    {% if data_person.orcid != '' %}
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">ORCID :
+                                {{ data_person.orcid }}
                             </p>
                         </div>
                     {% endif %}
@@ -179,26 +187,26 @@
                 <div class="columns">
 
                     {% if data_person.email != '' %}
-                        <div class="column">
-                            <p>Email : {{ data_person.email }}</p>
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">Email : {{ data_person.email }}</p>
                         </div>
                     {% endif %}
                     
                     {% if data_person.telephone != '' %}
-                        <div class="column">
-                            <p>Téléphone : {{ data_person.telephone }}</p>
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">Téléphone : {{ data_person.telephone }}</p>
                         </div>
                     {% endif %}
 
                     {% if data_person.address != '' %}
-                        <div class="column">
-                            <p>Adresse professionnelle : {{ data_person.address }}</p>
+                        <div class="column keep-it-inline-parent">
+                            <p class="keep-it-inline">Adresse professionnelle : {{ data_person.address }}</p>
                         </div>
                     {% endif %}
 
                     {% if data_person.linkedin != '' %}
                         <div class="column">
-                            <a href="{{ data_person.linkedin }}"><i class="fab fa-linkedin fa-3x"></i></a>
+                            <a class="" href="{{ data_person.linkedin }}"><i class="fab fa-linkedin fa-3x"></i></a>
                         </div>
                     {% endif %}
                 </div>
