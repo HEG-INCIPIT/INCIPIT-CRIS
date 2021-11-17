@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top">
+<html class="has-navbar-fixed-top" lang="fr">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,7 +37,7 @@
                     <div class="right-align">
                         {% if data_person.orcid != '' %}
                             <p class="orcid is-background-green title is-5">
-                                <a class="police-color" href="https://orcid.org/{{ data_person.orcid }}">{{ data_person.orcid }}</a>
+                                <a title="Accèder au profil ORCID" class="police-color" href="https://orcid.org/{{ data_person.orcid }}">{{ data_person.orcid }}</a>
                                 <i class="fab is-green fa-orcid"></i>
                             </p>
                         {% else %}
@@ -45,7 +45,6 @@
                                 <i class="fab is-red fa-orcid"></i>
                             </p>
                         {% endif %}
-                            
                     </div>
                 </div>
             </section>
@@ -54,7 +53,7 @@
                 <div class="columns">
                     {% block button_navigation %}
                         {% if can_edit %}
-                            <a class="link-one right-align little-space-above" href="/persons/edition/{{ data_person.pid }}"><i class="fas fa-user-edit"></i></a>
+                            <a title="Editer le profil" class="link-one right-align little-space-above" href="/persons/edition/{{ data_person.pid }}"><i class="fas fa-user-edit"></i></a>
                         {% endif %}
                     {% endblock %}
                     
@@ -82,7 +81,7 @@
                                         {% endif %}
                                         >
                                 </figure>
-                                <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                                <a title="Accèder au profil de l'institution : {{ work.name }} ({{ work.alternate_name }})" class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
                             </div>
                         {% endfor %}
                         <p class="break-logo"></p>
@@ -97,7 +96,7 @@
                                     {% endif %}
                                     >
                                 </figure>
-                                <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
+                                <a title="Accèder au profil de l'institution : {{ affiliation.name }} ({{ affiliation.alternate_name }})" class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
                             </div>
                         {% endfor %}
                     </div>
@@ -280,7 +279,9 @@
                 
                     <div>
                         <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
-                        <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        {% if article.url != '' %}
+                            <a title="Accèder au site de l'article {{ article.name }}" class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                        {% endif %}
                         <p class="justified little-space-below">{{ article.abstract }}</p>
                         <p>
                             {% for author in article.authors %}
@@ -292,7 +293,7 @@
                                 
                             {% endfor %}
                         </p>
-                        <i>Editeur, {{ article.date_published }}</i>
+                        <i>{{ article.date_published }}</i>
                     </div>
 
                     {% if forloop.first %}
@@ -331,7 +332,7 @@
                     <div>
                         <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
                         {% if project.url != '' %}
-                            <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                            <a title="Accèder au site du projet {{ project.name }}" class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
                         {% endif %}
                         <p class="justified little-space-below">{{ project.description }}</p>
                         <p> Membres :
@@ -391,10 +392,10 @@
                     <div>
                         <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
                         {% if dataset.url != '' %}
-                            <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
+                            <a title="Accèder au site du jeu de données {{ dataset.name }}" class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
                         {% endif %}
                         {% if dataset.data_download.url != '' %}
-                            <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
+                            <a title="Télécharger le jeu de données {{ dataset.name }}" class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
                         {% endif %}
                         <p class="justified little-space-below">{{ dataset.abstract }}</p>
                         {% if dataset.creators != None %}
