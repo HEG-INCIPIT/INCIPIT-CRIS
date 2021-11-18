@@ -158,10 +158,7 @@ def dataset_profile(request, pid):
         # Request the data about the dataset given
         data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
         can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
-        # Verify if the user as the rights to edit the dataset
-        edition_granted = request.user.is_superuser or request.user.is_authenticated and (request.user.pid in [maintainer[0] for maintainer in data_dataset['maintainers']] or request.user.pid in [creator[0] for creator in data_dataset['creators']])
         context = {
-            'edition_granted': edition_granted,
             'can_edit': can_edit,
             'data_dataset': data_dataset
         }
