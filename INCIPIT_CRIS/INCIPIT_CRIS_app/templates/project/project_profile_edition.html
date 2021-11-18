@@ -130,8 +130,7 @@
 <p class="title is-5">Membres <a class="link-one" href="/projects/edition/field/add-member/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
 {% if data_project.len_members == 0 %}
-<span id="more-member">
-</span>
+<p>Il n'y a pas encore de membres associés</p>
 {% endif %}
 
 {% for member in data_project.members %}
@@ -164,8 +163,7 @@
 <p class="title is-5">Articles <a class="link-one" href="/projects/edition/field/add-article/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
 {% if data_project.len_articles == 0 %}
-<span id="more-article">
-</span>
+<p>Il n'y a pas encore d'articles associés</p>
 {% endif %}
 
 {% for article in data_project.articles %}
@@ -209,8 +207,7 @@
 <p class="title is-5">Données <a class="link-one" href="/projects/edition/field/add-dataset/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
 {% if data_project.len_datasets == 0 %}
-<span id="more-dataset">
-</span>
+<p>Il n'y a pas encore de données associés</p>
 {% endif %}
 
 {% for dataset in data_project.datasets %}
@@ -218,7 +215,7 @@
 <div>
    <form action="/projects/edition/field/delete-dataset/{{data_project.pid}}" method="post">
       {% csrf_token %}
-      <input type="hidden" id="datasetARK" name="datasetARK" value="{{ dataset.0 }}">
+      <input type="hidden" id="datasetARK" name="datasetARK" value="{{ dataset.pid }}">
       <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
       <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
       <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
