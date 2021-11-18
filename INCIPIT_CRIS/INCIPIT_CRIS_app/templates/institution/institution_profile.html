@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-        <link rel="stylesheet" href="{% static 'css/institution_profile.css' %}">
+        <link rel="stylesheet" href="{% static 'css/person_profile.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
     </head>
     <body>
@@ -29,6 +29,92 @@
             {% block information %}
             {% endblock %}
 
+            <div class="parallax">
+               <section class="header">
+                  <figure class="figure ml-5 mb-2">
+                      <img src=
+                      {% if data_institution.logo == '' %}
+                          "{% static 'images/university-solid.png' %}"
+                      {% else %}
+                          "{{ data_institution.logo }}"
+                      {% endif %}
+                      width="250" height="250">
+                  </figure>
+               </section>
+            </div>
+
+            <section class="box top-box">
+               <div class="columns">
+                  {% block button_navigation %}
+                  {% if can_edit %}
+                  <a class="link-one right-align little-space-above" href="/institutions/edition/{{ data_institution.pid }}"><i class="fas fa-pen"></i></a>
+                  {% endif %}
+                  {% endblock %}
+
+                  <div class="column">
+                     {% block dataset_information %}
+                     <p class="title is-4 name">{{ data_institution.name }}
+                     {% if data_institution.alternate_name != '' %}
+                         ({{ data_institution.alternate_name }})
+                     {% endif %}</p>
+                     <p style="visibility: hidden"></p>
+                     {% endblock %}
+                  </div>
+
+                  <div class="column is-one-third header">
+                     {% for work in data_dataset.institutions %}
+                     <div class="align-image-text">
+                        <figure class="image is-48x48">
+                           <img src=
+                           {% if work.logo == '' %}
+                           "{% static 'images/university-solid.png' %}"
+                           {% else %}
+                           "{{ work.logo }}"
+                           {% endif %}
+                           >
+                        </figure>
+                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                     </div>
+                     {% endfor %}
+                  </div>
+               </div>
+            </section>
+
+            <div class="columns is-mobile has-text-centered stats">
+               <a href="#Workers" id="workersStats" name="workersStats" class="column column-left-align">
+                  <article class="box">
+                     <p class="title">{{ data_institution.len_workers }}</p>
+                     <p class="heading">Employés</p>
+                  </article>
+               </a>
+               <a href="#Affiliates" id="affiliatesStats" name="affiliatesStats" class="column">
+                  <article class="box">
+                     <p class="title">{{ data_institution.len_affiliates}}</p>
+                     <p class="heading">Affiliés</p>
+                  </article>
+               </a>
+               <a href="#Articles" id="articlesStats" name="articlesStats" class="column">
+                  <article class="box">
+                     <p class="title">{{ data_institution.len_articles }}</p>
+                     <p class="heading">Articles</p>
+                  </article>
+               </a>
+               <a href="#Projects" id="projectsStats" name="projectsStats" class="column">
+                  <article class="box">
+                     <p class="title">{{ data_institution.len_projects }}</p>
+                     <p class="heading">Projets</p>
+                  </article>
+               </a>
+               <a href="#Projects" id="datasetsStats" name="datasetsStats" class="column column-right-align">
+                  <article class="box">
+                     <p class="title">{{ data_institution.len_datasets }}</p>
+                     <p class="heading">Données</p>
+                  </article>
+               </a>
+            </div>
+
+
+            <!------------------------------------------------------->
             <div class="columns">
                 {% block information_header %}
                     <div class="column">
@@ -128,7 +214,7 @@
                                 </p>
                             {% endfor %}
                         </p>
-                        <p>Sous-organisations : 
+                        <p>Sous-organisations :
                             {% for organization in data_institution.sub_organizations %}
                                 <p>
                                     <a class="link-one" href="/institutions/{{ organization.0 }}">{{ organization.1.name }} ({{ organization.1.alternate_name }})</a>
@@ -202,10 +288,10 @@
                 {% endif %}
             </div>
         </section>
-        
+
         {% include 'main/footer.html' %}
     </body>
-    
+
     <script>
         $(document).ready(function() {
             $('.tabs li').on('click', function() {

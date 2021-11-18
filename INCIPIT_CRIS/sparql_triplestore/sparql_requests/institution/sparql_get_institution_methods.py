@@ -57,7 +57,7 @@ class SparqlGetInstitutionMethods:
 
         return parse_get_institutions(self.sparql.query().response.read())
 
-    
+
     def get_top_lvl_institutions(self):
         """
         Get basic information of an institution : ark, name,
@@ -130,7 +130,7 @@ class SparqlGetInstitutionMethods:
 
         return array_projects
 
-    
+
     def get_sub_organization_institution(self, pid):
 
         sparql_request = """
@@ -146,7 +146,7 @@ class SparqlGetInstitutionMethods:
 
         return parse_get_array_sub_organization_institution(self.sparql.query().response.read())
 
-    
+
     def get_parent_organization_institution(self, pid):
 
         sparql_request = """
@@ -164,7 +164,7 @@ class SparqlGetInstitutionMethods:
 
 
     def get_dict_institution(self, pid):
-        
+
         sparql_request = """
             {prefix}
 
@@ -186,11 +186,11 @@ class SparqlGetInstitutionMethods:
         for sub_organization in array_sub_organizations:
             if len(sub_organization) > 0:
                 institution_dict['sub_organization{}'.format(cnt)] = variables.sparql_get_institution_object.get_dict_institution(sub_organization['sub_organization'])
-            
+
             cnt+=1
 
         institution_dict['organization'] = data_institution
-        
+
         return institution_dict
 
 
@@ -223,7 +223,7 @@ class SparqlGetInstitutionMethods:
 
         return array_persons
 
-    
+
     def get_affiliates_institution(self, pid):
         """
         Get all the affiliations for who the person is a maintainer
@@ -272,7 +272,7 @@ class SparqlGetInstitutionMethods:
 
         articles_sorted = []
         for article in articles:
-            articles_sorted.append(variables.sparql_get_article_object.get_data_article(article))    
+            articles_sorted.append(variables.sparql_get_article_object.get_data_article(article))
         articles_sorted.sort(key=lambda item: item['date_published'], reverse=True)
 
         return articles_sorted
@@ -299,7 +299,7 @@ class SparqlGetInstitutionMethods:
 
         projects_sorted = []
         for project in projects:
-            projects_sorted.append(variables.sparql_get_project_object.get_data_project(project))    
+            projects_sorted.append(variables.sparql_get_project_object.get_data_project(project))
         projects_sorted.sort(key=lambda item: item['founding_date'], reverse=True)
 
         return projects_sorted
@@ -327,7 +327,7 @@ class SparqlGetInstitutionMethods:
 
         datasets_sorted = []
         for dataset in datasets:
-            datasets_sorted.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))    
+            datasets_sorted.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
         datasets_sorted.sort(key=lambda item: item['modified_date'], reverse=True)
 
         return datasets_sorted
@@ -377,14 +377,19 @@ class SparqlGetInstitutionMethods:
         funder = variables.sparql_get_funder_object.check_funder_ark(pid)
 
 
-        
+
         data_institution['workers'] = workers
+        data_institution['len_workers'] = len(workers)
         data_institution['affiliates'] = affiliates
+        data_institution['len_affiliates'] = len(affiliates)
         data_institution['sub_organizations'] = sub_organization_array
         data_institution['parent_organizations'] = parent_organization_array
         data_institution['articles'] = articles
+        data_institution['len_articles'] = len(articles)
         data_institution['projects'] = projects
+        data_institution['len_projects'] = len(projects)
         data_institution['datasets'] = datasets
+        data_institution['len_datasets'] = len(datasets)
         data_institution['projects_funded'] = projects_funded
         data_institution['funder'] = funder
         data_institution['pid'] = pid
@@ -417,7 +422,7 @@ class SparqlGetInstitutionMethods:
 
         data_institution = parse_get_data_institution(self.sparql.query().response.read())
         data_institution['pid'] = pid
-        
+
         return data_institution
 
 
