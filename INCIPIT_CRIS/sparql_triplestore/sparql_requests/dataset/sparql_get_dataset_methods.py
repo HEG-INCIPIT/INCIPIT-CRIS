@@ -178,8 +178,8 @@ class SparqlGetDatasetMethods:
         array_articles = []
 
         for article in parse_get_articles_dataset(self.sparql.query().response.read()):
-            name = variables.sparql_get_article_object.get_full_name_article(article)
-            array_articles.append([article, name])
+            array_articles.append(variables.sparql_get_article_object.get_minimum_data_article(article))
+        array_articles.sort(key=lambda item: item['date_published'], reverse=True)
 
         return array_articles
 
