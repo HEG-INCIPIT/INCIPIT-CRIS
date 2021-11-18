@@ -247,6 +247,8 @@ class SparqlGetInstitutionMethods:
             data_affiliate = variables.SparqlGetPersonMethods.get_full_name_person(self, affiliate)
             array_affiliates.append(data_affiliate)
 
+        array_affiliates.sort(key=lambda worker: worker['family_name'])
+
         return array_affiliates
 
 

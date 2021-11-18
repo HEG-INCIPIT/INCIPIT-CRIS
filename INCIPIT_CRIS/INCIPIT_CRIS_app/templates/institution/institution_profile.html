@@ -52,7 +52,7 @@
                   {% endblock %}
 
                   <div class="column">
-                     {% block dataset_information %}
+                     {% block institution_information %}
                      <p class="title is-4 name">{{ data_institution.name }}
                      {% if data_institution.alternate_name != '' %}
                          ({{ data_institution.alternate_name }})
@@ -62,7 +62,7 @@
                   </div>
 
                   <div class="column is-one-third header">
-                     {% for work in data_dataset.institutions %}
+                     {% for work in data_institution.institutions %}
                      <div class="align-image-text">
                         <figure class="image is-48x48">
                            <img src=
@@ -113,6 +113,171 @@
                </a>
             </div>
 
+            <section class="data-box btn-see-more box">
+               <p class="title is-5">A propos</p>
+               {% block institution_description %}
+                  <div class="separator">Description</div>
+                  <p class="justified">{{ data_institution.description }}</p>
+               {% endblock %}
+
+               <span id="more">
+
+                  <div class="separator">Informations</div>
+
+                  {% block institution_informations %}
+                  <div class="columns is-multiline">
+                     <div class="column keep-it-inline-parent">
+                        <p class="keep-it-inline">Nom : {{ data_institution.name }}</p>
+                     </div>
+                     <div class="column keep-it-inline-parent">
+                        <p class="keep-it-inline-parent">Nom alternatif: {{ data_institution.alternate_name }}</p>
+                     </div>
+                  </div>
+                  <div class="columns is-multiline">
+                     <div class="column keep-it-inline-parent">
+                        <p class="keep-it-inline">Date de fondation : <time datetime="{{ data_institution.founding_date }}">{{ data_institution.founding_date }}</time></p>
+                     </div>
+                     <div class="column class="keep-it-inline" keep-it-inline-parent">
+                        <p class="keep-it-inline">Lien vers l'institution : <a class="link-one url" href="{{ data_institution.url }}">{{ data_institution.url }}</a></p>
+                     </div>
+                  </div>
+                  <div class="columns is-multiline">
+                     <div class="column keep-it-inline-parent">
+                        <p class="keep-it-inline">Bailleur de fonds : <i class="fas {% if data_institution.funder == True%}fa-pen{% else %}fa-times{% endif %}"></i>
+                        </p>
+                     </div>
+                  </div>
+                  {% endblock %}
+
+                  <div class="separator">Institutions</div>
+
+                  <div class="columns">
+                     <div class="column">
+                        {% block institution_institutions %}
+                        <p class="subtitle is-6">Institutions parentes :</p>
+                        {% for work in data_institution.parent_organizations %}
+                        <div class="align-image-text">
+                           <figure class="image is-48x48">
+                              <img src=
+                              {% if work.logo == '' %}
+                              "{% static 'images/university-solid.png' %}"
+                              {% else %}
+                              "{{ work.logo }}"
+                              {% endif %}
+                              >
+                           </figure>
+                           <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                        </div>
+                        {% endfor %}
+                        {% endblock %}
+                     </div>
+                     <div class="column">
+                        {% block institution_subinstitutions %}
+                        <p class="subtitle is-6">Sous-institutions :</p>
+                        {% for work in data_institution.sub_organizations %}
+                        <div class="align-image-text">
+                           <figure class="image is-48x48">
+                              <img src=
+                              {% if work.logo == '' %}
+                              "{% static 'images/university-solid.png' %}"
+                              {% else %}
+                              "{{ work.logo }}"
+                              {% endif %}
+                              >
+                           </figure>
+                           <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                        </div>
+                        {% endfor %}
+                        {% endblock %}
+                     </div>
+                  </div>
+
+               </span>
+
+               <a onclick="displayMore('more', 'myBtn-div')" class="myBtn" id="myBtn">
+                  <div class="title is-6 myBtn-div" id="myBtn-div">
+                     Voir plus
+                  </div>
+               </a>
+            </section>
+
+            <a class="workers" id="Workers"></a>
+
+            <section class="data-box btn-see-more box">
+               {% block institution_workers %}
+               <p class="title is-5">Employés</p>
+
+               {% if data_institution.len_workers == 0 %}
+                  <p>Il n'y a pas encore d'employés associés</p>
+               {% endif %}
+
+               {% for member in data_institution.workers %}
+
+               <div>
+                  <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
+                  <a class="link-one" href="{{ member.url }}"><i class="fas fa-external-link-alt"></i></a>
+                  <p class="justified little-space-below">{{ member.1.description }}</p>
+               </div>
+
+               {% if forloop.first %}
+               <span id="more-worker">
+                  {% endif %}
+
+                  {% if forloop.last %}
+               </span>
+               {% else %}
+               <hr>
+               {% endif %}
+               {% endfor %}
+               {% endblock %}
+
+               {% if data_institution.len_workers > 1 %}
+                  <a onclick="displayMore('more-worker', 'myBtn-div-worker')" class="myBtn" id="myBtn">
+                     <div class="title is-6 myBtn-div" id="myBtn-div-worker">
+                        Voir plus
+                     </div>
+                  </a>
+               {% endif %}
+            </section>
+
+            <a class="affiliates" id="Affiliates"></a>
+
+            <section class="data-box btn-see-more box">
+               {% block institution_affiliates %}
+               <p class="title is-5">Affiliés</p>
+
+               {% if data_institution.len_affiliates == 0 %}
+                  <p>Il n'y a pas encore d'affiliés associés</p>
+               {% endif %}
+
+               {% for member in data_institution.affiliates %}
+
+               <div>
+                  <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
+                  <a class="link-one" href="{{ member.url }}"><i class="fas fa-external-link-alt"></i></a>
+                  <p class="justified little-space-below">{{ member.1.description }}</p>
+               </div>
+
+               {% if forloop.first %}
+               <span id="more-affiliate">
+                  {% endif %}
+
+                  {% if forloop.last %}
+               </span>
+               {% else %}
+               <hr>
+               {% endif %}
+               {% endfor %}
+               {% endblock %}
+
+               {% if data_institution.len_affiliates > 1 %}
+                  <a onclick="displayMore('more-affiliate', 'myBtn-div-affiliate')" class="myBtn" id="myBtn">
+                     <div class="title is-6 myBtn-div" id="myBtn-div-affiliate">
+                        Voir plus
+                     </div>
+                  </a>
+               {% endif %}
+            </section>
 
             <!------------------------------------------------------->
             <div class="columns">
@@ -265,11 +430,11 @@
                     {% endblock %}
                 </div>
                 <div data-content="data">
-                    {% block dataset %}
+                    {% block institution %}
                         <p>Données : </p>
-                        {% for dataset in data_institution.datasets %}
+                        {% for institution in data_institution.institutions %}
                             <p>
-                                <a class="link-one" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
+                                <a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }}</a>
                             </p>
                         {% endfor %}
                     {% endblock %}
@@ -290,6 +455,21 @@
         </section>
 
         {% include 'main/footer.html' %}
+        <script>
+
+        function displayMore(spanId, btn) {
+           var moreText = document.getElementById(spanId);
+           var btnText = document.getElementById(btn);
+
+           if (moreText.style.display === "inline") {
+             moreText.style.display = "none";
+             btnText.innerHTML = "Voir plus";
+           } else {
+             moreText.style.display = "inline";
+             btnText.innerHTML = "Voir moins";
+           }
+        }
+        </script>
     </body>
 
     <script>

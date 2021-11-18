@@ -98,7 +98,7 @@
       <section class="data-box btn-see-more box">
          <p class="title is-5">A propos</p>
          {% block dataset_description %}
-         <div class="separator">Description :</div>
+         <div class="separator">Description</div>
          <p class="justified">{{ data_dataset.abstract }}</p>
          {% endblock %}
 
@@ -215,7 +215,7 @@
          </div>
 
          {% if forloop.first %}
-         <span id="more-maintener">
+         <span id="more-maintainer">
             {% endif %}
 
             {% if forloop.last %}
@@ -227,8 +227,8 @@
          {% endblock %}
 
          {% if data_dataset.len_maintainers > 1 %}
-         <a onclick="displayMore('more-maintener', 'myBtn-div-maintener')" class="myBtn" id="myBtn">
-            <div class="title is-6 myBtn-div" id="myBtn-div-maintener">
+         <a onclick="displayMore('more-maintainer', 'myBtn-div-maintainer')" class="myBtn" id="myBtn">
+            <div class="title is-6 myBtn-div" id="myBtn-div-maintainer">
                Voir plus
             </div>
          </a>
