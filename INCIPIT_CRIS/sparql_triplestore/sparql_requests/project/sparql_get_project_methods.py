@@ -250,6 +250,35 @@ class SparqlGetProjectMethods:
 
         return data_project
 
+    def get_minimum_data_project(self, pid):
+        """
+        Get all the information of a project : ark, name, abstract, date of publication, members, ...
+        And return a dictionnary with all elements
+        """
+        sparql_request = """
+            {prefix}
+
+            SELECT ?name ?description ?foundingDate ?dissolutionDate ?url ?logo WHERE
+            {{
+                <{ark_research}> schema:name ?name .
+                <{ark_research}> schema:description ?description .
+                <{ark_research}> schema:foundingDate ?foundingDate .
+                <{ark_research}> schema:dissolutionDate ?dissolutionDate .
+                <{ark_research}> schema:url ?url .
+                OPTIONAL {{ <{ark_research}> schema:logo ?logo }} .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
+
+        self.sparql.setQuery(sparql_request)
+        data_project = parse_get_data_project(self.sparql.query().response.read())
+
+        members = variables.sparql_get_project_object.get_members_project(pid)
+
+        data_project['members'] = members
+        data_project['len_members'] = len(members)
+        data_project['pid'] = pid
+
+        return data_project
 
     def check_project_ark(self, pid):
         """

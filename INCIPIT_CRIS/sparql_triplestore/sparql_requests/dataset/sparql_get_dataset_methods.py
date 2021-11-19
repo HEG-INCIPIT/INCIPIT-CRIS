@@ -152,12 +152,12 @@ class SparqlGetDatasetMethods:
         array_projects = []
 
         for project in parse_get_projects_dataset(self.sparql.query().response.read()):
-            name = variables.sparql_get_project_object.get_full_name_project(project)
-            array_projects.append([project, name])
+            array_projects.append(variables.sparql_get_project_object.get_minimum_data_project(project))
+        array_projects.sort(key=lambda item: item['founding_date'], reverse=True)
 
         return array_projects
 
-    
+
     def get_articles_dataset(self, pid):
         """
         Get all the articles of an dataset
@@ -178,8 +178,8 @@ class SparqlGetDatasetMethods:
         array_articles = []
 
         for article in parse_get_articles_dataset(self.sparql.query().response.read()):
-            name = variables.sparql_get_article_object.get_full_name_article(article)
-            array_articles.append([article, name])
+            array_articles.append(variables.sparql_get_article_object.get_minimum_data_article(article))
+        array_articles.sort(key=lambda item: item['date_published'], reverse=True)
 
         return array_articles
 
@@ -204,7 +204,7 @@ class SparqlGetDatasetMethods:
         array_institutions = []
 
         for institution in parse_get_institutions_dataset(self.sparql.query().response.read()):
-            data_institution = variables.SparqlGetInstitutionMethods.get_full_name_institution(self, institution)
+            data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
         return array_institutions
@@ -240,11 +240,15 @@ class SparqlGetDatasetMethods:
         data_download = variables.sparql_get_dataset_object.get_data_download_dataset(pid)
         institutions = variables.sparql_get_dataset_object.get_institutions_dataset(pid)
 
-        
+
         data_dataset['maintainers'] = maintainers
+        data_dataset['len_maintainers'] = len(maintainers)
         data_dataset['creators'] = creators
+        data_dataset['len_creators'] = len(creators)
         data_dataset['projects'] = projects
+        data_dataset['len_projects'] = len(projects)
         data_dataset['articles'] = articles
+        data_dataset['len_articles'] = len(articles)
         data_dataset['institutions'] = institutions
         data_dataset['pid'] = pid
         data_dataset['data_download'] = data_download

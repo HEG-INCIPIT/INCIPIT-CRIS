@@ -88,9 +88,9 @@ def dataset_creation(request):
                         raise Exception
                 variables.sparql_post_dataset_object.create_dataset(pid, form.cleaned_data['name'],
                                                           form.cleaned_data['abstract'],
-                                                          form.cleaned_data['created_date'], 
-                                                          form.cleaned_data['modified_date'], 
-                                                          form.cleaned_data['url_data'], 
+                                                          form.cleaned_data['created_date'],
+                                                          form.cleaned_data['modified_date'],
+                                                          form.cleaned_data['url_data'],
                                                           form.cleaned_data['url_details'])
                 for maintainer in maintainers:
                     variables.sparql_post_dataset_object.add_maintainer_to_dataset(pid, maintainer.split()[-1])
@@ -161,10 +161,9 @@ def dataset_profile(request, pid):
     if variables.sparql_get_dataset_object.check_dataset_ark(pid):
         # Request the data about the dataset given
         data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
-        # Verify if the user as the rights to edit the dataset
-        edition_granted = request.user.is_superuser or request.user.is_authenticated and (request.user.pid in [maintainer[0] for maintainer in data_dataset['maintainers']] or request.user.pid in [creator[0] for creator in data_dataset['creators']])
+        can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
         context = {
-            'edition_granted': edition_granted,
+            'can_edit': can_edit,
             'data_dataset': data_dataset
         }
         return render(request, 'dataset/dataset_profile.html', context)
@@ -197,7 +196,7 @@ def dataset_edition(request, pid):
         data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in data_dataset['creators']] or request.user.pid in [maintainers[0] for maintainers in data_dataset['maintainers']]:
-            
+
             context = {
                 'data_dataset': data_dataset
             }
@@ -239,7 +238,7 @@ def dataset_field_edition(request, field_to_modify, pid):
     if request.user.is_authenticated:
         # Request all the data of the given dataset
         data_dataset = variables.sparql_get_dataset_object.get_data_dataset(pid)
-        
+
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in data_dataset['creators']] or request.user.pid in [maintainers[0] for maintainers in data_dataset['maintainers']]:
 
@@ -386,7 +385,7 @@ def dataset_creator_deletion(request, pid):
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
-        
+
             # Get the value of a variable in the POST request by its id
             creator = request.POST.get('creatorARK', '')
             variables.sparql_post_dataset_object.delete_creator_of_dataset(pid, creator)
@@ -432,7 +431,7 @@ def dataset_maintainer_addition(request, pid):
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
-       
+
             # Check the request method
             if request.method == 'POST':
                 maintainers = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
@@ -498,7 +497,7 @@ def dataset_maintainer_deletion(request, pid):
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
-       
+
             # Get the value of a variable in the POST request by its id
             maintainer = request.POST.get('maintainerARK', '')
             variables.sparql_post_dataset_object.delete_maintainer_of_dataset(pid, maintainer)
@@ -544,7 +543,7 @@ def dataset_project_addition(request, pid):
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
-       
+
             # Check the request method
             if request.method == 'POST':
                 projects = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
@@ -612,7 +611,7 @@ def dataset_project_deletion(request, pid):
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
-       
+
             project = request.POST.get('projectARK', '')
             variables.sparql_post_dataset_object.delete_project_from_dataset(pid, project)
 
@@ -657,7 +656,7 @@ def dataset_article_addition(request, pid):
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
-       
+
             # Check the request method
             if request.method == 'POST':
                 articles = re.findall('"([^"]*)"', request.POST['groupElementsPost'])
@@ -725,7 +724,7 @@ def dataset_article_deletion(request, pid):
         maintainers_dataset = variables.sparql_get_dataset_object.get_maintainers_dataset(pid)
         # Verify if the user ark is in the datasets creators or maintainers to grant edition
         if request.user.is_superuser or request.user.pid in [creators[0] for creators in creators_dataset] or request.user.pid in [maintainers[0] for maintainers in maintainers_dataset]:
-       
+
             article = request.POST.get('articleARK', '')
             variables.sparql_post_dataset_object.delete_article_from_dataset(pid, article)
 

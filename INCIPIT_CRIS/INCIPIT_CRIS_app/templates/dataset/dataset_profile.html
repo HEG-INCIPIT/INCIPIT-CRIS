@@ -1,110 +1,355 @@
 <!DOCTYPE html>
 <html class="has-navbar-fixed-top">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>INCIPIT-CRIS</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/profil.css' %}">
-    </head>
-    <body>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>INCIPIT-CRIS</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+   {% load static %}
+   <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+   <link rel="stylesheet" href="{% static 'css/main.css' %}">
+   <link rel="stylesheet" href="{% static 'css/person_profile.css' %}">
+</head>
+<body>
 
-        {% include 'main/navbar.html' %}
-        
-        <section>
-        
-            {% block breadcrumb %}
-                <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
-                    <ul>
-                        <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
-                        <li><a class="link-one" href="/datasets/">Données</a></li>
-                        <li class="is-active"><a href="/datasets/{{ data_dataset.pid }}" aria-current="page">Profil</a></li>
-                    </ul>
-                </nav>
+   {% include 'main/navbar.html' %}
+
+   <section>
+
+      {% block breadcrumb %}
+      <nav class="breadcrumb has-succeeds-separator is-size-7" aria-label="breadcrumbs">
+         <ul>
+            <li><a class="link-one" href="/">INCIPIT-CRIS</a></li>
+            <li><a class="link-one" href="/datasets/">Données</a></li>
+            <li class="is-active"><a href="/datasets/{{ data_dataset.pid }}" aria-current="page">Profil</a></li>
+         </ul>
+      </nav>
+      {% endblock %}
+
+      {% block information %}
+      {% endblock %}
+
+      <div class="parallax">
+         <section style="opacity: 0;height:180px;" class="header">
+         </section>
+      </div>
+
+      <section class="box top-box">
+         <div class="columns">
+            {% block button_navigation %}
+            {% if can_edit %}
+            <a class="link-one right-align little-space-above" href="/datasets/edition/{{ data_dataset.pid }}"><i class="fas fa-pen"></i></a>
+            {% endif %}
             {% endblock %}
 
-            {% block information %}
-            {% endblock %}
-            {% block information_header %}
-                {% if user.is_authenticated and edition_granted or user.is_superuser %}
-                    <p>
-                        <a class="button is-primary" href="/datasets/edition/{{ data_dataset.pid }}">Modifier</a>
-                    </p>
-                {% endif %}
-                <p class="title is-4" align="justify">
-                    {{ data_dataset.name }} 
-                </p>
-                <p class="subtitle is-6" align="justify">{{ data_dataset.abstract }}</p>
-            {% endblock %}
-
-            <hr>
-            
-            <div class="columns">
-                <div class="column has-text-justified is-one-third">
-                    {% block information_relative_data %}
-                        <p class="title-data"><time datetime="{{ data_dataset.created_date }}">Date de création : </p>
-                        <ul>
-                            <li class="data">{{ data_dataset.created_date }}</time></li>
-                        </ul>
-                        <p class="title-data"><time datetime="{{ data_dataset.modified_date }}">Date de modification : </p>
-                        <ul>
-                            <li class="data">{{ data_dataset.modified_date }}</time></li>
-                        </ul>
-                        <p class="title-data">URL des détails : </p>
-                        <ul>
-                            <li class="data"><a class="link-one url" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></li>
-                        </ul>
-                        <p class="title-data">URL des données : </p>
-                        <ul>
-                            <li class="data"><a class="link-one url" href="{{ data_dataset.data_download.url }}">{{ data_dataset.data_download.url }}</a></li>
-                        </ul>
-                    {% endblock %}
-                </div>
-                <div class="column has-text-justified is-one-third">
-                    {% block information_persons %}
-                        <p class="title-data">Créateur(s) : </p>
-                        <ul>
-                            {% for creator in data_dataset.creators %}
-                                <li class="data"><a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                        <p class="title-data">Mainteneur(s) : </p>
-                        <ul>
-                            {% for maintainer in data_dataset.maintainers %}
-                                <li class="data"><a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% endblock %}
-                </div>
-                <div class="column has-text-justified is-one-third">
-                    {% block information_elements_linked %}
-                        <p class="title-data">Projet(s) : </p>
-                        <ul>
-                            {% for project in data_dataset.projects %}
-                                <li class="data"><a class="link-one" href="/projects/{{ project.0 }}">{{ project.1.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-
-                        <p class="title-data">Article(s) : </p>
-                        <ul>
-                            {% for article in data_dataset.articles %}
-                                <li class="data"><a class="link-one" href="/articles/{{ article.0 }}">{{ article.1.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-
-                        <p class="title-data">Institution(s) : </p>
-                        <ul>
-                            {% for institution in data_dataset.institutions %}
-                                <li class="data"><a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }} ({{ institution.alternate_name }})</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% endblock %}
-                </div>
+            <div class="column">
+               {% block dataset_information %}
+               <p class="title is-4 name">{{ data_dataset.name }}</p>
+               <p style="visibility: hidden"></p>
+               {% endblock %}
             </div>
-        </section>
-        {% include 'main/footer.html' %}
-    </body>
-</html>
+
+            <div class="column is-one-third header">
+               {% for work in data_dataset.institutions %}
+               <div class="align-image-text">
+                  <figure class="image is-48x48">
+                     <img src=
+                     {% if work.logo == '' %}
+                     "{% static 'images/university-solid.png' %}"
+                     {% else %}
+                     "{{ work.logo }}"
+                     {% endif %}
+                     >
+                  </figure>
+                  <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+               </div>
+               {% endfor %}
+            </div>
+         </div>
+      </section>
+
+      <div class="columns is-mobile has-text-centered stats">
+         <a href="#Creators" id="creatorsStats" name="creatorsStats" class="column column-left-align">
+            <article class="box">
+               <p class="title">{{ data_dataset.len_creators }}</p>
+               <p class="heading">Créateurs</p>
+            </article>
+         </a>
+         <a href="#Maintainers" id="maintainersStats" name="maintainersStats" class="column">
+            <article class="box">
+               <p class="title">{{ data_dataset.len_maintainers }}</p>
+               <p class="heading">Mainteneurs</p>
+            </article>
+         </a>
+         <a href="#Articles" id="articlesStats" name="articlesStats" class="column">
+            <article class="box">
+               <p class="title">{{ data_dataset.len_articles }}</p>
+               <p class="heading">Articles</p>
+            </article>
+         </a>
+         <a href="#Projects" id="projectsStats" name="projectsStats" class="column column-right-align">
+            <article class="box">
+               <p class="title">{{ data_dataset.len_projects }}</p>
+               <p class="heading">Projets</p>
+            </article>
+         </a>
+      </div>
+
+      <section class="data-box btn-see-more box">
+         <p class="title is-5">A propos</p>
+         {% block dataset_description %}
+         <div class="separator">Description</div>
+         <p class="justified">{{ data_dataset.abstract }}</p>
+         {% endblock %}
+
+         <span id="more">
+
+            <div class="separator">Informations</div>
+
+            {% block dataset_informations %}
+            <div class="columns is-multiline">
+               <div class="column keep-it-inline-parent">
+                  <p class="keep-it-inline">Date de création : <time datetime="{{ data_dataset.created_date }}">{{ data_dataset.created_date }}</time></p>
+               </div>
+               <div class="column keep-it-inline-parent">
+                  <p class="keep-it-inline-parent">Date de modification : <time datetime="{{ data_dataset.modified_date }}">{{ data_dataset.modified_date }}</time></p>
+               </div>
+            </div>
+            <div class="columns is-multiline">
+               <div class="column keep-it-inline-parent">
+                  <p class="keep-it-inline">URL des détails: <a class="link-one url" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a></p>
+               </div>
+               <div class="column class="keep-it-inline" keep-it-inline-parent">
+                  <p class="keep-it-inline">URL des données: <a class="link-one url" href="{{ data_dataset.data_download.url }}">{{ data_dataset.data_download.url }}</a></p>
+               </div>
+            </div>
+            {% endblock %}
+
+            <div class="separator">Institutions</div>
+
+            <div class="columns">
+               <div class="column">
+                  {% block dataset_institutions %}
+                  {% for work in data_dataset.institutions %}
+                  <div class="align-image-text">
+                     <figure class="image is-48x48">
+                        <img src=
+                        {% if work.logo == '' %}
+                        "{% static 'images/university-solid.png' %}"
+                        {% else %}
+                        "{{ work.logo }}"
+                        {% endif %}
+                        >
+                     </figure>
+                     <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                  </div>
+                  {% endfor %}
+                  {% endblock %}
+
+               </div>
+            </div>
+
+         </span>
+
+         <a onclick="displayMore('more', 'myBtn-div')" class="myBtn" id="myBtn">
+            <div class="title is-6 myBtn-div" id="myBtn-div">
+               Voir plus
+            </div>
+         </a>
+      </section>
+
+      <a class="creators" id="Creators"></a>
+
+      <section class="data-box btn-see-more box">
+         {% block dataset_creators %}
+         <p class="title is-5">Créateurs</p>
+
+         {% if data_dataset.len_creators == 0 %}
+         <p>Il n'y a pas encore de créateurs associés</p>
+         {% endif %}
+
+         {% for author in data_dataset.creators %}
+
+         <div>
+            <a class="link-one title is-6" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+            <a class="link-one" href="{{ author.url }}"><i class="fas fa-external-link-alt"></i></a>
+            <p class="justified little-space-below">{{ author.1.description }}</p>
+         </div>
+
+         {% if forloop.first %}
+         <span id="more-creator">
+            {% endif %}
+
+            {% if forloop.last %}
+         </span>
+         {% else %}
+         <hr>
+         {% endif %}
+         {% endfor %}
+         {% endblock %}
+
+         {% if data_dataset.len_creators > 1 %}
+         <a onclick="displayMore('more-creator', 'myBtn-div-creators')" class="myBtn" id="myBtn">
+            <div class="title is-6 myBtn-div" id="myBtn-div-creators">
+               Voir plus
+            </div>
+         </a>
+         {% endif %}
+      </section>
+
+      <a class="maintainers" id="Maintainers"></a>
+      <section class="data-box btn-see-more box">
+         {% block dataset_mainteners %}
+         <p class="title is-5">Mainteneurs</p>
+
+         {% if data_dataset.len_len_maintainers == 0 %}
+         <p>Il n'y a pas encore de mainteneurs associés</p>
+         {% endif %}
+
+         {% for author in data_dataset.maintainers %}
+
+         <div>
+            <a class="link-one title is-6" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+            <a class="link-one" href="{{ author.url }}"><i class="fas fa-external-link-alt"></i></a>
+            <p class="justified little-space-below">{{ author.1.description }}</p>
+         </div>
+
+         {% if forloop.first %}
+         <span id="more-maintainer">
+            {% endif %}
+
+            {% if forloop.last %}
+         </span>
+         {% else %}
+         <hr>
+         {% endif %}
+         {% endfor %}
+         {% endblock %}
+
+         {% if data_dataset.len_maintainers > 1 %}
+         <a onclick="displayMore('more-maintainer', 'myBtn-div-maintainer')" class="myBtn" id="myBtn">
+            <div class="title is-6 myBtn-div" id="myBtn-div-maintainer">
+               Voir plus
+            </div>
+         </a>
+         {% endif %}
+      </section>
+
+      <a class="articles" id="Articles"></a>
+
+      <section class="data-box btn-see-more box">
+         {% block dataset_articles %}
+         <p class="title is-5">Articles</p>
+
+         {% if data_dataset.len_articles == 0 %}
+         <p>Il n'y a pas d'articles associés.</p>
+         {% endif %}
+         {% for article in data_dataset.articles %}
+         <div>
+            <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
+            {% if article.url != '' %}
+            <a title="Accèder au site de l'article {{ article.name }}" class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+            {% endif %}
+            <p class="justified little-space-below">{{ article.abstract }}</p>
+            <p>
+               {% for author in article.authors %}
+               {% if not forloop.last %}
+               <a class="link-one" href="/persons/{{ author.1.pid }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>,
+               {% else %}
+               <a class="link-one" href="/persons/{{ author.1.pid }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+               {% endif %}
+
+               {% endfor %}
+            </p>
+            <i>{{ article.date_published }}</i>
+         </div>
+
+         {% if forloop.first %}
+         <span id="more-article">
+            {% endif %}
+
+            {% if forloop.last %}
+         </span>
+         {% else %}
+         <hr>
+         {% endif %}
+         {% endfor %}
+         {% endblock %}
+
+         {% if data_dataset.len_articles > 1 %}
+         <a onclick="displayMore('more-article', 'myBtn-div-article')" class="myBtn" id="myBtn">
+            <div class="title is-6 myBtn-div" id="myBtn-div-article">
+               Voir plus
+            </div>
+         </a>
+         {% endif %}
+      </section>
+
+      <a class="projects" id="Projects"></a>
+
+      <section class="data-box btn-see-more box">
+         {% block dataset_projects %}
+         <p class="title is-5">Projets</p>
+
+         {% if data_dataset.len_projects == 0 %}
+         <p>Il n'y a pas encore de projets associés</p>
+         {% endif %}
+
+         {% for project in data_dataset.projects %}
+
+         <div>
+            <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
+            <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+            <p class="justified little-space-below">{{ project.description }}</p>
+            <p>
+               {% for member in project.members %}
+               {% if not forloop.last %}
+               <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
+               {% else %}
+               <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
+               {% endif %}
+               {% endfor %}
+            </p>
+            <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+            <p>Financement : Bailleurs de fonds</p>
+         </div>
+
+         {% if forloop.first %}
+         <span id="more-project">
+            {% endif %}
+
+            {% if forloop.last %}
+         </span>
+         {% else %}
+         <hr>
+         {% endif %}
+         {% endfor %}
+         {% endblock %}
+
+         {% if data_dataset.len_projects > 1 %}
+         <a onclick="displayMore('more-project', 'myBtn-div-project')" class="myBtn" id="myBtn">
+            <div class="title is-6 myBtn-div" id="myBtn-div-project">
+               Voir plus
+            </div>
+         </a>
+         {% endif %}
+      </section>
+
+         {% include 'main/footer.html' %}
+         <script>
+
+         function displayMore(spanId, btn) {
+            var moreText = document.getElementById(spanId);
+            var btnText = document.getElementById(btn);
+
+            if (moreText.style.display === "inline") {
+               moreText.style.display = "none";
+               btnText.innerHTML = "Voir plus";
+            } else {
+               moreText.style.display = "inline";
+               btnText.innerHTML = "Voir moins";
+            }
+         }
+         </script>
+      </body>
+      </html>

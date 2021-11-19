@@ -160,11 +160,7 @@ def project_profile(request, pid):
     if sparql_request_check_project_ark:
         data_project = variables.sparql_get_project_object.get_data_project(pid)
         can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
-        edition_granted = False
-        if request.user.is_superuser or request.user.is_authenticated and request.user.pid in [members[0] for members in data_project['members']]:
-            edition_granted = True
         context = {
-            'edition_granted': edition_granted,
             'data_project': data_project,
             'can_edit': can_edit,
         }

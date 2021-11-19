@@ -81,7 +81,7 @@ def institution_creation(request):
                             pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name),
                                 form.cleaned_data['name'], form.cleaned_data['founding_date'] if form.cleaned_data['founding_date'] != None else '')
                     except:
-                        raise Exception 
+                        raise Exception
                 variables.sparql_post_institution_object.create_institution(pid, form.cleaned_data['name'],
                                                         form.cleaned_data['alternate_name'],
                                                         form.cleaned_data['description'],
@@ -93,7 +93,7 @@ def institution_creation(request):
                 return redirect(views.index)
         else:
             form = InstitutionCreationForm()
-        
+
         top_lvl_institutions = variables.sparql_get_institution_object.get_top_lvl_institutions()
         top_lvl_institutions_data = []
         for top_lvl_institution in top_lvl_institutions:
@@ -138,10 +138,12 @@ def institution_profile(request, pid):
     sparql_request_check_institution_ark = variables.sparql_get_institution_object.check_institution_ark(pid)
     if sparql_request_check_institution_ark:
         data_institution = variables.sparql_get_institution_object.get_data_institution(pid)
+        can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
         edition_granted = False
         if request.user.is_superuser or request.user.is_authenticated and request.user.pid in [members[0] for members in data_institution['members']]:
             edition_granted = True
         context = {
+            'can_edit': can_edit,
             'edition_granted': edition_granted,
             'data_institution': data_institution,
         }
@@ -308,7 +310,7 @@ def institution_parent_organization_addition(request, pid):
             }
 
             return render(request, 'forms/select_institution_form.html', context)
-    
+
         context = {
             'message': "Vous n'avez pas le droit d'éditer cette institution",
         }
@@ -401,7 +403,7 @@ def institution_sub_organization_addition(request, pid):
             }
 
             return render(request, 'forms/select_institution_form.html', context)
-    
+
         context = {
             'message': "Vous n'avez pas le droit d'éditer cette institution",
         }
@@ -446,7 +448,7 @@ def institution_sub_organization_deletion(request, pid):
         'message': "Connectez-vous pour pouvoir éditer cette institution"
     }
     return render(request, 'page_info.html', context)
-    
+
 
 def institution_worker_addition(request, pid):
     '''
@@ -500,7 +502,7 @@ def institution_worker_addition(request, pid):
             }
 
             return render(request, 'forms/autocompletion_group.html', context)
-    
+
         context = {
             'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
@@ -601,7 +603,7 @@ def institution_affiliate_addition(request, pid):
             }
 
             return render(request, 'forms/autocompletion_group.html', context)
-    
+
         context = {
             'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
@@ -702,7 +704,7 @@ def institution_article_addition(request, pid):
             }
 
             return render(request, 'forms/autocompletion_group.html', context)
-    
+
         context = {
             'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
@@ -803,7 +805,7 @@ def institution_project_addition(request, pid):
             }
 
             return render(request, 'forms/autocompletion_group.html', context)
-    
+
         context = {
             'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
@@ -904,7 +906,7 @@ def institution_dataset_addition(request, pid):
             }
 
             return render(request, 'forms/autocompletion_group.html', context)
-    
+
         context = {
             'message': "Vous n'avez pas le droit d'éditer ce profil",
         }
