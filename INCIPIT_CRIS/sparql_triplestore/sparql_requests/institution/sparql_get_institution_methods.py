@@ -363,11 +363,12 @@ class SparqlGetInstitutionMethods:
 
         sub_organization_array = []
         for inst in variables.SparqlGetInstitutionMethods.get_sub_organization_institution(self, pid):
-            sub_organization_array.append((inst, variables.SparqlGetInstitutionMethods.get_full_name_institution(self, inst)))
+            sub_organization_array.append(variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, inst))
+        print(sub_organization_array)
 
         parent_organization_array = []
         for inst in variables.SparqlGetInstitutionMethods.get_parent_organization_institution(self, pid):
-            parent_organization_array.append((inst, variables.SparqlGetInstitutionMethods.get_full_name_institution(self, inst)))
+            parent_organization_array.append(variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, inst))
 
         workers = variables.sparql_get_institution_object.get_workers_institution(pid)
         affiliates = variables.sparql_get_institution_object.get_affiliates_institution(pid)
