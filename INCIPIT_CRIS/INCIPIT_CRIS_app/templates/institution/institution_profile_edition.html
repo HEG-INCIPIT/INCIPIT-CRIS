@@ -90,6 +90,167 @@
 {% endfor %}
 {% endblock %}
 
+{% block institution_affiliates %}
+<p class="title is-5">Affiliés <a class="link-one" href="/institutions/edition/field/add-affiliate/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+
+{% if data_institution.len_affiliates == 0 %}
+   <p>Il n'y a pas encore d'affiliés associés</p>
+{% endif %}
+
+{% for member in data_institution.affiliates %}
+
+<div>
+   <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
+   <a class="link-one" href="{{ member.url }}"><i class="fas fa-external-link-alt"></i></a>
+   <p class="justified little-space-below">{{ member.1.description }}</p>
+</div>
+
+{% if forloop.first %}
+<span id="more-affiliate">
+   {% endif %}
+
+   {% if forloop.last %}
+</span>
+{% else %}
+<hr>
+{% endif %}
+{% endfor %}
+{% endblock %}
+{% block project_articles %}
+<p class="title is-5">Articles <a class="link-one" href="/institutions/edition/field/add-article/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+
+{% if data_institution.len_articles == 0 %}
+   <p>Il n'y a pas encore d'articles associés</p>
+{% endif %}
+
+{% for article in data_institution.articles %}
+
+<div>
+   <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
+   <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+   <p class="justified little-space-below">{{ article.abstract }}</p>
+   <p>
+      {% for author in article.authors %}
+      {% if not forloop.last %}
+      <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>,
+      {% else %}
+      <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+      {% endif %}
+
+      {% endfor %}
+   </p>
+   <i>Editeur, {{ article.date_published }}</i>
+</div>
+
+{% if forloop.first %}
+<span id="more-article">
+   {% endif %}
+
+   {% if forloop.last %}
+</span>
+{% else %}
+<hr>
+{% endif %}
+{% endfor %}
+{% endblock %}
+{% block article_projects %}
+     <p class="title is-5">Projets <a class="link-one" href="/institutions/edition/field/add-project/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+
+     {% if data_institution.len_projects == 0 %}
+            <span id="more-project">
+            </span>
+     {% endif %}
+
+     {% for project in data_institution.projects %}
+
+        <div>
+            <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
+            <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+            <p class="justified little-space-below">{{ project.description }}</p>
+            <p>
+                 {% for member in project.members %}
+                     {% if not forloop.last %}
+                         <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
+                     {% else %}
+                         <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
+                     {% endif %}
+                 {% endfor %}
+            </p>
+            <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+            <p>Financement : Bailleurs de fonds</p>
+        </div>
+
+        {% if forloop.first %}
+            <span id="more-project">
+        {% endif %}
+
+        {% if forloop.last %}
+            </span>
+        {% else %}
+            <hr>
+        {% endif %}
+     {% endfor %}
+{% endblock %}
+
+<a onclick="displayMore('more-project', 'myBtn-div-project')" class="myBtn" id="myBtn">
+     <div class="title is-6 myBtn-div" id="myBtn-div-project">
+        Voir plus
+     </div>
+</a>
+</section>
+
+
+<a class="datasets" id="Datasets"></a>
+
+<section class="data-box btn-see-more box">
+{% block project_datasets %}
+<p class="title is-5">Données <a class="link-one" href="/institutions/edition/field/add-dataset/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+
+{% if data_institution.len_datasets == 0 %}
+   <p>Il n'y a pas encore de données associés</p>
+{% endif %}
+
+{% for dataset in data_institution.datasets %}
+
+<div>
+   <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
+   <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
+   <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
+   <p class="justified little-space-below">{{ dataset.abstract }}</p>
+   <p> Créateurs :
+      {% for creator in dataset.creators %}
+      {% if not forloop.last %}
+      <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
+      {% else %}
+      <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+      {% endif %}
+      {% endfor %}
+   </p>
+   <p> Mainteneurs :
+      {% for maintainer in dataset.maintainers %}
+      {% if not forloop.last %}
+      <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
+      {% else %}
+      <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+      {% endif %}
+      {% endfor %}
+   </p>
+   <p>Création : {{ dataset.created_date }}</p>
+   <p>Dernière modification : {{ dataset.modified_date }}</p>
+</div>
+
+{% if forloop.first %}
+<span id="more-dataset">
+   {% endif %}
+
+   {% if forloop.last %}
+</span>
+{% else %}
+<hr>
+{% endif %}
+{% endfor %}
+{% endblock %}
+
 
 {% block information_header %}
 
