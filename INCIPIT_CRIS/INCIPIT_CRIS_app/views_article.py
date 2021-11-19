@@ -111,8 +111,12 @@ def article_creation(request):
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name),
-                            form.cleaned_data['name'], form.cleaned_data['date_published'])
+                        if request.user.is_superuser:
+                            pid = variables.ark.mint(form.cleaned_data['url'], 'Admin',
+                                form.cleaned_data['name'], form.cleaned_data['date_published'] if form.cleaned_data['date_published'] != None else '')
+                        else:
+                            pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name),
+                                form.cleaned_data['name'], form.cleaned_data['date_published'] if form.cleaned_data['date_published'] != None else '')
                     except:
                         raise Exception
                 variables.sparql_post_article_object.create_article(pid, form.cleaned_data['name'],

@@ -74,8 +74,12 @@ def institution_creation(request):
                 if pid == '':
                     # Try to mint an ARK with the functions of the app arketype_API
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name), 
-                            form.cleaned_data['name'], form.cleaned_data['founding_date'])
+                        if request.user.is_superuser:
+                            pid = variables.ark.mint(form.cleaned_data['url'], 'Admin',
+                                form.cleaned_data['name'], form.cleaned_data['founding_date'] if form.cleaned_data['founding_date'] != None else '')
+                        else:
+                            pid = variables.ark.mint(form.cleaned_data['url'], '{} {}'.format(request.user.first_name, request.user.last_name),
+                                form.cleaned_data['name'], form.cleaned_data['founding_date'] if form.cleaned_data['founding_date'] != None else '')
                     except:
                         raise Exception 
                 variables.sparql_post_institution_object.create_institution(pid, form.cleaned_data['name'],

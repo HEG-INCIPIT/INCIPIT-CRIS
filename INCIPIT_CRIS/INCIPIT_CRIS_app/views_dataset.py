@@ -78,8 +78,12 @@ def dataset_creation(request):
                 pid = form.cleaned_data['pid']
                 if pid == '':
                     try:
-                        pid = variables.ark.mint(form.cleaned_data['url_data'], '{} {}'.format(request.user.first_name, request.user.last_name), 
-                            form.cleaned_data['name'], form.cleaned_data['created_date'])
+                        if request.user.is_superuser:
+                            pid = variables.ark.mint(form.cleaned_data['url_data'], 'Admin',
+                                form.cleaned_data['name'], form.cleaned_data['created_date'] if form.cleaned_data['created_date'] != None else '')
+                        else:
+                            pid = variables.ark.mint(form.cleaned_data['url_data'], '{} {}'.format(request.user.first_name, request.user.last_name),
+                                form.cleaned_data['name'], form.cleaned_data['created_date'] if form.cleaned_data['created_date'] != None else '')
                     except:
                         raise Exception
                 variables.sparql_post_dataset_object.create_dataset(pid, form.cleaned_data['name'],
