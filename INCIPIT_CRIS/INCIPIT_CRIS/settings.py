@@ -145,3 +145,6 @@ SCHEMA_ROOT = os.path.join(BASE_DIR, '')[:-13] + 'schema_ontology/'
 
 FUSEKI_USER = 'admin'
 FUSEKI_PASSWORD = 'pw'
+
+# Authetication backend
+AUTHENTICATION_BACKENDS = ['INCIPIT_CRIS_app.authentication.EmailBackend']

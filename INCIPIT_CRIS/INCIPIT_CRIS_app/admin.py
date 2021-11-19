@@ -7,7 +7,7 @@ class UserAdmin(BaseUserAdmin):
 
     add_fieldsets = (
         (None, {
-            'fields': ('username', 'email', 'first_name', 'last_name', 'pid', 'password1', 'password2')
+            'fields': ('email', 'first_name', 'last_name', 'pid', 'password1', 'password2')
         }),
     )
     fieldsets = (
