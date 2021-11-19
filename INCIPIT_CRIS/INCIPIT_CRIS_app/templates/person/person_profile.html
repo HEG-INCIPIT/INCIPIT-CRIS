@@ -211,50 +211,56 @@
                 </div>
             {% endblock %}
 
-            <div class="separator">Institutions</div>
+            {% if data_person.works|length > 0 or data_person.affiliations|length > 0 %}
+                <div class="separator">Institutions</div>
 
-            <div class="columns">
-                <div class="column">
-                    {% block person_work %}
-                        <p class="subtitle is-6">Travail :</p>
-                        {% for work in data_person.works %}
-                            <div class="align-image-text">
-                                <figure class="image is-48x48">
-                                        <img src=
-                                        {% if work.logo == '' %}
-                                            "{% static 'images/university-solid.png' %}"
-                                        {% else %}
-                                            "{{ work.logo }}"
-                                        {% endif %}
-                                        >
-                                </figure>
-                                <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
-                            </div>
-                        {% endfor %}
-                    {% endblock %}
+                <div class="columns">
+                    {% if data_person.works|length > 0 %}
+                        <div class="column">
+                            {% block person_work %}
+                                <p class="subtitle is-6">Travail :</p>
+                                {% for work in data_person.works %}
+                                    <div class="align-image-text">
+                                        <figure class="image is-48x48">
+                                                <img src=
+                                                {% if work.logo == '' %}
+                                                    "{% static 'images/university-solid.png' %}"
+                                                {% else %}
+                                                    "{{ work.logo }}"
+                                                {% endif %}
+                                                >
+                                        </figure>
+                                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                                    </div>
+                                {% endfor %}
+                            {% endblock %}
+                        </div>
+                    {% endif %}
 
+                    {% if data_person.affiliations|length > 0 %}
+                        <div class="column">
+
+                            {% block person_affiliation %}
+                                <p class="subtitle is-6">Affiliation :</p>
+                                {% for affiliation in data_person.affiliations %}
+                                    <div class="align-image-text">
+                                        <figure class="image is-48x48">
+                                            <img src=
+                                            {% if affiliation.logo == '' %}
+                                                "{% static 'images/university-solid.png' %}"
+                                            {% else %}
+                                                "{{ affiliation.logo }}"
+                                            {% endif %}
+                                            >
+                                        </figure>
+                                        <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
+                                    </div>
+                                {% endfor %}
+                            {% endblock %}
+                        </div>
+                    {% endif %}
                 </div>
-                <div class="column">
-
-                    {% block person_affiliation %}
-                        <p class="subtitle is-6">Affiliation :</p>
-                        {% for affiliation in data_person.affiliations %}
-                            <div class="align-image-text">
-                                <figure class="image is-48x48">
-                                    <img src=
-                                    {% if affiliation.logo == '' %}
-                                        "{% static 'images/university-solid.png' %}"
-                                    {% else %}
-                                        "{{ affiliation.logo }}"
-                                    {% endif %}
-                                    >
-                                </figure>
-                                <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
-                            </div>
-                        {% endfor %}
-                    {% endblock %}
-                </div>
-            </div>
+            {% endif %}
 
             </span>
 
