@@ -104,6 +104,10 @@ trap terminate SIGTERM SIGINT
 
 flags=$1
 
+export username_ark=""
+export password_ark=""
+export shoulder=""
+
 while getopts "adfhms" opt; do
     case $opt in
         a)

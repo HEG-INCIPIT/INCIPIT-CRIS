@@ -8,6 +8,10 @@ RUN export client_secret
 RUN export redirect_uri
 RUN export url_auth
 
+RUN export username_ark
+RUN export password_ark
+RUN export shoulder
+
 # Installation of dependencies
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install grep procps -y

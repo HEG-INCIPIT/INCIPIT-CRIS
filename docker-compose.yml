@@ -9,6 +9,10 @@ services:
       username: "admin"
       # Password of the admin account of the CRIS
       password: "pw"
+      # Credentials for ARKetype API
+      username_ark: ""
+      password_ark: ""
+      shoulder: ""
       # Credentials for ORCID API
       client_id: ""
       client_secret: ""

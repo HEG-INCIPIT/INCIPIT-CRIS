@@ -1,14 +1,16 @@
 import urllib.request
 import base64
+import os
 
 class Ark:
 
-    server = 'https://dev.arketype.ch/'
-    username = 'apitest'
-    password = '1234'
-    shoulder = 'ark:/99999/fk3'
+    server = 'https://www.arketype.ch/'
+    username = os.environ['username_ark']
+    password = os.environ['password_ark']
+    shoulder = os.environ['shoulder']
 
     def mint(self, target, who, what, when):
+        print('{}, {}, {}, {}'.format(target, who, what, when))
         r = urllib.request.Request("{}shoulder/{}".format(self.server, self.shoulder))
         r.get_method = lambda: 'POST'
     
@@ -41,7 +43,7 @@ class Ark:
 
     
     def view(self, ark):
-        r = urllib.request.Request('https://dev.arketype.ch/id/{}'.format(ark))
+        r = urllib.request.Request('{}id/{}'.format(self.server, ark))
         r.get_method = lambda: 'GET'
 
         c = None
