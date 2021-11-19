@@ -17,6 +17,79 @@
     {{ message }}
 {% endblock %}
 
+{% block button_navigation %}
+<a class="link-one right-align little-space-above" href="/institutions/{{ data_institution.pid }}"><i class="fas fa-check"></i></a>
+<form id="delete_institution_form" action="/institutions/edition/delete-institution/{{data_institution.pid}}" method="post">
+    {% csrf_token %}
+    <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
+   <a class="link-one right-align little-space-above mr-5" href="javascript:$('#delete_institution_form').submit()"><i class="fas fa-times-circle"></i></a>
+</form>
+{% endblock %}
+
+{% block institution_description %}
+   <div class="separator">Description <a class="link-one ml-1" href="/institutions/edition/field/description/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></div>
+   <p class="justified">{{ data_institution.description }}</p>
+{% endblock %}
+
+{% block institution_informations %}
+<div class="columns is-multiline">
+   <div class="column keep-it-inline-parent">
+      <p class="keep-it-inline">Nom : {{ data_institution.name }} <a class="link-one is-size-6" href="/institutions/edition/field/name/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+   </div>
+   <div class="column keep-it-inline-parent">
+      <p class="keep-it-inline-parent">Nom alternatif: {{ data_institution.alternate_name }} <a class="link-one is-size-6" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+   </div>
+</div>
+<div class="columns is-multiline">
+   <div class="column keep-it-inline-parent">
+      <p class="keep-it-inline">Date de fondation : <time datetime="{{ data_institution.founding_date }}">{{ data_institution.founding_date }}</time> <a class="edit-institution link-one is-size-6" href="/institutions/edition/field/foundingDate/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+   </div>
+   <div class="column class="keep-it-inline" keep-it-inline-parent">
+      <p class="keep-it-inline">Lien vers l'institution : <a class="link-one url" href="{{ data_institution.url }}">{{ data_institution.url }}</a> <a class="edit-institution link-one is-size-6" href="/institutions/edition/field/url/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+   </div>
+</div>
+<div class="columns is-multiline">
+   <div class="column keep-it-inline-parent">
+      <form class="funder-form" action="/institutions/edition/field/add-funder/{{data_institution.pid}}" method="post">
+          {% csrf_token %}
+          <p class="keep-it-inline">Bailleur de fonds : </p>
+          {% if data_institution.funder %}
+            <button><i class="far fa-check-square"></i></button>
+          {% else %}
+            <button><i class="far fa-square"></i> </button>
+          {% endif %}
+      </form>
+   </div>
+</div>
+{% endblock %}
+
+{% block institution_workers %}
+<p class="title is-5">Employés <a class="link-one" href="/institutions/edition/field/add-worker/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+
+{% if data_institution.len_workers == 0 %}
+   <p>Il n'y a pas encore d'employés associés</p>
+{% endif %}
+
+{% for member in data_institution.workers %}
+
+<div>
+   <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
+   <a class="link-one" href="{{ member.url }}"><i class="fas fa-external-link-alt"></i></a>
+   <p class="justified little-space-below">{{ member.1.description }}</p>
+</div>
+
+{% if forloop.first %}
+<span id="more-worker">
+   {% endif %}
+
+   {% if forloop.last %}
+</span>
+{% else %}
+<hr>
+{% endif %}
+{% endfor %}
+{% endblock %}
+
 
 {% block information_header %}
 
@@ -125,7 +198,7 @@
                 <button><i class="far fa-square"></i> </button>
             </form>
         {% endif %}
-        
+
     </p>
 {% endblock %}
 
