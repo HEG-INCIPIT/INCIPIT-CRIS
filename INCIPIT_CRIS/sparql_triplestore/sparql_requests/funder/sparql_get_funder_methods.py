@@ -99,7 +99,7 @@ class SparqlGetFunderMethods:
 
         projects_sorted = []
         for project in projects:
-            projects_sorted.append(variables.sparql_get_project_object.get_data_project(project))    
+            projects_sorted.append(variables.sparql_get_project_object.get_minimum_data_project(project))
         projects_sorted.sort(key=lambda item: item['founding_date'], reverse=True)
 
         return projects_sorted

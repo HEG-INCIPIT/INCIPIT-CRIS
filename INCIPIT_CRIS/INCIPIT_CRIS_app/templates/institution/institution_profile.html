@@ -30,6 +30,7 @@
             {% endblock %}
 
             <div class="parallax">
+               {% block institution_picture %}
                <section class="header">
                   <figure class="figure ml-5 mb-2">
                       <img src=
@@ -41,6 +42,7 @@
                       width="250" height="250">
                   </figure>
                </section>
+               {% endblock %}
             </div>
 
             <section class="box top-box">
@@ -73,7 +75,7 @@
                            {% endif %}
                            >
                         </figure>
-                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
                      </div>
                      {% endfor %}
                   </div>
@@ -105,7 +107,15 @@
                      <p class="heading">Projets</p>
                   </article>
                </a>
-               <a href="#Projects" id="datasetsStats" name="datasetsStats" class="column column-right-align">
+               {% if data_institution.funder %}
+                  <a href="#ProjectsFunded" id="projectsFundedStats" name="projectsFundedStats" class="column">
+                     <article class="box">
+                        <p class="title">{{ data_institution.len_projects_funded }}</p>
+                        <p class="heading">Projets Financés</p>
+                     </article>
+                  </a>
+               {% endif %}
+               <a href="#Datasets" id="datasetsStats" name="datasetsStats" class="column column-right-align">
                   <article class="box">
                      <p class="title">{{ data_institution.len_datasets }}</p>
                      <p class="heading">Données</p>
@@ -166,7 +176,7 @@
                               {% endif %}
                               >
                            </figure>
-                           <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                           <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
                         </div>
                         {% endfor %}
                         {% endblock %}
@@ -185,7 +195,7 @@
                               {% endif %}
                               >
                            </figure>
-                           <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                           <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
                         </div>
                         {% endfor %}
                         {% endblock %}
@@ -336,8 +346,7 @@
                     <p class="title is-5">Projets</p>
 
                     {% if data_institution.len_projects == 0 %}
-                           <span id="more-project">
-                           </span>
+                       <p>Il n'y a pas encore de projets associés</p>
                     {% endif %}
 
                     {% for project in data_institution.projects %}
@@ -371,13 +380,66 @@
                     {% endfor %}
                 {% endblock %}
 
+                  {% if data_institution.len_projects > 1 %}
                 <a onclick="displayMore('more-project', 'myBtn-div-project')" class="myBtn" id="myBtn">
                     <div class="title is-6 myBtn-div" id="myBtn-div-project">
                        Voir plus
                     </div>
                 </a>
+                {% endif %}
             </section>
 
+            {% if data_institution.funder %}
+            <a class="projectsFunded" id="ProjectsFunded"></a>
+
+            <section class="data-box btn-see-more box">
+                {% block article_projects_funded %}
+                    <p class="title is-5">Projets Financés</p>
+
+                    {% if data_institution.len_projects_funded == 0 %}
+                       <p>Il n'y a pas encore de projets financés associés</p>
+                    {% endif %}
+
+                    {% for project in data_institution.projects_funded %}
+
+                       <div>
+                           <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
+                           <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                           <p class="justified little-space-below">{{ project.description }}</p>
+                           <p>
+                                {% for member in project.members %}
+                                    {% if not forloop.last %}
+                                        <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
+                                    {% else %}
+                                        <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                           </p>
+                           <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+                           <p>Financement : Bailleurs de fonds</p>
+                       </div>
+
+                       {% if forloop.first %}
+                           <span id="more-project-funded">
+                       {% endif %}
+
+                       {% if forloop.last %}
+                           </span>
+                       {% else %}
+                           <hr>
+                       {% endif %}
+                    {% endfor %}
+                {% endblock %}
+
+                  {% if data_institution.len_projects_funded > 1 %}
+                <a onclick="displayMore('more-project-funded', 'myBtn-div-project-funded')" class="myBtn" id="myBtn">
+                    <div class="title is-6 myBtn-div" id="myBtn-div-project-funded">
+                       Voir plus
+                    </div>
+                </a>
+                {% endif %}
+            </section>
+            {% endif %}
 
             <a class="datasets" id="Datasets"></a>
 
@@ -442,183 +504,6 @@
       </div>
 
       </section>
-
-
-            <!------------------------------------------------------->
-            <div class="columns">
-                {% block information_header %}
-                    <div class="column">
-                        <figure class="figure">
-                            <img src=
-                            {% if data_institution.logo == '' %}
-                                "{% static 'images/university-solid.png' %}"
-                            {% else %}
-                                "{{ data_institution.logo }}"
-                            {% endif %}
-                            width="250" height="250">
-                        </figure>
-                    </div>
-                    <div class="column">
-                            <p class="title is-4" align="justify">
-                                {{ data_institution.name }}
-                                {% if data_institution.alternate_name != '' %}
-                                    ({{ data_institution.alternate_name }})
-                                {% endif %}
-                            </p>
-                            <p class="subtitle is-6" align="justify">{{ data_institution.description }}</p>
-                    </div>
-                    <div class="column">
-                        {% if user.is_superuser %}
-                            <p>
-                                <a class="button is-primary" href="/institutions/edition/{{ data_institution.pid }}">Modifier</a>
-                            </p>
-                        {% endif %}
-                    </div>
-                {% endblock %}
-            </div>
-        </section>
-
-        <section>
-
-            <div class="tabs is-boxed">
-                <ul>
-                    <li class="is-active" data-tab="apropos">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>A propos</span>
-                    </a>
-                    </li>
-                    <li data-tab="workers">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Employés</span>
-                    </a>
-                    </li>
-                    <li data-tab="affiliates">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Affiliés</span>
-                    </a>
-                    </li>
-                    <li data-tab="publications">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Articles</span>
-                    </a>
-                    </li>
-                    <li data-tab="projects">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Projets</span>
-                    </a>
-                    </li>
-                    <li data-tab="data">
-                    <a>
-                        <span class=""><i class="" aria-hidden="true"></i></span>
-                        <span>Données</span>
-                    </a>
-                    </li>
-                    {% if data_institution.funder %}
-                        <li data-tab="funder">
-                            <a>
-                                <span class=""><i class="" aria-hidden="true"></i></span>
-                                <span>Projet(s) Financé(s)</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-
-            <div class="tab-content">
-                <div class="is-active" data-content="apropos">
-                    {% block apropos %}
-                        <p>Nom : {{ data_institution.name }}</p>
-                        <p>Nom alternatif : {{ data_institution.alternate_name }}</p>
-                        <p>Description : {{ data_institution.description }}</p>
-                        <p>Lien vers l'institution : {{ data_institution.url }}</p>
-                        <p>Date de fondation : {{ data_institution.founding_date }}</p>
-                        <p>Organisations parente :
-                            {% for organization in data_institution.parent_organizations %}
-                                <p>
-                                    <a class="link-one" href="/institutions/{{ organization.0 }}">{{ organization.1.name }} ({{ organization.1.alternate_name }})</a>
-                                </p>
-                            {% endfor %}
-                        </p>
-                        <p>Sous-organisations :
-                            {% for organization in data_institution.sub_organizations %}
-                                <p>
-                                    <a class="link-one" href="/institutions/{{ organization.0 }}">{{ organization.1.name }} ({{ organization.1.alternate_name }})</a>
-                                </p>
-                            {% endfor %}
-                        </p>
-                        <p>Bailleur de fonds : {{ data_institution.funder }}</p>
-                    {% endblock %}
-                </div>
-                <div data-content="workers">
-                    {% block workers %}
-                        Employés :
-                        {% for worker in data_institution.workers %}
-                            <p>
-                                <a class="link-one" href="/persons/{{ worker.pid }}">{{ worker.given_name }} {{ worker.family_name }}</a>
-                            </p>
-                        {% endfor %}
-                    {% endblock %}
-                </div>
-                <div data-content="affiliates">
-                    {% block affiliates %}
-                        Affiliés :
-                        {% for affiliate in data_institution.affiliates %}
-                            <p>
-                                <a class="link-one" href="/persons/{{ affiliate.pid }}">{{ affiliate.given_name }} {{ affiliate.family_name }}</a>
-                            </p>
-                        {% endfor %}
-                    {% endblock %}
-                </div>
-                <div data-content="publications">
-                    {% block articles %}
-                        Articles :
-                        {% for article in data_institution.articles %}
-                            <p>
-                                <a class="link-one" href="/articles/{{ article.pid }}">{{ article.name }}</a>
-                            </p>
-                        {% endfor %}
-                    {% endblock %}
-                </div>
-                <div data-content="projects">
-                    {% block projects %}
-                        <p>Projets : </p>
-                        {% for project in data_institution.projects %}
-                            <p>
-                                <a class="link-one" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-                            </p>
-                        {% endfor %}
-                    {% endblock %}
-                </div>
-                <div data-content="data">
-                    {% block institution %}
-                        <p>Données : </p>
-                        {% for institution in data_institution.institutions %}
-                            <p>
-                                <a class="link-one" href="/institutions/{{ institution.pid }}">{{ institution.name }}</a>
-                            </p>
-                        {% endfor %}
-                    {% endblock %}
-                </div>
-                {% if data_institution.funder %}
-                    <div data-content="funder">
-                        {% block funder %}
-                            <p>Projet(s) Financé(s) : </p>
-                            {% for project_funded in data_institution.projects_funded %}
-                            <p>
-                                <a class="link-one" href="/projects/{{ project_funded.pid }}">{{ project_funded.name }}</a>
-                            </p>
-                        {% endfor %}
-                        {% endblock %}
-                    </div>
-                {% endif %}
-            </div>
-        </section>
-
         {% include 'main/footer.html' %}
         <script>
 
