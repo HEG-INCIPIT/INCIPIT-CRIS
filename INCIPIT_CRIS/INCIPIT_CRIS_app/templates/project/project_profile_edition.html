@@ -26,7 +26,7 @@
 <a class="link-one right-align little-space-above" href="/projects/{{ data_project.pid }}"><i class="fas fa-check"></i></a>
 {% endblock %}
 {% block project_information %}
-<p class="title is-4 name">{{ data_project.name }} <a class="link-one" href="/projects/edition/field/name/{{data_project.pid}}"><i class="fas fa-edit"></i></a></p>
+<p class="title is-4 name">{{ data_project.name }}</p>
 <p style="visibility: hidden"></p>
 {% endblock %}
 
@@ -61,6 +61,11 @@
 
 {% block article_informations %}
 <div class="columns is-multiline">
+   <div class="column is-one-third">
+      <div>
+         <p>Name : {{ data_project.name }}  <a class="link-one" href="/projects/edition/field/name/{{data_project.pid}}"><i class="fas fa-edit"></i></a></p>
+      </div>
+   </div>
    <div class="column is-one-third">
       <div>
          <p>Date de début : <time datetime="{{ data_project.founding_date }}">{{ data_project.founding_date }}</time> <a class="link-one" href="/projects/edition/field/foundingDate/{{data_project.pid}}"><i class="fas fa-edit"></i></a></p>
