@@ -109,6 +109,11 @@
             {% block dataset_informations %}
             <div class="columns is-multiline">
                <div class="column keep-it-inline-parent">
+                  <p class="keep-it-inline">Nom : {{ data_dataset.name }}</p>
+               </div>
+            </div>
+            <div class="columns is-multiline">
+               <div class="column keep-it-inline-parent">
                   <p class="keep-it-inline">Date de création : <time datetime="{{ data_dataset.created_date }}">{{ data_dataset.created_date }}</time></p>
                </div>
                <div class="column keep-it-inline-parent">

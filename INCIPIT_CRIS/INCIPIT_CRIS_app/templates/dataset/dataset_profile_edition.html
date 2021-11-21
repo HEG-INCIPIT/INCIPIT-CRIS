@@ -29,7 +29,7 @@
 
 
 {% block dataset_information %}
-<p class="title is-4 name">{{ data_dataset.name }} <a class="link-one" href="/datasets/edition/field/name/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
+<p class="title is-4 name">{{ data_dataset.name }}</p>
 <p style="visibility: hidden"></p>
 {% endblock %}
 
@@ -39,6 +39,11 @@
 {% endblock %}
 
 {% block dataset_informations %}
+<div class="columns is-multiline">
+   <div class="column keep-it-inline-parent">
+      <p class="keep-it-inline">Nom : {{ data_dataset.name }} <a class="link-one" href="/datasets/edition/field/name/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
+   </div>
+</div>
 <div class="columns is-multiline">
    <div class="column keep-it-inline-parent">
       <p class="keep-it-inline">Date de création : <time datetime="{{ data_dataset.created_date }}">{{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/dateCreated/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
