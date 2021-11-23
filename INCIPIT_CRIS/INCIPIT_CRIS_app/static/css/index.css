@@ -84,3 +84,7 @@ input[type="text"] {
     position: relative;
     padding-bottom: 20px;
 }
+
+.select2 {
+    width: 1000px !important;
+}
