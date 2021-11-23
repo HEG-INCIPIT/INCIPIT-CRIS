@@ -245,15 +245,15 @@ def project_field_edition(request, field_to_modify, pid):
             if request.method == 'POST':
                 if form.is_valid():
                     if field_to_modify == 'foundingDate':
+                        date_project = str(data_project['founding_date']) + " 00:00:00+00:00" if data_project['founding_date'] != 'None' else str(data_project['founding_date'])
                         variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['founding_date'],
-                                                                    str(data_project['founding_date']) +
-                                                                    " 00:00:00+00:00")
+                                                                    date_project)
                     elif field_to_modify == 'dissolutionDate':
+                        date_project = str(data_project['dissolution_date']) + " 00:00:00+00:00" if data_project['dissolution_date'] != 'None' else str(data_project['dissolution_date'])
                         variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['dissolution_date'],
-                                                                    str(data_project['dissolution_date']) +
-                                                                    " 00:00:00+00:00")
+                                                                    date_project)
                     elif field_to_modify == 'logo':
                         variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
                                                                       form.cleaned_data['url'],

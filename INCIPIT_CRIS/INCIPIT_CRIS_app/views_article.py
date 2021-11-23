@@ -252,10 +252,10 @@ def article_field_edition(request, field_to_modify, pid):
                         pass # For debugging purposes, for now it does nothing
 
                     if field_to_modify == 'datePublished':
+                        date_project = str(data_article['date_published']) + " 00:00:00+00:00" if data_article['date_published'] != 'None' else str(data_article['date_published'])
                         variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['date_published'],
-                                                                    str(data_article['date_published']) +
-                                                                    " 00:00:00+00:00")
+                                                                    date_project)
                     else:
                         variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
                                                                       form.cleaned_data[field_to_modify],
