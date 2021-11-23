@@ -33,3 +33,7 @@ hr {
 #cookiebannerModal{
    z-index: 999 !important;
 }
+
+.cookiebannerSubmit{
+   cursor: pointer;
+}
