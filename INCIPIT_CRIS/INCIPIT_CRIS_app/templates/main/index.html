@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     </head>
     <body>
+        {% load cookiebanner %}
+        {% cookiebanner_modal 'cookies' %}
         {% include 'main/navbar.html' %}
 
         <div class="parallax"><p class="is-size-2">Bienvenue sur INCIPIT-CRIS, le CRIS de la HEG</p></div>
@@ -118,7 +120,7 @@
                 </a>
             </div>
         </section>
-        
+
         {% include 'main/footer.html' %}
     </body>
 </html>

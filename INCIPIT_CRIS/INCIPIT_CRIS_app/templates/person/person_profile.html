@@ -12,7 +12,8 @@
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
     </head>
     <body>
-
+      {% load cookiebanner %}
+      {% cookiebanner_modal 'cookies' %}
         {% include 'main/navbar.html' %}
 
         <section>
@@ -56,7 +57,7 @@
                             <a title="Editer le profil" class="link-one right-align little-space-above" href="/persons/edition/{{ data_person.pid }}"><i class="fas fa-user-edit"></i></a>
                         {% endif %}
                     {% endblock %}
-                    
+
                     <div class="column">
                         {% block person_information %}
                             <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
@@ -68,7 +69,7 @@
                             {% endif %}
                         {% endblock %}
                     </div>
-                    
+
                     <div class="column is-one-third header">
                         {% for work in data_person.works %}
                             <div class="align-image-text">
@@ -190,7 +191,7 @@
                             <p class="keep-it-inline">Email : {{ data_person.email }}</p>
                         </div>
                     {% endif %}
-                    
+
                     {% if data_person.telephone != '' %}
                         <div class="column keep-it-inline-parent">
                             <p class="keep-it-inline">Téléphone : {{ data_person.telephone }}</p>
@@ -281,7 +282,7 @@
                 {% endif %}
 
                 {% for article in data_person.articles %}
-                
+
                     <div>
                         <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
                         {% if article.url != '' %}
@@ -295,7 +296,7 @@
                                 {% else %}
                                     <a class="link-one" href="/persons/{{ author.1.pid }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
                                 {% endif %}
-                                
+
                             {% endfor %}
                         </p>
                         {% if article.date_published != "None" %}
@@ -335,7 +336,7 @@
                 {% endif %}
 
                 {% for project in data_person.projects %}
-                
+
                     <div>
                         <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
                         {% if project.url != '' %}
@@ -397,9 +398,9 @@
                 {% if data_person.len_datasets == 0 %}
                         <p>Il n'y a pas encore de jeux de données associés</p>
                 {% endif %}
-                
+
                 {% for dataset in data_person.datasets %}
-                
+
                     <div>
                         <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
                         {% if dataset.url != '' %}
@@ -459,10 +460,10 @@
                 </a>
             {% endif %}
         </section>
-        
+
         {% include 'main/footer.html' %}
     </body>
-    
+
     <script>
 
         function displayMore(spanId, btn) {
