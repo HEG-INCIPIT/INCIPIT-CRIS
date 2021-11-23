@@ -298,7 +298,9 @@
                                 
                             {% endfor %}
                         </p>
-                        <i>{{ article.date_published }}</i>
+                        {% if article.date_published != "None" %}
+                            <i>{{ article.date_published }}</i>
+                        {% endif %}
                     </div>
 
                     {% if forloop.first %}
@@ -349,16 +351,20 @@
                                 {% endif %}
                             {% endfor %}
                         </p>
-                        <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
-                        <p>Financement : 
-                            {% for funder in project.funders %}
-                                {% if not forloop.last %}
-                                    <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
-                                {% else %}
-                                    <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
-                                {% endif %}
-                            {% endfor %}
-                        </p></p>
+                        {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
+                            <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+                        {% endif %}
+                        {% if project.funders|length > 0 %}
+                            <p>Financement : 
+                                {% for funder in project.funders %}
+                                    {% if not forloop.last %}
+                                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+                                    {% else %}
+                                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% endif %}
                     </div>
 
                     {% if forloop.first %}

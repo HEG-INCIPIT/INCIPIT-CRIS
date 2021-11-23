@@ -30,22 +30,30 @@
             {% block information %}
             {% endblock %}
 
-            <div class="parallax">
-            <section style="opacity: 0;height:180px;" class="header">
+            <section>
+                <div class="parallax">
+                    <div class="right-align">
+                        {% if data_article.doi != '' %}
+                            <p class="doi has-border title is-5">
+                                <a title="DOI de l'article" class="police-color" href="https://doi.org/{{ data_article.doi }}">{{ data_article.doi }}</a>
+                                <strong class="doi-magic is-background-blue">DOI</strong>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
             </section>
-            </div>
 
             <section class="box top-box">
                 <div class="columns">
                     {% block button_navigation %}
                         {% if can_edit %}
-                            <a class="link-one right-align little-space-above" href="/articles/edition/{{ data_article.pid }}"><i class="fas fa-user-edit"></i></a>
+                            <a class="link-one right-align little-space-above" href="/articles/edition/{{ data_article.pid }}"><i class="fas fa-pen"></i></a>
                         {% endif %}
                     {% endblock %}
 
                     <div class="column">
                         {% block article_information %}
-                            <p class="title is-4 name">{{ data_article.name }}</p>
+                            <p class="title is-4 name">{{ data_article.name }} <a class="link-one" href="{{ data_article.url }}"><i class="fas fa-external-link-alt"></i></a></p>
                             <p style="visibility: hidden"></p>
                         {% endblock %}
                     </div>
@@ -91,56 +99,73 @@
             </div>
 
             <section class="data-box btn-see-more box">
-                <p class="title is-5">A propos</p>
-                {% block article_description %}
-                    <p class="space-below">Description :</p>
-                    <p class="justified">{{ data_article.abstract }}</p>
-                {% endblock %}
+                    <p class="title is-5">A propos</p>
+                    {% block article_description %}
+                        {% if data_article.abstract != '' %}
+                            <div class="separator">Résumé</div>
+                            <p class="justified">{{ data_article.abstract }}</p>
+                            <span id="more">
+                        {% endif %}
+                    {% endblock %}
 
-                <span id="more">
-
-                <div class="separator"></div>
+                <div class="separator">A propos</div>
 
                 {% block article_informations %}
                     <div class="columns is-multiline">
                         <div class="column is-one-third">
-
                             <div>
-                                <p>Date de publication : <time datetime="{{ data_article.date_published }}">{{ data_article.date_published }}</time></p>
+                                <p>Nom : {{ data_article.name }}</p>
                             </div>
                         </div>
-                        <div class="column is-one-third">
-                        </div>
-                        <div class="column is-one-third">
-                            <p>URL : <a class="link-one url" href="{{ data_article.url }}">{{ data_article.url }}</a></p>
-                        </div>
+                        {% if data_article.date_published != None %}
+                            <div class="column is-one-third">
+                                <div>
+                                    <p>Date de publication : <time datetime="{{ data_article.date_published }}">{{ data_article.date_published }}</time></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if data_article.url != None %}
+                            <div class="column is-one-third">
+                                <p>URL : <a class="link-one url" href="{{ data_article.url }}">{{ data_article.url }}</a></p>
+                            </div>
+                        {% endif %}
+                        {% if data_article.doi != None %}
+                            <div class="column is-one-third">
+                                <p>DOI : <a class="link-one url" href="https://doi.org/{{ data_article.doi }}">{{ data_article.doi }}</a></p>
+                            </div>
+                        {% endif %}
 
                     </div>
                 {% endblock %}
 
+                {% if data_article.abstract == '' %}
+                    <span id="more">
+                {% endif %}
+
                 <div class="separator">Institutions</div>
 
-                <div class="columns">
-                    <div class="column">
-                        {% block article_work %}
-                            {% for work in data_article.institutions %}
-                                <div class="align-image-text">
-                                    <figure class="image is-48x48">
-                                            <img src=
-                                            {% if work.logo == '' %}
-                                                "{% static 'images/university-solid.png' %}"
-                                            {% else %}
-                                                "{{ work.logo }}"
-                                            {% endif %}
-                                            >
-                                    </figure>
-                                    <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
-                                </div>
-                            {% endfor %}
-                        {% endblock %}
-
-                    </div>
-                </div>
+                {% block article_work %}
+                    {% if data_article.institutions|length > 0 %}
+                        <div class="columns">
+                            <div class="column">
+                                {% for work in data_article.institutions %}
+                                    <div class="align-image-text">
+                                        <figure class="image is-48x48">
+                                                <img src=
+                                                {% if work.logo == '' %}
+                                                    "{% static 'images/university-solid.png' %}"
+                                                {% else %}
+                                                    "{{ work.logo }}"
+                                                {% endif %}
+                                                >
+                                        </figure>
+                                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endblock %}
 
                 </span>
 
@@ -158,15 +183,13 @@
                     <p class="title is-5">Auteurs</p>
 
                     {% if data_article.len_authors == 0 %}
-                           <span id="more-article">
-                           </span>
+                           <p>Il n'y a pas encore d'auteurs associés</p>
                     {% endif %}
 
                     {% for author in data_article.authors %}
 
                        <div>
                            <a class="link-one title is-6" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
-                           <a class="link-one" href="{{ author.url }}"><i class="fas fa-external-link-alt"></i></a>
                            <p class="justified little-space-below">{{ author.1.description }}</p>
                        </div>
 
@@ -182,11 +205,13 @@
                     {% endfor %}
                 {% endblock %}
 
-                <a onclick="displayMore('more-article', 'myBtn-div-article')" class="myBtn" id="myBtn">
-                    <div class="title is-6 myBtn-div" id="myBtn-div-article">
-                       Voir plus
-                    </div>
-                </a>
+                {% if data_article.len_authors > 1 %}
+                    <a onclick="displayMore('more-article', 'myBtn-div-article')" class="myBtn" id="myBtn">
+                        <div class="title is-6 myBtn-div" id="myBtn-div-article">
+                        Voir plus
+                        </div>
+                    </a>
+                {% endif %}
             </section>
 
             <a class="projects" id="Projects"></a>
@@ -196,17 +221,16 @@
                     <p class="title is-5">Projets</p>
 
                     {% if data_article.len_projects == 0 %}
-                           <span id="more-project">
-                           </span>
+                        <p>Il n'y a pas encore de projets associés</p>
                     {% endif %}
 
                     {% for project in data_article.projects %}
 
                        <div>
-                           <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-                           <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
-                           <p class="justified little-space-below">{{ project.description }}</p>
-                           <p>
+                            <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
+                            <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                            <p class="justified little-space-below">{{ project.description }}</p>
+                            <p>
                                 {% for member in project.members %}
                                     {% if not forloop.last %}
                                         <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
@@ -214,9 +238,20 @@
                                         <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
                                     {% endif %}
                                 {% endfor %}
+                            </p>
+                            {% if project.founding_date != None and project.dissolution_date != None %}
+                                <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+                            {% endif %}
+                            
+                            <p>Financement : 
+                                {% for funder in project.funders %}
+                                    {% if not forloop.last %}
+                                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+                                    {% else %}
+                                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                    {% endif %}
+                                {% endfor %}
                            </p>
-                           <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
-                           <p>Financement : Bailleurs de fonds</p>
                        </div>
 
                        {% if forloop.first %}
@@ -231,11 +266,13 @@
                     {% endfor %}
                 {% endblock %}
 
-                <a onclick="displayMore('more-project', 'myBtn-div-project')" class="myBtn" id="myBtn">
-                    <div class="title is-6 myBtn-div" id="myBtn-div-project">
-                       Voir plus
-                    </div>
-                </a>
+                {% if data_article.len_projects > 1 %}
+                    <a onclick="displayMore('more-project', 'myBtn-div-project')" class="myBtn" id="myBtn">
+                        <div class="title is-6 myBtn-div" id="myBtn-div-project">
+                        Voir plus
+                        </div>
+                    </a>
+                {% endif %}
             </section>
 
         <a class="datasets" id="Datasets"></a>
@@ -245,8 +282,7 @@
                 <p class="title is-5">Données</p>
 
                 {% if data_article.len_datasets == 0 %}
-                        <span id="more-dataset">
-                        </span>
+                        <p>Il n'y a pas encore de projets associés</p>
                 {% endif %}
 
                 {% for dataset in data_article.datasets %}
@@ -290,11 +326,13 @@
                 {% endfor %}
            {% endblock %}
 
-           <a onclick="displayMore('more-dataset', 'myBtn-div-dataset')" class="myBtn" id="myBtn">
-                <div class="title is-6 myBtn-div" id="myBtn-div-dataset">
-                    Voir plus
-                </div>
-           </a>
+            {% if data_article.len_datasets > 0 %}
+                <a onclick="displayMore('more-dataset', 'myBtn-div-dataset')" class="myBtn" id="myBtn">
+                    <div class="title is-6 myBtn-div" id="myBtn-div-dataset">
+                        Voir plus
+                    </div>
+                </a>
+            {% endif %}
         </section>
 
         {% include 'main/footer.html' %}
