@@ -11,7 +11,8 @@
    <link rel="stylesheet" href="{% static 'css/person_profile.css' %}">
 </head>
 <body>
-
+   {% load cookiebanner %}
+   {% cookiebanner_modal 'cookies' %}
    {% include 'main/navbar.html' %}
 
    <section>
