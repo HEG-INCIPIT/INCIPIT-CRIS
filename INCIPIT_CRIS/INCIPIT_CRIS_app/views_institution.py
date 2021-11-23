@@ -226,10 +226,10 @@ def institution_field_edition(request, field_to_modify, pid):
             if request.method == 'POST':
                 if form.is_valid():
                     if field_to_modify == 'foundingDate':
-                        date_project = str(data_institution['modified_date']) + " 00:00:00+00:00" if data_institution['modified_date'] != 'None' else str(data_institution['modified_date'])
+                        date_institution = str(data_institution['modified_date']) + " 00:00:00+00:00" if data_institution['modified_date'] != 'None' else str(data_institution['modified_date'])
                         variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['founding_date'],
-                                                                    date_project)
+                                                                    date_institution)
                     elif field_to_modify == 'alternateName':
                         variables.sparql_generic_post_object.update_string_leaf(pid, field_to_modify,
                                                                       form.cleaned_data['alternate_name'],
