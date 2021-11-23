@@ -130,52 +130,61 @@
 {% endif %}
 
 
-{% block person_work %}
-    <p class="subtitle is-6">Travail : <a title="Ajouter une institution de travail" class="link-one" href="/persons/edition/profil/add-work/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-        {% for work in data_person.works %}
-            <div class="align-image-text">
-            <figure class="image is-48x48">
-                    <img src=
-                    {% if work.logo == '' %}
-                        "{% static 'images/university-solid.png' %}"
-                    {% else %}
-                        "{{ work.logo }}"
-                    {% endif %}
-                    >
-            </figure>
-            <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
 
-            <form class="align-button-centered" action="/persons/edition/profil/delete-work/{{ data_person.pid }}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="workARK" name="workARK" value="{{ work.pid }}">
-                <button title="Supprimer {{ work.name }} ({{ work.alternate_name }}) comme institution de travail" class="delete"></button>
-            </form>
-            </div>
-        {% endfor %}
-{% endblock %}
+{% block person_institutions %}
+    <div class="separator">Institutions</div>
 
-{% block person_affiliation %}
-    <p class="subtitle is-6">Affiliation : <a title="Ajouter une institution d'affiliation" class="link-one" href="/persons/edition/profil/add-affiliation/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-    {% for affiliation in data_person.affiliations %}
-        <div class="align-image-text">
-            <figure class="image is-48x48">
-                <img src=
-                {% if affiliation.logo == '' %}
-                    "{% static 'images/university-solid.png' %}"
-                {% else %}
-                    "{{ affiliation.logo }}"
-                {% endif %}
-                >
-            </figure>
-            <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
-            <form class="align-button-centered" action="/persons/edition/profil/delete-affiliation/{{ data_person.pid }}" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="affiliationARK" name="affiliationARK" value="{{ affiliation.pid }}">
-                <button title="Supprimer l'affiliation à {{ affiliation.name }} ({{ affiliation.alternate_name }})" class="delete"></button>
-            </form>
+    <div class="columns">
+        <div class="column">
+            <p class="subtitle is-6">Travail : <a title="Ajouter une institution de travail" class="link-one" href="/persons/edition/profil/add-work/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+            {% for work in data_person.works %}
+                <div class="align-image-text">
+                <figure class="image is-48x48">
+                        <img src=
+                        {% if work.logo == '' %}
+                            "{% static 'images/university-solid.png' %}"
+                        {% else %}
+                            "{{ work.logo }}"
+                        {% endif %}
+                        >
+                </figure>
+                <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+
+                <form class="align-button-centered" action="/persons/edition/profil/delete-work/{{ data_person.pid }}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="workARK" name="workARK" value="{{ work.pid }}">
+                    <button title="Supprimer {{ work.name }} ({{ work.alternate_name }}) comme institution de travail" class="delete"></button>
+                </form>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+
+        <div class="column">
+            <p class="subtitle is-6">Affiliation : <a title="Ajouter une institution d'affiliation" class="link-one" href="/persons/edition/profil/add-affiliation/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+            {% for affiliation in data_person.affiliations %}
+                <div class="align-image-text">
+                    <figure class="image is-48x48">
+                        <img src=
+                        {% if affiliation.logo == '' %}
+                            "{% static 'images/university-solid.png' %}"
+                        {% else %}
+                            "{{ affiliation.logo }}"
+                        {% endif %}
+                        >
+                    </figure>
+                    <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
+                    <form class="align-button-centered" action="/persons/edition/profil/delete-affiliation/{{ data_person.pid }}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" id="affiliationARK" name="affiliationARK" value="{{ affiliation.pid }}">
+                        <button title="Supprimer l'affiliation à {{ affiliation.name }} ({{ affiliation.alternate_name }})" class="delete"></button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
+
+
 
 {% block person_articles %}
     <p class="title is-5">Articles <a title="Ajouter un article" class="link-one" href="/persons/edition/profil/add-article/{{data_person.pid}}"><i class="fas fa-plus-circle"></i></a></p>

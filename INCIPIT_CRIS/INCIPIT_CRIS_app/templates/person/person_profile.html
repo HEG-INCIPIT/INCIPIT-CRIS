@@ -211,13 +211,14 @@
                 </div>
             {% endblock %}
 
-            {% if data_person.works|length > 0 or data_person.affiliations|length > 0 %}
-                <div class="separator">Institutions</div>
+            {% block person_institutions %}
 
-                <div class="columns">
-                    {% if data_person.works|length > 0 %}
-                        <div class="column">
-                            {% block person_work %}
+                {% if data_person.works|length > 0 or data_person.affiliations|length > 0 %}
+                    <div class="separator">Institutions</div>
+
+                    <div class="columns">
+                        {% if data_person.works|length > 0 %}
+                            <div class="column">
                                 <p class="subtitle is-6">Travail :</p>
                                 {% for work in data_person.works %}
                                     <div class="align-image-text">
@@ -233,14 +234,11 @@
                                         <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
                                     </div>
                                 {% endfor %}
-                            {% endblock %}
-                        </div>
-                    {% endif %}
+                            </div>
+                        {% endif %}
 
-                    {% if data_person.affiliations|length > 0 %}
-                        <div class="column">
-
-                            {% block person_affiliation %}
+                        {% if data_person.affiliations|length > 0 %}
+                            <div class="column">
                                 <p class="subtitle is-6">Affiliation :</p>
                                 {% for affiliation in data_person.affiliations %}
                                     <div class="align-image-text">
@@ -256,11 +254,12 @@
                                         <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
                                     </div>
                                 {% endfor %}
-                            {% endblock %}
-                        </div>
-                    {% endif %}
-                </div>
-            {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+            {% endblock %}
 
             </span>
 
