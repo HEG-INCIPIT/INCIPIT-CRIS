@@ -41,8 +41,38 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cookiebanner'
 ]
-
+COOKIEBANNER = {
+    "title": "Réglages des cookies",
+    "header_text": "Nous utilisons des cookies sur notre site.",
+    "footer_text": "Accepter nos cookies, s'il vous plaît.",
+    # "footer_links": [
+    #     {"title": "Imprint", "href": "/imprint"},
+    #     {"title": "Privacy", "href": "/privacy"},
+    # ],
+    "groups": [
+        {
+            "id": "essential",
+            "name": "Essentiel",
+            "description": "Ces cookies essentiels sont nécessaires au fonctionnement du site.",
+            "cookies": [
+                {
+                    "pattern": "cookiebanner",
+                    "description": "Meta cookie qui gère les cookies.",
+                },
+                {
+                    "pattern": "csrftoken",
+                    "description": "Ce cookie prévient les attaques de type \"Cross-Site-Request-Forgery attacks.\"",
+                },
+                {
+                    "pattern": "sessionid",
+                    "description": "Ce cookie sert à la connexion.",
+                },
+            ],
+        }
+    ],
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

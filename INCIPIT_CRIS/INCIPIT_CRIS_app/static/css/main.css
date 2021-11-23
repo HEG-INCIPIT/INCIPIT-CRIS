@@ -30,3 +30,6 @@ hr {
 .link-one svg:hover {
     color: #b5b5b5;
 }
+#cookiebannerModal{
+   z-index: 999 !important;
+}
