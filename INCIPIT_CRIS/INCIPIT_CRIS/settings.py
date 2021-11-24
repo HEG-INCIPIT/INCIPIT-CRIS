@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cookiebanner'
+    'cookiebanner',
 ]
 COOKIEBANNER = {
     "title": "Réglages des cookies",
