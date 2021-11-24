@@ -12,7 +12,6 @@
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
     </head>
     <body>
-
         {% include 'main/navbar.html' %}
 
         <section>
@@ -56,7 +55,7 @@
                             <a title="Editer le profil" class="link-one right-align little-space-above" href="/persons/edition/{{ data_person.pid }}"><i class="fas fa-user-edit"></i></a>
                         {% endif %}
                     {% endblock %}
-                    
+
                     <div class="column">
                         {% block person_information %}
                             <p class="title is-4 name break">{{ data_person.given_name }} {{ data_person.family_name }}</p>
@@ -68,7 +67,7 @@
                             {% endif %}
                         {% endblock %}
                     </div>
-                    
+
                     <div class="column is-one-third header">
                         {% for work in data_person.works %}
                             <div class="align-image-text">
@@ -190,7 +189,7 @@
                             <p class="keep-it-inline">Email : {{ data_person.email }}</p>
                         </div>
                     {% endif %}
-                    
+
                     {% if data_person.telephone != '' %}
                         <div class="column keep-it-inline-parent">
                             <p class="keep-it-inline">Téléphone : {{ data_person.telephone }}</p>
@@ -211,13 +210,14 @@
                 </div>
             {% endblock %}
 
-            {% if data_person.works|length > 0 or data_person.affiliations|length > 0 %}
-                <div class="separator">Institutions</div>
+            {% block person_institutions %}
 
-                <div class="columns">
-                    {% if data_person.works|length > 0 %}
-                        <div class="column">
-                            {% block person_work %}
+                {% if data_person.works|length > 0 or data_person.affiliations|length > 0 %}
+                    <div class="separator">Institutions</div>
+
+                    <div class="columns">
+                        {% if data_person.works|length > 0 %}
+                            <div class="column">
                                 <p class="subtitle is-6">Travail :</p>
                                 {% for work in data_person.works %}
                                     <div class="align-image-text">
@@ -233,14 +233,11 @@
                                         <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
                                     </div>
                                 {% endfor %}
-                            {% endblock %}
-                        </div>
-                    {% endif %}
+                            </div>
+                        {% endif %}
 
-                    {% if data_person.affiliations|length > 0 %}
-                        <div class="column">
-
-                            {% block person_affiliation %}
+                        {% if data_person.affiliations|length > 0 %}
+                            <div class="column">
                                 <p class="subtitle is-6">Affiliation :</p>
                                 {% for affiliation in data_person.affiliations %}
                                     <div class="align-image-text">
@@ -256,11 +253,12 @@
                                         <a class="link-one institution-name" href="/institutions/{{ affiliation.pid }}">{{ affiliation.name }} ({{ affiliation.alternate_name }})</a>
                                     </div>
                                 {% endfor %}
-                            {% endblock %}
-                        </div>
-                    {% endif %}
-                </div>
-            {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+            {% endblock %}
 
             </span>
 
@@ -282,7 +280,7 @@
                 {% endif %}
 
                 {% for article in data_person.articles %}
-                
+
                     <div>
                         <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
                         {% if article.url != '' %}
@@ -296,10 +294,12 @@
                                 {% else %}
                                     <a class="link-one" href="/persons/{{ author.1.pid }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
                                 {% endif %}
-                                
+
                             {% endfor %}
                         </p>
-                        <i>{{ article.date_published }}</i>
+                        {% if article.date_published != "None" %}
+                            <i>{{ article.date_published }}</i>
+                        {% endif %}
                     </div>
 
                     {% if forloop.first %}
@@ -334,7 +334,7 @@
                 {% endif %}
 
                 {% for project in data_person.projects %}
-                
+
                     <div>
                         <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
                         {% if project.url != '' %}
@@ -350,16 +350,20 @@
                                 {% endif %}
                             {% endfor %}
                         </p>
-                        <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
-                        <p>Financement : 
-                            {% for funder in project.funders %}
-                                {% if not forloop.last %}
-                                    <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
-                                {% else %}
-                                    <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
-                                {% endif %}
-                            {% endfor %}
-                        </p></p>
+                        {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
+                            <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+                        {% endif %}
+                        {% if project.funders|length > 0 %}
+                            <p>Financement : 
+                                {% for funder in project.funders %}
+                                    {% if not forloop.last %}
+                                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+                                    {% else %}
+                                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% endif %}
                     </div>
 
                     {% if forloop.first %}
@@ -392,9 +396,9 @@
                 {% if data_person.len_datasets == 0 %}
                         <p>Il n'y a pas encore de jeux de données associés</p>
                 {% endif %}
-                
+
                 {% for dataset in data_person.datasets %}
-                
+
                     <div>
                         <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
                         {% if dataset.url != '' %}
@@ -454,10 +458,10 @@
                 </a>
             {% endif %}
         </section>
-        
+
         {% include 'main/footer.html' %}
     </body>
-    
+
     <script>
 
         function displayMore(spanId, btn) {

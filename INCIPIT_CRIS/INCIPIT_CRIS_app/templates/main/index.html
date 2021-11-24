@@ -6,11 +6,16 @@
         <title>INCIPIT-CRIS</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         {% load static %}
+        <script src="{% static 'js/jquery-3.1.0.js' %}"></script>
+        <script src="{% static 'js/select2.min.js' %}"></script>
+        <link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
         <link rel="stylesheet" href="{% static 'css/index.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
         <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     </head>
     <body>
+        {% load cookiebanner %}
+        {% cookiebanner_modal 'cookies' %}
         {% include 'main/navbar.html' %}
 
         <div class="parallax"><p class="is-size-2">Bienvenue sur INCIPIT-CRIS, le CRIS de la HEG</p></div>
@@ -115,7 +120,7 @@
                 </a>
             </div>
         </section>
-        
+
         {% include 'main/footer.html' %}
     </body>
 </html>

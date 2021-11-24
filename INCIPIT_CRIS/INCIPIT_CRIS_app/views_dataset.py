@@ -247,15 +247,15 @@ def dataset_field_edition(request, field_to_modify, pid):
             if request.method == 'POST':
                 if form.is_valid():
                     if field_to_modify == 'dateCreated':
+                        date_dataset = str(data_dataset['created_date']) + " 00:00:00+00:00" if data_dataset['created_date'] != 'None' else str(data_dataset['created_date'])
                         variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['created_date'],
-                                                                    str(data_dataset['created_date']) +
-                                                                    ' 00:00:00+00:00')
+                                                                    date_dataset)
                     elif field_to_modify == 'dateModified':
+                        date_dataset = str(data_dataset['modified_date']) + " 00:00:00+00:00" if data_dataset['modified_date'] != 'None' else str(data_dataset['modified_date'])
                         variables.sparql_generic_post_object.update_date_leaf(pid, field_to_modify,
                                                                     form.cleaned_data['modified_date'],
-                                                                    str(data_dataset['modified_date']) +
-                                                                    ' 00:00:00+00:00')
+                                                                    date_dataset)
                     elif field_to_modify == 'url-details':
                         variables.sparql_generic_post_object.update_string_leaf(pid, 'url',
                                                                     form.cleaned_data['url_details'],

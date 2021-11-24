@@ -2,6 +2,7 @@
 env/
 fuseki/run/databases/
 fuseki/run/configuration/
+fuseki/run/system_files/
 fuseki/dataset/
 fuseki/run/backups/
 INCIPIT_CRIS/**/__pycache__/
@@ -10,3 +11,4 @@ fuseki/run/system/tdb.lock
 media/
 docker-compose.override.yml
 fuseki/fuseki.log
+INCIPIT-CRIS_launcher_local.sh

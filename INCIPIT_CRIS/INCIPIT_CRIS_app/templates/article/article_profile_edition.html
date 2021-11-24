@@ -19,47 +19,67 @@
 {% endblock %}
 
 {% block button_navigation %}
-    <a class="link-one right-align little-space-above" href="/articles/{{ data_article.pid }}"><i class="fas fa-user-alt"></i></a>
+    <form id="delete_project_form" action="/articles/edition/delete-article/{{data_article.pid}}" method="post">
+   {% csrf_token %}
+   <input type="hidden" id="projectARK" name="projectARK" value="{{ data_article.pid }}">
+   <a class="link-one right-align little-space-above mr-5" href="javascript:$('#delete_project_form').submit()"><i class="fas fa-times-circle"></i></a>
+</form>
+<a class="link-one right-align little-space-above" href="/articles/{{ data_article.pid }}"><i class="fas fa-check"></i></a>
 {% endblock %}
 
 {% block article_information %}
-    <p class="title is-4 name">{{ data_article.name }} <a class="link-one" href="/articles/edition/field/name/{{data_article.pid}}"><i class="fas fa-edit"></i></a></p>
-    {% if data_article.doi == '' %}
-        <a href="/articles/edition/field/add-doi/{{data_article.pid}}">Ajouter un DOI</a>
-    {% else %}
-        <form class="align-button-centered" action="/articles/edition/field/delete-doi/{{data_article.pid}}" method="post">
-            {% csrf_token %}
-            <p>{{ data_article.doi }}</p>
-            <input type="hidden" id="doi" name="doi" value="{{ data_article.doi }}">
-            <button class="delete"></button>
-        </form>
-    {% endif %}
+    <p class="title is-4 name">{{ data_article.name }} <a class="link-one" href="{{ data_article.url }}"><i class="fas fa-external-link-alt"></i></a></p>
+    <p style="visibility: hidden"></p>
 {% endblock %}
 
 {% block article_description %}
-    <p class="space-below">Description : <a class="link-one" href="/articles/edition/field/abstract/{{ data_article.pid }}"><i class="fas fa-edit"></i></a></p>
-    <p class="justified">{{ data_article.abstract }}</p>
+    <div class="separator">Résumé</div>
+    <p class="justified">{{ data_article.abstract }} <a class="link-one" href="/articles/edition/field/abstract/{{ data_article.pid }}"><i class="fas fa-edit"></i></a></p>
+    {% if data_article.abstract != '' %}
+        <span id="more">
+    {% endif %}
 {% endblock %}
 
 {% block article_informations %}
     <div class="columns is-multiline">
-        <div class="column is-one-third">
+        <div class="column">
+            <div class="column">
+                <div>
+                    <p>Nom : {{ data_article.name }} <a class="link-one" href="/articles/edition/field/name/{{data_article.pid}}"><i class="fas fa-edit"></i></a></p>
+                </div>
+            </div>
 
-            <div>
+            <div class="column">
                 <p>Date de publication : <time datetime="{{ data_article.date_published }}">{{ data_article.date_published }}</time> <a class="link-one" href="/articles/edition/field/datePublished/{{data_article.pid}}"><i class="fas fa-edit"></i></a></p>
             </div>
         </div>
-        <div class="column is-one-third">
-        </div>
-        <div class="column is-one-third">
+
+        <div class="column">
             <p>URL : <a class="link-one url" href="{{ data_article.url }}">{{ data_article.url }}</a> <a class="link-one" href="/articles/edition/field/url/{{data_article.pid}}"><i class="fas fa-edit"></i></a></p>
+        </div>
+
+        <div class="column">
+            {% if data_article.doi == '' %}
+                DOI : <a class="link-one" href="/articles/edition/field/add-doi/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a>
+            {% else %}
+                <form class="align-button-centered" action="/articles/edition/field/delete-doi/{{data_article.pid}}" method="post">
+                    {% csrf_token %}
+                    <p>DOI : {{ data_article.doi }} </p>
+                    <input type="hidden" id="doi" name="doi" value="{{ data_article.doi }}">
+                    <button class="delete"></button>
+                </form>
+            {% endif %}
         </div>
 
     </div>
 {% endblock %}
 
+{% if data_article.abstract == '' %}
+    <span id="more">
+{% endif %}
+
 {% block article_work %}
-<p class="subtitle is-6">Travail : <a class="link-one" href="/articles/edition/field/add-institution/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+<p class="subtitle is-6">Institutions : <a class="link-one" href="/articles/edition/field/add-institution/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
    {% for work in data_article.institutions %}
         <div class="align-image-text">
         <figure class="image is-48x48">
@@ -97,7 +117,6 @@
               {% csrf_token %}
               <input type="hidden" id="authorARK" name="authorARK" value="{{ author.0 }}">
                  <a class="link-one title is-6" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
-                 <a class="link-one" href="{{ author.url }}"><i class="fas fa-external-link-alt"></i></a>
                  <button class="delete"></button>
           </form>
        </div>
@@ -125,13 +144,15 @@
     {% for project in data_article.projects %}
 
        <div>
-          <form action="/articles/edition/field/delete-project/{{data_article.pid}}" method="post">
-              {% csrf_token %}
-              <input type="hidden" id="projectARK" name="projectARK" value="{{ project.pid }}">
-              <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-              <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
-              <button class="delete"></button>
-          </form>
+            <form action="/articles/edition/field/delete-project/{{data_article.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="projectARK" name="projectARK" value="{{ project.pid }}">
+                <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
+                {% if project.url != '' %}
+                    <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                {% endif %}
+                <button class="delete"></button>
+            </form>
            <p class="justified little-space-below">{{ project.description }}</p>
            <p>
                 {% for member in project.members %}
@@ -142,7 +163,9 @@
                     {% endif %}
                 {% endfor %}
            </p>
-           <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+            {% if project.founding_date != None and project.dissolution_date != None %}
+                <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+            {% endif %}
            <p>Financement : Bailleurs de fonds</p>
        </div>
 

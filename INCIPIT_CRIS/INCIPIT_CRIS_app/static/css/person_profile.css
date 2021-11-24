@@ -251,8 +251,32 @@ a.datasets {
     padding-left: 10px;
 }
 
+.doi {
+    margin-top: -27px;
+    border-radius: 15px;
+    padding-left: 10px;
+}
+
+.doi-magic {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
 .is-background-green {
     background-color: #a6ce39;
+}
+
+.is-background-blue {
+    background-color: #3d64e4ef;
+    color: white !important;
+}
+
+.has-border {
+    border-style: solid;
+    border-width: 2px;
+    line-height: 1.15;
 }
 
 .is-green{
