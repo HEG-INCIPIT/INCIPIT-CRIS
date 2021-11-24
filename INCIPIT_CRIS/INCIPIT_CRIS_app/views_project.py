@@ -159,7 +159,7 @@ def project_profile(request, pid):
     sparql_request_check_project_ark = variables.sparql_get_project_object.check_project_ark(pid)
     if sparql_request_check_project_ark:
         data_project = variables.sparql_get_project_object.get_data_project(pid)
-        can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
+        can_edit = True if request.user.is_authenticated and (request.user.pid in [data_project['members'][i][1]['pid'] for i in range(len(data_project['members']))] or request.user.is_superuser) else False
         context = {
             'data_project': data_project,
             'can_edit': can_edit,

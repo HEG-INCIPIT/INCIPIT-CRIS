@@ -67,7 +67,7 @@ def article_profile(request, pid):
     if variables.sparql_get_article_object.check_article_ark(pid):
         data_article = variables.sparql_get_article_object.get_data_article(pid)
         # Verify if the user as the rights to edit the article
-        can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
+        can_edit = True if request.user.is_authenticated and (request.user.pid in [data_article['authors'][i][1]['pid'] for i in range(len(data_article['authors']))] or request.user.is_superuser) else False
 
         context = {
             'can_edit': can_edit,
