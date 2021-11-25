@@ -138,9 +138,9 @@ def institution_profile(request, pid):
     sparql_request_check_institution_ark = variables.sparql_get_institution_object.check_institution_ark(pid)
     if sparql_request_check_institution_ark:
         data_institution = variables.sparql_get_institution_object.get_data_institution(pid)
-        can_edit = True if request.user.is_authenticated and (request.user.pid == pid or request.user.is_superuser) else False
+        can_edit = True if request.user.is_authenticated and request.user.is_superuser else False
         edition_granted = False
-        if request.user.is_superuser or request.user.is_authenticated and request.user.pid in [members[0] for members in data_institution['members']]:
+        if request.user.is_superuser:
             edition_granted = True
         context = {
             'can_edit': can_edit,

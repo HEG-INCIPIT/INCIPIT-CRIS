@@ -291,26 +291,34 @@
                         <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
                         <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
                         <p class="justified little-space-below">{{ dataset.abstract }}</p>
-                        <p> Créateurs :
-                           {% for creator in dataset.creators %}
-                                {% if not forloop.last %}
-                                    <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
-                                {% else %}
-                                    <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
-                                {% endif %}
-                           {% endfor %}
-                        </p>
-                        <p> Mainteneurs :
-                           {% for maintainer in dataset.maintainers %}
-                                {% if not forloop.last %}
-                                    <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
-                                {% else %}
-                                    <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
-                                {% endif %}
-                           {% endfor %}
-                        </p>
-                        <p>Création : {{ dataset.created_date }}</p>
-                        <p>Dernière modification : {{ dataset.modified_date }}</p>
+                        {% if dataset.creators|length > 0 %}
+                            <p> Créateurs :
+                                {% for creator in dataset.creators %}
+                                        {% if not forloop.last %}
+                                            <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
+                                        {% else %}
+                                            <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                                        {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                        {% if dataset.maintainers|length > 0 %}
+                            <p> Mainteneurs :
+                                {% for maintainer in dataset.maintainers %}
+                                        {% if not forloop.last %}
+                                            <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
+                                        {% else %}
+                                            <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                                        {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                        {% if dataset.created_date != 'None' %}
+                            <p>Création : {{ dataset.created_date }}</p>
+                        {% endif %}
+                        {% if dataset.modified_date != 'None' %}
+                            <p>Dernière modification : {{ dataset.modified_date }}</p>
+                        {% endif %}
                     </div>
 
                     {% if forloop.first %}
