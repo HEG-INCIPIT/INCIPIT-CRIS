@@ -8,12 +8,13 @@ from os.path import isfile, join
 from django.conf import settings
 from random import sample
 import requests
-
+import socket
 
 def index(request):
     '''
     Show Visualizer
     '''
     context = {
+        "ip": socket.gethostbyname(socket.gethostname())
     }
     return render(request, 'visualizer/index.html', context)
