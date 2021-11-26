@@ -28,7 +28,8 @@
 
             <form action="{{ url_to_return }}" method="post">
                 {% csrf_token %}
-                {{ form }}
+                <label>{{ title_data_type_added }}</label>
+                {{ form.url }}
                 <input class="button is-primary" type="submit" value="{{ button_value }}">
             </form>
         </section>
