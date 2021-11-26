@@ -52,7 +52,11 @@
 
                     <div class="column">
                         {% block article_information %}
-                            <p class="title is-4 name">{{ data_article.name }} <a class="link-one" href="{{ data_article.url }}"><i class="fas fa-external-link-alt"></i></a></p>
+                            <p class="title is-4 name">{{ data_article.name }} 
+                                {% if data_article.url != '' %}
+                                    <a class="link-one" href="{{ data_article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                                {% endif %}
+                            </p>
                             <p style="visibility: hidden"></p>
                         {% endblock %}
                     </div>
@@ -111,25 +115,25 @@
 
                 {% block article_informations %}
                     <div class="columns is-multiline">
-                        <div class="column is-one-third">
+                        <div class="column">
                             <div>
                                 <p>Nom : {{ data_article.name }}</p>
                             </div>
                         </div>
                         {% if data_article.date_published != None %}
-                            <div class="column is-one-third">
+                            <div class="column">
                                 <div>
                                     <p>Date de publication : <time datetime="{{ data_article.date_published }}">{{ data_article.date_published }}</time></p>
                                 </div>
                             </div>
                         {% endif %}
                         {% if data_article.url != None %}
-                            <div class="column is-one-third">
+                            <div class="column">
                                 <p>URL : <a class="link-one url" href="{{ data_article.url }}">{{ data_article.url }}</a></p>
                             </div>
                         {% endif %}
                         {% if data_article.doi != None %}
-                            <div class="column is-one-third">
+                            <div class="column">
                                 <p>DOI : <a class="link-one url" href="https://doi.org/{{ data_article.doi }}">{{ data_article.doi }}</a></p>
                             </div>
                         {% endif %}
@@ -141,10 +145,9 @@
                     <span id="more">
                 {% endif %}
 
-                <div class="separator">Institutions</div>
-
                 {% block article_work %}
                     {% if data_article.institutions|length > 0 %}
+                        <div class="separator">Institutions</div>
                         <div class="columns">
                             <div class="column">
                                 {% for work in data_article.institutions %}
@@ -238,19 +241,21 @@
                                     {% endif %}
                                 {% endfor %}
                             </p>
-                            {% if project.founding_date != None and project.dissolution_date != None %}
+                            {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
                                 <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
                             {% endif %}
                             
-                            <p>Financement : 
-                                {% for funder in project.funders %}
-                                    {% if not forloop.last %}
-                                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
-                                    {% else %}
-                                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
-                                    {% endif %}
-                                {% endfor %}
-                           </p>
+                            {% if project.funders|length > 0 %}
+                                <p>Financement : 
+                                    {% for funder in project.funders %}
+                                        {% if not forloop.last %}
+                                            <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+                                        {% else %}
+                                            <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
+                            {% endif %}
                        </div>
 
                        {% if forloop.first %}

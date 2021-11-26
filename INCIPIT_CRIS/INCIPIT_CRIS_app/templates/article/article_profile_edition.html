@@ -75,6 +75,8 @@
 {% endif %}
 
 {% block article_work %}
+<div class="separator">Institutions</div>
+
 <p class="subtitle is-6">Institutions : <a class="link-one" href="/articles/edition/field/add-institution/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
    {% for work in data_article.institutions %}
         <div class="align-image-text">
@@ -159,7 +161,7 @@
                     {% endif %}
                 {% endfor %}
            </p>
-            {% if project.founding_date != None and project.dissolution_date != None %}
+            {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
                 <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
             {% endif %}
            <p>Financement : 
