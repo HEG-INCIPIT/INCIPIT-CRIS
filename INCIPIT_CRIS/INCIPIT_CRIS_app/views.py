@@ -8,7 +8,7 @@ from os.path import isfile, join
 from django.conf import settings
 from random import sample
 import requests
-
+import socket
 
 def index(request):
     '''
@@ -73,6 +73,7 @@ def index(request):
         'random_persons': random_persons,
         'last_publications': articles_data[:5],
         'project_data': projects_data[:5],
+        'ip': socket.gethostbyname(socket.gethostname())
     }
     return render(request, 'main/index.html', context)
 

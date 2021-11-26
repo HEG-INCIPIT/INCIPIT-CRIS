@@ -37,3 +37,15 @@ hr {
 .cookiebannerSubmit{
    cursor: pointer;
 }
+
+.select2-container{
+    font-size: 12pt !important;
+    height: 40px !important;
+    text-align: left;
+    width: 55% !important;
+}
+.select2-selection,.select2-selection__rendered,.select2-selection__placeholder,.select2-selection__arrow{
+    display: inline-block;
+    height: 40px !important;
+    line-height: 40px !important;
+}
