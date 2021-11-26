@@ -124,7 +124,6 @@
       {% csrf_token %}
       <input type="hidden" id="maintainerARK" name="maintainerARK" value="{{ author.0 }}">
       <a class="link-one title is-6" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
-      <a class="link-one" href="{{ author.url }}"><i class="fas fa-external-link-alt"></i></a>
       <button class="delete"></button>
    </form>
    <p class="justified little-space-below">{{ author.1.description }}</p>
@@ -155,7 +154,7 @@
       <input type="hidden" id="articleARK" name="articleARK" value="{{ article.pid }}">
       <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
       {% if article.url != '' %}
-      <a title="Accèder au site de l'article {{ article.name }}" class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+         <a title="Accèder au site de l'article {{ article.name }}" class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
       {% endif %}
       <button class="delete"></button>
    </form>
@@ -170,7 +169,9 @@
 
       {% endfor %}
    </p>
-   <i>{{ article.date_published }}</i>
+   {% if article.date_published != 'None' %}
+      <i>{{ article.date_published }}</i>
+   {% endif %}
 </div>
 
 {% if forloop.first %}
@@ -201,7 +202,9 @@
       {% csrf_token %}
       <input type="hidden" id="projectARK" name="projectARK" value="{{ project.pid }}">
       <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-      <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+      {% if project.url != '' %}
+         <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+      {% endif %}
       <button class="delete"></button>
    </form>
    <p class="justified little-space-below">{{ project.description }}</p>
@@ -214,8 +217,20 @@
       {% endif %}
       {% endfor %}
    </p>
-   <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
-   <p>Financement : Bailleurs de fonds</p>
+   {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
+      <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+   {% endif %}
+   {% if project.funders|length > 0 %}
+      <p>Financement : 
+         {% for funder in project.funders %}
+            {% if not forloop.last %}
+                  <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+            {% else %}
+                  <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+            {% endif %}
+         {% endfor %}
+      </p>
+   {% endif %}
 </div>
 
 {% if forloop.first %}

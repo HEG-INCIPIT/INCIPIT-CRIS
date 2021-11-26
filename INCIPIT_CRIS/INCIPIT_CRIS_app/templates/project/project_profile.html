@@ -155,56 +155,54 @@
                 {% endif %}
 
 
+               {% block project_institutions %}
                 {% if data_project.institutions|length > 0 or data_project.funders|length > 0 %}
                     <div class="separator">Institutions</div>
 
                     <div class="columns">
-                        {% block project_institutions %}
-                            {% if data_project.institutions|length > 0 %}
-                                <div class="column">
-                                    <p class="subtitle is-6">Institutions :</p>
-                                    {% for work in data_project.institutions %}
-                                    <div class="align-image-text">
-                                        <figure class="image is-48x48">
-                                            <img src=
-                                            {% if work.logo == '' %}
-                                            "{% static 'images/university-solid.png' %}"
-                                            {% else %}
-                                            "{{ work.logo }}"
-                                            {% endif %}
-                                            >
-                                        </figure>
-                                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endblock %}
+                           {% if data_project.institutions|length > 0 %}
+                              <div class="column">
+                                 <p class="subtitle is-6">Institutions :</p>
+                                 {% for work in data_project.institutions %}
+                                 <div class="align-image-text">
+                                       <figure class="image is-48x48">
+                                          <img src=
+                                          {% if work.logo == '' %}
+                                          "{% static 'images/university-solid.png' %}"
+                                          {% else %}
+                                          "{{ work.logo }}"
+                                          {% endif %}
+                                          >
+                                       </figure>
+                                       <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                                 </div>
+                                 {% endfor %}
+                              </div>
+                           {% endif %}
 
                         <div class="column"></div>
-                        {% block project_funders %}
-                            {% if data_project.funders|length > 0 %}
-                                <div class="column">
-                                    <p class="subtitle is-6">Bailleurs de fonds :</p>
-                                    {% for funder in data_project.funders %}
-                                    <div class="align-image-text">
-                                        <figure class="image is-48x48">
-                                            <img src=
-                                            {% if funder.logo == '' %}
-                                            "{% static 'images/university-solid.png' %}"
-                                            {% else %}
-                                            "{{ funder.logo }}"
-                                            {% endif %}
-                                            >
-                                        </figure>
-                                        <a class="link-one institution-name" href="/institutions/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endblock %}
+                           {% if data_project.funders|length > 0 %}
+                              <div class="column">
+                                 <p class="subtitle is-6">Bailleurs de fonds :</p>
+                                 {% for funder in data_project.funders %}
+                                 <div class="align-image-text">
+                                       <figure class="image is-48x48">
+                                          <img src=
+                                          {% if funder.logo == '' %}
+                                          "{% static 'images/university-solid.png' %}"
+                                          {% else %}
+                                          "{{ funder.logo }}"
+                                          {% endif %}
+                                          >
+                                       </figure>
+                                       <a class="link-one institution-name" href="/institutions/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                 </div>
+                                 {% endfor %}
+                              </div>
+                           {% endif %}
                     </div>
                 {% endif %}
+               {% endblock %}
 
             </span>
 

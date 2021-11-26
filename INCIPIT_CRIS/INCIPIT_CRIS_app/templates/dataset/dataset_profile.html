@@ -276,7 +276,9 @@
 
                {% endfor %}
             </p>
-            <i>{{ article.date_published }}</i>
+            {% if article.date_published != 'None' %}
+               <i>{{ article.date_published }}</i>
+            {% endif %}
          </div>
 
          {% if forloop.first %}
