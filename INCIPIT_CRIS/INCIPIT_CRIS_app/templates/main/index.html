@@ -1,126 +1,180 @@
 <!DOCTYPE html>
 <html class="has-navbar-fixed-top">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>INCIPIT-CRIS</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-        {% load static %}
-        <script src="{% static 'js/jquery-3.1.0.js' %}"></script>
-        <script src="{% static 'js/select2.min.js' %}"></script>
-        <link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
-        <link rel="stylesheet" href="{% static 'css/index.css' %}">
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-    </head>
-    <body>
-        {% load cookiebanner %}
-        {% cookiebanner_modal 'cookies' %}
-        {% include 'main/navbar.html' %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>INCIPIT-CRIS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    {% load static %}
+    <script src="{% static 'js/jquery-3.1.0.js' %}"></script>
+    <script src="{% static 'js/select2.min.js' %}"></script>
+    <link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+</head>
+<body>
+    {% include 'main/navbar.html' %}
 
-        <div class="parallax"><p class="is-size-2">Bienvenue sur INCIPIT-CRIS, le CRIS de la HEG</p></div>
+    <div class="parallax"><p class="is-size-2">Bienvenue sur INCIPIT-CRIS, le CRIS de la HEG</p></div>
 
-        <section class="research-section">
-            <h1 class="is-size-5 is-research-title" align="center">Recherche</h1>
-            <form action="" method="post" id="researchForm">
-                {% csrf_token %}
-                <div align="center">
-                    <input class="input" id="research" name="research" type="text" placeholder="Effectuer votre recherche dans le CRIS">
-                    <input type="submit" class="submit button is-primary" value="Rechercher">
+    <section class="research-section">
+        <h1 class="is-size-5 is-research-title" align="center">Recherche</h1>
+
+        <div class="mb-5" align="center">
+            <select id="searchForm"></select>
+        </div>
+    </section>
+    <section>
+        <div id="informationData" class="columns">
+            <div id="recentPersons" class="column">
+                <div class="overline-left">
+                    <h1 class="is-size-5">Personnes</h1>
                 </div>
-            </form>
-        </section>
-        <section>
-            <div id="informationData" class="columns">
-                <div id="recentPersons" class="column">
-                    <div class="overline-left">
-                        <h1 class="is-size-5">Personnes</h1>
-                    </div>
-                    <div class="align-text-left">
-                        <ul>
-                            {% for user in random_persons %}
-                                <li class="display-content"><a class="link-one" href="/persons/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
-                                <img src="{% static 'svg/data_separator.svg' %}" />
-                            {% endfor %}
-                            <li class="display-content-last-element"><a class="link-one" href="/persons/">Voir tout</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="recentArticles" class="column has-text-centered">
-                    <div class="overline-center">
-                        <h1 class="is-size-5">Articles</h1>
-                    </div>
-                    <div class="align-text-center">
-                        <ul>
-                            {% for article in last_publications %}
-                                    <li class="display-content"><a class="link-one" href="/articles/{{ article.pid }}">{{ article.name }}</a></li>
-                                    <img src="{% static 'svg/data_separator.svg' %}" />
-                            {% endfor %}
-                            <li class="display-content-last-element"><a class="link-one" href="/articles/">Voir tout</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="recentProjects" class="column has-text-right">
-                    <div class="overline-right">
-                        <h1 class="is-size-5">Projets</h1>
-                    </div>
-                    <div class="align-text-right">
-                        <ul>
-                            {% for project in project_data %}
-                                <li class="display-content"><a class="link-one" href="/projects/{{ project.pid }}">{{ project.name }}</a></li>
-                                <img src="{% static 'svg/data_separator.svg' %}" />
-                            {% endfor %}
-                            <li class="display-content-last-element"><a class="link-one" href="/projects/">Voir tout</a></li>
-                        </ul>
-                    </div>
+                <div class="align-text-left">
+                    <ul>
+                        {% for user in random_persons %}
+                        <li class="display-content"><a class="link-one" href="/persons/{{ user.0 }}">{{ user.1 }} {{ user.2 }}</a></li>
+                        <img src="{% static 'svg/data_separator.svg' %}" />
+                        {% endfor %}
+                        <li class="display-content-last-element"><a class="link-one" href="/persons/">Voir tout</a></li>
+                    </ul>
                 </div>
             </div>
-        </section>
-        <section>
-            <div class="overline">
-                <h1 class="is-size-5">Statistiques</h1>
+            <div id="recentArticles" class="column has-text-centered">
+                <div class="overline-center">
+                    <h1 class="is-size-5">Articles</h1>
+                </div>
+                <div class="align-text-center">
+                    <ul>
+                        {% for article in last_publications %}
+                        <li class="display-content"><a class="link-one" href="/articles/{{ article.pid }}">{{ article.name }}</a></li>
+                        <img src="{% static 'svg/data_separator.svg' %}" />
+                        {% endfor %}
+                        <li class="display-content-last-element"><a class="link-one" href="/articles/">Voir tout</a></li>
+                    </ul>
+                </div>
             </div>
-            <div id="statsColumns" name="statsColumns" class="tile is-ancestor has-text-centered">
-                <a href="/persons" id="personsStats" name="personsStats" class="tile is-parent">
-                    <article class="tile is-child box content">
-                        <p class="title">{{ len_persons }}</p>
-                        <p class="heading">Personnes</p>
-                    </article>
-                </a>
-
-                <a href="/articles" id="articlesStats" name="articlesStats" class="tile is-parent">
-                    <article class="tile is-child box content">
-                        <p class="title">{{ len_articles }}</p>
-                        <p class="heading">Articles</p>
-                    </article>
-                </a>
-                <a href="/projects" id="projectsStats" name="projectsStats" class="tile is-parent">
-                    <article class="tile is-child box content">
-                        <p class="title">{{ len_projects }}</p>
-                        <p class="heading">Projets</p>
-                    </article>
-                </a>
-                <a href="/datasets/" id="datasetsStats" name="datasetsStats" class="tile is-parent">
-                    <article class="tile is-child box content">
-                        <p class="title">{{ len_datasets }}</p>
-                        <p class="heading">Jeu de données</p>
-                    </article>
-                </a>
-                <a href="/institutions/" id="institutionsStats" name="institutionsStats" class="tile is-parent">
-                    <article class="tile is-child box content">
-                        <p class="title">{{ len_institutions }}</p>
-                        <p class="heading">Institutions</p>
-                    </article>
-                </a>
-                <a href="/funders/" id="fundersStats" name="fundersStats" class="tile is-parent">
-                    <article class="tile is-child box content">
-                        <p class="title">{{ len_funders }}</p>
-                        <p class="heading">Bailleurs de fonds</p>
-                    </article>
-                </a>
+            <div id="recentProjects" class="column has-text-right">
+                <div class="overline-right">
+                    <h1 class="is-size-5">Projets</h1>
+                </div>
+                <div class="align-text-right">
+                    <ul>
+                        {% for project in project_data %}
+                        <li class="display-content"><a class="link-one" href="/projects/{{ project.pid }}">{{ project.name }}</a></li>
+                        <img src="{% static 'svg/data_separator.svg' %}" />
+                        {% endfor %}
+                        <li class="display-content-last-element"><a class="link-one" href="/projects/">Voir tout</a></li>
+                    </ul>
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
+    <section>
+        <div class="overline">
+            <h1 class="is-size-5">Statistiques</h1>
+        </div>
+        <div id="statsColumns" name="statsColumns" class="tile is-ancestor has-text-centered">
+            <a href="/persons" id="personsStats" name="personsStats" class="tile is-parent">
+                <article class="tile is-child box content">
+                    <p class="title">{{ len_persons }}</p>
+                    <p class="heading">Personnes</p>
+                </article>
+            </a>
 
-        {% include 'main/footer.html' %}
-    </body>
+            <a href="/articles" id="articlesStats" name="articlesStats" class="tile is-parent">
+                <article class="tile is-child box content">
+                    <p class="title">{{ len_articles }}</p>
+                    <p class="heading">Articles</p>
+                </article>
+            </a>
+            <a href="/projects" id="projectsStats" name="projectsStats" class="tile is-parent">
+                <article class="tile is-child box content">
+                    <p class="title">{{ len_projects }}</p>
+                    <p class="heading">Projets</p>
+                </article>
+            </a>
+            <a href="/datasets/" id="datasetsStats" name="datasetsStats" class="tile is-parent">
+                <article class="tile is-child box content">
+                    <p class="title">{{ len_datasets }}</p>
+                    <p class="heading">Jeu de données</p>
+                </article>
+            </a>
+            <a href="/institutions/" id="institutionsStats" name="institutionsStats" class="tile is-parent">
+                <article class="tile is-child box content">
+                    <p class="title">{{ len_institutions }}</p>
+                    <p class="heading">Institutions</p>
+                </article>
+            </a>
+            <a href="/funders/" id="fundersStats" name="fundersStats" class="tile is-parent">
+                <article class="tile is-child box content">
+                    <p class="title">{{ len_funders }}</p>
+                    <p class="heading">Bailleurs de fonds</p>
+                </article>
+            </a>
+        </div>
+    </section>
+    <script>
+
+    $( document ).ready(function() {
+
+        $('#searchForm').select2({
+            tags: "true",
+            minimumInputLength: 4,
+            multiple: false,
+            placeholder: "Effectuer votre recherche dans le CRIS",
+            ajax: {
+                type: "POST",
+                delay: 250,
+                url: "http://{{ip}}:3030/INCIPIT-CRIS", // this one needs to be the function
+                data: function (params) {
+                    var query = `
+                    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                    SELECT DISTINCT ?option ?label ?class WHERE {
+                        ?option ?predicate [].
+                        OPTIONAL { ?option rdfs:label ?label }
+                        OPTIONAL { ?option a ?class }
+                        FILTER(!ISBLANK(?option))
+                        FILTER(REGEX(STR(?class), "https://schema.org/ScholarlyArticle", "i") || REGEX(STR(?class), "https://schema.org/ResearchProject", "i") || REGEX(STR(?class), "https://schema.org/EducationalOrganization", "i") || REGEX(STR(?class), "https://schema.org/Dataset", "i") || REGEX(STR(?class), "https://schema.org/Person", "i"))
+                        FILTER(!REGEX(STR(?option), "https://schema.org", "i"))
+                        FILTER(REGEX(STR(?option), "${params.term}", "i") || REGEX(?label, "${params.term}", "i"))
+                    }
+                    `;
+                    return { query: query, format: 'json' };
+                },
+                headers: { Accept: "application/json" },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    var results = [];
+                    let categoryName = {
+                        "https://schema.org/ResearchProject": "projects",
+                        "https://schema.org/Dataset": "datasets",
+                        "https://schema.org/ScholarlyArticle": "articles",
+                        "https://schema.org/Person": "persons",
+                        "https://schema.org/EducationalOrganization": "institutions",
+                    }
+
+                    for (var i in data.results.bindings) {
+                        var binding = data.results.bindings[i];
+                        results.push({ id: categoryName[binding['class'].value]+"/"+binding['option'].value, text: binding['label'] ? `${binding['label'].value} (${binding['option'].value})` : binding['option'].value });
+                    };
+
+                    return {
+                        results: results,
+                        pagination: {
+                            more: false
+                        }
+                    };
+                },
+            }
+        });
+    });
+    $(document).on('change', 'select#searchForm', function(e) {
+        let url = (window.location.toString().endsWith("/"))?window.location+""+this.value:window.location+"/"+this.value
+        window.location.href = url
+    });
+    </script>
+    {% include 'main/footer.html' %}
+</body>
 </html>
