@@ -127,13 +127,13 @@
             ajax: {
                 type: "POST",
                 delay: 250,
-                url: "http://{{ip}}:3030/INCIPIT-CRIS", // this one needs to be the function
+                url: "http://{{ip}}:3030/INCIPIT-CRIS",
                 data: function (params) {
                     var query = `
-                    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                    PREFIX schema: <https://schema.org/>
                     SELECT DISTINCT ?option ?label ?class WHERE {
                         ?option ?predicate [].
-                        OPTIONAL { ?option rdfs:label ?label }
+                        OPTIONAL { ?option schema:name ?label }
                         OPTIONAL { ?option a ?class }
                         FILTER(!ISBLANK(?option))
                         FILTER(REGEX(STR(?class), "https://schema.org/ScholarlyArticle", "i") || REGEX(STR(?class), "https://schema.org/ResearchProject", "i") || REGEX(STR(?class), "https://schema.org/EducationalOrganization", "i") || REGEX(STR(?class), "https://schema.org/Dataset", "i") || REGEX(STR(?class), "https://schema.org/Person", "i"))

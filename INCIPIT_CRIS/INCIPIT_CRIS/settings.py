@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cookiebanner',
+    'corsheaders',
 ]
 COOKIEBANNER = {
     "title": "Réglages des cookies",
@@ -81,8 +82,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'INCIPIT_CRIS.urls'
 
 TEMPLATES = [
