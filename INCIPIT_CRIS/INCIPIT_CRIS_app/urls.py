@@ -1,10 +1,13 @@
 from django.urls import path
 
-from . import views, views_person, views_article, views_project, views_dataset, views_institution, views_funder
+from . import views, views_person, views_article, views_project, views_dataset, views_institution, views_funder, views_search
 
 urlpatterns = [
     # Index page
     path('', views.index, name='index'),
+
+    # Search POST
+    path('search', views_search.search, name='search'),
 
     # Import data
     path('import-data/', views.import_data, name='import_data'),
@@ -117,7 +120,7 @@ urlpatterns = [
     path('institutions/edition/field/<str:field_to_modify>/<path:pid>', views_institution.institution_field_edition, name='institution_field_edition'),
     path('institutions/edition/<path:pid>', views_institution.institution_edition, name='institution_edition'),
     path('institutions/<path:pid>', views_institution.institution_profile, name='institution_profile'),
-    
+
 
     # Funders urls
     path('funders/', views_funder.funder_results, name='funder_results'),

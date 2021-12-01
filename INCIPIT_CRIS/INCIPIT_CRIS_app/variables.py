@@ -12,6 +12,7 @@ from sparql_triplestore.sparql_requests.institution.sparql_get_institution_metho
 from sparql_triplestore.sparql_requests.institution.sparql_post_institution_methods import SparqlPostInstitutionMethods
 from sparql_triplestore.sparql_requests.funder.sparql_get_funder_methods import SparqlGetFunderMethods
 from sparql_triplestore.sparql_requests.funder.sparql_post_funder_methods import SparqlPostFunderMethods
+from sparql_triplestore.sparql_requests.search.sparql_post_search_methods import SparqlPostSearchMethods
 import sparql_triplestore.sparql_requests.variables as sparql_variables
 
 
@@ -29,3 +30,4 @@ sparql_get_institution_object = SparqlGetInstitutionMethods()
 sparql_post_institution_object = SparqlPostInstitutionMethods()
 sparql_get_funder_object = SparqlGetFunderMethods()
 sparql_post_funder_object = SparqlPostFunderMethods()
+sparql_post_search_object = SparqlPostSearchMethods()

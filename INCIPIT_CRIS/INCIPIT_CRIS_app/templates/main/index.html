@@ -22,7 +22,10 @@
         <h1 class="is-size-5 is-research-title" align="center">Recherche</h1>
 
         <div class="mb-5" align="center">
-            <select id="searchForm"></select>
+            <form action="">
+                {% csrf_token %}
+                <select id="searchForm"></select>
+            </form>
         </div>
     </section>
     <section>
@@ -116,18 +119,18 @@
         </div>
     </section>
     <script>
-
+    let dTest
     $( document ).ready(function() {
-
+        let csrf = $("[name=csrfmiddlewaretoken]").val()
         $('#searchForm').select2({
-            tags: "true",
+            tags: false,
             minimumInputLength: 4,
             multiple: false,
             placeholder: "Effectuer votre recherche dans le CRIS",
             ajax: {
                 type: "POST",
                 delay: 250,
-                url: "http://{{ip}}:3030/INCIPIT-CRIS",
+                url: "/search",
                 data: function (params) {
                     var query = `
                     PREFIX schema: <https://schema.org/>
@@ -141,10 +144,11 @@
                         FILTER(REGEX(STR(?option), "${params.term}", "i") || REGEX(?label, "${params.term}", "i"))
                     }
                     `;
-                    return { query: query, format: 'json' };
+                    return { query: query, csrfmiddlewaretoken: csrf, format: 'json' };
                 },
                 headers: { Accept: "application/json" },
                 processResults: function (data, params) {
+                    data = JSON.parse(data)
                     params.page = params.page || 1;
                     var results = [];
                     let categoryName = {
