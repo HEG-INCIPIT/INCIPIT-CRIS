@@ -12,7 +12,9 @@
            <div class="bg-light border-right" id="sidebar-wrapper">
                <div id="explorer-alert-container"></div>
                <h1>INCIPIT-CRIS Visualizer</h1>
-               <div id="explorer-form"></div>
+               <div id="explorer-form">
+                   {% csrf_token %}
+               </div>
            </div>
 
            <div id="page-content-wrapper">
@@ -26,7 +28,7 @@
        </div>
        {% load static %}
        <script>
-          const ip = "http://{{ip}}:3030/INCIPIT-CRIS"
+          const ip = "/search"
        </script>
        <script src="{% static 'js/jquery-3.1.0.js' %}" crossorigin="anonymous"></script>
        <script src="{% static 'js/bundle.js' %}" charset="utf-8"></script>
