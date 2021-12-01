@@ -150,7 +150,7 @@
             var option = document.createElement("option");
             option.value = dictionary["organization"].pid;
             option.text = dictionary["organization"].name;
-            option.innerHTML = "&nbsp;".repeat(cpt*3)+dictionary["organization"].name
+            option.innerHTML = "&nbsp;".repeat(cpt*3)+dictionary["organization"].name+ ' (' + dictionary["organization"].alternate_name + ')'
             select.appendChild(option);
             for (let i = 0; i < Object.keys(dictionary).length-1; i++) {
                 readInstitutions(dictionary["sub_organization"+i.toString()], cpt+1);

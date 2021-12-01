@@ -731,6 +731,8 @@ def article_doi_addition(request, pid):
                 'button_value': 'Ajouter',
             }
 
+            form.fields['url'].widget.attrs.update({'placeholder':context['data_type_added']})
+
             return render(request, 'forms/edited_form.html', context)
     
         context = {

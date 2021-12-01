@@ -53,13 +53,14 @@
                   {% endblock %}
 
                   <div class="column">
-                     {% block institution_information %}
                      <p class="title is-4 name">{{ data_institution.name }}
                      {% if data_institution.alternate_name != '' %}
                          ({{ data_institution.alternate_name }})
                      {% endif %}</p>
+                     {% if data_institution.url != '' %}
+                            <a class="link-one" href="{{ data_project.url }}"><i class="fas fa-external-link-alt"></i></a></p>
+                        {% endif %}
                      <p style="visibility: hidden"></p>
-                     {% endblock %}
                   </div>
 
                   <div class="column is-one-third header">
@@ -125,11 +126,12 @@
             <section class="data-box btn-see-more box">
                <p class="title is-5">A propos</p>
                {% block institution_description %}
-                  <div class="separator">Description</div>
-                  <p class="justified">{{ data_institution.description }}</p>
+                  {% if data_institution.description != '' %}
+                    <div class="separator">Description</div>
+                    <p class="justified">{{ data_institution.description }}</p>
+                    <span id="more">
+                  {% endif %}
                {% endblock %}
-
-               <span id="more">
 
                   <div class="separator">Informations</div>
 
@@ -138,68 +140,81 @@
                      <div class="column keep-it-inline-parent">
                         <p class="keep-it-inline">Nom : {{ data_institution.name }}</p>
                      </div>
+                     {% if data_institution.alternate_name != '' %}
+                        <div class="column keep-it-inline-parent">
+                           <p class="keep-it-inline-parent">Nom alternatif: {{ data_institution.alternate_name }}</p>
+                        </div>
+                     {% endif %}
+                     {% if data_institution.founding_date != 'None' %}
+                        <div class="column keep-it-inline-parent">
+                           <p class="keep-it-inline">Date de fondation : <time datetime="{{ data_institution.founding_date }}">{{ data_institution.founding_date }}</time></p>
+                        </div>
+                     {% endif %}
+                     {% if data_institution.url != '' %}
+                        <div class="column keep-it-inline-parent">
+                           <p class="keep-it-inline">Lien vers l'institution : <a class="link-one url" href="{{ data_institution.url }}">{{ data_institution.url }}</a></p>
+                        </div>
+                     {% endif %}
                      <div class="column keep-it-inline-parent">
-                        <p class="keep-it-inline-parent">Nom alternatif: {{ data_institution.alternate_name }}</p>
-                     </div>
-                  </div>
-                  <div class="columns is-multiline">
-                     <div class="column keep-it-inline-parent">
-                        <p class="keep-it-inline">Date de fondation : <time datetime="{{ data_institution.founding_date }}">{{ data_institution.founding_date }}</time></p>
-                     </div>
-                     <div class="column class="keep-it-inline" keep-it-inline-parent">
-                        <p class="keep-it-inline">Lien vers l'institution : <a class="link-one url" href="{{ data_institution.url }}">{{ data_institution.url }}</a></p>
-                     </div>
-                  </div>
-                  <div class="columns is-multiline">
-                     <div class="column keep-it-inline-parent">
-                        <p class="keep-it-inline">Bailleur de fonds : <i class="fas {% if data_institution.funder == True%}fa-pen{% else %}fa-times{% endif %}"></i>
+                        <p class="keep-it-inline">Bailleur de fonds : <i class="fas {% if data_institution.funder == True%}fa-check{% else %}fa-times{% endif %}"></i>
                         </p>
                      </div>
                   </div>
                   {% endblock %}
 
-                  <div class="separator">Institutions</div>
+                  {% if data_institution.description == '' %}
+                    <span id="more">
+                {% endif %}
 
-                  <div class="columns">
-                     <div class="column">
-                        {% block institution_institutions %}
-                        <p class="subtitle is-6">Institutions parentes :</p>
-                        {% for work in data_institution.parent_organizations %}
-                        <div class="align-image-text">
-                           <figure class="image is-48x48">
-                              <img src=
-                              {% if work.logo == '' %}
-                              "{% static 'images/university-solid.png' %}"
-                              {% else %}
-                              "{{ work.logo }}"
-                              {% endif %}
-                              >
-                           </figure>
-                           <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
+
+                  
+                  {% block institution_institutions %}
+                     {% if data_institution.parent_organizations|length > 0 or data_institution.sub_organizations|length > 0 %}
+                        <div class="separator">Institutions</div>
+
+                        <div class="columns">
+                           {% if data_institution.parent_organizations|length > 0 %}
+                              <div class="column">
+                                 <p class="subtitle is-6">Institutions parentes :</p>
+                                 {% for work in data_institution.parent_organizations %}
+                                 <div class="align-image-text">
+                                    <figure class="image is-48x48">
+                                       <img src=
+                                       {% if work.logo == '' %}
+                                       "{% static 'images/university-solid.png' %}"
+                                       {% else %}
+                                       "{{ work.logo }}"
+                                       {% endif %}
+                                       >
+                                    </figure>
+                                    <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
+                                 </div>
+                                 {% endfor %}
+                              </div>
+                           {% endif %}
+
+                           {% if data_institution.sub_organizations|length > 0 %}
+                              <div class="column">
+                                 <p class="subtitle is-6">Sous-institutions :</p>
+                                 {% for work in data_institution.sub_organizations %}
+                                 <div class="align-image-text">
+                                    <figure class="image is-48x48">
+                                       <img src=
+                                       {% if work.logo == '' %}
+                                       "{% static 'images/university-solid.png' %}"
+                                       {% else %}
+                                       "{{ work.logo }}"
+                                       {% endif %}
+                                       >
+                                    </figure>
+                                    <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
+                                 </div>
+                                 {% endfor %}
+                              </div>
+                           {% endif %}
                         </div>
-                        {% endfor %}
-                        {% endblock %}
-                     </div>
-                     <div class="column">
-                        {% block institution_subinstitutions %}
-                        <p class="subtitle is-6">Sous-institutions :</p>
-                        {% for work in data_institution.sub_organizations %}
-                        <div class="align-image-text">
-                           <figure class="image is-48x48">
-                              <img src=
-                              {% if work.logo == '' %}
-                              "{% static 'images/university-solid.png' %}"
-                              {% else %}
-                              "{{ work.logo }}"
-                              {% endif %}
-                              >
-                           </figure>
-                           <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
-                        </div>
-                        {% endfor %}
-                        {% endblock %}
-                     </div>
-                  </div>
+                     {% endif %}
+                  {% endblock %}
 
                </span>
 
@@ -224,7 +239,6 @@
 
                <div>
                   <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
-                  <a class="link-one" href="{{ member.url }}"><i class="fas fa-external-link-alt"></i></a>
                   <p class="justified little-space-below">{{ member.1.description }}</p>
                </div>
 
@@ -263,7 +277,6 @@
 
                <div>
                   <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
-                  <a class="link-one" href="{{ member.url }}"><i class="fas fa-external-link-alt"></i></a>
                   <p class="justified little-space-below">{{ member.1.description }}</p>
                </div>
 
@@ -302,7 +315,9 @@
 
                <div>
                   <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
-                  <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                  {% if article.url != '' %}
+                     <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                  {% endif %}
                   <p class="justified little-space-below">{{ article.abstract }}</p>
                   <p>
                      {% for author in article.authors %}
@@ -314,7 +329,9 @@
 
                      {% endfor %}
                   </p>
-                  <i>Editeur, {{ article.date_published }}</i>
+                  {% if article.date_published != 'None' %}
+                     <i>{{ article.date_published }}</i>
+                  {% endif %}
                </div>
 
                {% if forloop.first %}
@@ -352,7 +369,9 @@
 
                        <div>
                            <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-                           <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                           {% if projet.url != '' %}
+                              <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                           {% endif %}
                            <p class="justified little-space-below">{{ project.description }}</p>
                            <p>
                                 {% for member in project.members %}
@@ -363,8 +382,18 @@
                                     {% endif %}
                                 {% endfor %}
                            </p>
-                           <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
-                           <p>Financement : Bailleurs de fonds</p>
+                           {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
+                              <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+                           {% endif %}
+                           <p>Financement :
+                              {% for funder in project.funders %}
+                                 {% if not forloop.last %}
+                                       <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+                                 {% else %}
+                                       <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                 {% endif %}
+                              {% endfor %}
+                           </p>
                        </div>
 
                        {% if forloop.first %}
@@ -403,7 +432,9 @@
 
                        <div>
                            <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-                           <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                           {% if project.url != '' %}
+                              <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                           {% endif %}
                            <p class="justified little-space-below">{{ project.description }}</p>
                            <p>
                                 {% for member in project.members %}
@@ -414,8 +445,18 @@
                                     {% endif %}
                                 {% endfor %}
                            </p>
-                           <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
-                           <p>Financement : Bailleurs de fonds</p>
+                           {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
+                              <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+                           {% endif %}
+                           <p>Financement :
+                              {% for funder in project.funders %}
+                                 {% if not forloop.last %}
+                                       <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+                                 {% else %}
+                                       <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                 {% endif %}
+                              {% endfor %}
+                           </p>
                        </div>
 
                        {% if forloop.first %}
@@ -454,29 +495,41 @@
 
                <div>
                   <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
-                  <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
-                  <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
+                  {% if dataset.url != '' %}
+                     <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
+                  {% endif %}
+                  {% if dataset.data_download.url != '' %}
+                     <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
+                  {% endif %}
                   <p class="justified little-space-below">{{ dataset.abstract }}</p>
-                  <p> Créateurs :
-                     {% for creator in dataset.creators %}
-                     {% if not forloop.last %}
-                     <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
-                     {% else %}
-                     <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
-                     {% endif %}
-                     {% endfor %}
-                  </p>
-                  <p> Mainteneurs :
-                     {% for maintainer in dataset.maintainers %}
-                     {% if not forloop.last %}
-                     <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
-                     {% else %}
-                     <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
-                     {% endif %}
-                     {% endfor %}
-                  </p>
-                  <p>Création : {{ dataset.created_date }}</p>
-                  <p>Dernière modification : {{ dataset.modified_date }}</p>
+                  {% if dataset.creators|length > 0 %}
+                     <p> Créateurs :
+                        {% for creator in dataset.creators %}
+                        {% if not forloop.last %}
+                        <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
+                        {% else %}
+                        <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                        {% endif %}
+                        {% endfor %}
+                     </p>
+                  {% endif %}
+                  {% if dataset.maintainers|length > 0 %}
+                     <p> Mainteneurs :
+                        {% for maintainer in dataset.maintainers %}
+                        {% if not forloop.last %}
+                        <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
+                        {% else %}
+                        <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                        {% endif %}
+                        {% endfor %}
+                     </p>
+                  {% endif %}
+                  {% if dataset.created_date != 'None' %}
+                     <p>Création : {{ dataset.created_date }}</p>
+                  {% endif %}
+                  {% if dataset.modified_date != 'None' %}
+                     <p>Dernière modification : {{ dataset.modified_date }}</p>
+                  {% endif %}
                </div>
 
                {% if forloop.first %}

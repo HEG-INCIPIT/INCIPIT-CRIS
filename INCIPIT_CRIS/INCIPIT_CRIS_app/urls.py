@@ -1,10 +1,13 @@
 from django.urls import path
 
-from . import views, views_person, views_article, views_project, views_dataset, views_institution, views_funder, views_visualizer
+from . import views, views_person, views_article, views_project, views_dataset, views_institution, views_funder, views_visualizer, views_search
 
 urlpatterns = [
     # Index page
     path('', views.index, name='index'),
+
+    # Search POST
+    path('search', views_search.search, name='search'),
 
     # Import data
     path('import-data/', views.import_data, name='import_data'),

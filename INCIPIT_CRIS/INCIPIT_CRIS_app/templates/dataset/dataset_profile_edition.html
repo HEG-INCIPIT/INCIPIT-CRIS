@@ -27,15 +27,9 @@
 <a class="link-one right-align little-space-above" href="/datasets/{{ data_dataset.pid }}"><i class="fas fa-check"></i></a>
 {% endblock %}
 
-
-{% block dataset_information %}
-<p class="title is-4 name">{{ data_dataset.name }}</p>
-<p style="visibility: hidden"></p>
-{% endblock %}
-
 {% block dataset_description %}
-<div class="separator">Description  <a class="link-one" href="/datasets/edition/field/abstract/{{ data_dataset.pid }}"><i class="fas fa-edit"></i></a></div>
-<p class="justified">{{ data_dataset.abstract }}</p>
+<div class="separator">Description</div>
+<p class="justified">{{ data_dataset.abstract }} <a class="link-one" href="/datasets/edition/field/abstract/{{ data_dataset.pid }}"><i class="fas fa-edit"></i></a></p>
 {% endblock %}
 
 {% block dataset_informations %}
@@ -43,16 +37,12 @@
    <div class="column keep-it-inline-parent">
       <p class="keep-it-inline">Nom : {{ data_dataset.name }} <a class="link-one" href="/datasets/edition/field/name/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
    </div>
-</div>
-<div class="columns is-multiline">
    <div class="column keep-it-inline-parent">
       <p class="keep-it-inline">Date de création : <time datetime="{{ data_dataset.created_date }}">{{ data_dataset.created_date }}</time> <a class="link-one" href="/datasets/edition/field/dateCreated/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
    </div>
    <div class="column keep-it-inline-parent">
       <p class="keep-it-inline-parent">Date de modification : <time datetime="{{ data_dataset.modified_date }}">{{ data_dataset.modified_date }}</time> <a class="link-one" href="/datasets/edition/field/dateModified/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
    </div>
-</div>
-<div class="columns is-multiline">
    <div class="column keep-it-inline-parent">
       <p class="keep-it-inline">URL des détails : <a class="link-one url" href="{{ data_dataset.url }}">{{ data_dataset.url }}</a> <a class="link-one" href="/datasets/edition/field/url-details/{{data_dataset.pid}}"><i class="fas fa-edit"></i></a></p>
    </div>
@@ -134,7 +124,6 @@
       {% csrf_token %}
       <input type="hidden" id="maintainerARK" name="maintainerARK" value="{{ author.0 }}">
       <a class="link-one title is-6" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
-      <a class="link-one" href="{{ author.url }}"><i class="fas fa-external-link-alt"></i></a>
       <button class="delete"></button>
    </form>
    <p class="justified little-space-below">{{ author.1.description }}</p>
@@ -165,7 +154,7 @@
       <input type="hidden" id="articleARK" name="articleARK" value="{{ article.pid }}">
       <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
       {% if article.url != '' %}
-      <a title="Accèder au site de l'article {{ article.name }}" class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+         <a title="Accèder au site de l'article {{ article.name }}" class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
       {% endif %}
       <button class="delete"></button>
    </form>
@@ -180,7 +169,9 @@
 
       {% endfor %}
    </p>
-   <i>{{ article.date_published }}</i>
+   {% if article.date_published != 'None' %}
+      <i>{{ article.date_published }}</i>
+   {% endif %}
 </div>
 
 {% if forloop.first %}
@@ -211,7 +202,9 @@
       {% csrf_token %}
       <input type="hidden" id="projectARK" name="projectARK" value="{{ project.pid }}">
       <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-      <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+      {% if project.url != '' %}
+         <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+      {% endif %}
       <button class="delete"></button>
    </form>
    <p class="justified little-space-below">{{ project.description }}</p>
@@ -224,8 +217,20 @@
       {% endif %}
       {% endfor %}
    </p>
-   <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
-   <p>Financement : Bailleurs de fonds</p>
+   {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
+      <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+   {% endif %}
+   {% if project.funders|length > 0 %}
+      <p>Financement : 
+         {% for funder in project.funders %}
+            {% if not forloop.last %}
+                  <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+            {% else %}
+                  <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+            {% endif %}
+         {% endfor %}
+      </p>
+   {% endif %}
 </div>
 
 {% if forloop.first %}
