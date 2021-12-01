@@ -80,55 +80,57 @@
 {% endblock %}
 
 {% block project_institutions %}
-<div class="column">
-   <p class="subtitle is-6">Institutions : <a class="link-one" href="/projects/edition/field/add-institution/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-   {% for work in data_project.institutions %}
-   <div class="align-image-text">
-      <figure class="image is-48x48">
-         <img src=
-         {% if work.logo == '' %}
-         "{% static 'images/university-solid.png' %}"
-         {% else %}
-         "{{ work.logo }}"
-         {% endif %}
-         >
-      </figure>
-      <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+   <div class="separator">Institutions</div>
 
-      <form class="align-button-centered" action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
-         {% csrf_token %}
-         <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
-         <button class="delete"></button>
-      </form>
+   <div class="columns">
+      <div class="column">
+         <p class="subtitle is-6">Institutions : <a class="link-one" href="/projects/edition/field/add-institution/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+         {% for work in data_project.institutions %}
+         <div class="align-image-text">
+            <figure class="image is-48x48">
+               <img src=
+               {% if work.logo == '' %}
+               "{% static 'images/university-solid.png' %}"
+               {% else %}
+               "{{ work.logo }}"
+               {% endif %}
+               >
+            </figure>
+            <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+
+            <form class="align-button-centered" action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
+               {% csrf_token %}
+               <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
+               <button class="delete"></button>
+            </form>
+         </div>
+         {% endfor %}
+      </div>
+
+      <div class="column">
+         <p class="subtitle is-6">Bailleurs de fonds : <a class="link-one" href="/projects/edition/field/add-funder/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+         {% for work in data_project.funders %}
+         <div class="align-image-text">
+            <figure class="image is-48x48">
+               <img src=
+               {% if work.logo == '' %}
+               "{% static 'images/university-solid.png' %}"
+               {% else %}
+               "{{ work.logo }}"
+               {% endif %}
+               >
+            </figure>
+            <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+
+            <form class="align-button-centered" action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
+               {% csrf_token %}
+               <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
+               <button class="delete"></button>
+            </form>
+         </div>
+         {% endfor %}
+      </div>
    </div>
-   {% endfor %}
-</div>
-{% endblock %}
-
-{% block project_funders %}
-<div class="column">
-   <p class="subtitle is-6">Bailleurs de fonds : <a class="link-one" href="/projects/edition/field/add-funder/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-   {% for work in data_project.funders %}
-   <div class="align-image-text">
-      <figure class="image is-48x48">
-         <img src=
-         {% if work.logo == '' %}
-         "{% static 'images/university-solid.png' %}"
-         {% else %}
-         "{{ work.logo }}"
-         {% endif %}
-         >
-      </figure>
-      <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
-
-      <form class="align-button-centered" action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
-         {% csrf_token %}
-         <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
-         <button class="delete"></button>
-      </form>
-   </div>
-   {% endfor %}
-</div>
 {% endblock %}
 
 {% block project_members %}

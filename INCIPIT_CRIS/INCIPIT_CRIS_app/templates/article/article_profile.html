@@ -120,19 +120,19 @@
                                 <p>Nom : {{ data_article.name }}</p>
                             </div>
                         </div>
-                        {% if data_article.date_published != None %}
+                        {% if data_article.date_published != 'None' %}
                             <div class="column">
                                 <div>
                                     <p>Date de publication : <time datetime="{{ data_article.date_published }}">{{ data_article.date_published }}</time></p>
                                 </div>
                             </div>
                         {% endif %}
-                        {% if data_article.url != None %}
+                        {% if data_article.url != 'None' %}
                             <div class="column">
                                 <p>URL : <a class="link-one url" href="{{ data_article.url }}">{{ data_article.url }}</a></p>
                             </div>
                         {% endif %}
-                        {% if data_article.doi != None %}
+                        {% if data_article.doi != 'None' %}
                             <div class="column">
                                 <p>DOI : <a class="link-one url" href="https://doi.org/{{ data_article.doi }}">{{ data_article.doi }}</a></p>
                             </div>
