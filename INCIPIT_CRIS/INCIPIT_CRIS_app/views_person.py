@@ -13,7 +13,7 @@ from . import form_selection
 from INCIPIT_CRIS_app.models import Title, JobTitle
 
 
-def person_results(request):
+def person_results(request, page=1, filter_category='Personnes', filter_letter=''):
     '''
     Search in the triplestore all the persons and format a dictionnary that's used
     in the template to display information.
@@ -32,17 +32,26 @@ def person_results(request):
     '''
 
     alphabet_list = list(string.ascii_lowercase)
-    categories = ['Personnes']
-    category = categories[0]
+    categories = [job_title for job_title in list(JobTitle.objects.order_by('job_title').values_list('job_title', flat=True))]
+    # It is important to insert the category that display all the persons first, we'll use in the template the index 0 to display everybody
+    categories.insert(0, 'Personnes')
+    filter_category
     sparql_request = variables.sparql_get_person_object.get_persons()
+    if filter_category != '' and filter_category != 'Personnes':
+        sparql_request = [element for element in sparql_request if filter_category in element]
+    if filter_letter != '':
+        sparql_request = [element for element in sparql_request if filter_letter == element[2][0].lower()]
+    print(sparql_request)
+    print(filter_letter)
     context = {
         'path_name' : ['Personnes'],
         'path_url' : ['/persons/'],
         'sparql_request': sparql_request,
-        'size_sparql_request': len(sparql_request),
         'alphabet_list': alphabet_list,
         'categories': categories,
-        'category':category,
+        'category': filter_category,
+        'page': page,
+        'filter_letter': filter_letter,
     }
 
     return render(request, 'person/person_results.html', context)

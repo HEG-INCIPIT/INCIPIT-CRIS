@@ -6,7 +6,7 @@ def parse_get_persons(sparql_query_answer):
     array_data_parsed = []
     for json_data in loaded_json:
         array_data_parsed.append(
-            [json_data['person']['value'], json_data['given_name']['value'], json_data['family_name']['value']])
+            [json_data['person']['value'], json_data['given_name']['value'], json_data['family_name']['value'], json_data['jobTitle']['value'] if 'jobTitle' in json_data else ''])
     return array_data_parsed
 
 

@@ -10,7 +10,6 @@ def parse_get_projects(sparql_query_answer):
 
 
 def parse_get_full_name_project(sparql_query_answer):
-    print(json.loads(sparql_query_answer))
     if len(json.loads(sparql_query_answer)['results']['bindings']) >0:
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
         dict_data = {
