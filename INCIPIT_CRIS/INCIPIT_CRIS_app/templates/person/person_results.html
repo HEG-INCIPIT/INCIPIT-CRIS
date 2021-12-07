@@ -35,14 +35,18 @@
             </div>
             <div class="box">
                 <div class="results">
-                    <h1 class="category is-size-4">{{ category }} ({{ sparql_request|length }})</h1>
+                    <h1 class="category is-size-4">{{ category }} ({{ len_sparql_request }})</h1>
                     {% if sparql_request|length == 0 %}
-                        <p>Aucune occurence trouvée</p>
+                        <ul>
+                            <div>
+                                <li>Aucune occurence trouvée</li>
+                            </div>
+                        </ul>
                     {% else %}
                         <p class="display-if-none"></p>
                         <ul>
                             {% for result in sparql_request %}
-                                <div class="result-sparql-request to-display-by-job to-display-by-name" name="{{ result.3 }}">
+                                <div>
                                     <li><a class="link-one" href="/persons/{{ result.0 }}">{{ result.2 }} {{ result.1 }}</a></li>
                                     <hr />
                                 </div>
@@ -56,7 +60,7 @@
                             {% for alphabet_letter in alphabet_list %}
                                 <li>
                                     {% if filter_letter == alphabet_letter %}
-                                        <a class="pagination-link is-current" href="/persons/filter/{{ page }}/{{ category }}/{{ alphabet_letter }}">{{ alphabet_letter }}</a>
+                                        <a class="pagination-link is-current" href="/persons/filter/{{ page }}/{{ category }}/">{{ alphabet_letter }}</a>
                                     {% else %}
                                         <a class="pagination-link" href="/persons/filter/{{ page }}/{{ category }}/{{ alphabet_letter }}">{{ alphabet_letter }}</a>
                                     {% endif %}
@@ -65,98 +69,45 @@
                         </ul>
                     </nav>
                 </div>
+                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                    {% if page == 1 %}
+                        <a class="pagination-previous" disabled><i class="fas fa-angle-left"></i></a>
+                    {% else %}
+                        <a class="pagination-previous" href="/persons/filter/{{ page|add:-1 }}/{{ category }}/{{ filter_letter }}"><i class="fas fa-angle-left"></i></a>
+                    {% endif %}
+                    {% if page == last_page %}
+                        <a class="pagination-next" disabled><i class="fas fa-angle-right"></i></a>
+                    {% else %}
+                        <a class="pagination-next" href="/persons/filter/{{ page|add:1 }}/{{ category }}/{{ filter_letter }}"><i class="fas fa-angle-right"></i></a>
+                    {% endif %}
+                    <ul class="pagination-list">
+                        {% for i in range_pages %}
+                            {% if page > 1 and i == 1 %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% elif page > 1 and i == page|add:-1 %}
+                                {% if page > 1 and page > 3 %}
+                                    <li><span class="pagination-ellipsis">&hellip;</span></li>
+                                {% endif %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% if page == i %}
+                                <li><a class="pagination-link is-current" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% if page < last_page and i == page|add:1 %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                                {% if page < last_page and page < last_page|add:-2 %}
+                                    <li><span class="pagination-ellipsis">&hellip;</span></li>
+                                {% endif %}
+                            {% elif page < last_page and i == last_page %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
             </div>
         </section>
 
         {% include 'main/footer.html' %}
-
-        <script>
-            function filterDisplayByCategory(e, filter){
-                var i, nb_tab, tablinks, persons, results_none;
-                var cnt_none = 0;
-
-                nb_tab = document.getElementsByClassName("tab");
-                persons = document.getElementsByClassName("result-sparql-request");
-
-                tablinks = document.getElementsByClassName("tab");
-
-                results_none = document.getElementsByClassName("display-if-none");
-                results_none[0].innerHTML = "";
-
-                for (i = 0; i < persons.length; i++) {
-                    persons[i].className = persons[i].className.replace(" to-display-by-job", "");
-                }
-
-                for (i = 0; i < persons.length; i++) {
-                    if (persons[i].getAttribute("name") != filter && filter!="{{categories.0}}") {
-                        persons[i].style.display = "none";
-                    }
-                    else{
-                        persons[i].className += " to-display-by-job";
-                    }
-
-                    if (persons[i].classList.contains("to-display-by-name") && persons[i].classList.contains("to-display-by-job")){
-                        persons[i].style.display = "block";
-                        cnt_none++;
-                    }
-                }
-
-                if(cnt_none == 0){
-                    results_none[0].innerHTML = "Aucune occurence trouvée";
-                }
-
-                
-                for (i = 0; i < nb_tab.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" is-active", "");
-                }
-
-                e.currentTarget.parentElement.className += " is-active";
-            }
-
-            function filterDisplayByLetter(e, letter){
-                var i, paglinks, persons, results_none;
-                var cnt_none = 0;
-                
-                persons = document.getElementsByClassName("result-sparql-request");
-                paglinks = document.getElementsByClassName("pagination-link");
-                results_none = document.getElementsByClassName("display-if-none");
-                results_none[0].innerHTML = "";
-
-                for (i = 0; i < persons.length; i++) {
-                    persons[i].className = persons[i].className.replace(" to-display-by-name", "")
-                }
-
-                for (i = 0; i < persons.length; i++) {
-                    if (persons[i].firstElementChild.firstElementChild.innerHTML[0].toLowerCase() != letter && !(e.currentTarget.classList.contains("is-current"))) {
-                        persons[i].style.display = "none";
-                    }
-                    else{
-                        persons[i].className += " to-display-by-name"
-                    }
-                    if (persons[i].classList.contains("to-display-by-name") && persons[i].classList.contains("to-display-by-job")){
-                        persons[i].style.display = "block";
-                        cnt_none++;
-                    }
-                }
-
-                console.log(results_none)
-
-                if(cnt_none == 0){
-                    results_none[0].innerHTML = "Aucune occurence trouvée";
-                }
-
-                if (e.currentTarget.classList.contains("is-current")){
-                    e.currentTarget.className = e.currentTarget.className.replace(" is-current", "");
-                }
-                else {
-                    for (i = 0; i < paglinks.length; i++) {
-                        paglinks[i].className = paglinks[i].className.replace(" is-current", "");
-                    }
-    
-                    e.currentTarget.className += " is-current";
-                }
-            }
-        </script>
 
     </body>
 </html>

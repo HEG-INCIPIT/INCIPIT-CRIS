@@ -11,6 +11,8 @@ urlpatterns = [
 
     # Manage data
     path('manage-data/', views.manage_data, name='manage_data'),
+    path('backup-triplestore/', views.backup_triplestore, name='backup_triplestore'),
+    path('download-file/', views.download_file_superuser, name='download_file_superuser'),
     path('populate-triplestore/', views.populate_triplestore, name='populate_triplestore'),
     path('delete-data/', views.delete_data, name='delete_data'),
 

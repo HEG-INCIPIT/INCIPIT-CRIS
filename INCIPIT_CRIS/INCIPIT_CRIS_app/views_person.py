@@ -31,6 +31,8 @@ def person_results(request, page=1, filter_category='Personnes', filter_letter='
         the template.
     '''
 
+    nb_persons_per_page = 5
+
     alphabet_list = list(string.ascii_lowercase)
     categories = [job_title for job_title in list(JobTitle.objects.order_by('job_title').values_list('job_title', flat=True))]
     # It is important to insert the category that display all the persons first, we'll use in the template the index 0 to display everybody
@@ -41,16 +43,22 @@ def person_results(request, page=1, filter_category='Personnes', filter_letter='
         sparql_request = [element for element in sparql_request if filter_category in element]
     if filter_letter != '':
         sparql_request = [element for element in sparql_request if filter_letter == element[2][0].lower()]
-    print(sparql_request)
-    print(filter_letter)
+    
+    last_page = int(len(sparql_request)/nb_persons_per_page)
+    if nb_persons_per_page != len(sparql_request):
+        last_page += ((len(sparql_request)/nb_persons_per_page)%2 > 0)
+
     context = {
         'path_name' : ['Personnes'],
         'path_url' : ['/persons/'],
-        'sparql_request': sparql_request,
+        'len_sparql_request' : len(sparql_request),
+        'sparql_request': sparql_request[(page-1)*nb_persons_per_page:(page-1)*nb_persons_per_page+nb_persons_per_page],
         'alphabet_list': alphabet_list,
         'categories': categories,
         'category': filter_category,
         'page': page,
+        'last_page': last_page,
+        'range_pages': range(1, last_page+1),
         'filter_letter': filter_letter,
     }
 

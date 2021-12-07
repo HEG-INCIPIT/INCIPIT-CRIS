@@ -24,18 +24,31 @@
                 </ul>
             </nav>
 
+            <div>
+                <form action="/backup-triplestore/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="filename" name="filename" value="{{ file }}">
+                    <button class="button is-primary">Backup</button>
+                </form>
+            </div>
+
             {% for file in my_files %}
                 <div>
                     {{ file }}
                     <form action="/populate-triplestore/" method="post">
                         {% csrf_token %}
-                        <input type="hidden" id="file_name" name="file_name" value="{{ file }}">
+                        <input type="hidden" id="filename" name="filename" value="{{ file }}">
                         <button class="button is-primary">Peupler le triplestore</button>
                     </form>
                     <form action="/delete-data/" method="post">
                         {% csrf_token %}
-                        <input type="hidden" id="file_name" name="file_name" value="{{ file }}">
+                        <input type="hidden" id="filename" name="filename" value="{{ file }}">
                         <button class="button is-danger">Supprimer le fichier</button>
+                    </form>
+                    <form action="/download-file/" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" id="filename" name="filename" value="{{ file }}">
+                        <button class="button is-link">Télécharger le fichier</button>
                     </form>
                 </div>
             {% endfor %}
