@@ -32,6 +32,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Extract metadata (tags, labels) for Docker
+      # https://github.com/docker/metadata-action
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build Docker image
@@ -40,8 +48,12 @@ jobs:
           context: .
           push: false
       
+      - name: Start container
+        run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --name cris -e username="admin" -e password="pw" -e username_ark="" -e password_ark="" -e shoulder=""
+        shell: bash
+
       - name: Launch tests
-        run: docker-compose up -d & docker exec incipit-cris-cris-1 python /app/INCIPIT-CRIS/manage.py test
+        run: docker exec cris python /app/INCIPIT-CRIS/manage.py test
         shell: bash
 
 
