@@ -21,7 +21,31 @@ env:
 
 
 jobs:
+  unit-test:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # Build and push Docker image with Buildx (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: false
+          tags: tag
+          labels: label
+      
+      - name: Launch tests
+        run: docker-compose up -d
+        shell: bash
+
+
   build:
+    needs: [unit-test]
 
     runs-on: self-hosted
     permissions:
