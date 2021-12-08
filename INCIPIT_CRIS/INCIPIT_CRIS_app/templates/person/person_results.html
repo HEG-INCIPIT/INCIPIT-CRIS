@@ -85,8 +85,8 @@
                             {% if page > 1 and i == 1 %}
                                 <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
                             {% elif page > 1 and i == page|add:-1 %}
-                                {% if page > 1 and page > 3 %}
-                                    <li><span class="pagination-ellipsis">&hellip;</span></li>
+                                {% if page > 3 %}
+                                    <li><a class="pagination-link" id="btn1">&hellip;</a></li>
                                 {% endif %}
                                 <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
                             {% endif %}
@@ -95,8 +95,8 @@
                             {% endif %}
                             {% if page < last_page and i == page|add:1 %}
                                 <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
-                                {% if page < last_page and page < last_page|add:-2 %}
-                                    <li><span class="pagination-ellipsis">&hellip;</span></li>
+                                {% if page < last_page|add:-2 %}
+                                    <li><a class="pagination-link" id="btn2">&hellip;</a></li>
                                 {% endif %}
                             {% elif page < last_page and i == last_page %}
                                 <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
@@ -105,9 +105,111 @@
                     </ul>
                 </nav>
             </div>
+
+            <div class="modal" id="myModal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                        <section class="modal-card-body">
+                            <p class="is-size-4">Aller à la page :</p>
+                            <input type="text" class="input" id="valueToGo" name="valueToGo" autocomplete="off">
+                            <div class="buttons-to-select-page">
+                                <button class="button" data-bulma-modal="close">Cancel</button>
+                                <button class="button is-success" id="btnToGo" onclick="redirectFunction()">Save changes</button>
+                            </div>
+                        </section>
+                </div>
+              </div>
+
         </section>
 
         {% include 'main/footer.html' %}
+
+        <script>
+            function promptFunction() {
+                var page = prompt("A quelle page souhaitez-vous aller", "{{ page }}");
+                if (page != null) {
+                    window.location.href = "/persons/filter/"+page.toString()+"/{{ category }}/{{ filter_letter }}";
+                }
+            }
+
+            function redirectFunction(){
+                var urlToGo = "/persons/filter/" + document.getElementsByName("valueToGo")[0].value.toString() + "/{{ category }}/{{ filter_letter }}";
+                window.location.href = urlToGo;
+            }
+
+            class BulmaModal {
+                constructor(selector) {
+                    this.elem = document.querySelector(selector)
+                    this.close_data()
+                }
+                
+                show() {
+                    this.elem.classList.toggle('is-active')
+                    this.on_show()
+                }
+                
+                close() {
+                    this.elem.classList.toggle('is-active')
+                    this.on_close()
+                }
+                
+                close_data() {
+                    var modalClose = this.elem.querySelectorAll("[data-bulma-modal='close'], .modal-background")
+                    var that = this
+                    modalClose.forEach(function(e) {
+                        e.addEventListener("click", function() {
+                            
+                            that.elem.classList.toggle('is-active')
+            
+                            var event = new Event('modal:close')
+            
+                            that.elem.dispatchEvent(event);
+                        })
+                    })
+                }
+                
+                on_show() {
+                    var event = new Event('modal:show')
+                
+                    this.elem.dispatchEvent(event);
+                }
+                
+                on_close() {
+                    var event = new Event('modal:close')
+                
+                    this.elem.dispatchEvent(event);
+                }
+                
+                addEventListener(event, callback) {
+                    this.elem.addEventListener(event, callback)
+                }
+            }
+            
+            var btn1 = document.querySelector("#btn1")
+            var btn2 = document.querySelector("#btn2")
+            var mdl = new BulmaModal("#myModal")
+            
+            if (btn1 != null){
+                btn1.addEventListener("click", function () {
+                    mdl.show()
+                })
+            }
+
+            if (btn2 != null){
+                btn2.addEventListener("click", function () {
+                    mdl.show()
+                })
+            }
+
+            var input = document.getElementById("valueToGo");
+            input.addEventListener("keyup", function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("btnToGo").click();
+                }
+            });
+
+        </script>
 
     </body>
 </html>

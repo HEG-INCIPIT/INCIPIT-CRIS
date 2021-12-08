@@ -28,3 +28,8 @@ hr {
 .alphabet-research {
     padding-top: 10px;
 }
+
+.buttons-to-select-page {
+    float: right;
+    margin-top: 10px;
+}

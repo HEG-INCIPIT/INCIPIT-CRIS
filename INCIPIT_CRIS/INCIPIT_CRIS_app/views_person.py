@@ -30,8 +30,8 @@ def person_results(request, page=1, filter_category='Personnes', filter_letter='
         to display results for persons and a dictionnary with all the data needed to fulfill
         the template.
     '''
-
-    nb_persons_per_page = 5
+    # Defines how many persons will be displayed on the pages
+    nb_persons_per_page = 10
 
     alphabet_list = list(string.ascii_lowercase)
     categories = [job_title for job_title in list(JobTitle.objects.order_by('job_title').values_list('job_title', flat=True))]
