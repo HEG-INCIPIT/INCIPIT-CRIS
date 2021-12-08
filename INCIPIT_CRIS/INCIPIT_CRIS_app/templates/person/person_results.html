@@ -75,7 +75,7 @@
                     {% else %}
                         <a class="pagination-previous" href="/persons/filter/{{ page|add:-1 }}/{{ category }}/{{ filter_letter }}"><i class="fas fa-angle-left"></i></a>
                     {% endif %}
-                    {% if page == last_page %}
+                    {% if page == last_page or range_pages|length == 0 %}
                         <a class="pagination-next" disabled><i class="fas fa-angle-right"></i></a>
                     {% else %}
                         <a class="pagination-next" href="/persons/filter/{{ page|add:1 }}/{{ category }}/{{ filter_letter }}"><i class="fas fa-angle-right"></i></a>
