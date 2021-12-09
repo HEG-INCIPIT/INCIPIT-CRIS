@@ -50,7 +50,7 @@ jobs:
           tags: ma_super_image:test
       
       - name: Start container
-        run: docker run ma_super_image:test --name cris -e username="admin" -e password="pw" -e username_ark="" -e password_ark="" -e shoulder=""
+        run: docker run --name cris -e username="admin" -e password="pw" -e username_ark="" -e password_ark="" -e shoulder="" ma_super_image:test
         shell: bash
 
       - name: Launch tests
