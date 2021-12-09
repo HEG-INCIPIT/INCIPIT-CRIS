@@ -1,6 +1,10 @@
 from SPARQLWrapper.Wrapper import ADD
+from django.http import request
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from .forms import *
+import datetime
+import os
 from . import variables
 from django.core.files.storage import FileSystemStorage
 from os import listdir, remove, path
@@ -8,7 +12,9 @@ from os.path import isfile, join
 from django.conf import settings
 from random import sample
 import requests
+import mimetypes
 import socket
+
 
 def index(request):
     '''
@@ -98,8 +104,32 @@ def manage_data(request):
             my_files = []
             if path.isdir(media_path):
                 my_files = [f for f in listdir(media_path) if isfile(join(media_path, f))]
+                my_files.sort(key=lambda x: os.path.getmtime('{}/{}'.format(media_path, x)), reverse=True)
 
             return render(request, 'data/manage_data.html', {'my_files': my_files})
+
+
+def backup_triplestore(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            backup = variables.sparql_generic_get_object.generate_backup()
+            with open('{}/cris-backup-{}.ttl'.format(settings.MEDIA_ROOT, str(datetime.datetime.now())[:-7].replace(' ', '_').replace(':', '-')), 'w') as f:
+                f.write(backup.decode("utf-8"))
+    return redirect(manage_data)
+
+
+def download_file_superuser(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            if isfile(join(settings.MEDIA_ROOT, request.POST['filename'])):
+                filepath = path.join(settings.MEDIA_ROOT, request.POST['filename'])
+                data_file = open(filepath, 'r')
+                mime_type, _ = mimetypes.guess_type(filepath)
+                response = HttpResponse(data_file, content_type=mime_type)
+                response['Content-Disposition'] = "attachment; filename={}".format(request.POST['filename'])
+                return response
+
+    return render(request, 'page_404.html')
 
 
 def populate_triplestore(request):
@@ -117,10 +147,10 @@ def populate_triplestore(request):
         if request.user.is_superuser:
             if request.method == 'POST':
                 media_path = settings.MEDIA_ROOT
-                if isfile(join(media_path, request.POST['file_name'])):
-                    extension = request.POST['file_name'].split('.')[-1]
+                if isfile(join(media_path, request.POST['filename'])):
+                    extension = request.POST['filename'].split('.')[-1]
                     if extension in rdf_format_dictionnary:
-                        f = open(join(media_path, request.POST['file_name']), 'r')
+                        f = open(join(media_path, request.POST['filename']), 'r')
                         data = f.read()
                         f.close()
                         headers = {'Content-Type': rdf_format_dictionnary[extension]}
@@ -134,7 +164,7 @@ def delete_data(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             media_path = settings.MEDIA_ROOT
-            if isfile(join(media_path, request.POST['file_name'])):
-                remove(path.join(settings.MEDIA_ROOT, request.POST['file_name']))
+            if isfile(join(media_path, request.POST['filename'])):
+                remove(path.join(settings.MEDIA_ROOT, request.POST['filename']))
 
             return redirect(manage_data)

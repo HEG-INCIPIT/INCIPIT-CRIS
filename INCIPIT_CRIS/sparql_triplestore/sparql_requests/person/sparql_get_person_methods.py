@@ -42,17 +42,22 @@ class SparqlGetPersonMethods:
         sparql_request = """
             {prefix}
 
-            SELECT ?person ?given_name ?family_name WHERE
+            SELECT ?person ?given_name ?family_name ?jobTitle WHERE
             {{
                 ?person a schema:Person .
                 ?person schema:givenName ?given_name .
                 ?person schema:familyName ?family_name .
+                OPTIONAL {{ ?person schema:jobTitle ?jobTitle }}
             }}
         """.format(prefix=variables.prefix)
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_persons(self.sparql.query().response.read())
+        array_person_parsed = parse_get_persons(self.sparql.query().response.read())
+        array_person_parsed.sort(key=lambda item: item[1])
+
+        return array_person_parsed
+
 
     def get_full_name_person(self, pid):
         """

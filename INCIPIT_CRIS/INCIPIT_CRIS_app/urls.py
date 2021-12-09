@@ -14,6 +14,8 @@ urlpatterns = [
 
     # Manage data
     path('manage-data/', views.manage_data, name='manage_data'),
+    path('backup-triplestore/', views.backup_triplestore, name='backup_triplestore'),
+    path('download-file/', views.download_file_superuser, name='download_file_superuser'),
     path('populate-triplestore/', views.populate_triplestore, name='populate_triplestore'),
     path('delete-data/', views.delete_data, name='delete_data'),
 
@@ -23,6 +25,8 @@ urlpatterns = [
 
     # Persons urls
     path('persons/', views_person.person_results, name='person_results'),
+    path('persons/filter/<int:page>/<str:filter_category>/', views_person.person_results, name='person_results'),
+    path('persons/filter/<int:page>/<str:filter_category>/<str:filter_letter>', views_person.person_results, name='person_results'),
     path('persons/edition/profil/add-article/<path:pid>', views_person.person_article_addition, name='person_article_addition'),
     path('persons/edition/profil/delete-article/<path:pid>', views_person.person_article_deletion, name='person_article_deletion'),
     path('persons/edition/profil/add-project/<path:pid>', views_person.person_project_addition, name='person_project_addition'),

@@ -26,23 +26,30 @@
                 <ul>
                     {% for categ in categories %}
                         {% if category == categ %}
-                            <li class="is-active"><a class="link-one" href="">{{ categ }}</a></li>
+                            <li id="{{ categ }}" class="tab is-active"><a class="link-one" href="/persons/filter/{{ page }}/{{ categ }}/{{ filter_letter }}">{{ categ }}</a></li>
                         {% else %}
-                            <li class=""><a class="link-one" href="">{{ categ }}</a></li>
+                            <li id="{{ categ }}" class="tab"><a class="link-one" href="/persons/filter/{{ page }}/{{ categ }}/{{ filter_letter }}">{{ categ }}</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>
             </div>
             <div class="box">
                 <div class="results">
-                    <h1 class="category is-size-4">{{ category }} ({{ size_sparql_request }})</h1>
-                    {% if size_sparql_request == 0 %}
-                        <p>Aucune occurence trouvée</p>
+                    <h1 class="category is-size-4">{{ category }} ({{ len_sparql_request }})</h1>
+                    {% if sparql_request|length == 0 %}
+                        <ul>
+                            <div>
+                                <li>Aucune occurence trouvée</li>
+                            </div>
+                        </ul>
                     {% else %}
+                        <p class="display-if-none"></p>
                         <ul>
                             {% for result in sparql_request %}
-                                <li><a class="link-one" href="{% url "person_profile" result.0 %}">{{ result.2 }} {{ result.1 }}</a></li>
-                                <hr />
+                                <div>
+                                    <li><a class="link-one" href="/persons/{{ result.0 }}">{{ result.2 }} {{ result.1 }}</a></li>
+                                    <hr />
+                                </div>
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -50,17 +57,87 @@
                 <div class="alphabet-research has-text-centered">
                     <nav class="pagination is-small is-centered" role="navigation" aria-label="pagination">
                         <ul class="pagination-list">
-                            {% for letter in alphabet_list %}
+                            {% for alphabet_letter in alphabet_list %}
                                 <li>
-                                    <a class="pagination-link" href="">{{ letter }}</a>
+                                    {% if filter_letter == alphabet_letter %}
+                                        <a class="pagination-link is-current" href="/persons/filter/{{ page }}/{{ category }}/">{{ alphabet_letter }}</a>
+                                    {% else %}
+                                        <a class="pagination-link" href="/persons/filter/{{ page }}/{{ category }}/{{ alphabet_letter }}">{{ alphabet_letter }}</a>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
                     </nav>
                 </div>
+                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                    {% if page == 1 %}
+                        <a class="pagination-previous" disabled><i class="fas fa-angle-left"></i></a>
+                    {% else %}
+                        <a class="pagination-previous" href="/persons/filter/{{ page|add:-1 }}/{{ category }}/{{ filter_letter }}"><i class="fas fa-angle-left"></i></a>
+                    {% endif %}
+                    {% if page == last_page or range_pages|length == 0 %}
+                        <a class="pagination-next" disabled><i class="fas fa-angle-right"></i></a>
+                    {% else %}
+                        <a class="pagination-next" href="/persons/filter/{{ page|add:1 }}/{{ category }}/{{ filter_letter }}"><i class="fas fa-angle-right"></i></a>
+                    {% endif %}
+                    <ul class="pagination-list">
+                        {% for i in range_pages %}
+                            {% if page > 1 and i == 1 %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% elif page > 1 and i == page|add:-1 %}
+                                {% if page > 3 %}
+                                    <li><a class="pagination-link" id="btn1">&hellip;</a></li>
+                                {% endif %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% if page == i %}
+                                <li><a class="pagination-link is-current" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% if page < last_page and i == page|add:1 %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                                {% if page < last_page|add:-2 %}
+                                    <li><a class="pagination-link" id="btn2">&hellip;</a></li>
+                                {% endif %}
+                            {% elif page < last_page and i == last_page %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="/persons/filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
             </div>
+
+            <div class="modal" id="myModal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                        <section class="modal-card-body">
+                            <p class="is-size-4">Aller à la page :</p>
+                            <input type="text" class="input" id="valueToGo" name="valueToGo" autocomplete="off">
+                            <div class="buttons-to-select-page">
+                                <button class="button" data-bulma-modal="close">Cancel</button>
+                                <button class="button is-success" id="btnToGo" onclick="redirectFunction()">Save changes</button>
+                            </div>
+                        </section>
+                </div>
+              </div>
+
         </section>
 
         {% include 'main/footer.html' %}
+
+        <script type="text/javascript" src="{% static 'js/bulmaModal.js' %}"></script>
+        <script>
+            function promptFunction() {
+                var page = prompt("A quelle page souhaitez-vous aller", "{{ page }}");
+                if (page != null) {
+                    window.location.href = "/persons/filter/"+page.toString()+"/{{ category }}/{{ filter_letter }}";
+                }
+            }
+            
+            function redirectFunction(){
+                var urlToGo = "/persons/filter/" + document.getElementsByName("valueToGo")[0].value.toString() + "/{{ category }}/{{ filter_letter }}";
+                window.location.href = urlToGo;
+            }
+        </script>
+
     </body>
 </html>

@@ -39,7 +39,7 @@ ja:RDFDatasetZero  rdfs:subClassOf  ja:RDFDataset .
 
 :tdb_dataset_readwrite
         a              tdb2:DatasetTDB2 ;
-        tdb2:location  "/Users/david/Documents/HEG/Code/INCIPIT-CRIS/fuseki/run/databases/INCIPIT-CRIS" .
+        tdb2:location  "run/databases/INCIPIT-CRIS" .
 
 tdb2:GraphTDB  rdfs:subClassOf  ja:Model .
 
