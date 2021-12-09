@@ -53,6 +53,10 @@ jobs:
         run: docker run -d --name cris -e username="admin" -e password="pw" -e username_ark="" -e password_ark="" -e shoulder="" ma_super_image:test
         shell: bash
         
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
+        
       - name: Launch tests
         run: docker exec cris python /app/INCIPIT_CRIS/manage.py test
         shell: bash
