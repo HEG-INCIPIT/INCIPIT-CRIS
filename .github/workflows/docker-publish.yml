@@ -49,9 +49,14 @@ jobs:
           push: false
           tags: ma_super_image:test
       
-      - name: Start container and launch test
-        run: docker run --name cris -e username="admin" -e password="pw" -e username_ark="" -e password_ark="" -e shoulder="" ma_super_image:test python /app/INCIPIT_CRIS/manage.py test
+      - name: Start container
+        run: docker run -d --name cris -e username="admin" -e password="pw" -e username_ark="" -e password_ark="" -e shoulder="" ma_super_image:test
         shell: bash
+        
+      - name: Launch tests
+        run: docker exec cris python /app/INCIPIT-CRIS/manage.py test
+        shell: bash
+
 
   build:
     needs: [unit-test]
