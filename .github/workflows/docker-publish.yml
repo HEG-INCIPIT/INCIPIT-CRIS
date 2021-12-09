@@ -51,8 +51,8 @@ jobs:
         run: docker exec cris python3.7 /app/INCIPIT_CRIS/manage.py test
         shell: bash
         
-      - name: Stop Docker Container
-        run: docker stop cris
+      - name: Remove Docker Container
+        run: docker rm --force cris
         shell: bash
       
       - name: Remove Docker Image
