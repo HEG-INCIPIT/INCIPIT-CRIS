@@ -58,7 +58,7 @@ jobs:
         shell: bash
         
       - name: Launch tests
-        run: docker exec cris python /app/INCIPIT_CRIS/manage.py test
+        run: docker exec cris python3.7 /app/INCIPIT_CRIS/manage.py test
         shell: bash
 
 
