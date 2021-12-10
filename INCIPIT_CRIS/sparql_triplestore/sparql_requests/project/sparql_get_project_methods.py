@@ -54,7 +54,10 @@ class SparqlGetProjectMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_projects(self.sparql.query().response.read())
+        array_projects_parsed = parse_get_projects(self.sparql.query().response.read())
+        array_projects_parsed.sort(key=lambda item: item[1])
+
+        return array_projects_parsed
 
 
     def get_full_name_project(self, pid):

@@ -54,7 +54,10 @@ class SparqlGetArticleMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_articles(self.sparql.query().response.read())
+        array_article_parsed = parse_get_articles(self.sparql.query().response.read())
+        array_article_parsed.sort(key=lambda item: item[1])
+
+        return array_article_parsed
 
 
     def get_full_name_article(self, pid):

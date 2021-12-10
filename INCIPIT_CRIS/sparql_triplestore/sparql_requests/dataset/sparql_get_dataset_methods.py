@@ -54,7 +54,10 @@ class SparqlGetDatasetMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_datasets(self.sparql.query().response.read())
+        array_datasets_parsed = parse_get_datasets(self.sparql.query().response.read())
+        array_datasets_parsed.sort(key=lambda item: item[1])
+
+        return array_datasets_parsed
 
 
     def get_full_name_dataset(self, pid):

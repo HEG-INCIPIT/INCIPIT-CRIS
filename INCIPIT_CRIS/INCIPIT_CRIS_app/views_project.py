@@ -9,7 +9,7 @@ from . import variables
 from . import form_selection
 
 
-def project_results(request):
+def project_results(request, page=1, filter_category='Projets', filter_letter=''):
     '''
     Search in the triplestore all the projects and format a dictionnary that's used
     in the template to display information.
@@ -27,19 +27,35 @@ def project_results(request):
         the template.
     '''
 
+    # Defines how many projects will be displayed on the pages
+    nb_projects_per_page = 10
+
     alphabet_list = list(string.ascii_lowercase)
-    categories = ['Projets de recherche']
-    category = categories[0]
+    categories = ['Projets']
     sparql_request = variables.sparql_get_project_object.get_projects()
+
+    if filter_category != '' and filter_category != 'Projets':
+        sparql_request = [element for element in sparql_request if filter_category in element]
+    if filter_letter != '':
+        sparql_request = [element for element in sparql_request if filter_letter == element[1][0].lower()]
+    
+    last_page = int(len(sparql_request)/nb_projects_per_page)
+    if len(sparql_request)%nb_projects_per_page != 0:
+        last_page += 1
+
     context = {
         'path_name' : ['Projets'],
         'path_url' : ['/projects/'],
-        'sparql_request': sparql_request,
-        'size_sparql_request': len(sparql_request),
+        'sparql_request': sparql_request[(page-1)*nb_projects_per_page:(page-1)*nb_projects_per_page+nb_projects_per_page],
+        'len_sparql_request': len(sparql_request),
         'alphabet_list': alphabet_list,
         'categories': categories,
-        'category':category,
+        'category': filter_category,
         'url':'/projects/',
+        'page': page,
+        'last_page': last_page,
+        'range_pages': range(1, last_page+1),
+        'filter_letter': filter_letter,
     }
 
     return render(request, 'generic/results.html', context)

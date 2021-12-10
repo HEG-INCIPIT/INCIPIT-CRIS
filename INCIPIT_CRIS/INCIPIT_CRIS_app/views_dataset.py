@@ -9,7 +9,7 @@ from . import variables
 from . import form_selection
 
 
-def dataset_results(request):
+def dataset_results(request, page=1, filter_category='Jeux de données', filter_letter=''):
     '''
     Search in the triplestore all the datasets and format a dictionnary that's used
     in the template to display information.
@@ -26,19 +26,36 @@ def dataset_results(request):
         to display results for datasets and a dictionnary with all the data needed to fulfill
         the template.
     '''
+
+    # Defines how many dataset will be displayed on the pages
+    nb_dataset_per_page = 10
+
     alphabet_list = list(string.ascii_lowercase)
     categories = ['Jeux de données']
-    category = categories[0]
     sparql_request = variables.sparql_get_dataset_object.get_datasets()
+
+    if filter_category != '' and filter_category != 'Jeux de données':
+        sparql_request = [element for element in sparql_request if filter_category in element]
+    if filter_letter != '':
+        sparql_request = [element for element in sparql_request if filter_letter == element[1][0].lower()]
+    
+    last_page = int(len(sparql_request)/nb_dataset_per_page)
+    if len(sparql_request)%nb_dataset_per_page != 0:
+        last_page += 1
+
     context = {
         'path_name' : ['Données'],
         'path_url' : ['/datasets/'],
-        'sparql_request': sparql_request,
-        'size_sparql_request': len(sparql_request),
+        'sparql_request': sparql_request[(page-1)*nb_dataset_per_page:(page-1)*nb_dataset_per_page+nb_dataset_per_page],
+        'len_sparql_request': len(sparql_request),
         'alphabet_list': alphabet_list,
         'categories': categories,
-        'category':category,
-        'url':'/datasets/'
+        'category': filter_category,
+        'url':'/datasets/',
+        'page': page,
+        'last_page': last_page,
+        'range_pages': range(1, last_page+1),
+        'filter_letter': filter_letter,
     }
 
     return render(request, 'generic/results.html', context)

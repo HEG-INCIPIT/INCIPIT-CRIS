@@ -55,7 +55,10 @@ class SparqlGetInstitutionMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_institutions(self.sparql.query().response.read())
+        array_institutions_parsed = parse_get_institutions(self.sparql.query().response.read())
+        array_institutions_parsed.sort(key=lambda item: item[1])
+
+        return array_institutions_parsed
 
 
     def get_top_lvl_institutions(self):

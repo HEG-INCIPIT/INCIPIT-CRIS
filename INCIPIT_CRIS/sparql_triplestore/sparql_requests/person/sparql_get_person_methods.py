@@ -54,7 +54,7 @@ class SparqlGetPersonMethods:
         self.sparql.setQuery(sparql_request)
 
         array_person_parsed = parse_get_persons(self.sparql.query().response.read())
-        array_person_parsed.sort(key=lambda item: item[1])
+        array_person_parsed.sort(key=lambda item: item[2])
 
         return array_person_parsed
 

@@ -56,7 +56,10 @@ class SparqlGetFunderMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_institutions(self.sparql.query().response.read())
+        array_funders_parsed = parse_get_institutions(self.sparql.query().response.read())
+        array_funders_parsed.sort(key=lambda item: item[1])
+
+        return array_funders_parsed
 
 
     def check_funder_ark(self, pid):
