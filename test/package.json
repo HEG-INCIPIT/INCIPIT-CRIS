@@ -1,0 +1,23 @@
+{
+  "name": "incipit-cris-tests",
+  "version": "0.0.1",
+  "description": "A set of tests using cypress",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "cypress": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HEG-INCIPIT/ARKetype-Selenium-Tests-Files.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HEG-INCIPIT/ARKetype-Selenium-Tests-Files/issues"
+  },
+  "homepage": "https://github.com/HEG-INCIPIT/ARKetype-Selenium-Tests-Files#readme",
+  "devDependencies": {
+    "cypress": "^9.1.1"
+  }
+}
