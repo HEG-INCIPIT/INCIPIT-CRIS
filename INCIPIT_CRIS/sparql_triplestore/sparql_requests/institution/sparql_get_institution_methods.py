@@ -105,32 +105,6 @@ class SparqlGetInstitutionMethods:
         return dict_institution
 
 
-    def get_projects_institution(self, pid):
-        """
-        Get all the projects of an institution
-        And return an array with tuples (identifier, dictionnary)
-        """
-
-        sparql_request = """
-            {prefix}
-
-            SELECT ?project WHERE
-            {{
-                ?project schema:sponsor <{ark_research}> .
-            }}
-        """.format(prefix=variables.prefix, ark_research=pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        array_projects = []
-
-        for project in parse_get_projects_institution(self.sparql.query().response.read()):
-            name = variables.sparql_get_project_object.get_full_name_project(project)
-            array_projects.append([project, name])
-
-        return array_projects
-
-
     def get_sub_organization_institution(self, pid):
 
         sparql_request = """

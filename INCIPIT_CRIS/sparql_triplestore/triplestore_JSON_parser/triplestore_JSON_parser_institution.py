@@ -82,7 +82,7 @@ def parse_get_persons_institution(sparql_query_answer):
     array_persons = []
     for person in loaded_json:
         array_persons.append(person['person']['value'])
-        
+
     return array_persons
 
 
@@ -91,7 +91,7 @@ def parse_get_articles_institution(sparql_query_answer):
     array_articles = []
     for article in loaded_json:
         array_articles.append(article['article']['value'])
-        
+
     return array_articles
 
 
@@ -100,7 +100,7 @@ def parse_get_projects_institution(sparql_query_answer):
     array_projects = []
     for project in loaded_json:
         array_projects.append(project['project']['value'])
-        
+
     return array_projects
 
 
@@ -109,5 +109,5 @@ def parse_get_datasets_institution(sparql_query_answer):
     array_datasets = []
     for dataset in loaded_json:
         array_datasets.append(dataset['dataset']['value'])
-        
+
     return array_datasets
