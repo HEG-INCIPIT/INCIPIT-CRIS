@@ -1,3 +1,4 @@
 node_modules/
 cypress/integration/*
 !cypress/integration/cris.spec.js
+cypress.env.json
