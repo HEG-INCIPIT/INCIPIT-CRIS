@@ -1,7 +1,40 @@
 from django.test import TestCase
+from .triplestore_JSON_parser.triplestore_JSON_parser_generic import *
 from .triplestore_JSON_parser.triplestore_JSON_parser_article import *
 
 # Create your tests here.
+
+class GenericSONParser(TestCase):
+    #######################################################################################################################################
+    # Creating json variables to test parser
+    #######################################################################################################################################
+
+    # parse_get_simple_elements_article
+
+    get_authors_article = b'{ "head": {\n    "vars": [ "author" ]\n  } ,\n  "results": {\n    "bindings": [\n \
+        { \n        "author": { "type": "uri" , "value": "ark:/99999/1" }\n      } ,\n \
+        { \n        "author": { "type": "uri" , "value": "ark:/99999/2" }\n      } ,\n \
+        { \n        "author": { "type": "uri" , "value": "ark:/99999/3" }\n      }\n    ]\n  }\n}\n'
+
+    get_authors_article_empty = b'{ "head": {\n    "vars": [ "author" ]\n  } ,\n  "results": {\n    "bindings": [\n \n]\n  }\n}\n'
+
+    get_projects_article = b'{ "head": {\n    "vars": [ "project" ]\n  } ,\n  "results": {\n    "bindings": [\n \
+        { \n        "project": { "type": "uri" , "value": "ark:/99999/1" }\n      } ,\n \
+        { \n        "project": { "type": "uri" , "value": "ark:/99999/2" }\n      } ,\n \
+        { \n        "project": { "type": "uri" , "value": "ark:/99999/3" }\n      }\n    ]\n  }\n}\n'
+
+    get_projects_article_empty = b'{ "head": {\n    "vars": [ "project" ]\n  } ,\n  "results": {\n    "bindings": [\n \n]\n  }\n}\n'
+
+
+    def test_article_JSON_parser(self):
+        # parse_get_simple_elements_article
+        self.assertEqual(parse_get_simple_elements_article(self.get_authors_article, 'author'), ['ark:/99999/1', 'ark:/99999/2', 'ark:/99999/3'])
+        self.assertEqual(parse_get_simple_elements_article(self.get_authors_article_empty, 'author'), [])
+
+        self.assertEqual(parse_get_simple_elements_article(self.get_projects_article, 'project'), ['ark:/99999/1', 'ark:/99999/2', 'ark:/99999/3'])
+        self.assertEqual(parse_get_simple_elements_article(self.get_projects_article_empty, 'project'), [])
+
+
 class ArticleJSONParser(TestCase):
     #######################################################################################################################################
     # Creating json variables to test parser
@@ -23,22 +56,6 @@ class ArticleJSONParser(TestCase):
         { \n        "scholarlyArticle": { "type": "uri" , "value": "https://schema.org/ScholarlyArticle" }\n      }\n    ]\n  }\n}\n'
 
     check_article_false = b'{ "head": {\n    "vars": [ "scholarlyArticle" ]\n  } ,\n  "results": {\n    "bindings": [\n    \n]\n  }\n}\n'
-
-    # parse_get_simple_elements_article
-
-    get_authors_article = b'{ "head": {\n    "vars": [ "author" ]\n  } ,\n  "results": {\n    "bindings": [\n \
-        { \n        "author": { "type": "uri" , "value": "ark:/99999/1" }\n      } ,\n \
-        { \n        "author": { "type": "uri" , "value": "ark:/99999/2" }\n      } ,\n \
-        { \n        "author": { "type": "uri" , "value": "ark:/99999/3" }\n      }\n    ]\n  }\n}\n'
-
-    get_authors_article_empty = b'{ "head": {\n    "vars": [ "author" ]\n  } ,\n  "results": {\n    "bindings": [\n \n]\n  }\n}\n'
-
-    get_projects_article = b'{ "head": {\n    "vars": [ "project" ]\n  } ,\n  "results": {\n    "bindings": [\n \
-        { \n        "project": { "type": "uri" , "value": "ark:/99999/1" }\n      } ,\n \
-        { \n        "project": { "type": "uri" , "value": "ark:/99999/2" }\n      } ,\n \
-        { \n        "project": { "type": "uri" , "value": "ark:/99999/3" }\n      }\n    ]\n  }\n}\n'
-
-    get_projects_article_empty = b'{ "head": {\n    "vars": [ "project" ]\n  } ,\n  "results": {\n    "bindings": [\n \n]\n  }\n}\n'
 
     # parse_get_data_article
     get_data_article = b'{ "head": {\n    "vars": [ "name" , "abstract" , "datePublished" , "url" ]\n  } ,\n  "results": {\n    "bindings": [\n \
@@ -65,13 +82,6 @@ class ArticleJSONParser(TestCase):
         self.assertEqual(parse_check_article_ark(self.check_article_true), True)
         self.assertEqual(parse_check_article_ark(self.check_article_false), False)
 
-        # parse_get_simple_elements_article
-        self.assertEqual(parse_get_simple_elements_article(self.get_authors_article, 'author'), ['ark:/99999/1', 'ark:/99999/2', 'ark:/99999/3'])
-        self.assertEqual(parse_get_simple_elements_article(self.get_authors_article_empty, 'author'), [])
-
-        self.assertEqual(parse_get_simple_elements_article(self.get_projects_article, 'project'), ['ark:/99999/1', 'ark:/99999/2', 'ark:/99999/3'])
-        self.assertEqual(parse_get_simple_elements_article(self.get_projects_article_empty, 'project'), [])
-
         # parse_get_data_article
         self.assertEqual(parse_get_data_article(self.get_data_article), {'name': 'Article name test', 'abstract': 'Article abstract test', 'date_published': '2022-01-01', 'url': 'www.url.ch'})
         self.assertEqual(parse_get_data_article(self.get_data_article_empty), {'name': '', 'abstract': '', 'date_published': '', 'url': ''})
@@ -79,3 +89,4 @@ class ArticleJSONParser(TestCase):
         # parse_get_DOI_information
         self.assertEqual(parse_get_DOI_information(self.get_DOI_information), '10.1')
         self.assertEqual(parse_get_DOI_information(self.get_DOI_information_empty), '')
+
