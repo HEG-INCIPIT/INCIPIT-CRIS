@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_article import *
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import parse_get_simple_elements_article
 from .. import variables
 
 
