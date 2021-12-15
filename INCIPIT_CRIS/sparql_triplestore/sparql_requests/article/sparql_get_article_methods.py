@@ -60,25 +60,6 @@ class SparqlGetArticleMethods:
         return array_article_parsed
 
 
-    def get_full_name_article(self, pid):
-        """
-        Get the name of an article formated in a dict
-        Return a dict with name
-        """
-        sparql_request = """
-            {prefix}
-
-            SELECT ?name WHERE
-            {{
-                <{ark_research}> schema:name ?name .
-            }}
-        """.format(prefix=variables.prefix, ark_research=pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        return parse_get_full_name_article(self.sparql.query().response.read())
-
-
     def get_authors_article(self, pid):
         """
         Get all the authors of an article
@@ -98,7 +79,7 @@ class SparqlGetArticleMethods:
 
         array_authors = []
 
-        for author in parse_get_authors_article(self.sparql.query().response.read()):
+        for author in parse_get_simple_elements_article(self.sparql.query().response.read(), 'author'):
             full_name = variables.sparql_get_person_object.get_full_name_person(author)
             array_authors.append([author, full_name])
 
@@ -127,10 +108,11 @@ class SparqlGetArticleMethods:
 
         array_projects = []
 
-        for project in parse_get_projects_article(self.sparql.query().response.read()):
+        for project in parse_get_simple_elements_article(self.sparql.query().response.read(), 'project'):
             array_projects.append(variables.sparql_get_project_object.get_data_project(project))
         array_projects.sort(key=lambda item: item['founding_date'], reverse=True)
         return array_projects
+
 
     def get_datasets_article(self, pid):
         """
@@ -151,7 +133,7 @@ class SparqlGetArticleMethods:
 
         array_datasets = []
 
-        for dataset in parse_get_datasets_article(self.sparql.query().response.read()):
+        for dataset in parse_get_simple_elements_article(self.sparql.query().response.read(), 'dataset'):
             array_datasets.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
 
         return array_datasets
@@ -176,7 +158,7 @@ class SparqlGetArticleMethods:
 
         array_institutions = []
 
-        for institution in parse_get_institutions_article(self.sparql.query().response.read()):
+        for institution in parse_get_simple_elements_article(self.sparql.query().response.read(), 'sourceOrganization'):
             data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
@@ -230,8 +212,6 @@ class SparqlGetArticleMethods:
         institutions = variables.sparql_get_article_object.get_institutions_article(pid)
         doi = variables.sparql_get_article_object.get_DOI_article(pid)
 
-
-
         data_article['authors'] = authors
         data_article['len_authors'] = len(authors)
         data_article['projects'] = projects
@@ -243,6 +223,7 @@ class SparqlGetArticleMethods:
         data_article['pid'] = pid
 
         return data_article
+
 
     def get_minimum_data_article(self, pid):
         """
@@ -275,6 +256,7 @@ class SparqlGetArticleMethods:
         data_article['pid'] = pid
 
         return data_article
+
 
     def check_article_ark(self, pid):
         """
