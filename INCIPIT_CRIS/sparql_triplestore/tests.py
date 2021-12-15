@@ -4,7 +4,7 @@ from .triplestore_JSON_parser.triplestore_JSON_parser_article import *
 
 # Create your tests here.
 
-class GenericSONParser(TestCase):
+class GenericJSONParser(TestCase):
     #######################################################################################################################################
     # Creating json variables to test parser
     #######################################################################################################################################
