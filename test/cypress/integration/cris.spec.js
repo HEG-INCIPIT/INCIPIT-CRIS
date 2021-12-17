@@ -46,8 +46,9 @@ function acceptCookies(){
 function cris_login(){
     cy.visit(baseUrl+'/login')
     acceptCookies()
+    console.log(Cypress.env('cris_account'))
     cy.get('.title.is-4').contains('Connectez-vous')
-    cy.get('#id_username').type(Cypress.env('cris_account_admin_username'))
-    cy.get('#id_password').type(Cypress.env('cris_account_admin_password'))
+    cy.get('#id_username').type(Cypress.env('cris_account').admin.username)
+    cy.get('#id_password').type(Cypress.env('cris_account').admin.password)
     cy.get('form > .button.is-primary').contains('Connexion').click()
 }
