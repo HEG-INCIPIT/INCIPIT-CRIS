@@ -1,6 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_dataset import *
-from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import parse_get_simple_elements_article
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import parse_get_simple_elements, parse_check_ark
 from .. import variables
 
 
@@ -80,7 +80,7 @@ class SparqlGetDatasetMethods:
 
         array_maintainers = []
 
-        for maintainer in parse_get_simple_elements_article(self.sparql.query().response.read(), 'maintainer'):
+        for maintainer in parse_get_simple_elements(self.sparql.query().response.read(), 'maintainer'):
             full_name = variables.sparql_get_person_object.get_full_name_person(maintainer)
             array_maintainers.append([maintainer, full_name])
 
@@ -108,7 +108,7 @@ class SparqlGetDatasetMethods:
 
         array_creators = []
 
-        for creator in parse_get_simple_elements_article(self.sparql.query().response.read(), 'creator'):
+        for creator in parse_get_simple_elements(self.sparql.query().response.read(), 'creator'):
             full_name = variables.sparql_get_person_object.get_full_name_person(creator)
             array_creators.append([creator, full_name])
 
@@ -136,7 +136,7 @@ class SparqlGetDatasetMethods:
 
         array_projects = []
 
-        for project in parse_get_simple_elements_article(self.sparql.query().response.read(), 'project'):
+        for project in parse_get_simple_elements(self.sparql.query().response.read(), 'project'):
             array_projects.append(variables.sparql_get_project_object.get_minimum_data_project(project))
         array_projects.sort(key=lambda item: item['founding_date'], reverse=True)
 
@@ -162,7 +162,7 @@ class SparqlGetDatasetMethods:
 
         array_articles = []
 
-        for article in parse_get_simple_elements_article(self.sparql.query().response.read(), 'article'):
+        for article in parse_get_simple_elements(self.sparql.query().response.read(), 'article'):
             array_articles.append(variables.sparql_get_article_object.get_minimum_data_article(article))
         array_articles.sort(key=lambda item: item['date_published'], reverse=True)
 
@@ -188,7 +188,7 @@ class SparqlGetDatasetMethods:
 
         array_institutions = []
 
-        for institution in parse_get_simple_elements_article(self.sparql.query().response.read(), 'sourceOrganization'):
+        for institution in parse_get_simple_elements(self.sparql.query().response.read(), 'sourceOrganization'):
             data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
@@ -255,7 +255,7 @@ class SparqlGetDatasetMethods:
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
-        return parse_check_dataset_ark(self.sparql.query().response.read())
+        return parse_check_ark(self.sparql.query().response.read())
 
 
     def get_data_download_dataset(self, pid):

@@ -1,6 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_article import *
-from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import parse_get_simple_elements_article
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import parse_get_simple_elements, parse_check_ark
 from .. import variables
 
 
@@ -80,7 +80,7 @@ class SparqlGetArticleMethods:
 
         array_authors = []
 
-        for author in parse_get_simple_elements_article(self.sparql.query().response.read(), 'author'):
+        for author in parse_get_simple_elements(self.sparql.query().response.read(), 'author'):
             full_name = variables.sparql_get_person_object.get_full_name_person(author)
             array_authors.append([author, full_name])
 
@@ -109,7 +109,7 @@ class SparqlGetArticleMethods:
 
         array_projects = []
 
-        for project in parse_get_simple_elements_article(self.sparql.query().response.read(), 'project'):
+        for project in parse_get_simple_elements(self.sparql.query().response.read(), 'project'):
             array_projects.append(variables.sparql_get_project_object.get_data_project(project))
         array_projects.sort(key=lambda item: item['founding_date'], reverse=True)
         return array_projects
@@ -134,7 +134,7 @@ class SparqlGetArticleMethods:
 
         array_datasets = []
 
-        for dataset in parse_get_simple_elements_article(self.sparql.query().response.read(), 'dataset'):
+        for dataset in parse_get_simple_elements(self.sparql.query().response.read(), 'dataset'):
             array_datasets.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
 
         return array_datasets
@@ -159,7 +159,7 @@ class SparqlGetArticleMethods:
 
         array_institutions = []
 
-        for institution in parse_get_simple_elements_article(self.sparql.query().response.read(), 'sourceOrganization'):
+        for institution in parse_get_simple_elements(self.sparql.query().response.read(), 'sourceOrganization'):
             data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
@@ -275,4 +275,4 @@ class SparqlGetArticleMethods:
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
-        return parse_check_article_ark(self.sparql.query().response.read())
+        return parse_check_ark(self.sparql.query().response.read())

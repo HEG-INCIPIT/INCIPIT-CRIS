@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_institution import *
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import *
 from .. import variables
 
 
@@ -85,29 +86,6 @@ class SparqlGetInstitutionMethods:
         return parse_get_institutions(self.sparql.query().response.read())
 
 
-    def get_full_name_institution(self, pid):
-        """
-        Get the name of an institution formated in a dict
-        Return a dict with name
-        """
-        sparql_request = """
-            {prefix}
-
-            SELECT ?name ?alternateName WHERE
-            {{
-                <{ark_research}> schema:name ?name .
-                <{ark_research}> schema:alternateName ?alternateName .
-            }}
-        """.format(prefix=variables.prefix, ark_research=pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        dict_institution = parse_get_full_name_institution(self.sparql.query().response.read())
-        dict_institution['pid'] = pid
-
-        return dict_institution
-
-
     def get_sub_organization_institution(self, pid):
 
         sparql_request = """
@@ -190,7 +168,7 @@ class SparqlGetInstitutionMethods:
 
         array_persons = []
 
-        result_sparql_request_parser = parse_get_persons_institution(self.sparql.query().response.read())
+        result_sparql_request_parser = parse_get_simple_elements(self.sparql.query().response.read(), 'person')
 
         for worker in result_sparql_request_parser:
             data_person = variables.SparqlGetPersonMethods.get_full_name_person(self, worker)
@@ -220,7 +198,7 @@ class SparqlGetInstitutionMethods:
 
         array_affiliates = []
 
-        for affiliate in parse_get_persons_institution(self.sparql.query().response.read()):
+        for affiliate in parse_get_simple_elements(self.sparql.query().response.read(), 'person'):
             data_affiliate = variables.SparqlGetPersonMethods.get_full_name_person(self, affiliate)
             array_affiliates.append(data_affiliate)
 
@@ -247,7 +225,7 @@ class SparqlGetInstitutionMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        articles = parse_get_articles_institution(self.sparql.query().response.read())
+        articles = parse_get_simple_elements(self.sparql.query().response.read(), 'article')
 
         articles_sorted = []
         for article in articles:
@@ -274,7 +252,7 @@ class SparqlGetInstitutionMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        projects = parse_get_projects_institution(self.sparql.query().response.read())
+        projects = parse_get_simple_elements(self.sparql.query().response.read(), 'project')
 
         projects_sorted = []
         for project in projects:
@@ -302,7 +280,7 @@ class SparqlGetInstitutionMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        datasets = parse_get_datasets_institution(self.sparql.query().response.read())
+        datasets = parse_get_simple_elements(self.sparql.query().response.read(), 'dataset')
 
         datasets_sorted = []
         for dataset in datasets:
@@ -341,7 +319,6 @@ class SparqlGetInstitutionMethods:
         sub_organization_array = []
         for inst in variables.SparqlGetInstitutionMethods.get_sub_organization_institution(self, pid):
             sub_organization_array.append(variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, inst))
-        print(sub_organization_array)
 
         parent_organization_array = []
         for inst in variables.SparqlGetInstitutionMethods.get_parent_organization_institution(self, pid):
@@ -421,4 +398,4 @@ class SparqlGetInstitutionMethods:
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
-        return parse_check_institution_ark(self.sparql.query().response.read())
+        return parse_check_ark(self.sparql.query().response.read())

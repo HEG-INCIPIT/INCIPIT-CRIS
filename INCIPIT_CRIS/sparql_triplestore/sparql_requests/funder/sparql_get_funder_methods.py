@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_institution import *
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import *
 from .. import variables
 
 
@@ -78,7 +79,7 @@ class SparqlGetFunderMethods:
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
-        return parse_check_institution_ark(self.sparql.query().response.read())
+        return parse_check_ark(self.sparql.query().response.read())
 
 
     def get_projects_funder(self, pid):
@@ -98,7 +99,7 @@ class SparqlGetFunderMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        projects = parse_get_projects_institution(self.sparql.query().response.read())
+        projects = parse_get_simple_elements(self.sparql.query().response.read(), 'project')
 
         projects_sorted = []
         for project in projects:

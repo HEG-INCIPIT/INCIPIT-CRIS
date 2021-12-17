@@ -9,14 +9,13 @@ def parse_get_articles(sparql_query_answer):
     return array_data_parsed
 
 
-def parse_check_article_ark(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    if len(loaded_json) > 0:
-        return True
-    return False
-
-
 def parse_get_data_article(sparql_query_answer):
+    dict_data = {
+        'name': '',
+        'abstract': '',
+        'date_published': '',
+        'url': '',
+    }
     if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
         dict_data = {
@@ -26,18 +25,10 @@ def parse_get_data_article(sparql_query_answer):
             'url': loaded_json['url']['value'],
         }
 
-        return dict_data
-    else:
-        return {
-                'name': '',
-                'abstract': '',
-                'date_published': '',
-                'url': '',
-        }
+    return dict_data
 
 
 def parse_get_DOI_information(sparql_query_answer):
-    print(sparql_query_answer)
     if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
         return loaded_json['value']['value']
