@@ -203,3 +203,24 @@ class InstitutionJSONParser(TestCase):
         # parse_get_data_institution
         self.assertEqual(parse_get_data_institution(self.get_data_institution), {'name': 'My institution', 'alternate_name': 'M i', 'description': 'This is a test description', 'founding_date': 'None', 'url': '', 'logo': 'logo.png'})
         self.assertEqual(parse_get_data_institution(self.get_data_institution_empty), {})
+
+
+class PersonJSONParser(TestCase):
+    
+    def setUp(self):
+
+        # Data of sub organizations
+        self.get_persons = b'{ "head": {\n    "vars": [ "person" , "given_name" , "family_name" , "jobTitle" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
+            "person": { "type": "uri" , "value": "ark:/99999/1" } ,\n        \
+            "given_name": { "type": "literal" , "value": "Test" } ,\n        \
+            "family_name": { "type": "literal" , "value": "Name" } ,\n        \
+            "jobTitle": { "type": "literal" , "value": "Job Title" }\n      \
+            } ,\n      { \n        \
+            "person": { "type": "uri" , "value": "ark:/99999/2" } ,\n        \
+            "given_name": { "type": "literal" , "value": "Another" } ,\n        \
+            "family_name": { "type": "literal" , "value": "Test" }\n      } ,\
+            }\n    ]\n  }\n}\n'
+
+    def tests_JSON_parser(self):
+        # parse_get_persons
+        self.assertEqual(self.get_persons(self.get_persons), [{'person': 'ark:/99999/1', 'given_name': 'Test', 'family_name': 'Name', 'job_title': 'Job Title'}, {'person': 'ark:/99999/1', 'given_name': 'Test', 'family_name': 'Name'}])
