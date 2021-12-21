@@ -99,7 +99,7 @@ class SparqlGetInstitutionMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_array_sub_organization_institution(self.sparql.query().response.read())
+        return parse_get_simple_elements(self.sparql.query().response.read(), 'subOrganization')
 
 
     def get_parent_organization_institution(self, pid):
@@ -115,10 +115,14 @@ class SparqlGetInstitutionMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_array_parent_organization_institution(self.sparql.query().response.read())
+        return parse_get_simple_elements(self.sparql.query().response.read(), 'parentOrganization')
 
 
     def get_dict_institution(self, pid):
+        """
+        Get all the sub-institutions of the given pid
+        Return a dictionnary with the organization and its sub-organizations
+        """
 
         sparql_request = """
             {prefix}
@@ -307,8 +311,6 @@ class SparqlGetInstitutionMethods:
                 <{ark_research}> schema:foundingDate ?foundingDate .
                 OPTIONAL {{ <{ark_research}> schema:url ?url }} .
                 OPTIONAL {{ <{ark_research}> schema:logo ?logo }} .
-                OPTIONAL {{ <{ark_research}> schema:parentOrganization ?parentOrganization }} .
-                OPTIONAL {{ ?subOrganization schema:parentOrganization <{ark_research}> }} .
             }}
         """.format(prefix=variables.prefix, ark_research=pid)
 
