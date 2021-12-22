@@ -1,6 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_article import *
-from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import parse_get_simple_elements, parse_check_ark
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import *
 from .. import variables
 
 
@@ -55,7 +55,7 @@ class SparqlGetArticleMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        array_article_parsed = parse_get_articles(self.sparql.query().response.read())
+        array_article_parsed = parse_get_element_and_name(self.sparql.query().response.read(), 'article')
         array_article_parsed.sort(key=lambda item: item[1])
 
         return array_article_parsed

@@ -1,14 +1,6 @@
 import json
 
 
-def parse_get_datasets(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_data_parsed = []
-    for json_data in loaded_json:
-        array_data_parsed.append([json_data['dataset']['value'], json_data['name']['value']])
-    return array_data_parsed
-
-
 def parse_get_data_dataset(sparql_query_answer):
     dict_data = {
         'name': '',

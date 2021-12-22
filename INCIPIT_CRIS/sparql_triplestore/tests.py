@@ -49,6 +49,16 @@ class GenericJSONParser(TestCase):
         self.check_article_false = b'{ "head": {\n    "vars": [ "scholarlyArticle" ]\n  } ,\n  "results": {\n    "bindings": [\n    \n]\n  }\n}\n'
 
 
+        # parse get element and name
+        self.get_datasets = b'{ "head": {\n    "vars": [ "dataset" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n \
+            { \n        "dataset": { "type": "uri" , "value": "ark:/99999/test1" } ,\n \
+            "name": { "type": "literal" , "value": "Name test 1" }\n      } ,\n \
+            { \n        "dataset": { "type": "uri" , "value": "ark:/99999/test2" } ,\n \
+            "name": { "type": "literal" , "value": "Name test 2" }\n      }\n    ]\n  }\n}\n'
+        
+        self.get_datasets_empty = b'{ "head": {\n    "vars": [ "dataset" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n   \n]\n  }\n}\n'
+
+
     def tests_JSON_parser(self):
         # parse_get_simple_elements
         self.assertEqual(parse_get_simple_elements(self.get_authors_article, 'author'), ['ark:/99999/1', 'ark:/99999/2', 'ark:/99999/3'])
@@ -66,19 +76,14 @@ class GenericJSONParser(TestCase):
         self.assertEqual(parse_check_ark(self.check_article_true), True)
         self.assertEqual(parse_check_ark(self.check_article_false), False)
 
+        # parse get element and name
+        self.assertEqual(parse_get_element_and_name(self.get_datasets, 'dataset'), [['ark:/99999/test1', 'Name test 1'], ['ark:/99999/test2', 'Name test 2']])
+        self.assertEqual(parse_get_element_and_name(self.get_datasets_empty, 'dataset'), [])
+
 
 class ArticleJSONParser(TestCase):
 
     def setUp(self):
-        # parse_get_articles
-        self.get_articles = b'{ "head": {\n    "vars": [ "article" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n \
-            { \n        "article": { "type": "uri" , "value": "ark:/99999/test1" } ,\n \
-            "name": { "type": "literal" , "value": "Name test 1" }\n      } ,\n \
-            { \n        "article": { "type": "uri" , "value": "ark:/99999/test2" } ,\n \
-            "name": { "type": "literal" , "value": "Name test 2" }\n      }\n    ]\n  }\n}\n'
-        
-        self.get_articles_empty = b'{ "head": {\n    "vars": [ "article" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n \n]\n  }\n}\n'
-
         # parse_get_data_article
         self.get_data_article = b'{ "head": {\n    "vars": [ "name" , "abstract" , "datePublished" , "url" ]\n  } ,\n  "results": {\n    "bindings": [\n \
             { \n        "name": { "type": "literal" , "value": "Article name test" } ,\
@@ -96,9 +101,6 @@ class ArticleJSONParser(TestCase):
 
 
     def tests_JSON_parser(self):
-        # parse_get_articles
-        self.assertEqual(parse_get_articles(self.get_articles), [['ark:/99999/test1', 'Name test 1'], ['ark:/99999/test2', 'Name test 2']] )
-        self.assertEqual(parse_get_articles(self.get_articles_empty), [] )
 
         # parse_get_data_article
         self.assertEqual(parse_get_data_article(self.get_data_article), {'name': 'Article name test', 'abstract': 'Article abstract test', 'date_published': '2022-01-01', 'url': 'www.url.ch'})
@@ -112,15 +114,6 @@ class ArticleJSONParser(TestCase):
 class DatasetJSONParser(TestCase):
     
     def setUp(self):
-        # parse_get_datasets
-        self.get_datasets = b'{ "head": {\n    "vars": [ "dataset" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n \
-            { \n        "dataset": { "type": "uri" , "value": "ark:/99999/test1" } ,\n \
-            "name": { "type": "literal" , "value": "Name test 1" }\n      } ,\n \
-            { \n        "dataset": { "type": "uri" , "value": "ark:/99999/test2" } ,\n \
-            "name": { "type": "literal" , "value": "Name test 2" }\n      }\n    ]\n  }\n}\n'
-        
-        self.get_datasets_empty = b'{ "head": {\n    "vars": [ "dataset" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n   \n]\n  }\n}\n'
-
         # parse_get_data_dataset
         self.get_data_dataset = b'{ "head": {\n    "vars": [ "name" , "abstract" , "dateCreated", "dateModified" , "url" ]\n  } ,\n  "results": {\n    "bindings": [\n \
             { \n        "name": { "type": "literal" , "value": "Dataset name test" } ,\
@@ -138,9 +131,6 @@ class DatasetJSONParser(TestCase):
         self.get_data_download_dataset_empty = b'{ "head": {\n    "vars": [ "url" ]\n  } ,\n "results": { \n    "bindings": [\n \n]\n  }\n}\n'
 
     def tests_JSON_parser(self):
-        # parse_get_simple_elements_dataset
-        self.assertEqual(parse_get_datasets(self.get_datasets), [['ark:/99999/test1', 'Name test 1'], ['ark:/99999/test2', 'Name test 2']])
-        self.assertEqual(parse_get_datasets(self.get_datasets_empty), [])
 
         # parse_get_data_dataset
         self.assertEqual(parse_get_data_dataset(self.get_data_dataset), {'name': 'Dataset name test', 'abstract': 'Dataset abstract test', 'created_date': '2021-01-01', 'modified_date': '2022-01-01', 'url': 'www.url.ch'})
