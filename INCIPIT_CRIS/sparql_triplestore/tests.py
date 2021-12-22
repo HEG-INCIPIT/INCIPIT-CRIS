@@ -210,13 +210,75 @@ class PersonJSONParser(TestCase):
     
     def setUp(self):
 
-        # Data of sub organizations
+        # parse_get_persons
         self.get_persons = b'{ "head": {\n    "vars": [ "person" , "given_name" , "family_name" , "jobTitle" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
             "person": { "type": "uri" , "value": "ark:/99999/1" } ,\n        "given_name": { "type": "literal" , "value": "Test" } ,\n        "family_name": { "type": "literal" , "value": "Name" } ,\n        "jobTitle": { "type": "literal" , "value": "Job Title" }\n      } ,\n      { \n        \
             "person": { "type": "uri" , "value": "ark:/99999/2" } ,\n        "given_name": { "type": "literal" , "value": "Another" } ,\n        "family_name": { "type": "literal" , "value": "Test" }\n         \
             }\n    ]\n  }\n}\n'
 
+        self.get_persons_empty = b'{ "head": {\n    "vars": [ "person" , "given_name" , "family_name" , "jobTitle" ]\n  } ,\n  "results": {\n    "bindings": [\n    \n]\n  }\n}\n'
+
+        # parse_get_full_name_person
+        self.get_full_name_person = b'{ "head": {\n    "vars": [ "given_name" , "family_name" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
+            "given_name": { "type": "literal" , "value": "Given Name" } ,\n        "family_name": { "type": "literal" , "value": "Family Name" }\n      \
+            }\n    ]\n  }\n}\n'
+
+        self.get_full_name_person_empty = b'{ "head": {\n    "vars": [ "given_name" , "family_name" ]\n  } ,\n  "results": {\n    "bindings": [\n    \n    ]\n  }\n}\n'
+
+        # parse_get_job_title
+        self.get_job_title = b'{ "head": {\n    "vars": [ "jobTitle" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
+            "jobTitle": { "type": "literal" , "value": "Job Title" }\n      \
+            }\n    ]\n  }\n}\n'
+        
+        self.get_job_title_empty = b'{ "head": {\n    "vars": [ "jobTitle" ]\n  } ,\n  "results": {\n    "bindings": [\n    \n    ]\n  }\n}\n'
+
+        # parse_get_ORCID_information
+        self.get_ORCID_information = b'{ "head": {\n    "vars": [ "propertyID" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        "propertyID": { "type": "literal" , "value": "0000-0000-0000-0001" }\n      }\n    ]\n  }\n}\n'
+
+        self.get_ORCID_information_empty = b'{ "head": {\n    "vars": [ "propertyID" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        "propertyID": { "type": "literal" , "value": "" }\n      }\n    ]\n  }\n}\n'
+
+        # parse_get_IN_information
+        self.get_IN_information = b'{ "head": {\n    "vars": [ "url" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        "url": { "type": "literal" , "value": "localhost.ch" }\n      }\n    ]\n  }\n}\n'
+
+        self.get_IN_information_empty = b'{ "head": {\n    "vars": [ "url" ]\n  } ,\n  "results": {\n    "bindings": [\n      \n    ]\n  }\n}\n'
+
+        self.get_data_person = b'{ "head": {\n    "vars": [ "given_name" , "family_name" , "email" , "telephone" , "description" , "address" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
+            "given_name": { "type": "literal" , "value": "The" } ,\n        \
+            "family_name": { "type": "literal" , "value": "Rock" } ,\n        \
+            "email": { "type": "literal" , "value": "mail@mail.ch" } ,\n        \
+            "telephone": { "type": "literal" , "value": "" } ,\n        \
+            "description": { "type": "literal" , "value": "My description" } ,\n        \
+            "address": { "type": "literal" , "value": "" }\n      }\n    ]\n  }\n}\n'
+
+        self.get_data_person_empty = b'{ "head": {\n    "vars": [ "given_name" , "family_name" , "email" , "telephone" , "description" , "address" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
+            "given_name": { "type": "literal" , "value": "" } ,\n        \
+            "family_name": { "type": "literal" , "value": "" } ,\n        \
+            "email": { "type": "literal" , "value": "" } ,\n        \
+            "telephone": { "type": "literal" , "value": "" } ,\n        \
+            "description": { "type": "literal" , "value": "" } ,\n        \
+            "address": { "type": "literal" , "value": "" }\n      }\n    ]\n  }\n}\n'
 
     def tests_JSON_parser(self):
         # parse_get_persons
         self.assertEqual(parse_get_persons(self.get_persons), [['ark:/99999/1', 'Test', 'Name', 'Job Title'], ['ark:/99999/2', 'Another', 'Test', '']])
+        self.assertEqual(parse_get_persons(self.get_persons_empty), [])
+
+        # parse_get_full_name_person
+        self.assertEqual(parse_get_full_name_person(self.get_full_name_person), {'given_name': 'Given Name', 'family_name': 'Family Name'})
+        self.assertEqual(parse_get_full_name_person(self.get_full_name_person_empty), {})
+
+        # parse_get_job_title
+        self.assertEqual(parse_get_job_title(self.get_job_title), 'Job Title')
+        self.assertEqual(parse_get_job_title(self.get_job_title_empty), '')
+
+        # parse_get_ORCID_information
+        self.assertEqual(parse_get_ORCID_information(self.get_ORCID_information), '0000-0000-0000-0001')
+        self.assertEqual(parse_get_ORCID_information(self.get_ORCID_information_empty), '')
+
+        # parse_get_IN_information
+        self.assertEqual(parse_get_IN_information(self.get_IN_information), 'localhost.ch')
+        self.assertEqual(parse_get_IN_information(self.get_IN_information_empty), '')
+
+        # parse_get_data_person
+        self.assertEqual(parse_get_data_person(self.get_data_person), {'given_name': 'The', 'family_name': 'Rock', 'email': 'mail@mail.ch', 'telephone': '', 'description': 'My description', 'address': ''})
+        self.assertEqual(parse_get_data_person(self.get_data_person_empty), {'given_name': '', 'family_name': '', 'email': '', 'telephone': '', 'description': '', 'address': ''})

@@ -11,11 +11,13 @@ def parse_get_persons(sparql_query_answer):
 
 
 def parse_get_full_name_person(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
-    dict_data = {
-        'given_name': loaded_json['given_name']['value'],
-        'family_name': loaded_json['family_name']['value'],
-    }
+    dict_data = {}
+    if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        dict_data = {
+            'given_name': loaded_json['given_name']['value'],
+            'family_name': loaded_json['family_name']['value'],
+        }
     return dict_data
 
 
@@ -23,6 +25,7 @@ def parse_get_job_title(sparql_query_answer):
     if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
         return loaded_json['jobTitle']['value']
+    return ''
 
 
 def parse_get_ORCID_information(sparql_query_answer):
@@ -40,6 +43,7 @@ def parse_get_IN_information(sparql_query_answer):
 
 
 def parse_get_data_person(sparql_query_answer):
+    print(sparql_query_answer)
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'given_name': loaded_json['given_name']['value'],
