@@ -4,6 +4,7 @@ from .triplestore_JSON_parser.triplestore_JSON_parser_article import *
 from .triplestore_JSON_parser.triplestore_JSON_parser_dataset import *
 from .triplestore_JSON_parser.triplestore_JSON_parser_institution import *
 from .triplestore_JSON_parser.triplestore_JSON_parser_person import *
+from .triplestore_JSON_parser.triplestore_JSON_parser_project import *
 
 # Create your tests here.
 
@@ -58,6 +59,14 @@ class GenericJSONParser(TestCase):
         
         self.get_datasets_empty = b'{ "head": {\n    "vars": [ "dataset" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n   \n]\n  }\n}\n'
 
+        self.get_projects = b'{ "head": {\n    "vars": [ "project" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n \
+            { \n        "project": { "type": "uri" , "value": "ark:/99999/test1" } ,\n \
+            "name": { "type": "literal" , "value": "Name test 1" }\n      } ,\n \
+            { \n        "project": { "type": "uri" , "value": "ark:/99999/test2" } ,\n \
+            "name": { "type": "literal" , "value": "Name test 2" }\n      }\n    ]\n  }\n}\n'
+        
+        self.get_projects_empty = b'{ "head": {\n    "vars": [ "project" , "name" ]\n  } ,\n "results": { \n    "bindings": [\n   \n]\n  }\n}\n'
+
 
     def tests_JSON_parser(self):
         # parse_get_simple_elements
@@ -79,6 +88,9 @@ class GenericJSONParser(TestCase):
         # parse get element and name
         self.assertEqual(parse_get_element_and_name(self.get_datasets, 'dataset'), [['ark:/99999/test1', 'Name test 1'], ['ark:/99999/test2', 'Name test 2']])
         self.assertEqual(parse_get_element_and_name(self.get_datasets_empty, 'dataset'), [])
+
+        self.assertEqual(parse_get_element_and_name(self.get_projects, 'project'), [['ark:/99999/test1', 'Name test 1'], ['ark:/99999/test2', 'Name test 2']])
+        self.assertEqual(parse_get_element_and_name(self.get_projects_empty, 'project'), [])
 
 
 class ArticleJSONParser(TestCase):
@@ -272,3 +284,33 @@ class PersonJSONParser(TestCase):
         # parse_get_data_person
         self.assertEqual(parse_get_data_person(self.get_data_person), {'given_name': 'The', 'family_name': 'Rock', 'email': 'mail@mail.ch', 'telephone': '', 'description': 'My description', 'address': ''})
         self.assertEqual(parse_get_data_person(self.get_data_person_empty), {'given_name': '', 'family_name': '', 'email': '', 'telephone': '', 'description': '', 'address': ''})
+
+
+class ProjectJSONParser(TestCase):
+
+    def setUp(self):
+        # parse_get_data_project
+        self.get_data_project = b'{ "head": {\n    "vars": [ "name" , "description" , "foundingDate" , "dissolutionDate" , "url" , "logo" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
+            "name": { "type": "literal" , "value": "My project" } ,\n        \
+            "description": { "type": "literal" , "value": "" } ,\n        \
+            "foundingDate": { "type": "literal" , "datatype": "http://www.w3.org/2001/XMLSchema#date" , "value": "2021-01-01 00:00:00+00:00" } ,\n        \
+            "dissolutionDate": { "type": "literal" , "datatype": "http://www.w3.org/2001/XMLSchema#date" , "value": "2021-12-31 00:00:00+00:00" } ,\n        \
+            "url": { "type": "literal" , "value": "" } ,\n        \
+            "logo": { "type": "literal" , "value": "" }\n      \
+            }\n    ]\n  }\n}\n'
+
+        self.get_data_project_empty = b'{ "head": {\n    "vars": [ "name" , "description" , "foundingDate" , "dissolutionDate" , "url" , "logo" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
+            "name": { "type": "literal" , "value": "" } ,\n        \
+            "description": { "type": "literal" , "value": "" } ,\n        \
+            "foundingDate": { "type": "literal" , "datatype": "http://www.w3.org/2001/XMLSchema#date" , "value": "" } ,\n        \
+            "dissolutionDate": { "type": "literal" , "datatype": "http://www.w3.org/2001/XMLSchema#date" , "value": "" } ,\n        \
+            "url": { "type": "literal" , "value": "" } ,\n        \
+            "logo": { "type": "literal" , "value": "" }\n      \
+            }\n    ]\n  }\n}\n'
+
+
+    def tests_JSON_parser(self):
+
+        # parse_get_data_project
+        self.assertEqual(parse_get_data_project(self.get_data_project), {'name': 'My project', 'description': '', 'founding_date': '2021-01-01', 'dissolution_date': '2021-12-31', 'url': '', 'logo': '' })
+        self.assertEqual(parse_get_data_project(self.get_data_project_empty), {'name': '', 'description': '', 'founding_date': '', 'dissolution_date': '', 'url': '', 'logo': '' })

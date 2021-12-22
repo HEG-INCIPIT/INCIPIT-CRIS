@@ -1,18 +1,8 @@
 import json
 
 
-def parse_get_full_name_project(sparql_query_answer):
-    if len(json.loads(sparql_query_answer)['results']['bindings']) >0:
-        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
-        dict_data = {
-            'name': loaded_json['name']['value'],
-        }
-        return dict_data
-    else:
-        return {'name' : ''}
-
-
 def parse_get_data_project(sparql_query_answer):
+    print(sparql_query_answer)
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'name': loaded_json['name']['value'],
