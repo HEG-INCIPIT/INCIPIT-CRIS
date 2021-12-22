@@ -43,7 +43,6 @@ def parse_get_IN_information(sparql_query_answer):
 
 
 def parse_get_data_person(sparql_query_answer):
-    print(sparql_query_answer)
     loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
     dict_data = {
         'given_name': loaded_json['given_name']['value'],
