@@ -3,6 +3,7 @@ from .triplestore_JSON_parser.triplestore_JSON_parser_generic import *
 from .triplestore_JSON_parser.triplestore_JSON_parser_article import *
 from .triplestore_JSON_parser.triplestore_JSON_parser_dataset import *
 from .triplestore_JSON_parser.triplestore_JSON_parser_institution import *
+from .triplestore_JSON_parser.triplestore_JSON_parser_person import *
 
 # Create your tests here.
 
@@ -211,16 +212,11 @@ class PersonJSONParser(TestCase):
 
         # Data of sub organizations
         self.get_persons = b'{ "head": {\n    "vars": [ "person" , "given_name" , "family_name" , "jobTitle" ]\n  } ,\n  "results": {\n    "bindings": [\n      { \n        \
-            "person": { "type": "uri" , "value": "ark:/99999/1" } ,\n        \
-            "given_name": { "type": "literal" , "value": "Test" } ,\n        \
-            "family_name": { "type": "literal" , "value": "Name" } ,\n        \
-            "jobTitle": { "type": "literal" , "value": "Job Title" }\n      \
-            } ,\n      { \n        \
-            "person": { "type": "uri" , "value": "ark:/99999/2" } ,\n        \
-            "given_name": { "type": "literal" , "value": "Another" } ,\n        \
-            "family_name": { "type": "literal" , "value": "Test" }\n      } ,\
+            "person": { "type": "uri" , "value": "ark:/99999/1" } ,\n        "given_name": { "type": "literal" , "value": "Test" } ,\n        "family_name": { "type": "literal" , "value": "Name" } ,\n        "jobTitle": { "type": "literal" , "value": "Job Title" }\n      } ,\n      { \n        \
+            "person": { "type": "uri" , "value": "ark:/99999/2" } ,\n        "given_name": { "type": "literal" , "value": "Another" } ,\n        "family_name": { "type": "literal" , "value": "Test" }\n         \
             }\n    ]\n  }\n}\n'
+
 
     def tests_JSON_parser(self):
         # parse_get_persons
-        self.assertEqual(self.get_persons(self.get_persons), [{'person': 'ark:/99999/1', 'given_name': 'Test', 'family_name': 'Name', 'job_title': 'Job Title'}, {'person': 'ark:/99999/1', 'given_name': 'Test', 'family_name': 'Name'}])
+        self.assertEqual(parse_get_persons(self.get_persons), [['ark:/99999/1', 'Test', 'Name', 'Job Title'], ['ark:/99999/2', 'Another', 'Test', '']])
