@@ -49,6 +49,8 @@ urlpatterns = [
 
     # Articles urls
     path('articles/', views_article.article_results, name='article_results'),
+    path('articles/filter/<int:page>/<str:filter_category>/', views_article.article_results, name='article_results'),
+    path('articles/filter/<int:page>/<str:filter_category>/<str:filter_letter>', views_article.article_results, name='article_results'),
     path('articles/creation/', views_article.article_creation, name='article_creation'),
     path('articles/edition/field/add-author/<path:pid>', views_article.article_author_addition, name='article_author_addition'),
     path('articles/edition/field/delete-author/<path:pid>', views_article.article_author_deletion, name='article_author_deletion'),
@@ -67,6 +69,8 @@ urlpatterns = [
 
     # Projects urls
     path('projects/', views_project.project_results, name='project_results'),
+    path('projects/filter/<int:page>/<str:filter_category>/', views_project.project_results, name='project_results'),
+    path('projects/filter/<int:page>/<str:filter_category>/<str:filter_letter>', views_project.project_results, name='project_results'),
     path('projects/creation/', views_project.project_creation, name='project_creation'),
     path('projects/edition/field/add-member/<path:pid>', views_project.project_member_addition, name='project_member_addition'),
     path('projects/edition/field/delete-member/<path:pid>', views_project.project_member_deletion, name='project_member_deletion'),
@@ -85,6 +89,8 @@ urlpatterns = [
 
     # Datasets urls
     path('datasets/', views_dataset.dataset_results, name='dataset_results'),
+    path('datasets/filter/<int:page>/<str:filter_category>/', views_dataset.dataset_results, name='dataset_results'),
+    path('datasets/filter/<int:page>/<str:filter_category>/<str:filter_letter>', views_dataset.dataset_results, name='dataset_results'),
     path('datasets/creation/', views_dataset.dataset_creation, name='dataset_creation'),
     path('datasets/edition/field/add-creator/<path:pid>', views_dataset.dataset_creator_addition, name='dataset_creator_addition'),
     path('datasets/edition/field/delete-creator/<path:pid>', views_dataset.dataset_creator_deletion, name='dataset_creator_deletion'),
@@ -103,6 +109,8 @@ urlpatterns = [
 
     # Institutions urls
     path('institutions/', views_institution.institution_results, name='institution_results'),
+    path('institutions/filter/<int:page>/<str:filter_category>/', views_institution.institution_results, name='institution_results'),
+    path('institutions/filter/<int:page>/<str:filter_category>/<str:filter_letter>', views_institution.institution_results, name='institution_results'),
     path('institutions/creation/', views_institution.institution_creation, name='institution_creation'),
     path('institutions/edition/field/add-parent-institution/<path:pid>', views_institution.institution_parent_organization_addition, name='institution_parent_organization_addition'),
     path('institutions/edition/field/delete-parent-institution/<path:pid>', views_institution.institution_parent_organization_deletion, name='institution_parent_organization_deletion'),
@@ -128,6 +136,8 @@ urlpatterns = [
 
     # Funders urls
     path('funders/', views_funder.funder_results, name='funder_results'),
+    path('funders/filter/<int:page>/<str:filter_category>/', views_funder.funder_results, name='funder_results'),
+    path('funders/filter/<int:page>/<str:filter_category>/<str:filter_letter>', views_funder.funder_results, name='funder_results'),
     path('funders/edition/field/add-project/<path:pid>', views_funder.funder_project_addition, name='funder_project_addition'),
     path('funders/edition/field/delete-project/<path:pid>', views_funder.funder_project_deletion, name='funder_project_deletion'),
 

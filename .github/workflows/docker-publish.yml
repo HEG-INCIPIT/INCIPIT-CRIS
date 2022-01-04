@@ -48,7 +48,7 @@ jobs:
         shell: bash
         
       - name: Launch Django Tests
-        run: docker exec cris python3.7 /app/INCIPIT_CRIS/manage.py test
+        run: docker exec cris bash -c "cd /app/INCIPIT_CRIS && python3.7 manage.py test"
         shell: bash
         
       - name: Remove Docker Container

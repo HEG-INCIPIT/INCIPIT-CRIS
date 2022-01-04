@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_project import *
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import *
 from .. import variables
 
 
@@ -54,26 +55,10 @@ class SparqlGetProjectMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_projects(self.sparql.query().response.read())
+        array_projects_parsed = parse_get_element_and_name(self.sparql.query().response.read(), 'project')
+        array_projects_parsed.sort(key=lambda item: item[1])
 
-
-    def get_full_name_project(self, pid):
-        """
-        Get the name of an project formated in a dict
-        Return a dict with name
-        """
-        sparql_request = """
-            {prefix}
-
-            SELECT ?name WHERE
-            {{
-                <{ark_research}> schema:name ?name .
-            }}
-        """.format(prefix=variables.prefix, ark_research=pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        return parse_get_full_name_project(self.sparql.query().response.read())
+        return array_projects_parsed
 
 
     def get_members_project(self, pid):
@@ -96,7 +81,7 @@ class SparqlGetProjectMethods:
 
         array_members = []
 
-        for member in parse_get_members_project(self.sparql.query().response.read()):
+        for member in parse_get_simple_elements(self.sparql.query().response.read(), 'member'):
             full_name = variables.sparql_get_person_object.get_full_name_person(member)
             array_members.append([member, full_name])
 
@@ -122,7 +107,7 @@ class SparqlGetProjectMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        articles = parse_get_articles_project(self.sparql.query().response.read())
+        articles = parse_get_simple_elements(self.sparql.query().response.read(), 'article')
 
         articles_sorted = []
         for article in articles:
@@ -150,7 +135,7 @@ class SparqlGetProjectMethods:
 
         array_datasets = []
 
-        for dataset in parse_get_datasets_project(self.sparql.query().response.read()):
+        for dataset in parse_get_simple_elements(self.sparql.query().response.read(), 'dataset'):
             array_datasets.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
 
         return array_datasets
@@ -175,7 +160,7 @@ class SparqlGetProjectMethods:
 
         array_institutions = []
 
-        for institution in parse_get_institutions_project(self.sparql.query().response.read()):
+        for institution in parse_get_simple_elements(self.sparql.query().response.read(), 'project'):
             data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
@@ -201,7 +186,7 @@ class SparqlGetProjectMethods:
 
         array_funders = []
 
-        for funder in parse_get_institutions_project(self.sparql.query().response.read()):
+        for funder in parse_get_simple_elements(self.sparql.query().response.read(), 'project'):
             data_funder = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, funder)
             array_funders.append(data_funder)
 
@@ -297,4 +282,4 @@ class SparqlGetProjectMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_check_project_ark(self.sparql.query().response.read())
+        return parse_check_ark(self.sparql.query().response.read())

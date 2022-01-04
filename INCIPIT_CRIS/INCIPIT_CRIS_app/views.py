@@ -1,5 +1,4 @@
 from SPARQLWrapper.Wrapper import ADD
-from django.http import request
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from .forms import *

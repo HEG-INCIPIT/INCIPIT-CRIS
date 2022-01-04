@@ -20,7 +20,7 @@ services:
       redirect_uri: "https://localhost/orcid/"
     volumes:
       - db:/var/lib/mysql
-      - fuseki:/app/fuseki
+      - fuseki:/app/fuseki/run/databases
     deploy:
       placement:
         constraints:

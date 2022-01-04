@@ -63,6 +63,14 @@ django()
 }
 
 
+test()
+{
+    source env/bin/activate
+    cd INCIPIT_CRIS
+    python3 manage.py test
+}
+
+
 kill_django(){
     if [ "`ps -ef | grep 'python' | grep -v grep | awk '{ print $2 }'`" ]
     then
@@ -108,7 +116,7 @@ export username_ark=""
 export password_ark=""
 export shoulder=""
 
-while getopts "adfhms" opt; do
+while getopts "adfhmst" opt; do
     case $opt in
         a)
             mysql_f
@@ -132,6 +140,10 @@ while getopts "adfhms" opt; do
         s)
             fuseki
             django
+            ;;
+        t)
+            test
+            exit 0
             ;;
         \?) # unsupported flags
             echo "Error: Unsupported flag $1" >&2

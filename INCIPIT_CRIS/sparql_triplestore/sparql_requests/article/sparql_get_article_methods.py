@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_article import *
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import *
 from .. import variables
 
 
@@ -54,26 +55,10 @@ class SparqlGetArticleMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_articles(self.sparql.query().response.read())
+        array_article_parsed = parse_get_element_and_name(self.sparql.query().response.read(), 'article')
+        array_article_parsed.sort(key=lambda item: item[1])
 
-
-    def get_full_name_article(self, pid):
-        """
-        Get the name of an article formated in a dict
-        Return a dict with name
-        """
-        sparql_request = """
-            {prefix}
-
-            SELECT ?name WHERE
-            {{
-                <{ark_research}> schema:name ?name .
-            }}
-        """.format(prefix=variables.prefix, ark_research=pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        return parse_get_full_name_article(self.sparql.query().response.read())
+        return array_article_parsed
 
 
     def get_authors_article(self, pid):
@@ -95,7 +80,7 @@ class SparqlGetArticleMethods:
 
         array_authors = []
 
-        for author in parse_get_authors_article(self.sparql.query().response.read()):
+        for author in parse_get_simple_elements(self.sparql.query().response.read(), 'author'):
             full_name = variables.sparql_get_person_object.get_full_name_person(author)
             array_authors.append([author, full_name])
 
@@ -124,34 +109,35 @@ class SparqlGetArticleMethods:
 
         array_projects = []
 
-        for project in parse_get_projects_article(self.sparql.query().response.read()):
-            array_projects.append( variables.sparql_get_project_object.get_data_project(project))
+        for project in parse_get_simple_elements(self.sparql.query().response.read(), 'project'):
+            array_projects.append(variables.sparql_get_project_object.get_data_project(project))
         array_projects.sort(key=lambda item: item['founding_date'], reverse=True)
         return array_projects
 
+
     def get_datasets_article(self, pid):
-            """
-            Get all the datasets of an article
-            And return an array with tuples (identifier, dictionnary)
-            """
+        """
+        Get all the datasets of an article
+        And return an array with tuples (identifier, dictionnary)
+        """
 
-            sparql_request = """
-                {prefix}
+        sparql_request = """
+            {prefix}
 
-                SELECT ?dataset WHERE
-                {{
-                    <{ark_research}> schema:isBasedOn ?dataset .
-                }}
-            """.format(prefix=variables.prefix, ark_research=pid)
+            SELECT ?dataset WHERE
+            {{
+                <{ark_research}> schema:isBasedOn ?dataset .
+            }}
+        """.format(prefix=variables.prefix, ark_research=pid)
 
-            self.sparql.setQuery(sparql_request)
+        self.sparql.setQuery(sparql_request)
 
-            array_datasets = []
+        array_datasets = []
 
-            for dataset in parse_get_datasets_article(self.sparql.query().response.read()):
-                array_datasets.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
+        for dataset in parse_get_simple_elements(self.sparql.query().response.read(), 'dataset'):
+            array_datasets.append(variables.sparql_get_dataset_object.get_data_dataset(dataset))
 
-            return array_datasets
+        return array_datasets
 
 
     def get_institutions_article(self, pid):
@@ -173,7 +159,7 @@ class SparqlGetArticleMethods:
 
         array_institutions = []
 
-        for institution in parse_get_institutions_article(self.sparql.query().response.read()):
+        for institution in parse_get_simple_elements(self.sparql.query().response.read(), 'sourceOrganization'):
             data_institution = variables.SparqlGetInstitutionMethods.get_minimum_data_institution(self, institution)
             array_institutions.append(data_institution)
 
@@ -227,8 +213,6 @@ class SparqlGetArticleMethods:
         institutions = variables.sparql_get_article_object.get_institutions_article(pid)
         doi = variables.sparql_get_article_object.get_DOI_article(pid)
 
-
-
         data_article['authors'] = authors
         data_article['len_authors'] = len(authors)
         data_article['projects'] = projects
@@ -240,6 +224,7 @@ class SparqlGetArticleMethods:
         data_article['pid'] = pid
 
         return data_article
+
 
     def get_minimum_data_article(self, pid):
         """
@@ -273,6 +258,7 @@ class SparqlGetArticleMethods:
 
         return data_article
 
+
     def check_article_ark(self, pid):
         """
         Return a boolean
@@ -289,4 +275,4 @@ class SparqlGetArticleMethods:
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
-        return parse_check_article_ark(self.sparql.query().response.read())
+        return parse_check_ark(self.sparql.query().response.read())

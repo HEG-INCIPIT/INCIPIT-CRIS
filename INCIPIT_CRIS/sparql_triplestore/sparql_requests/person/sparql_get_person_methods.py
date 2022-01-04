@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, GET, DIGEST
 from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_person import *
+from sparql_triplestore.triplestore_JSON_parser.triplestore_JSON_parser_generic import *
 from .. import variables
 
 
@@ -54,7 +55,7 @@ class SparqlGetPersonMethods:
         self.sparql.setQuery(sparql_request)
 
         array_person_parsed = parse_get_persons(self.sparql.query().response.read())
-        array_person_parsed.sort(key=lambda item: item[1])
+        array_person_parsed.sort(key=lambda item: item[2])
 
         return array_person_parsed
 
@@ -98,7 +99,7 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        articles = parse_get_articles_person(self.sparql.query().response.read())
+        articles = parse_get_simple_elements(self.sparql.query().response.read(), 'article')
 
         articles_sorted = []
         for article in articles:
@@ -125,7 +126,7 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        projects = parse_get_projects_person(self.sparql.query().response.read())
+        projects = parse_get_simple_elements(self.sparql.query().response.read(), 'project')
 
         projects_sorted = []
         for project in projects:
@@ -152,7 +153,7 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        datasets = parse_get_datasets_person(self.sparql.query().response.read())
+        datasets = parse_get_simple_elements(self.sparql.query().response.read(), 'dataset')
 
         datasets_sorted = []
         for dataset in datasets:
@@ -178,7 +179,7 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        datasets = parse_get_datasets_person(self.sparql.query().response.read())
+        datasets = parse_get_simple_elements(self.sparql.query().response.read(), 'dataset')
 
         datasets_sorted = []
         for dataset in datasets:
@@ -206,7 +207,7 @@ class SparqlGetPersonMethods:
 
         array_works = []
 
-        for work in parse_get_works_person(self.sparql.query().response.read()):
+        for work in parse_get_simple_elements(self.sparql.query().response.read(), 'work'):
             data_work = variables.SparqlGetInstitutionMethods.get_data_institution(self, work)
             array_works.append(data_work)
 
@@ -232,7 +233,7 @@ class SparqlGetPersonMethods:
 
         array_affiliations = []
 
-        for affiliation in parse_get_affiliations_person(self.sparql.query().response.read()):
+        for affiliation in parse_get_simple_elements(self.sparql.query().response.read(), 'affiliation'):
             data_affiliation = variables.SparqlGetInstitutionMethods.get_data_institution(self, affiliation)
             array_affiliations.append(data_affiliation)
 
@@ -274,7 +275,7 @@ class SparqlGetPersonMethods:
 
         self.sparql.setQuery(sparql_request)
 
-        return parse_get_title(self.sparql.query().response.read())
+        return parse_get_simple_elements(self.sparql.query().response.read(), 'honorificPrefix')
 
 
     def get_ORCID_information_person(self, pid):
@@ -392,4 +393,4 @@ class SparqlGetPersonMethods:
         """.format(prefix=variables.prefix, ark_research=pid)
 
         self.sparql.setQuery(sparql_request)
-        return parse_check_person_ark(self.sparql.query().response.read())
+        return parse_check_ark(self.sparql.query().response.read())

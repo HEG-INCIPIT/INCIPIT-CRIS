@@ -11,77 +11,22 @@ def parse_get_persons(sparql_query_answer):
 
 
 def parse_get_full_name_person(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
-    dict_data = {
-        'given_name': loaded_json['given_name']['value'],
-        'family_name': loaded_json['family_name']['value'],
-    }
+    dict_data = {}
+    if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
+        loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
+        dict_data = {
+            'given_name': loaded_json['given_name']['value'],
+            'family_name': loaded_json['family_name']['value'],
+        }
     return dict_data
-
-
-def parse_get_articles_person(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_articles = []
-    for article in loaded_json:
-        array_articles.append(article['article']['value'])
-    return array_articles
-
-
-def parse_get_projects_person(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_projects = []
-    for project in loaded_json:
-        array_projects.append(project['project']['value'])
-    return array_projects
-
-
-def parse_get_datasets_person(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_datasets = []
-    for dataset in loaded_json:
-        array_datasets.append(dataset['dataset']['value'])
-    return array_datasets
-
-
-def parse_check_person_ark(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    if len(loaded_json) > 0:
-        return True
-    return False
-
-
-def parse_get_works_person(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_works = []
-    for work in loaded_json:
-        array_works.append(work['work']['value'])
-        
-    return array_works
-
-
-def parse_get_affiliations_person(sparql_query_answer):
-    loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-    array_affiliations = []
-    for affiliation in loaded_json:
-        array_affiliations.append(affiliation['affiliation']['value'])
-        
-    return array_affiliations
 
 
 def parse_get_job_title(sparql_query_answer):
     if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
         return loaded_json['jobTitle']['value']
+    return ''
 
-
-def parse_get_title(sparql_query_answer):
-    if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
-        loaded_json = json.loads(sparql_query_answer)['results']['bindings']
-        array_titles = []
-        for title in loaded_json:
-            array_titles.append(title['honorificPrefix']['value'])
-        
-        return array_titles
 
 def parse_get_ORCID_information(sparql_query_answer):
     if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:

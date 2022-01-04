@@ -34,8 +34,8 @@
             </div>
             <div class="box">
                 <div class="results">
-                    <h1 class="category is-size-4">{{ category }} ({{ size_sparql_request }})</h1>
-                    {% if size_sparql_request == 0 %}
+                    <h1 class="category is-size-4">{{ category }} ({{ len_sparql_request }})</h1>
+                    {% if sparql_request|length == 0 %}
                         <p>Aucune occurence trouvée</p>
                     {% else %}
                         <ul>
@@ -51,15 +51,85 @@
                         <ul class="pagination-list">
                             {% for letter in alphabet_list %}
                                 <li>
-                                    <a class="pagination-link" href="">{{ letter }}</a>
+                                    {% if filter_letter == letter %}
+                                        <a class="pagination-link is-current" href="{{ url }}filter/{{ page }}/{{ category }}/">{{ letter }}</a>
+                                    {% else %}
+                                        <a class="pagination-link" href="{{ url }}filter/{{ page }}/{{ category }}/{{ letter }}">{{ letter }}</a>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
                     </nav>
                 </div>
+                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                    {% if page == 1 %}
+                        <a class="pagination-previous" disabled><i class="fas fa-angle-left"></i></a>
+                    {% else %}
+                        <a class="pagination-previous" href="{{ url }}filter/{{ page|add:-1 }}/{{ category }}/{{ filter_letter }}"><i class="fas fa-angle-left"></i></a>
+                    {% endif %}
+                    {% if page == last_page or range_pages|length == 0 %}
+                        <a class="pagination-next" disabled><i class="fas fa-angle-right"></i></a>
+                    {% else %}
+                        <a class="pagination-next" href="{{ url }}filter/{{ page|add:1 }}/{{ category }}/{{ filter_letter }}"><i class="fas fa-angle-right"></i></a>
+                    {% endif %}
+                    <ul class="pagination-list">
+                        {% for i in range_pages %}
+                            {% if page > 1 and i == 1 %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="{{ url }}filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% elif page > 1 and i == page|add:-1 %}
+                                {% if page > 3 %}
+                                    <li><a class="pagination-link" id="btn1">&hellip;</a></li>
+                                {% endif %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="{{ url }}filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% if page == i %}
+                                <li><a class="pagination-link is-current" aria-label="Goto page {{ i }}" href="{{ url }}filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% if page < last_page and i == page|add:1 %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="{{ url }}filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                                {% if page < last_page|add:-2 %}
+                                    <li><a class="pagination-link" id="btn2">&hellip;</a></li>
+                                {% endif %}
+                            {% elif page < last_page and i == last_page %}
+                                <li><a class="pagination-link" aria-label="Goto page {{ i }}" href="{{ url }}filter/{{ i }}/{{ category }}/{{ filter_letter }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
             </div>
+
+            <div class="modal" id="myModal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                        <section class="modal-card-body">
+                            <p class="is-size-4">Aller à la page :</p>
+                            <input type="text" class="input" id="valueToGo" name="valueToGo" autocomplete="off">
+                            <div class="buttons-to-select-page">
+                                <button class="button" data-bulma-modal="close">Cancel</button>
+                                <button class="button is-success" id="btnToGo" onclick="redirectFunction()">Save changes</button>
+                            </div>
+                        </section>
+                </div>
+              </div>
+
         </section>
         
         {% include 'main/footer.html' %}
+
+        <script type="text/javascript" src="{% static 'js/bulmaModal.js' %}"></script>
+        <script>
+            function promptFunction() {
+                var page = prompt("A quelle page souhaitez-vous aller", "{{ page }}");
+                if (page != null) {
+                    window.location.href = "{{ url }}filter/"+page.toString()+"/{{ category }}/{{ filter_letter }}";
+                }
+            }
+            
+            function redirectFunction(){
+                var urlToGo = "{{ url }}filter/" + document.getElementsByName("valueToGo")[0].value.toString() + "/{{ category }}/{{ filter_letter }}";
+                window.location.href = urlToGo;
+            }
+        </script>
+
     </body>
 </html>

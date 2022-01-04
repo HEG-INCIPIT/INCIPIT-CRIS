@@ -56,7 +56,7 @@
 
         <div class="column keep-it-inline-parent">
             <p class="keep-it-inline">Poste : 
-                {% if data_person.job_title != None %}
+                {% if data_person.job_title != '' %}
                     <form class="align-button-centered form-in-line" action="/persons/edition/profil/delete-job-title/{{ data_person.pid }}" method="post">
                         {% csrf_token %}
                         {{ data_person.job_title }}
