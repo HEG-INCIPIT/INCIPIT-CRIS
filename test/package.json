@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/HEG-INCIPIT/ARKetype-Selenium-Tests-Files#readme",
   "devDependencies": {
-    "cypress": "^9.1.1"
+    "cypress": "^9.2.0"
   }
 }

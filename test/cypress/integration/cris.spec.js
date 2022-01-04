@@ -1,7 +1,6 @@
 const baseUrl = Cypress.env('cris_base_url')[Cypress.env('cris_env')]
 const SKIP = Cypress.env('cris_skip')
-
-let identifierAnonym=undefined,identifierAdmin=undefined
+const accounts = Cypress.env('cris_account')
 
 describe('ARKetype Tests', () => {
     it('01. Check Pages as Anonymous', () => {
@@ -40,8 +39,10 @@ describe('ARKetype Tests', () => {
     it('0x. Check Admin Dashboard as Admin', () => {
         if(!SKIP.check){
             cris_login("admin")
-            cy.log("Create User1")
-            cy.log("Create User2")
+            cy.log("Create User "+accounts['user1'].username)
+            createUser('user1')
+            cy.log("Create User "+accounts['user2'].username)
+            createUser('user2')
         }else{
             cy.log('SKIPPED')
         }
@@ -85,6 +86,11 @@ describe('ARKetype Tests', () => {
             cy.log('SKIPPED')
         }
     })
+    it('0x. Delete Users', () => {
+        cris_login("admin")
+        deleteUser('user1')
+        deleteUser('user2')
+    })
 })
 
 function acceptCookies(){
@@ -93,9 +99,31 @@ function acceptCookies(){
 function cris_login(user){
     cy.visit(baseUrl+'/login')
     acceptCookies()
-    console.log(Cypress.env('cris_account'))
+    console.log(accounts)
     cy.get('.title.is-4').contains('Connectez-vous')
-    cy.get('#id_username').type(Cypress.env('cris_account')[user]username)
-    cy.get('#id_password').type(Cypress.env('cris_account')[user]password)
+    cy.get('#id_username').type(accounts[user].username)
+    cy.get('#id_password').type(accounts[user].password)
     cy.get('form > .button.is-primary').contains('Connexion').click()
+}
+
+function createUser(user){
+  cy.visit(baseUrl+'/admin/INCIPIT_CRIS_app/user/add/')
+  cy.get('#id_username').type(accounts[user].username)
+  cy.get('#id_email').type(accounts[user].email)
+  cy.get('#id_first_name').type(accounts[user].first_name)
+  cy.get('#id_last_name').type(accounts[user].last_name)
+  cy.get('#id_pid').type(accounts[user].pid)
+  cy.get('#id_password1').type(accounts[user].password)
+  cy.get('#id_password2').type(accounts[user].password)
+  cy.get('.default[value="Save"]').click()
+  cy.get('.success').contains('The user “'+accounts[user].pid+'” was added successfully. You may edit it again below.')
+}
+
+function deleteUser(user){
+  cy.visit(baseUrl+'/admin/INCIPIT_CRIS_app/user/')
+  cy.get('.field-pid a').contains(accounts[user].pid).click()
+  cy.get('.deletelink').contains('Delete').click()
+  cy.get('.content').find('input[type="submit"]').click()
+  cy.get('li.success').contains('The user “'+accounts[user].pid+'” was deleted successfully.')
+
 }
