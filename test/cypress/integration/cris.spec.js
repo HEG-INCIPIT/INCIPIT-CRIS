@@ -375,3 +375,12 @@ function deleteUser(user){
   cy.get('li.success').contains('The user “'+accounts[user].pid+'” was deleted successfully.')
 
 }
+
+function getForms(){
+  cy.visit(baseUrl+'/articles/edition/field/name/ark:/testArt1')
+  cy.visit('https://cris.arketype.ch/articles/edition/field/datePublished/ark:/99999/fk3gk5r')
+  cy.visit('https://cris.arketype.ch/articles/edition/field/url/ark:/99999/fk3gk5r')
+  cy.visit('https://cris.arketype.ch/articles/edition/field/add-author/ark:/99999/fk3gk5r')
+  cy.visit('https://cris.arketype.ch/articles/edition/field/add-projectark:/99999/fk3gk5r')
+  cy.visit('https://cris.arketype.ch/articles/edition/field/add-dataset/ark:/99999/fk3gk5r')
+}
