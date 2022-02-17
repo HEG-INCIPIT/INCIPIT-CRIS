@@ -70,23 +70,31 @@
                             {% endif %}
                             >
                         </figure>
-                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">
+                            {{ work.name }}
+                            {% if work.alternate_name != '' %}
+                                ({{ work.alternate_name }})
+                            {% endif %}
+                        </a>
                     </div>
                     {% endfor %}
                     <p class="break-logo"></p>
                     {% for funder in data_project.funders %}
                     <div class="align-image-text">
                         <figure class="image is-48x48">
-                            <i class="fas fa-coins"></i>
-                            <img src=
                             {% if funder.logo == '' %}
-                            "{% static 'images/university-solid.png' %}"
+                            <i class="fas fa-money-bill-wave-alt"></i>
                             {% else %}
-                            "{{ funder.logo }}"
+                            <img src="{{ funder.logo }}">
                             {% endif %}
-                            >
+                            
                         </figure>
-                        <a class="link-one institution-name" href="/institutions/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                        <a class="link-one institution-name" href="/institutions/{{ funder.pid }}">
+                            {{ funder.name }}
+                            {% if funder.alternate_name != '' %}
+                                ({{ funder.alternate_name }})
+                            {% endif %}
+                        </a>
                     </div>
                     {% endfor %}
                 </div>
@@ -174,7 +182,12 @@
                                           {% endif %}
                                           >
                                        </figure>
-                                       <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+                                       <a class="link-one institution-name" href="/institutions/{{ work.pid }}">
+                                            {{ work.name }}
+                                            {% if work.alternate_name != '' %}
+                                                ({{ work.alternate_name }})
+                                            {% endif %}
+                                        </a>
                                  </div>
                                  {% endfor %}
                               </div>
@@ -195,7 +208,12 @@
                                           {% endif %}
                                           >
                                        </figure>
-                                       <a class="link-one institution-name" href="/institutions/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                                       <a class="link-one institution-name" href="/institutions/{{ funder.pid }}">
+                                            {{ funder.name }}
+                                            {% if funder.alternate_name != '' %}
+                                                ({{ funder.alternate_name }})
+                                            {% endif %}
+                                        </a>
                                  </div>
                                  {% endfor %}
                               </div>

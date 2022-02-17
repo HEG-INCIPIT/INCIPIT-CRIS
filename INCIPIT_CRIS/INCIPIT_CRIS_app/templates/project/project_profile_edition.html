@@ -32,8 +32,8 @@
 {% endblock %}
 
 {% block article_work %}
-<p class="subtitle is-6">Travail : <a class="link-one" href="/articles/edition/field/add-institution/{{data_article.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-{% for work in data_article.institutions %}
+<p class="subtitle is-6">Travail : <a class="link-one" href="/projects/edition/field/add-institution/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+{% for work in data_project.institutions %}
 <div class="align-image-text">
    <figure class="image is-48x48">
       <img src=
@@ -44,9 +44,14 @@
       {% endif %}
       >
    </figure>
-   <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+   <a class="link-one institution-name" href="/projects/{{ work.pid }}">
+      {{ work.name }}
+      {% if work.alternate_name != '' %}
+            ({{ work.alternate_name }})
+      {% endif %}
+   </a>
 
-   <form class="align-button-centered" action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
+   <form class="align-button-centered" action="/projects/edition/field/delete-institution/{{data_project.pid}}" method="post">
       {% csrf_token %}
       <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
       <button class="delete"></button>
@@ -96,9 +101,14 @@
                {% endif %}
                >
             </figure>
-            <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+            <a class="link-one institution-name" href="/institutions/{{ work.pid }}">
+               {{ work.name }}
+               {% if work.alternate_name != '' %}
+                  ({{ work.alternate_name }})
+               {% endif %}
+            </a>
 
-            <form class="align-button-centered" action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
+            <form class="align-button-centered" action="/projects/edition/field/delete-institution/{{data_project.pid}}" method="post">
                {% csrf_token %}
                <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
                <button class="delete"></button>
@@ -109,22 +119,27 @@
 
       <div class="column">
          <p class="subtitle is-6">Bailleurs de fonds : <a class="link-one" href="/projects/edition/field/add-funder/{{data_project.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-         {% for work in data_project.funders %}
+         {% for funder in data_project.funders %}
          <div class="align-image-text">
             <figure class="image is-48x48">
                <img src=
-               {% if work.logo == '' %}
+               {% if funder.logo == '' %}
                "{% static 'images/university-solid.png' %}"
                {% else %}
-               "{{ work.logo }}"
+               "{{ funder.logo }}"
                {% endif %}
                >
             </figure>
-            <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} ({{ work.alternate_name }})</a>
+            <a class="link-one institution-name" href="/institutions/{{ funder.pid }}">
+               {{ funder.name }}
+               {% if funder.alternate_name != '' %}
+                     ({{ funder.alternate_name }})
+               {% endif %}
+            </a>
 
-            <form class="align-button-centered" action="/articles/edition/field/delete-institution/{{data_article.pid}}" method="post">
+            <form class="align-button-centered" action="/projects/edition/field/delete-institution/{{data_project.pid}}" method="post">
                {% csrf_token %}
-               <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
+               <input type="hidden" id="institutionARK" name="institutionARK" value="{{ funder.pid }}">
                <button class="delete"></button>
             </form>
          </div>

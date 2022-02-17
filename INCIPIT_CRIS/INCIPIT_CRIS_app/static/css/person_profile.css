@@ -79,6 +79,7 @@
     flex-wrap: wrap;
     align-content: center;
     margin-right: 10px;
+    justify-content: center;
 }
 
 .parallax {
