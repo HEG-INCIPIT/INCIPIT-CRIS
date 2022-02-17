@@ -13,13 +13,16 @@
     </nav>
 {% endblock %}
 
+
 {% block information %}
     {{ message }}
 {% endblock %}
 
+
 {% block button_navigation %}
     <a title="Aller sur le profil" class="link-one right-align little-space-above" href="/persons/{{ data_person.pid }}"><i class="fas fa-user-alt"></i></a>
 {% endblock %}
+
 
 {% block person_description %}
     <div class="separator">Description</div>
@@ -28,6 +31,7 @@
         <span id="more">
     {% endif %}
 {% endblock %}
+
 
 {% block person_personal_information %}
     <div class="columns is-multiline">
@@ -86,6 +90,7 @@
     </div>
 {% endblock %}
 
+
 {% block person_contact %}
     <div class="columns">
         <div class="column center-div">
@@ -124,11 +129,6 @@
         {% endif %}
     </div>
 {% endblock %}
-
-{% if data_person.description == '' %}
-    <span id="more">
-{% endif %}
-
 
 
 {% block person_institutions %}
@@ -185,7 +185,6 @@
 {% endblock %}
 
 
-
 {% block person_articles %}
     <p class="title is-5">Articles <a title="Ajouter un article" class="link-one" 
     {% if user.is_staff %}
@@ -235,6 +234,7 @@
     {% endfor %}
 {% endblock %}
 
+
 {% block person_projects %}
     <p class="title is-5">Projets <a title="Ajouter un projet" class="link-one"
     {% if user.is_staff %}
@@ -283,6 +283,7 @@
         {% endif %}
     {% endfor %}
 {% endblock %}
+
 
 {% block person_datasets %}
     <p class="title is-5">Données <a title="Ajouter un jeu de données" class="link-one"

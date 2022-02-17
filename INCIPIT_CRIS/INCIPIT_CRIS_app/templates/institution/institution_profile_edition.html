@@ -13,33 +13,37 @@
     </nav>
 {% endblock %}
 
+
 {% block information %}
     {{ message }}
 {% endblock %}
 
+
 {% block institution_picture %}
-<section class="header">
-   <figure class="figure ml-5 mb-2">
-      <img src=
-      {% if data_institution.logo == '' %}
-          "{% static 'images/university-solid.png' %}"
-      {% else %}
-          "{{ data_institution.logo }}"
-      {% endif %}
-      width="250" height="250">
-   </figure>
-   <a class="ml-1 edit-institution link-one is-size-6" title="Modifier le logo de l'institution" href="/institutions/edition/field/logo/{{data_institution.pid}}"><i  style="color:rgba(0,0,0,0.4) !important;" class="fas fa-edit"></i></a>
-</section>
+    <section class="header">
+        <figure class="figure ml-5 mb-2">
+            <img src=
+            {% if data_institution.logo == '' %}
+                "{% static 'images/university-solid.png' %}"
+            {% else %}
+                "{{ data_institution.logo }}"
+            {% endif %}
+            width="250" height="250">
+        </figure>
+        <a class="ml-1 edit-institution link-one is-size-6" title="Modifier le logo de l'institution" href="/institutions/edition/field/logo/{{data_institution.pid}}"><i  style="color:rgba(0,0,0,0.4) !important;" class="fas fa-edit"></i></a>
+    </section>
 {% endblock %}
 
+
 {% block button_navigation %}
-<a class="link-one right-align little-space-above" href="/institutions/{{ data_institution.pid }}"><i class="fas fa-check"></i></a>
-<form id="delete_institution_form" action="/institutions/edition/delete-institution/{{data_institution.pid}}" method="post">
-    {% csrf_token %}
-    <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
-   <a class="link-one right-align little-space-above mr-5" href="javascript:$('#delete_institution_form').submit()"><i class="fas fa-times-circle"></i></a>
-</form>
+    <a class="link-one right-align little-space-above" href="/institutions/{{ data_institution.pid }}"><i class="fas fa-check"></i></a>
+    <form id="delete_institution_form" action="/institutions/edition/delete-institution/{{data_institution.pid}}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="institutionARK" name="institutionARK" value="{{ data_institution.pid }}">
+        <a class="link-one right-align little-space-above mr-5" href="javascript:$('#delete_institution_form').submit()"><i class="fas fa-times-circle"></i></a>
+    </form>
 {% endblock %}
+
 
 {% block institution_description %}
    <div class="separator">Description</div>
@@ -47,234 +51,234 @@
 {% endblock %}
 
 {% block institution_informations %}
-<div class="columns is-multiline">
-   <div class="column keep-it-inline-parent">
-      <p class="keep-it-inline">Nom : {{ data_institution.name }} <a class="link-one is-size-6" href="/institutions/edition/field/name/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
-   </div>
-   <div class="column keep-it-inline-parent">
-      <p class="keep-it-inline-parent">Nom alternatif: {{ data_institution.alternate_name }} <a class="link-one is-size-6" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
-   </div>
-   <div class="column keep-it-inline-parent">
-      <p class="keep-it-inline">Date de fondation : <time datetime="{{ data_institution.founding_date }}">{{ data_institution.founding_date }}</time> <a class="edit-institution link-one is-size-6" href="/institutions/edition/field/foundingDate/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
-   </div>
-   <div class="column keep-it-inline-parent">
-      <p class="keep-it-inline">Lien vers l'institution : <a class="link-one url" href="{{ data_institution.url }}">{{ data_institution.url }}</a> <a class="edit-institution link-one is-size-6" href="/institutions/edition/field/url/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
-   </div>
-   <div class="column keep-it-inline-parent">
-      <form class="funder-form" action="/institutions/edition/field/add-funder/{{data_institution.pid}}" method="post">
-          {% csrf_token %}
-          <p class="keep-it-inline">Bailleur de fonds : </p>
-          {% if data_institution.funder %}
-            <button><i class="far fa-check-square"></i></button>
-          {% else %}
-            <button><i class="far fa-square"></i> </button>
-          {% endif %}
-      </form>
-   </div>
-</div>
+    <div class="columns is-multiline">
+        <div class="column keep-it-inline-parent">
+            <p class="keep-it-inline">Nom : {{ data_institution.name }} <a class="link-one is-size-6" href="/institutions/edition/field/name/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+        </div>
+        <div class="column keep-it-inline-parent">
+            <p class="keep-it-inline-parent">Nom alternatif: {{ data_institution.alternate_name }} <a class="link-one is-size-6" href="/institutions/edition/field/alternateName/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+        </div>
+        <div class="column keep-it-inline-parent">
+            <p class="keep-it-inline">Date de fondation : <time datetime="{{ data_institution.founding_date }}">{{ data_institution.founding_date }}</time> <a class="edit-institution link-one is-size-6" href="/institutions/edition/field/foundingDate/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+        </div>
+        <div class="column keep-it-inline-parent">
+            <p class="keep-it-inline">Lien vers l'institution : <a class="link-one url" href="{{ data_institution.url }}">{{ data_institution.url }}</a> <a class="edit-institution link-one is-size-6" href="/institutions/edition/field/url/{{data_institution.pid}}"><i class="fas fa-edit"></i></a></p>
+        </div>
+        <div class="column keep-it-inline-parent">
+            <form class="funder-form" action="/institutions/edition/field/add-funder/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <p class="keep-it-inline">Bailleur de fonds : </p>
+                {% if data_institution.funder %}
+                    <button><i class="far fa-check-square"></i></button>
+                {% else %}
+                    <button><i class="far fa-square"></i> </button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
 {% endblock %}
+
 
 {% block institution_institutions %}
-   <div class="separator">Institutions</div>
-      <div class="columns">
-         <div class="column">
-            <p class="subtitle is-6">Institutions parentes :  <a class="link-one" href="/institutions/edition/field/add-parent-institution/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-            {% for work in data_institution.parent_organizations %}
-            <div class="align-image-text">
-               <figure class="image is-48x48">
-                  <img src=
-                  {% if work.logo == '' %}
-                  "{% static 'images/university-solid.png' %}"
-                  {% else %}
-                  "{{ work.logo }}"
-                  {% endif %}
-                  >
-               </figure>
-               <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
-               <form  class="align-button-centered"  action="/institutions/edition/field/delete-parent-institution/{{data_institution.pid}}" method="post">
-                  {% csrf_token %}
-                  <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
-                  <button class="delete"></button>
-               </form>
+    <div class="separator">Institutions</div>
+        <div class="columns">
+            <div class="column">
+                <p class="subtitle is-6">Institutions parentes :  <a class="link-one" href="/institutions/edition/field/add-parent-institution/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+                {% for work in data_institution.parent_organizations %}
+                    <div class="align-image-text">
+                        <figure class="image is-48x48">
+                            <img src=
+                            {% if work.logo == '' %}
+                                "{% static 'images/university-solid.png' %}"
+                            {% else %}
+                                "{{ work.logo }}"
+                            {% endif %}
+                            >
+                        </figure>
+                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
+                        <form  class="align-button-centered"  action="/institutions/edition/field/delete-parent-institution/{{data_institution.pid}}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
+                            <button class="delete"></button>
+                        </form>
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-         </div>
 
-         <div class="column">
-            <p class="subtitle is-6">Sous-institutions : <a class="link-one" href="/institutions/edition/field/add-sub-institution/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
-            {% for work in data_institution.sub_organizations %}
-               <div class="align-image-text">
-
-                  <figure class="image is-48x48">
-                  <img src=
-                  {% if work.logo == '' %}
-                  "{% static 'images/university-solid.png' %}"
-                  {% else %}
-                  "{{ work.logo }}"
-                  {% endif %}
-                  >
-                  </figure>
-                  <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
-                  <form class="align-button-centered" action="/institutions/edition/field/delete-sub-institution/{{data_institution.pid}}" method="post">
-                  {% csrf_token %}
-                  <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
-                  <button class="delete"></button>
-               </form>
+            <div class="column">
+                <p class="subtitle is-6">Sous-institutions : <a class="link-one" href="/institutions/edition/field/add-sub-institution/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+                {% for work in data_institution.sub_organizations %}
+                    <div class="align-image-text">
+                        <figure class="image is-48x48">
+                            <img src=
+                            {% if work.logo == '' %}
+                                "{% static 'images/university-solid.png' %}"
+                            {% else %}
+                                "{{ work.logo }}"
+                            {% endif %}
+                            >
+                        </figure>
+                        <a class="link-one institution-name" href="/institutions/{{ work.pid }}">{{ work.name }} {% if work.alternate_name != "" %}({{ work.alternate_name }}){% endif %}</a>
+                        <form class="align-button-centered" action="/institutions/edition/field/delete-sub-institution/{{data_institution.pid}}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="institutionARK" name="institutionARK" value="{{ work.pid }}">
+                            <button class="delete"></button>
+                        </form>
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
 {% endblock %}
+
 
 {% block institution_workers %}
-<p class="title is-5">Employés <a class="link-one" href="/institutions/edition/field/add-worker/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="title is-5">Employés <a class="link-one" href="/institutions/edition/field/add-worker/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
-{% if data_institution.len_workers == 0 %}
-   <p>Il n'y a pas encore d'employés associés</p>
-{% endif %}
+    {% if data_institution.len_workers == 0 %}
+        <p>Il n'y a pas encore d'employés associés</p>
+    {% endif %}
 
-{% for member in data_institution.workers %}
+    {% for member in data_institution.workers %}
+        <div>
+            <form action="/institutions/edition/field/delete-worker/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="workerARK" name="workerARK" value="{{ member.pid }}">
+                <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
+                <button class="delete"></button>
+            </form>
+            <p class="justified little-space-below">{{ member.1.description }}</p>
+        </div>
 
-<div>
-   <form action="/institutions/edition/field/delete-worker/{{data_institution.pid}}" method="post">
-       {% csrf_token %}
-       <input type="hidden" id="workerARK" name="workerARK" value="{{ member.pid }}">
-       <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
-       <button class="delete"></button>
-   </form>
-   <p class="justified little-space-below">{{ member.1.description }}</p>
-</div>
+        {% if forloop.first %}
+            <span id="more-worker">
+        {% endif %}
 
-{% if forloop.first %}
-<span id="more-worker">
-   {% endif %}
-
-   {% if forloop.last %}
-</span>
-{% else %}
-<hr>
-{% endif %}
-{% endfor %}
+        {% if forloop.last %}
+            </span>
+        {% else %}
+            <hr>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
+
 
 {% block institution_affiliates %}
-<p class="title is-5">Affiliés <a class="link-one" href="/institutions/edition/field/add-affiliate/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="title is-5">Affiliés <a class="link-one" href="/institutions/edition/field/add-affiliate/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
-{% if data_institution.len_affiliates == 0 %}
-   <p>Il n'y a pas encore d'affiliés associés</p>
-{% endif %}
+    {% if data_institution.len_affiliates == 0 %}
+        <p>Il n'y a pas encore d'affiliés associés</p>
+    {% endif %}
 
-{% for member in data_institution.affiliates %}
+    {% for member in data_institution.affiliates %}
+        <div>
+            <form action="/institutions/edition/field/delete-affiliate/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="affiliateARK" name="affiliateARK" value="{{ member.pid }}">
+                <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
+                <button class="delete"></button>
+            </form>
+            <p class="justified little-space-below">{{ member.1.description }}</p>
+        </div>
 
-<div>
-   <form action="/institutions/edition/field/delete-affiliate/{{data_institution.pid}}" method="post">
-      {% csrf_token %}
-      <input type="hidden" id="affiliateARK" name="affiliateARK" value="{{ member.pid }}">
-      <a class="link-one title is-6" href="/persons/{{ member.pid }}">{{ member.given_name }} {{ member.family_name }}</a>
-      <button class="delete"></button>
-  </form>
-   <p class="justified little-space-below">{{ member.1.description }}</p>
-</div>
+        {% if forloop.first %}
+            <span id="more-affiliate">
+        {% endif %}
 
-{% if forloop.first %}
-<span id="more-affiliate">
-   {% endif %}
-
-   {% if forloop.last %}
-</span>
-{% else %}
-<hr>
-{% endif %}
-{% endfor %}
+        {% if forloop.last %}
+            </span>
+        {% else %}
+            <hr>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
+
+
 {% block project_articles %}
-<p class="title is-5">Articles <a class="link-one" href="/institutions/edition/field/add-article/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="title is-5">Articles <a class="link-one" href="/institutions/edition/field/add-article/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
-{% if data_institution.len_articles == 0 %}
-   <p>Il n'y a pas encore d'articles associés</p>
-{% endif %}
+    {% if data_institution.len_articles == 0 %}
+        <p>Il n'y a pas encore d'articles associés</p>
+    {% endif %}
 
-{% for article in data_institution.articles %}
+    {% for article in data_institution.articles %}
+        <div>
+            <form action="/institutions/edition/field/delete-article/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="articleARK" name="articleARK" value="{{ article.pid }}">
+                <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
+                {% if article.url != '' %}
+                    <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
+                {% endif %}
+                <button class="delete"></button>
+            </form>
+            <p class="justified little-space-below">{{ article.abstract }}</p>
+            <p>
+                {% for author in article.authors %}
+                    {% if not forloop.last %}
+                        <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>,
+                    {% else %}
+                        <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
+                    {% endif %}
+                {% endfor %}
+            </p>
+            {% if article.date_published != 'None' %}
+                <i>{{ article.date_published }}</i>
+            {% endif %}
+        </div>
 
-<div>
-   <form action="/institutions/edition/field/delete-article/{{data_institution.pid}}" method="post">
-      {% csrf_token %}
-      <input type="hidden" id="articleARK" name="articleARK" value="{{ article.pid }}">
-      <a class="link-one title is-6" href="/articles/{{ article.pid }}">{{ article.name }}</a>
-      {% if article.url != '' %}
-         <a class="link-one" href="{{ article.url }}"><i class="fas fa-external-link-alt"></i></a>
-      {% endif %}
-      <button class="delete"></button>
-  </form>
-   <p class="justified little-space-below">{{ article.abstract }}</p>
-   <p>
-      {% for author in article.authors %}
-      {% if not forloop.last %}
-      <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>,
-      {% else %}
-      <a class="link-one" href="/persons/{{ author.0 }}">{{ author.1.given_name }} {{ author.1.family_name }}</a>
-      {% endif %}
+        {% if forloop.first %}
+            <span id="more-article">
+        {% endif %}
 
-      {% endfor %}
-   </p>
-   {% if article.date_published != 'None' %}
-      <i>{{ article.date_published }}</i>
-   {% endif %}
-</div>
-
-{% if forloop.first %}
-<span id="more-article">
-   {% endif %}
-
-   {% if forloop.last %}
-</span>
-{% else %}
-<hr>
-{% endif %}
-{% endfor %}
+        {% if forloop.last %}
+            </span>
+        {% else %}
+            <hr>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
+
 
 {% block article_projects %}
-     <p class="title is-5">Projets <a class="link-one" href="/institutions/edition/field/add-project/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="title is-5">Projets <a class="link-one" href="/institutions/edition/field/add-project/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
-     {% if data_institution.len_projects == 0 %}
+    {% if data_institution.len_projects == 0 %}
         <p>Il n'y a pas encore de projets associés</p>
-     {% endif %}
+    {% endif %}
 
-     {% for project in data_institution.projects %}
-
+    {% for project in data_institution.projects %}
         <div>
-           <form action="/institutions/edition/field/delete-project/{{data_institution.pid}}" method="post">
-               {% csrf_token %}
-               <input type="hidden" id="projectARK" name="projectARK" value="{{ project.pid }}">
-               <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-               {% if projet.url != '' %}
-                  <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
-               {% endif %}
-               <button class="delete"></button>
-           </form>
+            <form action="/institutions/edition/field/delete-project/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="projectARK" name="projectARK" value="{{ project.pid }}">
+                <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
+                {% if projet.url != '' %}
+                    <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                {% endif %}
+                <button class="delete"></button>
+            </form>
             <p class="justified little-space-below">{{ project.description }}</p>
             <p>
-                 {% for member in project.members %}
-                     {% if not forloop.last %}
-                         <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
-                     {% else %}
-                         <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
-                     {% endif %}
-                 {% endfor %}
+                {% for member in project.members %}
+                    {% if not forloop.last %}
+                        <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
+                    {% else %}
+                        <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
+                    {% endif %}
+                {% endfor %}
             </p>
             {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
-               <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+                <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
             {% endif %}
             <p>Financement :
-               {% for funder in project.funders %}
-                  {% if not forloop.last %}
+                {% for funder in project.funders %}
+                    {% if not forloop.last %}
                         <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
-                  {% else %}
+                    {% else %}
                         <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
-                  {% endif %}
-               {% endfor %}
+                    {% endif %}
+                {% endfor %}
             </p>
         </div>
 
@@ -287,8 +291,9 @@
         {% else %}
             <hr>
         {% endif %}
-     {% endfor %}
+    {% endfor %}
 {% endblock %}
+
 
 {% block article_projects_funded %}
     <p class="title is-5">Projets Financés <a class="link-one" href="/funders/edition/field/add-project/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
@@ -298,19 +303,18 @@
     {% endif %}
 
     {% for project in data_institution.projects_funded %}
-
-       <div>
-          <form action="/funders/edition/field/delete-project/{{data_institution.pid}}" method="post">
-           {% csrf_token %}
-           <input type="hidden" id="project_fundedARK" name="project_fundedARK" value="{{ project.pid }}">
-           <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
-           {% if projet.url != '' %}
-               <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
-            {% endif %}
-            <button class="delete"></button>
-          </form>
-           <p class="justified little-space-below">{{ project.description }}</p>
-           <p>
+        <div>
+            <form action="/funders/edition/field/delete-project/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="project_fundedARK" name="project_fundedARK" value="{{ project.pid }}">
+                <a class="link-one title is-6" href="/projects/{{ project.pid }}">{{ project.name }}</a>
+                {% if projet.url != '' %}
+                    <a class="link-one" href="{{ project.url }}"><i class="fas fa-external-link-alt"></i></a>
+                {% endif %}
+                <button class="delete"></button>
+            </form>
+            <p class="justified little-space-below">{{ project.description }}</p>
+            <p>
                 {% for member in project.members %}
                     {% if not forloop.last %}
                         <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>,
@@ -318,94 +322,94 @@
                         <a class="link-one" href="/persons/{{ member.0 }}">{{ member.1.given_name }} {{ member.1.family_name }}</a>
                     {% endif %}
                 {% endfor %}
-           </p>
-           {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
-               <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
+            </p>
+            {% if project.founding_date != 'None' and project.dissolution_date != 'None' %}
+                <p>Durée du projet : du {{ project.founding_date }} au {{ project.dissolution_date }}</p>
             {% endif %}
             <p>Financement :
-               {% for funder in project.funders %}
-                  {% if not forloop.last %}
-                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
-                  {% else %}
-                        <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
-                  {% endif %}
-               {% endfor %}
+            {% for funder in project.funders %}
+                {% if not forloop.last %}
+                    <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>,
+                {% else %}
+                    <a class="link-one" href="/persons/{{ funder.pid }}">{{ funder.name }} ({{ funder.alternate_name }})</a>
+                {% endif %}
+            {% endfor %}
             </p>
-       </div>
+        </div>
 
-       {% if forloop.first %}
-           <span id="more-project-funded">
-       {% endif %}
+        {% if forloop.first %}
+            <span id="more-project-funded">
+        {% endif %}
 
-       {% if forloop.last %}
-           </span>
-       {% else %}
-           <hr>
-       {% endif %}
+        {% if forloop.last %}
+            </span>
+        {% else %}
+            <hr>
+        {% endif %}
     {% endfor %}
 {% endblock %}
 
+
 {% block project_datasets %}
-<p class="title is-5">Données <a class="link-one" href="/institutions/edition/field/add-dataset/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
+    <p class="title is-5">Données <a class="link-one" href="/institutions/edition/field/add-dataset/{{data_institution.pid}}"><i class="fas fa-plus-circle"></i></a></p>
 
-{% if data_institution.len_datasets == 0 %}
-   <p>Il n'y a pas encore de données associés</p>
-{% endif %}
+    {% if data_institution.len_datasets == 0 %}
+        <p>Il n'y a pas encore de données associés</p>
+    {% endif %}
 
-{% for dataset in data_institution.datasets %}
+    {% for dataset in data_institution.datasets %}
+        <div>
+            <form action="/institutions/edition/field/delete-dataset/{{data_institution.pid}}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="datasetARK" name="datasetARK" value="{{ dataset.pid }}">
+                <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
+                {% if dataset.url != '' %}
+                    <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
+                {% endif %}
+                {% if dataset.data_download.url != '' %}
+                    <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
+                {% endif %}
+                <button class="delete"></button>
+            </form>
+            <p class="justified little-space-below">{{ dataset.abstract }}</p>
+            {% if dataset.creators|length > 0 %}
+                <p> Créateurs :
+                    {% for creator in dataset.creators %}
+                        {% if not forloop.last %}
+                            <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
+                        {% else %}
+                            <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </p>
+            {% endif %}
+            {% if dataset.maintainers|length > 0 %}
+                <p> Mainteneurs :
+                    {% for maintainer in dataset.maintainers %}
+                        {% if not forloop.last %}
+                            <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
+                        {% else %}
+                            <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </p>
+            {% endif%}
+            {% if dataset.created_date != 'None' %}
+                <p>Création : {{ dataset.created_date }}</p>
+            {% endif %}
+            {% if dataset.modified_date != 'None' %}
+                <p>Dernière modification : {{ dataset.modified_date }}</p>
+            {% endif %}
+        </div>
 
-<div>
-   <form action="/institutions/edition/field/delete-dataset/{{data_institution.pid}}" method="post">
-       {% csrf_token %}
-       <input type="hidden" id="datasetARK" name="datasetARK" value="{{ dataset.pid }}">
-       <a class="link-one title is-6" href="/datasets/{{ dataset.pid }}">{{ dataset.name }}</a>
-       {% if dataset.url != '' %}
-         <a class="link-one" href="{{ dataset.url }}"><i class="fas fa-external-link-alt"></i></a>
-      {% endif %}
-      {% if dataset.data_download.url != '' %}
-         <a class="link-one" href="{{ dataset.data_download.url }}"><i class="fas fa-download"></i></a>
-      {% endif %}
-       <button class="delete"></button>
-   </form>
-   <p class="justified little-space-below">{{ dataset.abstract }}</p>
-   {% if dataset.creators|length > 0 %}
-      <p> Créateurs :
-         {% for creator in dataset.creators %}
-         {% if not forloop.last %}
-         <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>,
-         {% else %}
-         <a class="link-one" href="/persons/{{ creator.0 }}">{{ creator.1.given_name }} {{ creator.1.family_name }}</a>
-         {% endif %}
-         {% endfor %}
-      </p>
-   {% endif %}
-   {% if dataset.maintainers|length > 0 %}
-      <p> Mainteneurs :
-         {% for maintainer in dataset.maintainers %}
-         {% if not forloop.last %}
-         <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>,
-         {% else %}
-         <a class="link-one" href="/persons/{{ maintainer.0 }}">{{ maintainer.1.given_name }} {{ maintainer.1.family_name }}</a>
-         {% endif %}
-         {% endfor %}
-      </p>
-   {% endif%}
-   {% if dataset.created_date != 'None' %}
-      <p>Création : {{ dataset.created_date }}</p>
-   {% endif %}
-   {% if dataset.modified_date != 'None' %}
-      <p>Dernière modification : {{ dataset.modified_date }}</p>
-   {% endif %}
-</div>
+        {% if forloop.first %}
+            <span id="more-dataset">
+        {% endif %}
 
-{% if forloop.first %}
-<span id="more-dataset">
-   {% endif %}
-
-   {% if forloop.last %}
-</span>
-{% else %}
-<hr>
-{% endif %}
-{% endfor %}
+        {% if forloop.last %}
+            </span>
+        {% else %}
+            <hr>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
