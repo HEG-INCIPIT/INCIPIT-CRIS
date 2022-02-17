@@ -21,6 +21,7 @@ services:
     volumes:
       - db:/var/lib/mysql
       - fuseki:/app/fuseki/run/databases
+      - media:/app/INCIPIT_CRIS/media
     deploy:
       placement:
         constraints:
