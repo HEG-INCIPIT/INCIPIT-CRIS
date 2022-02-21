@@ -13,6 +13,7 @@ from random import sample
 import requests
 import mimetypes
 import socket
+import csv
 
 
 def index(request):
@@ -88,7 +89,7 @@ def import_data(request):
         if request.user.is_superuser:
             text_to_return = {'text': ''}
             if request.method == 'POST':
-                accepted_format_dictionnary = ['ttl', 'n3', 'nt', 'rdf', 'owl', 'nq', 'trig', 'jsonld', 'csv']
+                accepted_format_dictionnary = ['ttl', 'n3', 'nt', 'rdf', 'owl', 'nq', 'trig', 'jsonld', 'csv', 'txt']
                 data_file = request.FILES['data_file']
                 if str(data_file).split('.')[-1].lower() in accepted_format_dictionnary:
                     fs = FileSystemStorage()
@@ -110,7 +111,7 @@ def manage_data(request):
             if path.isdir(media_path):
                 for f in listdir(media_path):
                     if isfile(join(media_path, f)):
-                        if os.path.splitext(f)[1] == ".csv":
+                        if os.path.splitext(f)[1] in [".csv", ".txt"]:
                             csv_files.append(f)
                         else:
                             triple_files.append(f)
@@ -171,6 +172,25 @@ def populate_triplestore(request):
                         print(r.status_code)
 
         return redirect(manage_data)
+
+
+def add_data(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            if request.method == 'POST':
+                media_path = settings.MEDIA_ROOT
+                if isfile(join(media_path, request.POST['filename'])):
+                    if request.POST['filename'].split('.')[-1].lower() in ['csv', 'txt']:
+                        file = open(path.join(settings.MEDIA_ROOT, request.POST['filename']))
+                        csvreader = csv.reader(file)
+                        header = []
+                        header = next(csvreader)
+                        rows = []
+                        for row in csvreader:
+                            rows.append(row)
+                        file.close()
+    
+    return redirect(manage_data)
 
 
 def delete_data(request):

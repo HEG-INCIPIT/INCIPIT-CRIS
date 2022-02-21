@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
         <link rel="stylesheet" href="{% static 'css/manage_data.css' %}">
     </head>
-    <body>
+    <body onload="choseDisplay()">
 
         {% include 'main/navbar.html' %}
 
@@ -34,7 +34,7 @@
 
             <div class="tabs is-centered">
                 <ul>
-                    <li id="triple_files" class="is-active" onclick="setActive(this)">
+                    <li id="triple_files" onclick="setActive(this)">
                         <a>
                           <span class="icon is-small"><i class="far fa-file" aria-hidden="true"></i></span>
                           <span>Triple file</span>
@@ -76,10 +76,10 @@
                 {% for file in csv_files %}
                     <div>
                         {{ file }}
-                        <form action="/populate-triplestore/" method="post">
+                        <form action="/add-data/" method="post">
                             {% csrf_token %}
                             <input type="hidden" id="filename" name="filename" value="{{ file }}">
-                            <button class="button is-primary">Peupler le triplestore</button>
+                            <button class="button is-primary">Ajouter les données</button>
                         </form>
                         <form action="/delete-data/" method="post">
                             {% csrf_token %}
@@ -101,6 +101,8 @@
         {% include 'main/footer.html' %}
     </body>
     <script>
+        var activeElement = 'triple'
+
         function setActive(element) {
             element.setAttribute('class', 'is-active');
             if (element.id == 'triple_files') {
@@ -110,6 +112,8 @@
                 elem.hidden = true;
                 elem = document.getElementById('triple_elements');
                 elem.hidden = false;
+                var activeElement = 'triple'
+                window.sessionStorage.setItem('activeElement', activeElement);
             }
             else {
                 elem = document.getElementById('triple_files')
@@ -118,7 +122,26 @@
                 elem.hidden = true;
                 elem = document.getElementById('csv_elements');
                 elem.hidden = false;
+                var activeElement = 'csv'
+                window.sessionStorage.setItem('activeElement', activeElement);
             }
         }
+
+        function choseDisplay() {
+            if(window.sessionStorage.getItem('activeElement') == 'csv') {
+                elem = document.getElementById('csv_files');
+                elem.setAttribute('class', 'is-active');
+                elem = document.getElementById('triple_elements');
+                elem.classList.remove('is-active')
+                elem.hidden = true;
+                elem = document.getElementById('csv_elements');
+                elem.hidden = false;
+            }
+            else {
+                elem = document.getElementById('triple_files');
+                elem.setAttribute('class', 'is-active');
+            }
+        }
+
     </script>
 </html>
