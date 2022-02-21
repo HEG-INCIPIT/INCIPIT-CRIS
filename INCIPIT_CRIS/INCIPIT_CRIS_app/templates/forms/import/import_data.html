@@ -25,6 +25,10 @@
 
             <h1 class="title is-4">Importer des données</h1>
 
+            {% if text != ''%}
+                <p>{{ text }}</p>
+            {% endif %}
+
             <form action="/import-data/" method="post" id="data" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="data_file" accept=".n3, .nt, .rdf, .owl, .nq, .trig, .jsonld, .ttl">

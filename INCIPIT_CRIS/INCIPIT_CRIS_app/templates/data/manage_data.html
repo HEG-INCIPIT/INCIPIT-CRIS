@@ -32,30 +32,93 @@
                 </form>
             </div>
 
-            {% for file in my_files %}
-                <div>
-                    {{ file }}
-                    <form action="/populate-triplestore/" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" id="filename" name="filename" value="{{ file }}">
-                        <button class="button is-primary">Peupler le triplestore</button>
-                    </form>
-                    <form action="/delete-data/" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" id="filename" name="filename" value="{{ file }}">
-                        <button class="button is-danger">Supprimer le fichier</button>
-                    </form>
-                    <form action="/download-file/" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" id="filename" name="filename" value="{{ file }}">
-                        <button class="button is-link">Télécharger le fichier</button>
-                    </form>
-                </div>
-            {% endfor %}
+            <div class="tabs is-centered">
+                <ul>
+                    <li id="triple_files" class="is-active" onclick="setActive(this)">
+                        <a>
+                          <span class="icon is-small"><i class="far fa-file" aria-hidden="true"></i></span>
+                          <span>Triple file</span>
+                        </a>
+                    </li>
+                    <li id="csv_files" onclick="setActive(this)">
+                        <a>
+                          <span class="icon is-small"><i class="fas fa-file-csv" aria-hidden="true"></i></span>
+                          <span>CSV file</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="triple_elements">
+                {% for file in triple_files %}
+                    <div>
+                        {{ file }}
+                        <form action="/populate-triplestore/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="filename" name="filename" value="{{ file }}">
+                            <button class="button is-primary">Peupler le triplestore</button>
+                        </form>
+                        <form action="/delete-data/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="filename" name="filename" value="{{ file }}">
+                            <button class="button is-danger">Supprimer le fichier</button>
+                        </form>
+                        <form action="/download-file/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="filename" name="filename" value="{{ file }}">
+                            <button class="button is-link">Télécharger le fichier</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div id="csv_elements" hidden>
+                {% for file in csv_files %}
+                    <div>
+                        {{ file }}
+                        <form action="/populate-triplestore/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="filename" name="filename" value="{{ file }}">
+                            <button class="button is-primary">Peupler le triplestore</button>
+                        </form>
+                        <form action="/delete-data/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="filename" name="filename" value="{{ file }}">
+                            <button class="button is-danger">Supprimer le fichier</button>
+                        </form>
+                        <form action="/download-file/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="filename" name="filename" value="{{ file }}">
+                            <button class="button is-link">Télécharger le fichier</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
 
 
         </section>
         
         {% include 'main/footer.html' %}
     </body>
+    <script>
+        function setActive(element) {
+            element.setAttribute('class', 'is-active');
+            if (element.id == 'triple_files') {
+                elem = document.getElementById('csv_files');
+                elem.classList.remove('is-active');
+                elem = document.getElementById('csv_elements');
+                elem.hidden = true;
+                elem = document.getElementById('triple_elements');
+                elem.hidden = false;
+            }
+            else {
+                elem = document.getElementById('triple_files')
+                elem.classList.remove('is-active')
+                elem = document.getElementById('triple_elements');
+                elem.hidden = true;
+                elem = document.getElementById('csv_elements');
+                elem.hidden = false;
+            }
+        }
+    </script>
 </html>

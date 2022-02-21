@@ -86,13 +86,18 @@ def index(request):
 def import_data(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
+            text_to_return = {'text': ''}
             if request.method == 'POST':
+                accepted_format_dictionnary = ['ttl', 'n3', 'nt', 'rdf', 'owl', 'nq', 'trig', 'jsonld', 'csv']
                 data_file = request.FILES['data_file']
-                fs = FileSystemStorage()
-                filename = fs.save(data_file.name, data_file)
-                uploaded_file_url = fs.url(filename)
-                return render(request, 'forms/import/import_data.html', {'uploaded_file_url': uploaded_file_url})
-            return render(request, 'forms/import/import_data.html')
+                if str(data_file).split('.')[-1].lower() in accepted_format_dictionnary:
+                    fs = FileSystemStorage()
+                    filename = fs.save(data_file.name, data_file)
+                    uploaded_file_url = fs.url(filename)
+                    return render(request, 'forms/import/import_data.html', {'uploaded_file_url': uploaded_file_url})
+                else:
+                    text_to_return = {'text': 'Le format n\'est pas correct'}
+            return render(request, 'forms/import/import_data.html', text_to_return)
 
 
 
@@ -100,12 +105,21 @@ def manage_data(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             media_path = settings.MEDIA_ROOT
-            my_files = []
+            triple_files = []
+            csv_files = []
             if path.isdir(media_path):
-                my_files = [f for f in listdir(media_path) if isfile(join(media_path, f))]
-                my_files.sort(key=lambda x: os.path.getmtime('{}/{}'.format(media_path, x)), reverse=True)
+                for f in listdir(media_path):
+                    if isfile(join(media_path, f)):
+                        if os.path.splitext(f)[1] == ".csv":
+                            csv_files.append(f)
+                        else:
+                            triple_files.append(f)
 
-            return render(request, 'data/manage_data.html', {'my_files': my_files})
+                #my_files = [f for f in listdir(media_path) if isfile(join(media_path, f))]
+                triple_files.sort(key=lambda x: os.path.getmtime('{}/{}'.format(media_path, x)), reverse=True)
+                csv_files.sort(key=lambda x: os.path.getmtime('{}/{}'.format(media_path, x)), reverse=True)
+
+            return render(request, 'data/manage_data.html', {'triple_files': triple_files, 'csv_files': csv_files})
 
 
 def backup_triplestore(request):
@@ -147,7 +161,7 @@ def populate_triplestore(request):
             if request.method == 'POST':
                 media_path = settings.MEDIA_ROOT
                 if isfile(join(media_path, request.POST['filename'])):
-                    extension = request.POST['filename'].split('.')[-1]
+                    extension = request.POST['filename'].split('.')[-1].lower()
                     if extension in rdf_format_dictionnary:
                         f = open(join(media_path, request.POST['filename']), 'r')
                         data = f.read()
