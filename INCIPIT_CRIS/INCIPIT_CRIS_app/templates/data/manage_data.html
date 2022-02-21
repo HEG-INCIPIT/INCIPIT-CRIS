@@ -32,6 +32,11 @@
                 </form>
             </div>
 
+            
+            {% if text != '' %}
+                <p>{{ text }}</p>
+            {% endif %}
+
             <div class="tabs is-centered">
                 <ul>
                     <li id="triple_files" onclick="setActive(this)">

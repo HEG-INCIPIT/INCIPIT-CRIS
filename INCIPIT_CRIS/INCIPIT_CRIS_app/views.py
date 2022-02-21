@@ -185,10 +185,19 @@ def add_data(request):
                         csvreader = csv.reader(file)
                         header = []
                         header = next(csvreader)
+                        header = [h.lower() for h in header]
                         rows = []
                         for row in csvreader:
                             rows.append(row)
                         file.close()
+                        print(header)
+                        print(rows)
+                        if 'article' in request.POST['filename'].lower():
+                            fields_to_check = ['name','abstract','ark','url','publicationdate','authorsark','projectsark','datasetsark','institutionsark']
+                            # for h in header:
+                            #     if not(h in fields_to_check):
+                            #         return redirect(manage_data, text='Le fichier ne contient pas les bons en-têtes')
+                            print("OKAY")
     
     return redirect(manage_data)
 
