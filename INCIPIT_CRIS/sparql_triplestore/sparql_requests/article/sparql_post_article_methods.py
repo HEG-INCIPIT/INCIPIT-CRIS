@@ -89,6 +89,35 @@ class SparqlPostArticleMethods:
         return self.sparql.query().response.read()
 
 
+    def add_project_to_article(self, pid, project):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{project}> schema:subjectOf <{pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, project=project)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_dataset_to_article(self, pid, dataset):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:isBasedOn <{dataset}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, dataset=dataset)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
     def add_DOI_article(self, pid, doi_value):
         sparql_request = """
             {prefix}

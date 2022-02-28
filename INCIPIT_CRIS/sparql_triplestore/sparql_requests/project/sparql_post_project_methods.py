@@ -124,6 +124,21 @@ class SparqlPostProjectMethods:
 
         return self.sparql.query().response.read()
 
+    
+    def add_dataset_to_project(self, pid, dataset):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{dataset}> schema:producer <{pid}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, dataset=dataset)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
 
     def add_institution_to_project(self, pid, institution):
         sparql_request = """
