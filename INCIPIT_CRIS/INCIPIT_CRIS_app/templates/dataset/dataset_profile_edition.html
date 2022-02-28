@@ -23,7 +23,7 @@
     <form id="delete_dataset_form" action="/datasets/edition/delete-dataset/{{data_dataset.pid}}" method="post">
         {% csrf_token %}
         <input type="hidden" id="projectARK" name="projectARK" value="{{ data_project.pid }}">
-        <a class="link-one right-align little-space-above mr-5" href="javascript:$('#delete_dataset_form').submit()"><i class="fas fa-times-circle"></i></a>
+        <a class="link-one right-align little-space-above mr-5" href="/datasets/edition/delete-dataset/{{ data_dataset.pid }}"><i class="fas fa-times-circle"></i></a>
     </form>
     <a class="link-one right-align little-space-above" href="/datasets/{{ data_dataset.pid }}"><i class="fas fa-check"></i></a>
 {% endblock %}
