@@ -15,6 +15,7 @@ import requests
 import mimetypes
 import socket
 import csv
+from django.contrib.auth import get_user_model
 
 
 def index(request):
@@ -106,6 +107,10 @@ def import_data(request):
 def manage_data(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
+            pid_exists = ''
+            if 'pid_exists' in request.session:
+                pid_exists = request.session['pid_exists']
+                request.session['pid_exists'] = ''
             media_path = settings.MEDIA_ROOT
             triple_files = []
             csv_files = []
@@ -121,7 +126,7 @@ def manage_data(request):
                 triple_files.sort(key=lambda x: os.path.getmtime('{}/{}'.format(media_path, x)), reverse=True)
                 csv_files.sort(key=lambda x: os.path.getmtime('{}/{}'.format(media_path, x)), reverse=True)
 
-            return render(request, 'data/manage_data.html', {'triple_files': triple_files, 'csv_files': csv_files})
+            return render(request, 'data/manage_data.html', {'triple_files': triple_files, 'csv_files': csv_files, 'pid_exists': pid_exists})
 
 
 def backup_triplestore(request):
@@ -213,7 +218,7 @@ def add_data_from_csv(request):
                             for row in rows:
                                 if row[dict_header['name']] == '':
                                     raise ValueError('No name found for article')
-                                pid = row[dict_header['ark']]
+                                pid = row[dict_header['ark']] if 'ark' in dict_header.keys() else ''
                                 if pid == '':
                                     try:
                                         pid = variables.ark.mint(row[dict_header['url']] if 'url' in dict_header.keys() else '', 'Admin',
@@ -248,7 +253,7 @@ def add_data_from_csv(request):
                                 if 'doi' in dict_header.keys() and row[dict_header['doi']] != '':
                                     variables.sparql_post_article_object.add_DOI_article(pid, row[dict_header['doi']])
 
-                        if 'project' in request.POST['filename'].lower():
+                        elif 'project' in request.POST['filename'].lower():
                             fields_to_check = ['description','ark','url','urllogo','foundingdate','dissolutiondate','membersark','articlesark','datasetsark','institutionsark', 'fundersark']
                             # Check if the header contain at least the name of the projects (it's mandatory)
                             if not('name' in header):
@@ -265,7 +270,7 @@ def add_data_from_csv(request):
                             for row in rows:
                                 if row[dict_header['name']] == '':
                                     raise ValueError('No name found for project')
-                                pid = row[dict_header['ark']]
+                                pid = row[dict_header['ark']] if 'ark' in dict_header.keys() else ''
                                 if pid == '':
                                     try:
                                         pid = variables.ark.mint(row[dict_header['url']] if 'url' in dict_header.keys() else '', 'Admin',
@@ -303,7 +308,7 @@ def add_data_from_csv(request):
                                     for funder in fundersark:
                                         variables.sparql_post_project_object.add_funder_to_project(pid, funder)
                         
-                        if 'dataset' in request.POST['filename'].lower():
+                        elif 'dataset' in request.POST['filename'].lower():
                             fields_to_check = ['abstract','ark','urldetails','urldata','datecreated','datemodified','creatorsark','maintainersark','articlesark','projectsark','institutionsark']
                             # Check if the header contain at least the name of the dataset (it's mandatory)
                             if not('name' in header):
@@ -320,7 +325,7 @@ def add_data_from_csv(request):
                             for row in rows:
                                 if row[dict_header['name']] == '':
                                     raise ValueError('No name found for dataset')
-                                pid = row[dict_header['ark']]
+                                pid = row[dict_header['ark']] if 'ark' in dict_header.keys() else ''
                                 if pid == '':
                                     try:
                                         pid = variables.ark.mint(row[dict_header['urldata']] if 'urldata' in dict_header.keys() else '', 'Admin',
@@ -358,6 +363,118 @@ def add_data_from_csv(request):
                                     for institution in institutionsark:
                                         variables.sparql_post_dataset_object.add_institution_to_dataset(pid, institution)
 
+                        elif 'institution' in request.POST['filename'].lower():
+                            fields_to_check = ['alternatename','description','ark','url','urllogo','foundingdate','parentorganizationsark','suborganizationsark','workersark','affiliatesark','articlesark','projectsark','datasetsark','funder']
+                            # Check if the header contain at least the name of the institution (it's mandatory)
+                            if not('name' in header):
+                                raise ValueError("The header doesn't contain minimum field : 'name'")
+                            dict_header = {}
+                            # Check if fields of the header are well formed
+                            for i,h in enumerate(header):
+                                if not(h in fields_to_check) and not(h == 'name'):
+                                    raise ValueError('The header is badly formed')
+                                # Add to dictionary index of element of the header
+                                dict_header[h] = i
+                            
+                            # Iterate over the rows of the file
+                            for row in rows:
+                                if row[dict_header['name']] == '':
+                                    raise ValueError('No name found for dataset')
+                                pid = row[dict_header['ark']] if 'ark' in dict_header.keys() else ''
+                                if pid == '':
+                                    try:
+                                        pid = variables.ark.mint(row[dict_header['url']] if 'url' in dict_header.keys() else '', 'Admin',
+                                            row[dict_header['name']], row[dict_header['foundingdate']] if 'foundingdate' in dict_header.keys() else '')
+                                    except:
+                                        raise Exception
+
+                                # Add data to triplestore
+                                variables.sparql_post_institution_object.create_institution(pid, row[dict_header['name']], row[dict_header['alternatename']] if 'alternatename' in dict_header.keys() else '',
+                                    row[dict_header['description']] if 'description' in dict_header.keys() else '',
+                                    row[dict_header['foundingdate']] if 'foundingdate' in dict_header.keys() else '', row[dict_header['url']] if 'url' in dict_header.keys() else '',
+                                    row[dict_header['urllogo']] if 'urllogo' in dict_header.keys() else '', '')
+
+                                if 'parentorganizationsark' in dict_header.keys() and row[dict_header['parentorganizationsark']] != '':
+                                    parentorganizationsark = row[dict_header['parentorganizationsark']].split()
+                                    for parent_organization in parentorganizationsark:
+                                        variables.sparql_post_institution_object.add_parent_institution_to_institution(pid, parent_organization)
+                                
+                                if 'suborganizationsark' in dict_header.keys() and row[dict_header['suborganizationsark']] != '':
+                                    suborganizationsark = row[dict_header['suborganizationsark']].split()
+                                    for sub_organization in suborganizationsark:
+                                        variables.sparql_post_institution_object.add_sub_institution_to_institution(pid, sub_organization)
+
+                                if 'workersark' in dict_header.keys() and row[dict_header['workersark']] != '':
+                                    workersark = row[dict_header['workersark']].split()
+                                    for worker in workersark:
+                                        variables.sparql_post_institution_object.add_worker_to_institution(pid, worker)
+                                    
+                                if 'projectsark' in dict_header.keys() and row[dict_header['projectsark']] != '':
+                                    projectsark = row[dict_header['projectsark']].split()
+                                    for project in projectsark:
+                                        variables.sparql_post_dataset_object.add_project_to_dataset(pid, project)
+                                
+                                if 'affiliatesark' in dict_header.keys() and row[dict_header['affiliatesark']] != '':
+                                    affiliatesark = row[dict_header['affiliatesark']].split()
+                                    for affiliate in affiliatesark:
+                                        variables.sparql_post_institution_object.add_affiliate_to_institution(pid, affiliate)
+                                
+                                if 'articlesark' in dict_header.keys() and row[dict_header['articlesark']] != '':
+                                    articlesark = row[dict_header['articlesark']].split()
+                                    for article in articlesark:
+                                        variables.sparql_post_institution_object.add_article_to_institution(pid, article)
+
+                                if 'projectsark' in dict_header.keys() and row[dict_header['projectsark']] != '':
+                                    projectsark = row[dict_header['projectsark']].split()
+                                    for project in projectsark:
+                                        variables.sparql_post_institution_object.add_project_to_institution(pid, project)
+
+                                if 'datasetsark' in dict_header.keys() and row[dict_header['datasetsark']] != '':
+                                    datasetsark = row[dict_header['datasetsark']].split()
+                                    for dataset in datasetsark:
+                                        variables.sparql_post_institution_object.add_dataset_to_institution(pid, dataset)
+
+                                if 'funder' in dict_header.keys() and row[dict_header['funder']] != '' and row[dict_header['funder']] == 'True':
+                                    variables.sparql_post_funder_object.define_institution_funder(pid)
+
+                        elif 'person' in request.POST['filename'].lower():
+                            pid_exists = []
+                            fields_to_check = ['email','firstname','lastname','ark']
+                            # Check if the header contain at least the name of the institution (it's mandatory)
+                            if not('username' in header):
+                                raise ValueError("The header doesn't contain minimum field : 'username'")
+                            dict_header = {}
+                            # Check if fields of the header are well formed
+                            for i,h in enumerate(header):
+                                if not(h in fields_to_check) and not(h == 'username'):
+                                    raise ValueError('The header is badly formed')
+                                # Add to dictionary index of element of the header
+                                dict_header[h] = i
+
+                             # Iterate over the rows of the file
+                            for row in rows:
+                                if row[dict_header['username']] == '':
+                                    raise ValueError('No name found for dataset')
+                                pid = row[dict_header['ark']] if 'ark' in dict_header.keys() else ''
+                                if pid == '':
+                                    try:
+                                        pid = variables.ark.mint('', 'Admin',
+                                            'An ARK created in INCIPIT-CRIS for a person named {} {}'.format(row[dict_header['firstname']], row[dict_header['lastname']]), datetime.datetime.now())
+                                        variables.ark.update('{}'.format(pid), '{}{}'.format(settings.URL, pid), 'Admin',
+                                            'An ARK created in INCIPIT-CRIS for a person named {} {}'.format(row[dict_header['firstname']], row[dict_header['lastname']]), datetime.datetime.now())
+                                    except:
+                                        raise Exception
+
+                                User = get_user_model()
+                                if User.objects.filter(pid=pid).exists():
+                                    print(pid)
+                                    pid_exists.append(pid)
+                                else:
+                                    user = User.objects.create_user(username=row[dict_header['username']], email=row[dict_header['email']], first_name=row[dict_header['firstname']], last_name=row[dict_header['lastname']], pid=pid)
+                                    user.is_active = False
+                                    user.save()
+                                if len(pid_exists) > 0:
+                                    request.session['pid_exists'] = pid_exists
     
     return redirect(manage_data)
 

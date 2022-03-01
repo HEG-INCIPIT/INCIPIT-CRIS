@@ -32,6 +32,15 @@
                 </form>
             </div>
 
+            <div>
+                {% if pid_exists != ''%}
+                    Les ARKs suivants sont déjà associés à une personne dans le système :
+                    {% for pid in pid_exists %}
+                        <p>{{ pid }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
             
             {% if text != '' %}
                 <p>{{ text }}</p>
