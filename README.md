@@ -68,3 +68,18 @@ If you want to use the CRIS at it's fully potential, you'll need to use the ARK 
 - `s` : Skip the mysql database verification
 
 You can combine flags.
+
+## Populate Triplestore
+
+### N-Triples
+
+You can use N-Triples formats : `(ttl, n3, nt, rdf, owl, nq, trig, jsonld)` to populate the Triplestore. First of all, you'll need to upload the file to the `CRIS` by going to "Importer des données". After selecting the file, click on "importer". Then you can go to "Gérer les données", after clicking on "Triple file", you can see all the files that are N-Triples that you have upload. You can use them to populate the Triplestore. Delete them, or download them (one by one).
+
+### CSV
+It is possible to use CSV files instead of N-Triples to populate the Triplestore. To do so, you can first upload the file to the `CRIS` by going to "Importer des données". After selecting the file, click on "importer". Then you can go to "Gérer les données", after clicking on "CSV file", you can see all the CSV that were upload to the CRIS and perform some actions (populate, delete, download).
+
+If you're using CSV, you should pay attention to the headers of the differents categories. You will found an example of all the headers and a line of data example in the folder `file_examples` -> `csv`. If you use a header that is not recognize, an error will be raised. The header is not case-sensitive and doesn't take care of the order of the data. If you don't have an ARK for a data, you can let the cell empty, the CRIS will automatically mint one.
+
+For `Articles, Projects, Dataset, Institutions`, if you populate data with two times the same ARK, the first data will be override by the second one.
+
+For `Person`, if there already exist one person with a duplicate ARK. It will only inform you at the end that the person with the given ARK could not be created.
