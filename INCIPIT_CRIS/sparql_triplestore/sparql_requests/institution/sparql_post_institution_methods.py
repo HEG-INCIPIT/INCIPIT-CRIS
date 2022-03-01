@@ -128,3 +128,75 @@ class SparqlPostInstitutionMethods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
+
+
+    def add_worker_to_institution(self, pid, worker):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:worksFor <{worker}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , worker=worker)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_affiliate_to_institution(self, pid, affiliate):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{pid}> schema:affiliation <{affiliate}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid , affiliate=affiliate)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_article_to_institution(self, pid, article):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{article}> schema:sourceOrganization <{pid}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, article=article)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_project_to_institution(self, pid, project):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{project}> schema:sponsor <{pid}> .
+            }}
+        """.format(prefix=variables.prefix, pid=pid, project=project)
+
+        self.sparql.setQuery(sparql_request)
+
+        return self.sparql.query().response.read()
+
+
+    def add_dataset_to_institution(self, pid, dataset):
+        sparql_request = """
+            {prefix}
+
+            INSERT DATA {{
+                <{dataset}> schema:sourceOrganization <{pid}> .
+
+            }}
+        """.format(prefix=variables.prefix, pid=pid, dataset=dataset)
+
+        self.sparql.setQuery(sparql_request)
+        
+        return self.sparql.query().response.read()
