@@ -24,6 +24,21 @@
                 </ul>
             </nav>
 
+            {% if pid_exists != ''%}
+                <article class="message is-warning">
+                    <div class="message-header">
+                        <p>Warning</p>
+                        <button class="delete" aria-label="delete" onclick="deleteWarning(this.parentNode)"></button>
+                    </div>
+                    <div class="message-body">
+                        Les ARKs suivants sont déjà associés à une personne dans le système :
+                        {% for pid in pid_exists %}
+                            <p>{{ pid }}</p>
+                        {% endfor %}
+                    </div>
+                </article>
+            {% endif %}
+
             <div>
                 <form action="/backup-triplestore/" method="post">
                     {% csrf_token %}
@@ -31,16 +46,6 @@
                     <button class="button is-primary">Backup</button>
                 </form>
             </div>
-
-            <div>
-                {% if pid_exists != ''%}
-                    Les ARKs suivants sont déjà associés à une personne dans le système :
-                    {% for pid in pid_exists %}
-                        <p>{{ pid }}</p>
-                    {% endfor %}
-                {% endif %}
-            </div>
-
             
             {% if text != '' %}
                 <p>{{ text }}</p>
@@ -155,6 +160,10 @@
                 elem = document.getElementById('triple_files');
                 elem.setAttribute('class', 'is-active');
             }
+        }
+
+        function deleteWarning(element) {
+            element.parentNode.style.display = 'none';
         }
 
     </script>
