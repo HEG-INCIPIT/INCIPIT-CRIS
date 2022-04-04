@@ -13,17 +13,28 @@
     <body>
         {% include 'main/navbar.html' %}
 
-        <form class="box" method="post">
-            <h1 class="title is-4">Connectez-vous</h1>
-            {% csrf_token %}
-            <div class="label-login">
-                <label>Nom d'utilisateur : </label> {{ form.username }}
+        {% if user.is_authenticated%}
+            <div>
+                <div>
+                    <p class="h1">Connexion</p>
+                </div>
+                <div>
+                    <p>Vous êtes déjà connecté.</p>
+                </div>
             </div>
-            <div class="label-login">
-                <label>Mot de passe : </label> {{ form.password }}
-            </div>
-            <button class="button is-primary" type="submit">Connexion</button>
-        </form>
+        {% else %}
+            <form class="box" method="post">
+                <h1 class="title is-4">Connectez-vous</h1>
+                {% csrf_token %}
+                <div class="label-login">
+                    <label>Nom d'utilisateur : </label> {{ form.username }}
+                </div>
+                <div class="label-login">
+                    <label>Mot de passe : </label> {{ form.password }}
+                </div>
+                <button class="button is-primary" type="submit">Connexion</button>
+            </form>
+        {% endif %}
 
         {% include 'main/footer.html' %}
     </body>

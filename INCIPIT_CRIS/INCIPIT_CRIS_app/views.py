@@ -487,3 +487,6 @@ def delete_data(request):
                 remove(path.join(settings.MEDIA_ROOT, request.POST['filename']))
 
             return redirect(manage_data)
+
+def change_password_success(request):
+    return render(request, 'registration/change_password_success.html')
