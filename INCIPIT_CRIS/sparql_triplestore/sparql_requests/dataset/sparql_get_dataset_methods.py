@@ -241,7 +241,7 @@ class SparqlGetDatasetMethods:
 
     def check_dataset_ark(self, pid):
         """
-        Return a boolean
+        Check if the ark is attributed to a dataset and return a boolean
         """
 
         sparql_request = """
@@ -259,6 +259,9 @@ class SparqlGetDatasetMethods:
 
 
     def get_data_download_dataset(self, pid):
+        """
+        Get the url to download the dataset
+        """
 
         sparql_request = """
             {prefix}

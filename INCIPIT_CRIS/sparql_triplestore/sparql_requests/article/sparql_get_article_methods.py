@@ -230,6 +230,7 @@ class SparqlGetArticleMethods:
         """
         Get all the information of an article : ark, name, abstract, date of publication, authors, ...
         And return a dictionnary with all elements
+        It's a minimum version principaly use to display the main information about an article
         """
 
         sparql_request = """
@@ -261,7 +262,7 @@ class SparqlGetArticleMethods:
 
     def check_article_ark(self, pid):
         """
-        Return a boolean
+        Check if the ark is the ark of an article and return a boolean
         """
 
         sparql_request = """
