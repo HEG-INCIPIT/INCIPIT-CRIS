@@ -5,7 +5,7 @@
 label {
     display: inline-block;
     width: 150px;
-    text-align: right;
+    text-align: left;
 }
 
 button {
@@ -13,8 +13,16 @@ button {
 }
 
 form {
-    text-align: center;
+    text-align: left;
     margin-left: 30%;
     margin-right: 30%;
     margin-top: 30px;
+}
+
+footer {
+    position: absolute;
+}
+
+.notification {
+    margin-bottom: 0 !important;
 }

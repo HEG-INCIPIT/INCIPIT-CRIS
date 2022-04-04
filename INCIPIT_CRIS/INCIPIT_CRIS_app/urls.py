@@ -1,10 +1,13 @@
 from django.urls import path
-
+from django.contrib.auth.views import PasswordChangeView
 from . import views, views_person, views_article, views_project, views_dataset, views_institution, views_funder, views_visualizer
 
 urlpatterns = [
     # Index page
     path('', views.index, name='index'),
+
+    # Change password
+    path('modifier-mdp/', PasswordChangeView.as_view(template_name='registration/change_password.html'), name='password_change'),
 
     # Import data
     path('import-data/', views.import_data, name='import_data'),

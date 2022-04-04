@@ -164,6 +164,7 @@ AUTH_USER_MODEL = 'INCIPIT_CRIS_app.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/'
 
 URL = 'http://www.localhost:8000/'
 
