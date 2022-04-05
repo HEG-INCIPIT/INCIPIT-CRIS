@@ -39,7 +39,7 @@ class SparqlGetArticleMethods:
 
     def get_articles(self):
         """
-        Get basic information of an article : ark, name,
+        Gets basic information of an article : ark, name,
         And return a list for each article
         """
 
@@ -63,7 +63,7 @@ class SparqlGetArticleMethods:
 
     def get_authors_article(self, pid):
         """
-        Get all the authors of an article
+        Gets all the authors of an article
         And return an array with tuples (identifier, dictionnary)
         """
 
@@ -92,7 +92,7 @@ class SparqlGetArticleMethods:
 
     def get_projects_article(self, pid):
         """
-        Get all the projects of an article
+        Gets all the projects of an article
         And return a dictionary with the data of each project
         """
 
@@ -142,7 +142,7 @@ class SparqlGetArticleMethods:
 
     def get_institutions_article(self, pid):
         """
-        Get all the institutions of the article for who the authors were working for
+        Gets all the institutions of the article for who the authors were working for
         Return a dictionnary
         """
 
@@ -168,7 +168,7 @@ class SparqlGetArticleMethods:
 
     def get_DOI_article(self, pid):
         """
-        Get information about the doi information of the given article
+        Gets information about the doi information of the given article
         """
 
         sparql_request = """
@@ -187,7 +187,7 @@ class SparqlGetArticleMethods:
 
     def get_data_article(self, pid):
         """
-        Get all the information of an article : ark, name, abstract, date of publication, authors, ...
+        Gets all the information of an article : ark, name, abstract, date of publication, authors, ...
         And return a dictionnary with all elements
         """
 
@@ -228,7 +228,7 @@ class SparqlGetArticleMethods:
 
     def get_minimum_data_article(self, pid):
         """
-        Get all the information of an article : ark, name, abstract, date of publication, authors, ...
+        Gets all the information of an article : ark, name, abstract, date of publication, authors, ...
         And return a dictionnary with all elements
         It's a minimum version principaly use to display the main information about an article
         """
@@ -262,7 +262,7 @@ class SparqlGetArticleMethods:
 
     def check_article_ark(self, pid):
         """
-        Check if the ark is the ark of an article and return a boolean
+        Checks if the ark is the ark of an article and return a boolean
         """
 
         sparql_request = """

@@ -35,7 +35,7 @@ class SparqlPostArticleMethods:
 
     def create_article(self, pid, name, abstract, date_published, url):
         """
-        Create an article
+        Creates an article
         """
         sparql_request = """
             {prefix}
@@ -61,7 +61,7 @@ class SparqlPostArticleMethods:
 
     def add_author_to_article(self, pid, author):
         """
-        Add an author to the given article using pid's for both ressources
+        Adds an author to the given article using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -78,7 +78,7 @@ class SparqlPostArticleMethods:
 
     def delete_author_of_article(self, pid, author):
         """
-        Delete an author from the given article using pid's for both ressources
+        Deletes an author from the given article using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -100,7 +100,7 @@ class SparqlPostArticleMethods:
 
     def add_project_to_article(self, pid, project):
         """
-        Add a project to the given article using pid's for both ressources
+        Adds a project to the given article using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -117,7 +117,7 @@ class SparqlPostArticleMethods:
 
     def add_dataset_to_article(self, pid, dataset):
         """
-        Add a dataset to the given article using pid's for both ressources
+        Adds a dataset to the given article using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -135,7 +135,7 @@ class SparqlPostArticleMethods:
 
     def add_DOI_article(self, pid, doi_value):
         """
-        Add a DOI to the given article
+        Adds a DOI to the given article
         """
         sparql_request = """
             {prefix}
@@ -179,7 +179,7 @@ class SparqlPostArticleMethods:
 
     def add_institution_to_article(self, pid, institution):
         """
-        Add an institution to the given article using pid's for both ressources
+        Adds an institution to the given article using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -197,7 +197,7 @@ class SparqlPostArticleMethods:
 
     def delete_institution_from_article(self, pid, institution):
         """
-        Delete an institution from the given article using pid's for both ressources
+        Deletes an institution from the given article using pid's for both ressources
         """
         sparql_request = """
             {prefix}

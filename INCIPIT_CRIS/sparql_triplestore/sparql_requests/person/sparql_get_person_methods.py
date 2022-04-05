@@ -36,7 +36,7 @@ class SparqlGetPersonMethods:
 
     def get_persons(self):
         """
-        Get basic information of persons : ark, given name, family name
+        Gets basic information of persons : ark, given name, family name
         And return a list for each person
         """
 
@@ -62,7 +62,7 @@ class SparqlGetPersonMethods:
 
     def get_full_name_person(self, pid):
         """
-        Get the full name of a person formated in a dict
+        Gets the full name of a person formated in a dict
         Return a dict with given name and family name
         """
         sparql_request = """
@@ -84,7 +84,7 @@ class SparqlGetPersonMethods:
 
     def get_articles_person(self, pid):
         """
-        Get all the articles for who the person is an author
+        Gets all the articles for who the person is an author
         Return an array with tuples (identifier, dictionnary)
         """
 
@@ -111,7 +111,7 @@ class SparqlGetPersonMethods:
 
     def get_projects_person(self, pid):
         """
-        Get all the projects for who the person is a member
+        Gets all the projects for who the person is a member
         Return an array with tuples (identifier, dictionnary)
         """
 
@@ -138,7 +138,7 @@ class SparqlGetPersonMethods:
 
     def get_datasets_creator_person(self, pid):
         """
-        Get all the datasets for who the person is a creator
+        Gets all the datasets for who the person is a creator
         Return an array with tuples (identifier, dictionnary)
         """
 
@@ -164,7 +164,7 @@ class SparqlGetPersonMethods:
 
     def get_datasets_maintainer_person(self, pid):
         """
-        Get all the datasets for who the person is a maintainer
+        Gets all the datasets for who the person is a maintainer
         Return an array with tuples (identifier, dictionnary)
         """
 
@@ -190,7 +190,7 @@ class SparqlGetPersonMethods:
 
     def get_work_person(self, pid):
         """
-        Get all the works for who the person is a maintainer
+        Gets all the works for who the person is a maintainer
         Return an array with tuples (identifier, dictionnary)
         """
 
@@ -216,7 +216,7 @@ class SparqlGetPersonMethods:
 
     def get_affiliation_person(self, pid):
         """
-        Get all the affiliations for who the person is a maintainer
+        Gets all the affiliations for who the person is a maintainer
         Return an array with tuples (identifier, dictionnary)
         """
 
@@ -242,7 +242,7 @@ class SparqlGetPersonMethods:
 
     def get_job_title_person(self, pid):
         """
-        Get information about the job title of the given person
+        Gets information about the job title of the given person
         """
 
         sparql_request = """
@@ -261,7 +261,7 @@ class SparqlGetPersonMethods:
 
     def get_title_person(self, pid):
         """
-        Get information about the job title of the given person
+        Gets information about the job title of the given person
         """
 
         sparql_request = """
@@ -280,7 +280,7 @@ class SparqlGetPersonMethods:
 
     def get_ORCID_information_person(self, pid):
         """
-        Get information about the LinkedIn information of the given person
+        Gets information about the LinkedIn information of the given person
         """
 
         sparql_request = """
@@ -299,7 +299,7 @@ class SparqlGetPersonMethods:
 
     def get_IN_information_person(self, pid):
         """
-        Get information about the LinkedIn information of the given person
+        Gets information about the LinkedIn information of the given person
         """
 
         sparql_request = """
@@ -318,7 +318,7 @@ class SparqlGetPersonMethods:
 
     def get_data_person(self, pid):
         """
-        Get all the information of a person : ark, given name, family name, ...
+        Gets all the information of a person : ark, given name, family name, ...
         Return a dictionnary with all elements
         """
 
@@ -379,7 +379,7 @@ class SparqlGetPersonMethods:
 
     def check_person_ark(self, pid):
         """
-        Return a boolean
+        Check if the ark belongs to a person and return a boolean
         """
 
         sparql_request = """

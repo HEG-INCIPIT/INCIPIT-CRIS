@@ -65,7 +65,7 @@ class SparqlGetFunderMethods:
 
     def check_funder_ark(self, pid):
         """
-        Return a boolean
+        Check if the ark is attributed to a funder and return a boolean
         """
 
         sparql_request = """
