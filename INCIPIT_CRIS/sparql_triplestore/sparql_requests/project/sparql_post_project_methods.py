@@ -234,36 +234,3 @@ class SparqlPostProjectMethods:
         self.sparql.setQuery(sparql_request)
 
         return self.sparql.query().response.read()
-
-
-    def delete_project(self, pid):
-        """
-        Deletes the given project ressource
-        """
-        sparql_request = """
-            {prefix}
-
-            DELETE WHERE {{
-                <{pid}> a schema:ResearchProject ;
-                schema:name ?name ;
-                schema:description ?description ;
-                schema:foundingDate ?foundingDate ;
-                schema:dissolutionDate ?dissolutionDate ;
-                schema:url ?url ;
-                schema:member ?member;
-                schema:subjectOf ?subjectOf;
-                schema:sponsor ?sponsor;
-                schema:funder ?funder;
-                schema:identifier <{pid}ARK> .
-
-                <{pid}ARK> a schema:PropertyValue ;
-                schema:propertyID 'ARK' ;
-                schema:value "{pid}" .
-
-                
-            }}
-        """.format(prefix=variables.prefix, pid=pid)
-
-        self.sparql.setQuery(sparql_request)
-
-        return self.sparql.query().response.read()
