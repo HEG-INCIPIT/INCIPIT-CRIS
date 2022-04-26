@@ -189,7 +189,7 @@ def add_data_from_csv(request):
                     if request.POST['filename'].split('.')[-1].lower() in ['csv', 'txt']:
                         # Write data of the file in two variables
                         file = open(path.join(settings.MEDIA_ROOT, request.POST['filename']))
-                        csvreader = csv.reader(file)
+                        csvreader = csv.reader(file, delimiter='\t')
                         header = []
                         header = next(csvreader)
                         header = [h.lower() for h in header]
@@ -198,6 +198,7 @@ def add_data_from_csv(request):
                             if len(row) != len(header):
                                 raise ValueError('Length : header row, are not the same')
                             rows.append(row)
+                        print(rows)
                         file.close()
                         # print(header)
                         # print(rows)
