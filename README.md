@@ -80,6 +80,10 @@ It is possible to use CSV files instead of N-Triples to populate the Triplestore
 
 If you're using CSV, you should pay attention to the headers of the differents categories. You will found an example of all the headers and a line of data example in the folder `file_examples` -> `csv`. If you use a header that is not recognize, an error will be raised. The header is not case-sensitive and doesn't take care of the order of the data. If you don't have an ARK for a data, you can let the cell empty, the CRIS will automatically mint one.
 
+:warning: **The delimiter used for the csv files are tabulations.**
+
+In case you have more than one ark for a category, you can include them all within the delimiter separeted by one space.
+
 For `Articles, Projects, Dataset, Institutions`, if you populate data with two times the same ARK, the first data will be override by the second one.
 
 For `Person`, if there already exist one person with a duplicate ARK. It will only inform you at the end that the person with the given ARK could not be created.
