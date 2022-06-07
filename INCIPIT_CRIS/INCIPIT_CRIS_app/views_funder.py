@@ -20,6 +20,12 @@ def funder_results(request, page=1, filter_category='Bailleurs de fond', filter_
     ----------
     request : HttpRequest
         It is the metadata of the request.
+    page : int, optional
+        Page to be displayed by the view
+    filter_category : str, optional
+        Filter to be applied on results to only display articles that belongs to the given category
+    filter_letter : str, optional
+        Filter to be applied on results to only display articles that begin by the given letter
 
     Returns
     -------
@@ -72,7 +78,7 @@ def funder_project_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -135,7 +141,7 @@ def funder_project_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns

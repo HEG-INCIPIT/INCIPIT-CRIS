@@ -18,6 +18,12 @@ def project_results(request, page=1, filter_category='Projets', filter_letter=''
     ----------
     request : HttpRequest
         It is the metadata of the request.
+    page : int, optional
+        Page to be displayed by the view
+    filter_category : str, optional
+        Filter to be applied on results to only display articles that belongs to the given category
+    filter_letter : str, optional
+        Filter to be applied on results to only display articles that begin by the given letter
 
     Returns
     -------
@@ -161,8 +167,8 @@ def project_profile(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -192,8 +198,8 @@ def project_edition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -232,10 +238,10 @@ def project_field_edition(request, field_to_modify, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    part_of_project_to_modify : String
+    field_to_modify : str
         Indicates the field that is asked to be modified.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -308,8 +314,8 @@ def project_member_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -374,8 +380,8 @@ def project_member_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -415,8 +421,8 @@ def project_article_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -481,8 +487,8 @@ def project_article_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -519,8 +525,8 @@ def project_dataset_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -585,8 +591,8 @@ def project_dataset_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -623,8 +629,8 @@ def project_institution_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -683,8 +689,8 @@ def project_institution_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -721,8 +727,8 @@ def project_funder_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -778,8 +784,8 @@ def project_funder_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------
@@ -816,8 +822,8 @@ def project_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
-        It's a string representing an ARK.
+    pid: str
+        It's a string representing the PID of the current object.
 
     Returns
     -------

@@ -489,5 +489,6 @@ def delete_data(request):
 
             return redirect(manage_data)
 
+
 def change_password_success(request):
     return render(request, 'registration/change_password_success.html')

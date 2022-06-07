@@ -22,6 +22,12 @@ def person_results(request, page=1, filter_category='Personnes', filter_letter='
     ----------
     request : HttpRequest
         It is the metadata of the request.
+    page : int, optional
+        Page to be displayed by the view
+    filter_category : str, optional
+        Filter to be applied on results to only display articles that belongs to the given category
+    filter_letter : str, optional
+        Filter to be applied on results to only display articles that begin by the given letter
 
     Returns
     -------
@@ -72,7 +78,7 @@ def person_profile(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -116,7 +122,7 @@ def person_edition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -165,9 +171,9 @@ def person_field_edition(request, field_to_modify, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    field_to_modify : String
+    field_to_modify : str
         Indicates the field that is asked to be modified.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -227,7 +233,7 @@ def person_article_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -263,7 +269,7 @@ def person_article_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -327,7 +333,7 @@ def person_project_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -390,7 +396,7 @@ def person_project_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -426,7 +432,7 @@ def person_datasets_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -497,7 +503,7 @@ def person_datasets_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -535,7 +541,7 @@ def person_datasets_maintainer_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -598,7 +604,7 @@ def person_work_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -657,7 +663,7 @@ def person_work_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -695,7 +701,7 @@ def person_affiliation_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -754,7 +760,7 @@ def person_affiliation_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -792,7 +798,7 @@ def person_title_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -846,7 +852,7 @@ def person_title_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -883,7 +889,7 @@ def person_job_title_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -937,7 +943,7 @@ def person_job_title_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -968,6 +974,24 @@ def person_job_title_deletion(request, pid):
 
 
 def orcid(request):
+    """
+    Handle the redirection to the orcid service to allow the users to verify their account with orcid
+    and display it on their profiles
+
+     Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the field of the profil of a person that is going to be modified and a dictionnary
+        with all the data needed to fulfill the template.
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    """
 
     if not request.user.is_superuser:
     
@@ -1005,6 +1029,21 @@ def orcid(request):
 
 
 def delete_orcid(request, pid):
+    """
+    Remove the ORCID from the given user
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+    pid: str
+        It's a string representing the PID of the current object.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a person.
+    """
     user = User.objects.filter(pid=pid)
     user.update(access_token_orcid='')
     user.update(refresh_token_orcid='')
@@ -1026,7 +1065,7 @@ def person_linkedin_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -1081,7 +1120,7 @@ def person_linkedin_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
