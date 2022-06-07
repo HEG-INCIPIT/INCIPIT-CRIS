@@ -397,7 +397,7 @@ def dataset_creator_deletion(request, pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a dataset.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''
@@ -509,7 +509,7 @@ def dataset_maintainer_deletion(request, pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a dataset.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''
@@ -623,7 +623,7 @@ def dataset_project_deletion(request, pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a dataset.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''
@@ -736,7 +736,7 @@ def dataset_article_deletion(request, pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a dataset.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''
@@ -780,7 +780,7 @@ def dataset_institution_addition(request, pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of an dataset.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''
@@ -840,7 +840,7 @@ def dataset_institution_deletion(request, pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of an dataset.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''
@@ -881,7 +881,7 @@ def dataset_deletion(request, pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the index page.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''

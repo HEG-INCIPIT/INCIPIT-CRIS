@@ -387,7 +387,7 @@ def project_member_deletion(request, pid):
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the page of edition of a project.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''
