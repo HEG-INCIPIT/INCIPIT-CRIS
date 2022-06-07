@@ -21,7 +21,24 @@ class SparqlPostArticleMethods:
 
     Methods
     -------
-
+    create_article(pid, name, abstract, date_published, url)
+        Creates and article with the given data
+    add_author_to_article(pid, author)
+        Adds an author to the given article
+    delete_author_of_article(pid, author)
+        Deletes an author from the given article
+    add_project_to_article(pid, project)
+        Adds a project to the given article
+    add_dataset_to_article(pid, dataset)
+        Adds a dataset to the given article
+    add_DOI_article(pid, doi_value)
+        Adds a DOI to the given article
+    delete_DOI_article(pid, doi_value)
+        Deletes a DOI from the given article
+    add_institution_to_article(pid, institution)
+        Adds an institution to the given article
+    delete_institution_from_article(pid, institution)
+        Deletes an institution from the given article
     """
 
 
@@ -33,9 +50,28 @@ class SparqlPostArticleMethods:
         self.sparql.setReturnFormat(JSON)
         self.sparql.setMethod(POST)
 
+
     def create_article(self, pid, name, abstract, date_published, url):
         """
         Creates an article
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article that we want to create
+        name : str
+            name of the article
+        abstract : str
+            abstract of the article
+        date_published : str
+            date of publication of the article
+        url : str
+            url of the article
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
@@ -59,9 +95,22 @@ class SparqlPostArticleMethods:
 
         return self.sparql.query().response.read()
 
+
     def add_author_to_article(self, pid, author):
         """
         Adds an author to the given article using pid's for both ressources
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article
+        author : str
+            ark of the author to be added
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
@@ -76,9 +125,22 @@ class SparqlPostArticleMethods:
 
         return self.sparql.query().response.read()
 
+
     def delete_author_of_article(self, pid, author):
         """
         Deletes an author from the given article using pid's for both ressources
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article
+        author : str
+            ark of the author to be deleted
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
@@ -101,6 +163,18 @@ class SparqlPostArticleMethods:
     def add_project_to_article(self, pid, project):
         """
         Adds a project to the given article using pid's for both ressources
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article
+        project : str
+            ark of the project to be added
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
@@ -118,6 +192,18 @@ class SparqlPostArticleMethods:
     def add_dataset_to_article(self, pid, dataset):
         """
         Adds a dataset to the given article using pid's for both ressources
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article
+        dataset : str
+            ark of the dataset to be added
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
@@ -136,6 +222,18 @@ class SparqlPostArticleMethods:
     def add_DOI_article(self, pid, doi_value):
         """
         Adds a DOI to the given article
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article
+        doi_value : str
+            DOI to be added
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
@@ -157,6 +255,18 @@ class SparqlPostArticleMethods:
     def delete_DOI_article(self, pid, doi_value):
         """
         Deletes the DOI of the given article
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article
+        doi_value : str
+            DOI to be deleted
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
@@ -180,6 +290,18 @@ class SparqlPostArticleMethods:
     def add_institution_to_article(self, pid, institution):
         """
         Adds an institution to the given article using pid's for both ressources
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article
+        institution : str
+            ark of the institution to be added
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
@@ -198,6 +320,18 @@ class SparqlPostArticleMethods:
     def delete_institution_from_article(self, pid, institution):
         """
         Deletes an institution from the given article using pid's for both ressources
+
+        Parameters
+        ----------
+        pid : str
+            ark of the article
+        institution : str
+            ark of the institution to be deleted
+
+        Returns
+        -------
+        str
+            the response of the sparql query
         """
         sparql_request = """
             {prefix}
