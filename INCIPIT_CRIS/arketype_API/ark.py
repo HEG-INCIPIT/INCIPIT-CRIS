@@ -3,6 +3,31 @@ import base64
 import os
 
 class Ark:
+    """
+    A class that is used to make the calls to the ARKetype API
+
+    Attributes
+    ----------
+    server : str
+        String containing the url of the arketype api
+    username : str
+        String containing the username of the account in ARKetype managing the ARKs
+    password : str
+        String containing the password of the account in ARKetype managing the ARKs
+    shoulder : str
+        String containing the shoulder of the ARKs
+
+    Methods
+    -------
+    mint(target, who, what, when)
+        Creates a random ark based on the given parameters
+    view(ark)
+        Gets identifier metadata
+    update(ark, target, who, what, when)
+        Updates the metadata of the identifier
+    create(ark, target, who, what, when)
+        Creates a defined ark based on the given parameters
+    """
 
     server = 'https://www.arketype.ch/'
     username = os.environ['username_ark']
@@ -10,6 +35,34 @@ class Ark:
     shoulder = os.environ['shoulder']
 
     def mint(self, target, who, what, when):
+        """
+        Creates a random ark based on the given parameters
+
+        Parameters
+        ----------
+        target : str
+            The url containing the element
+        who : str
+            The name of an entity (person, organization, or service) responsible for creating 
+            the content or making it available
+        what : str
+            A name or other human-oriented identifier given to the resource
+        when : str
+            A point or period of time important in the lifecycle of the resource, 
+            often when it was created, modified, or made available
+
+        Returns
+        -------
+        str
+            String containing the ARK minted
+
+        Raises
+        ------
+        urlib.error.HTTPError
+            If there is an error when doing the request
+        Exception
+            If there is an exception when doing the request
+        """
         print('{}, {}, {}, {}'.format(target, who, what, when))
         r = urllib.request.Request("{}shoulder/{}".format(self.server, self.shoulder))
         r.get_method = lambda: 'POST'
@@ -43,6 +96,26 @@ class Ark:
 
     
     def view(self, ark):
+        """
+        Request the metadata of a given ARK
+
+        Parameters
+        ----------
+        ark : str
+            A string containing the ARK for which the function will request the metadata
+
+        Returns
+        -------
+        str
+            The metadata of the given ARK
+
+        Raises
+        ------
+        urlib.error.HTTPError
+            If there is an error when doing the request
+        Exception
+            If there is an exception when doing the request
+        """
         r = urllib.request.Request('{}id/{}'.format(self.server, ark))
         r.get_method = lambda: 'GET'
 
@@ -68,6 +141,36 @@ class Ark:
 
 
     def update(self, ark, target, who, what, when):
+        """
+        Updates the given ARK with the given parameters
+
+        Parameters
+        ----------
+        ark : str
+            A string that contain the ARK
+        target : str
+            The url containing the element
+        who : str
+            The name of an entity (person, organization, or service) responsible for creating 
+            the content or making it available
+        what : str
+            A name or other human-oriented identifier given to the resource
+        when : str
+            A point or period of time important in the lifecycle of the resource, 
+            often when it was created, modified, or made available
+
+        Returns
+        -------
+        str
+            String containing the ARK minted
+
+        Raises
+        ------
+        urlib.error.HTTPError
+            If there is an error when doing the request
+        Exception
+            If there is an exception when doing the request
+        """
         r = urllib.request.Request("{}id/{}".format(self.server, ark))
         r.get_method = lambda: 'POST'
     
@@ -100,6 +203,36 @@ class Ark:
 
 
     def create(self, ark, target, who, what, when):
+        """
+        Creates an ARK based on the given parameters
+
+        Parameters
+        ----------
+        ark : str
+            A string that contain the ARK
+        target : str
+            The url containing the element
+        who : str
+            The name of an entity (person, organization, or service) responsible for creating 
+            the content or making it available
+        what : str
+            A name or other human-oriented identifier given to the resource
+        when : str
+            A point or period of time important in the lifecycle of the resource, 
+            often when it was created, modified, or made available
+
+        Returns
+        -------
+        str
+            String containing the ARK minted
+
+        Raises
+        ------
+        urlib.error.HTTPError
+            If there is an error when doing the request
+        Exception
+            If there is an exception when doing the request
+        """
         r = urllib.request.Request("{}id/{}".format(self.server, ark))
         r.get_method = lambda: 'PUT'
     

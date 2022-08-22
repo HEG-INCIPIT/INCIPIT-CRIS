@@ -35,6 +35,9 @@ class SparqlPostFunderMethods:
 
 
     def define_institution_funder(self, pid):
+        """
+        Attributes to a pid the class FundingScheme
+        """
         sparql_request = """
             {prefix}
 
@@ -50,6 +53,9 @@ class SparqlPostFunderMethods:
 
 
     def delete_institution_funder(self, pid):
+        """
+        Deletes the class FundingScheme from a pid's funder
+        """
         sparql_request = """
             {prefix}
 
@@ -69,6 +75,9 @@ class SparqlPostFunderMethods:
 
 
     def add_project_to_funder(self, pid, project):
+        """
+        Adds a project to the given funder using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -84,6 +93,9 @@ class SparqlPostFunderMethods:
 
 
     def delete_project_from_funder(self, pid, project):
+        """
+        Deletes a project from the given funder using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 

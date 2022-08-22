@@ -2,6 +2,9 @@ import json
 
 
 def parse_get_data_article(sparql_query_answer):
+    """
+    Parse the JSON sparql query answer for the basic information around an article
+    """
     dict_data = {
         'name': '',
         'abstract': '',
@@ -21,6 +24,9 @@ def parse_get_data_article(sparql_query_answer):
 
 
 def parse_get_DOI_information(sparql_query_answer):
+    """
+    Parse the JSON sparql query answer for getting the DOI of an article
+    """
     if len(json.loads(sparql_query_answer)['results']['bindings']) > 0:
         loaded_json = json.loads(sparql_query_answer)['results']['bindings'][0]
         return loaded_json['value']['value']

@@ -39,7 +39,7 @@ class SparqlGetDatasetMethods:
 
     def get_datasets(self):
         """
-        Get basic information of a dataset : ark, name,
+        Gets basic information of a dataset : ark, name,
         And return a list for each dataset
         """
 
@@ -63,7 +63,7 @@ class SparqlGetDatasetMethods:
 
     def get_maintainers_dataset(self, pid):
         """
-        Get all the maintainers of an dataset
+        Gets all the maintainers of an dataset
         And return an array with tuples (identifier, dictionnary)
         """
 
@@ -91,7 +91,7 @@ class SparqlGetDatasetMethods:
 
     def get_creators_dataset(self, pid):
         """
-        Get all the creators of an dataset
+        Gets all the creators of an dataset
         And return an array with tuples (identifier, dictionnary)
         """
 
@@ -119,7 +119,7 @@ class SparqlGetDatasetMethods:
 
     def get_projects_dataset(self, pid):
         """
-        Get all the projects of an dataset
+        Gets all the projects of an dataset
         And return an array with tuples (identifier, dictionnary)
         """
 
@@ -145,7 +145,7 @@ class SparqlGetDatasetMethods:
 
     def get_articles_dataset(self, pid):
         """
-        Get all the articles of an dataset
+        Gets all the articles of an dataset
         And return an array with tuples (identifier, dictionnary)
         """
 
@@ -171,7 +171,7 @@ class SparqlGetDatasetMethods:
 
     def get_institutions_dataset(self, pid):
         """
-        Get all the institutions of the dataset for who the authors were working for
+        Gets all the institutions of the dataset for who the authors were working for
         Return a dictionnary
         """
 
@@ -197,7 +197,7 @@ class SparqlGetDatasetMethods:
 
     def get_data_dataset(self, pid):
         """
-        Get all the information of an dataset : ark, name, abstract, date of publication, maintainers, ...
+        Gets all the information of an dataset : ark, name, abstract, date of publication, maintainers, ...
         And return a dictionnary with all elements
         """
 
@@ -241,7 +241,7 @@ class SparqlGetDatasetMethods:
 
     def check_dataset_ark(self, pid):
         """
-        Check if the ark is attributed to a dataset and return a boolean
+        Checks if the ark is attributed to a dataset and return a boolean
         """
 
         sparql_request = """
@@ -260,7 +260,7 @@ class SparqlGetDatasetMethods:
 
     def get_data_download_dataset(self, pid):
         """
-        Get the url to download the dataset
+        Gets the url to download the dataset
         """
 
         sparql_request = """

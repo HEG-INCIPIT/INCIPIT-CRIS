@@ -36,7 +36,7 @@ class SparqlPostDatasetMethods:
 
     def create_dataset(self, pid, name, abstract, date_created, date_modified, url_data, url_details):
         """
-        Create a dataset ressource
+        Creates a dataset ressource
         """
         sparql_request = """
             {prefix}
@@ -69,7 +69,7 @@ class SparqlPostDatasetMethods:
 
     def add_maintainer_to_dataset(self, pid, maintainer):
         """
-        Add a maintainer to the given dataset using pid's for both ressources
+        Adds a maintainer to the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -87,7 +87,7 @@ class SparqlPostDatasetMethods:
 
     def delete_maintainer_of_dataset(self, pid, maintainer):
         """
-        Delete a maintainer from the given dataset using pid's for both ressources
+        Deletes a maintainer from the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -109,7 +109,7 @@ class SparqlPostDatasetMethods:
 
     def add_creator_to_dataset(self, pid, creator):
         """
-        Add a creator to the given dataset using pid's for both ressources
+        Adds a creator to the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -127,7 +127,7 @@ class SparqlPostDatasetMethods:
 
     def delete_creator_of_dataset(self, pid, creator):
         """
-        Delete a creator to the given dataset using pid's for both ressources
+        Deletes a creator to the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -149,7 +149,7 @@ class SparqlPostDatasetMethods:
 
     def add_project_to_dataset(self, pid, project):
         """
-        Add a project to the given dataset using pid's for both ressources
+        Adds a project to the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -167,7 +167,7 @@ class SparqlPostDatasetMethods:
 
     def delete_project_from_dataset(self, pid, project):
         """
-        Delete a project to the given dataset using pid's for both ressources
+        Deletes a project to the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -188,7 +188,7 @@ class SparqlPostDatasetMethods:
 
     def add_article_to_dataset(self, pid, article):
         """
-        Add an article to the given dataset using pid's for both ressources
+        Adds an article to the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -206,7 +206,7 @@ class SparqlPostDatasetMethods:
 
     def delete_article_from_dataset(self, pid, article):
         """
-        Delete an article from the given dataset using pid's for both ressources
+        Deletes an article from the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -228,7 +228,7 @@ class SparqlPostDatasetMethods:
 
     def add_institution_to_dataset(self, pid, institution):
         """
-        Add an institution to the given dataset using pid's for both ressources
+        Adds an institution to the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}
@@ -246,7 +246,7 @@ class SparqlPostDatasetMethods:
 
     def delete_institution_from_dataset(self, pid, institution):
         """
-        Delete an institution from the given dataset using pid's for both ressources
+        Deletes an institution from the given dataset using pid's for both ressources
         """
         sparql_request = """
             {prefix}

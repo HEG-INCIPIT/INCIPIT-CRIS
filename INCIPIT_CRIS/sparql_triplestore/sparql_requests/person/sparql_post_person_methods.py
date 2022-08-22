@@ -33,6 +33,9 @@ class SparqlPostPersonMethods:
         self.sparql.setMethod(POST)
 
     def init_person(self, pid, given_name, family_name, email):
+        """
+        Create a person ressource
+        """
         sparql_request = """
             {prefix}
 
@@ -63,6 +66,9 @@ class SparqlPostPersonMethods:
 
 
     def add_work_person(self, pid, work_pid):
+        """
+        Adds an institution of work to the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -77,6 +83,9 @@ class SparqlPostPersonMethods:
 
     
     def delete_work_person(self, pid, work_pid):
+        """
+        Deletes an institution of work from the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -94,6 +103,9 @@ class SparqlPostPersonMethods:
 
 
     def add_affiliation_person(self, pid, affiliation_pid):
+        """
+        Adds an institution of affiliation to the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -108,6 +120,9 @@ class SparqlPostPersonMethods:
 
     
     def delete_affiliation_person(self, pid, affiliation_pid):
+        """
+        Deletes an institution of affiliation from the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -125,6 +140,9 @@ class SparqlPostPersonMethods:
 
 
     def add_job_title_person(self, pid, job_title):
+        """
+        Adds a job title to the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -139,6 +157,9 @@ class SparqlPostPersonMethods:
 
     
     def delete_job_title_person(self, pid, job_title):
+        """
+        Deletes a job title from the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -156,6 +177,9 @@ class SparqlPostPersonMethods:
 
 
     def add_title_person(self, pid, title):
+        """
+        Adds a honorific title to the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -170,6 +194,9 @@ class SparqlPostPersonMethods:
 
     
     def delete_title_person(self, pid, title):
+        """
+        Deletes a honorific title from the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -187,6 +214,9 @@ class SparqlPostPersonMethods:
 
     
     def add_IN_information_person(self, pid, url):
+        """
+        Adds a LinkedIn url to the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -205,6 +235,9 @@ class SparqlPostPersonMethods:
 
 
     def delete_IN_information_person(self, pid, url):
+        """
+        Deletes a LinkedIn url from the given person using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -223,6 +256,9 @@ class SparqlPostPersonMethods:
 
 
     def update_person_string_leaf(self, pid, predicate, new_string, old_string):
+        """
+        Updates the string of a predicates using the pid of the person
+        """
         sparql_request = """
             {prefix}
 
@@ -241,6 +277,9 @@ class SparqlPostPersonMethods:
 
 
     def update_person_string_leaf_without_pid(self, predicate, new_string, old_string):
+        """
+        Updates the string of a predicates without using the pid of the person
+        """
         sparql_request = """
             {prefix}
 

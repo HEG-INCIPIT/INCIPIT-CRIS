@@ -35,6 +35,9 @@ class SparqlPostProjectMethods:
 
 
     def create_project(self, pid, name, description, founding_date, dissolution_date, url, logo):
+        """
+        Creates a project ressource
+        """
         sparql_request = """
             {prefix}
 
@@ -60,6 +63,9 @@ class SparqlPostProjectMethods:
 
 
     def add_member_to_project(self, pid, member):
+        """
+        Adds a member to the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -74,6 +80,9 @@ class SparqlPostProjectMethods:
 
 
     def delete_member_of_project(self, pid, member):
+        """
+        Deletes a member from the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -93,6 +102,9 @@ class SparqlPostProjectMethods:
 
 
     def add_article_to_project(self, pid, article):
+        """
+        Adds an article to the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -107,6 +119,9 @@ class SparqlPostProjectMethods:
 
 
     def delete_article_of_project(self, pid, article):
+        """
+        Deletes an article from the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -126,6 +141,9 @@ class SparqlPostProjectMethods:
 
     
     def add_dataset_to_project(self, pid, dataset):
+        """
+        Adds a dataset to the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -141,6 +159,9 @@ class SparqlPostProjectMethods:
 
 
     def add_institution_to_project(self, pid, institution):
+        """
+        Adds an institution to the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -155,6 +176,9 @@ class SparqlPostProjectMethods:
 
 
     def delete_institution_from_project(self, pid, institution):
+        """
+        Deletes an institution from the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -174,6 +198,9 @@ class SparqlPostProjectMethods:
 
     
     def add_funder_to_project(self, pid, funder):
+        """
+        Adds a funder to the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -188,6 +215,9 @@ class SparqlPostProjectMethods:
 
 
     def delete_funder_from_project(self, pid, funder):
+        """
+        Deletes a funder to the given project using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -200,36 +230,6 @@ class SparqlPostProjectMethods:
                 <{pid}> schema:funder <{funder}> .
             }}
         """.format(prefix=variables.prefix, pid=pid, funder=funder)
-
-        self.sparql.setQuery(sparql_request)
-
-        return self.sparql.query().response.read()
-
-
-    def delete_project(self, pid):
-        sparql_request = """
-            {prefix}
-
-            DELETE WHERE {{
-                <{pid}> a schema:ResearchProject ;
-                schema:name ?name ;
-                schema:description ?description ;
-                schema:foundingDate ?foundingDate ;
-                schema:dissolutionDate ?dissolutionDate ;
-                schema:url ?url ;
-                schema:member ?member;
-                schema:subjectOf ?subjectOf;
-                schema:sponsor ?sponsor;
-                schema:funder ?funder;
-                schema:identifier <{pid}ARK> .
-
-                <{pid}ARK> a schema:PropertyValue ;
-                schema:propertyID 'ARK' ;
-                schema:value "{pid}" .
-
-                
-            }}
-        """.format(prefix=variables.prefix, pid=pid)
 
         self.sparql.setQuery(sparql_request)
 

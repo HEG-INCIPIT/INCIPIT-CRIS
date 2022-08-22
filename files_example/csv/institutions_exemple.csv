@@ -1,2 +1,2 @@
-name,alternatename,description,ark,url,urllogo,foundingdate,parentorganizationsark,suborganizationsark,workersark,affiliatesark,articlesark,projectsark,datasetsark,funder
-Test institution,,,ark:/99999/i1a,,,,,,,,,,,False
+name	alternatename	description	ark	url	urllogo	foundingdate	parentorganizationsark	suborganizationsark	workersark	affiliatesark	articlesark	projectsark	datasetsark	funder
+Test institution			ark:/99999/i1a											False

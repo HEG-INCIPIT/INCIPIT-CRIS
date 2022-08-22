@@ -39,7 +39,7 @@ class SparqlGetProjectMethods:
 
     def get_projects(self):
         """
-        Get basic information of a project : ark, name,
+        Gets basic information of a project : ark, name,
         And return a list for each project
         """
 
@@ -63,7 +63,7 @@ class SparqlGetProjectMethods:
 
     def get_members_project(self, pid):
         """
-        Get all the members of a project
+        Gets all the members of a project
         And return an array with tuples (identifier, dictionnary)
         """
         from ..person.sparql_get_person_methods import SparqlGetPersonMethods
@@ -92,7 +92,7 @@ class SparqlGetProjectMethods:
 
     def get_articles_project(self, pid):
         """
-        Get all the articles of a project
+        Gets all the articles of a project
         And return an array with tuples (identifier, dictionnary)
         """
 
@@ -118,7 +118,7 @@ class SparqlGetProjectMethods:
 
     def get_datasets_project(self, pid):
         """
-        Get all the datasets of a project
+        Gets all the datasets of a project
         And return an array with tuples (identifier, dictionnary)
         """
 
@@ -143,7 +143,7 @@ class SparqlGetProjectMethods:
 
     def get_institutions_project(self, pid):
         """
-        Get all the institutions of the project for who the authors were working for
+        Gets all the institutions of the project for who the authors were working for
         Return a dictionnary
         """
 
@@ -169,7 +169,7 @@ class SparqlGetProjectMethods:
 
     def get_funders_project(self, pid):
         """
-        Get all the funders of the project for who the authors were working for
+        Gets all the funders of the project for who the authors were working for
         Return a dictionnary
         """
 
@@ -195,7 +195,7 @@ class SparqlGetProjectMethods:
 
     def get_data_project(self, pid):
         """
-        Get all the information of a project : ark, name, abstract, date of publication, members, ...
+        Gets all the information of a project : ark, name, abstract, date of publication, members, ...
         And return a dictionnary with all elements
         """
         sparql_request = """
@@ -237,7 +237,7 @@ class SparqlGetProjectMethods:
 
     def get_minimum_data_project(self, pid):
         """
-        Get all the information of a project : ark, name, abstract, date of publication, members, ...
+        Gets all the information of a project : ark, name, abstract, date of publication, members, ...
         And return a dictionnary with all elements
         """
         sparql_request = """
@@ -267,7 +267,7 @@ class SparqlGetProjectMethods:
 
     def check_project_ark(self, pid):
         """
-        Return a boolean
+        Check if the ark belongs to a project and return a boolean
         """
 
         sparql_request = """

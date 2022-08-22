@@ -23,7 +23,24 @@ class SparqlGetArticleMethods:
 
     Methods
     -------
-
+    get_articles()
+        Gets basic information of an article
+    get_authors_article(pid)
+        Gets all the authors of an article
+    get_projects_article(pid)
+        Gets all the projects of an article
+    get_datasets_article(pid)
+        Gets all the datasets of an article
+    get_institutions_article(pid)
+        Gets all the institutions of an article
+    get_DOI_article(pid)
+        Gets the DOI of an article
+    get_data_article(pid)
+        Gets all the data related to an article
+    get_minimum_data_article(pid)
+        Gets the minimum data related to an article, it is used to avoid infinite recursiveness between classes
+    check_article_ark(pid)
+        Check if the ark passed as parameter is attributed to an article
     """
 
 
@@ -39,8 +56,12 @@ class SparqlGetArticleMethods:
 
     def get_articles(self):
         """
-        Get basic information of an article : ark, name,
-        And return a list for each article
+        Gets basic information of an article : ark, name
+
+        Returns
+        -------
+        list
+            a list of tuples containing strings that are the ark and the name of the article
         """
 
         sparql_request = """
@@ -63,8 +84,18 @@ class SparqlGetArticleMethods:
 
     def get_authors_article(self, pid):
         """
-        Get all the authors of an article
-        And return an array with tuples (identifier, dictionnary)
+        Gets all the authors of an article
+
+        Parameters
+        ----------
+        pid : str
+            persistant identifier of the article
+
+        Returns
+        -------
+        list
+            a list of tuples containing strings that are the ark and a dictionary containing t
+            he first name and last name of the author
         """
 
         sparql_request = """
@@ -92,8 +123,17 @@ class SparqlGetArticleMethods:
 
     def get_projects_article(self, pid):
         """
-        Get all the projects of an article
-        And return a dictionary with the data of each project
+        Gets all the projects of an article
+
+        Parameters
+        ----------
+        pid : str
+            persistant identifier of the article
+
+        Returns
+        -------
+        dict
+            a list containing information about the projects related
         """
 
         sparql_request = """
@@ -119,6 +159,16 @@ class SparqlGetArticleMethods:
         """
         Get all the datasets of an article
         And return an array with tuples (identifier, dictionnary)
+
+        Parameters
+        ----------
+        pid : str
+            persistant identifier of the article
+
+        Returns
+        -------
+        list
+            a list containing information about the datasets related
         """
 
         sparql_request = """
@@ -142,8 +192,18 @@ class SparqlGetArticleMethods:
 
     def get_institutions_article(self, pid):
         """
-        Get all the institutions of the article for who the authors were working for
+        Gets all the institutions of the article for who the authors were working for
         Return a dictionnary
+
+        Parameters
+        ----------
+        pid : str
+            persistant identifier of the article
+
+        Returns
+        -------
+        list
+            a list containing information about the institutions related
         """
 
         sparql_request = """
@@ -168,7 +228,17 @@ class SparqlGetArticleMethods:
 
     def get_DOI_article(self, pid):
         """
-        Get information about the doi information of the given article
+        Gets information about the doi information of the given article
+
+        Parameters
+        ----------
+        pid : str
+            persistant identifier of the article
+
+        Returns
+        -------
+        str
+            a string containing the DOI of the article
         """
 
         sparql_request = """
@@ -187,8 +257,18 @@ class SparqlGetArticleMethods:
 
     def get_data_article(self, pid):
         """
-        Get all the information of an article : ark, name, abstract, date of publication, authors, ...
+        Gets all the information of an article : ark, name, abstract, date of publication, authors, ...
         And return a dictionnary with all elements
+
+        Parameters
+        ----------
+        pid : str
+            persistant identifier of the article
+        
+        Returns
+        -------
+        dict
+            a dictionary containing all the data related to the article
         """
 
         sparql_request = """
@@ -228,9 +308,19 @@ class SparqlGetArticleMethods:
 
     def get_minimum_data_article(self, pid):
         """
-        Get all the information of an article : ark, name, abstract, date of publication, authors, ...
+        Gets all the information of an article : ark, name, abstract, date of publication, authors, ...
         And return a dictionnary with all elements
         It's a minimum version principaly use to display the main information about an article
+
+        Parameters
+        ----------
+        pid : str
+            persistant identifier of the article
+
+        Returns
+        -------
+        dict
+            a dictionary containing the data related to the article
         """
 
         sparql_request = """
@@ -262,7 +352,17 @@ class SparqlGetArticleMethods:
 
     def check_article_ark(self, pid):
         """
-        Check if the ark is the ark of an article and return a boolean
+        Checks if the ark is the ark of an article
+
+        Parameters
+        ----------
+        pid : str
+            persistant identifier of the article
+
+        Returns
+        -------
+        bool
+            a boolean indicating if the ark belongs to an article or not
         """
 
         sparql_request = """

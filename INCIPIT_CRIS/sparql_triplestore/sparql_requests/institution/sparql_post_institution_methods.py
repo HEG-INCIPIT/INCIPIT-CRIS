@@ -35,6 +35,9 @@ class SparqlPostInstitutionMethods:
 
 
     def create_institution(self, pid, name, alternate_name, description, founding_date, url, logo, upper_organisation):
+        """
+        Create an institution ressource
+        """
         sparql_request = """
             {prefix}
 
@@ -63,6 +66,9 @@ class SparqlPostInstitutionMethods:
 
 
     def add_parent_institution_to_institution(self, pid, institution):
+        """
+        Adds a parent institution to the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -78,6 +84,9 @@ class SparqlPostInstitutionMethods:
 
 
     def delete_parent_institution_to_institution(self, pid, institution):
+        """
+        Deletes a parent institution from the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -97,6 +106,9 @@ class SparqlPostInstitutionMethods:
 
 
     def add_sub_institution_to_institution(self, pid, institution):
+        """
+        Adds a child institution to the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -112,6 +124,9 @@ class SparqlPostInstitutionMethods:
 
 
     def delete_sub_institution_to_institution(self, pid, institution):
+        """
+        Deletes a child institution to the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -131,6 +146,9 @@ class SparqlPostInstitutionMethods:
 
 
     def add_worker_to_institution(self, pid, worker):
+        """
+        Adds a worker to the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -145,6 +163,9 @@ class SparqlPostInstitutionMethods:
 
 
     def add_affiliate_to_institution(self, pid, affiliate):
+        """
+        Adds an affiliate to the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -159,6 +180,9 @@ class SparqlPostInstitutionMethods:
 
 
     def add_article_to_institution(self, pid, article):
+        """
+        Adds an article to the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -174,6 +198,9 @@ class SparqlPostInstitutionMethods:
 
 
     def add_project_to_institution(self, pid, project):
+        """
+        Adds a project to the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 
@@ -188,6 +215,9 @@ class SparqlPostInstitutionMethods:
 
 
     def add_dataset_to_institution(self, pid, dataset):
+        """
+        Adds a dataset to the given institution using pid's for both ressources
+        """
         sparql_request = """
             {prefix}
 

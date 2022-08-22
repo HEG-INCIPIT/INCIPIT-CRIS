@@ -86,6 +86,9 @@ def delete_in_sparql(sender, instance, using, **kwargs):
 
 
 class Title(models.Model):
+    """
+    Create a table in the database that will contain all the honorific prefix accessible by the users
+    """
     title = models.CharField(max_length=50)
 
     __original_title = ""
@@ -109,6 +112,9 @@ class Title(models.Model):
 
 
 class JobTitle(models.Model):
+    """
+    Create a table in the database that will contain all the job titles available by the users
+    """
     job_title = models.CharField(max_length=100)
 
     __original_job_title = ""

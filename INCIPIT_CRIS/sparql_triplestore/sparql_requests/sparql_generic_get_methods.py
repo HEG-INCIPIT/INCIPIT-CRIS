@@ -35,6 +35,9 @@ class SparqlGenericGetMethods:
         self.sparql.setMethod(GET)
 
     def generate_backup(self):
+        """
+        Generate a turtle file containing all triples in the triplestore, used as backup
+        """
         sparql_request = """
             CONSTRUCT   { ?subject ?predicate ?object }
             WHERE   { ?subject ?predicate ?object }

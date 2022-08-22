@@ -35,6 +35,9 @@ class SparqlGenericPostMethods:
         self.sparql.setMethod(POST)
 
     def update_string_leaf(self, pid, predicate, new_string, old_string):
+        """
+        Updates the string of a predicate for a given subject
+        """
         sparql_request = """
             {prefix}
 
@@ -53,6 +56,9 @@ class SparqlGenericPostMethods:
         return self.sparql.query().response.read()
 
     def update_date_leaf(self, pid, predicate, new_date, old_date):
+        """
+        Updates the date of a predicate for a given subject
+        """
         sparql_request = """
             {prefix}
 
@@ -71,6 +77,9 @@ class SparqlGenericPostMethods:
 
 
     def delete_subject(self, pid):
+        """
+        Delete all the predicates of the subject, used for removing a subject of the triplestore
+        """
         sparql_request = """
             {prefix}
 
@@ -90,6 +99,9 @@ class SparqlGenericPostMethods:
 
 
     def delete_object(self, pid):
+        """
+        Delete all the predicates for which the subject is the object, used for removing a subject of the triplestore
+        """
         sparql_request = """
             {prefix}
 

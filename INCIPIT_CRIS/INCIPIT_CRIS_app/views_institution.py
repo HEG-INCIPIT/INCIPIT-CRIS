@@ -19,6 +19,12 @@ def institution_results(request, page=1, filter_category='Institutions', filter_
     ----------
     request : HttpRequest
         It is the metadata of the request.
+    page : int, optional
+        Page to be displayed by the view
+    filter_category : str, optional
+        Filter to be applied on results to only display articles that belongs to the given category
+    filter_letter : str, optional
+        Filter to be applied on results to only display articles that begin by the given letter
 
     Returns
     -------
@@ -141,7 +147,7 @@ def institution_profile(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing an ARK.
 
     Returns
@@ -177,7 +183,7 @@ def institution_edition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing an ARK.
 
     Returns
@@ -217,9 +223,9 @@ def institution_field_edition(request, field_to_modify, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    field_to_modify : String
+    field_to_modify : str
         Indicates the field that is asked to be modified.
-    pid: String
+    pid: str
         It's a string representing an ARK.
 
     Returns
@@ -289,7 +295,7 @@ def institution_parent_organization_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -346,7 +352,7 @@ def institution_parent_organization_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing an ARK.
 
     Returns
@@ -382,7 +388,7 @@ def institution_sub_organization_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -439,7 +445,7 @@ def institution_sub_organization_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing an ARK.
 
     Returns
@@ -475,7 +481,7 @@ def institution_worker_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -538,7 +544,7 @@ def institution_worker_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -576,7 +582,7 @@ def institution_affiliate_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -639,7 +645,7 @@ def institution_affiliate_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -677,7 +683,7 @@ def institution_article_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -740,7 +746,7 @@ def institution_article_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -778,7 +784,7 @@ def institution_project_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -841,7 +847,7 @@ def institution_project_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -879,7 +885,7 @@ def institution_dataset_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -942,7 +948,7 @@ def institution_dataset_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -980,7 +986,7 @@ def institution_funder_addition(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -1017,7 +1023,7 @@ def institution_funder_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
@@ -1054,14 +1060,14 @@ def institution_deletion(request, pid):
     ----------
     request : HttpRequest
         It is the metadata of the request.
-    pid: String
+    pid: str
         It's a string representing the PID of the current object.
 
     Returns
     -------
     HttpResponseRedirect
         A HttpResponseRedirect object that redirect to the index page.
-        HTTPResponse
+    HTTPResponse
         A HttpResponse object that is composed of a request object, the name of the template
         to display and a dictionnary with all the data needed to fulfill the template.
     '''

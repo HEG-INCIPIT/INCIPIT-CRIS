@@ -87,6 +87,21 @@ def index(request):
 
 
 def import_data(request):
+    """
+    Import data to the media folder that will be accessible by the admin
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the index page and a dictionnary with all the data needed to fulfill
+        the template.
+    """
     if request.user.is_authenticated:
         if request.user.is_superuser:
             text_to_return = {'text': ''}
@@ -105,6 +120,23 @@ def import_data(request):
 
 
 def manage_data(request):
+    """
+    Display the files that were upload to the media folder. There is a distinction between :
+    triple files and csv files that are handle differently, and so the display is split to show,
+    one or the other.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the index page and a dictionnary with all the data needed to fulfill
+        the template.
+    """
     if request.user.is_authenticated:
         if request.user.is_superuser:
             pid_exists = ''
@@ -130,6 +162,19 @@ def manage_data(request):
 
 
 def backup_triplestore(request):
+    """
+    Does a backup of the triplestore at the moment requested. Writes a .ttl file in the media folder.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a dataset.
+    """
     if request.user.is_authenticated:
         if request.user.is_superuser:
             backup = variables.sparql_generic_get_object.generate_backup()
@@ -139,6 +184,21 @@ def backup_triplestore(request):
 
 
 def download_file_superuser(request):
+    """
+    Manage the download of a file from the media folder by an admin
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the index page and a dictionnary with all the data needed to fulfill
+        the template.
+    """
     if request.user.is_authenticated:
         if request.user.is_superuser:
             if isfile(join(settings.MEDIA_ROOT, request.POST['filename'])):
@@ -153,6 +213,19 @@ def download_file_superuser(request):
 
 
 def populate_triplestore(request):
+    """
+    Use a triple file to populate the triplestore
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a dataset.
+    """
     rdf_format_dictionnary = {
         'ttl': 'text/turtle;charset=utf-8',
         'n3': 'text/n3; charset=utf-8',
@@ -181,6 +254,19 @@ def populate_triplestore(request):
 
 
 def add_data_from_csv(request):
+    """
+    Use a csv file to populate the triplestore
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a dataset.
+    """
     if request.user.is_authenticated:
         if request.user.is_superuser:
             if request.method == 'POST':
@@ -189,7 +275,7 @@ def add_data_from_csv(request):
                     if request.POST['filename'].split('.')[-1].lower() in ['csv', 'txt']:
                         # Write data of the file in two variables
                         file = open(path.join(settings.MEDIA_ROOT, request.POST['filename']))
-                        csvreader = csv.reader(file)
+                        csvreader = csv.reader(file, delimiter='\t')
                         header = []
                         header = next(csvreader)
                         header = [h.lower() for h in header]
@@ -198,6 +284,7 @@ def add_data_from_csv(request):
                             if len(row) != len(header):
                                 raise ValueError('Length : header row, are not the same')
                             rows.append(row)
+                        print(rows)
                         file.close()
                         # print(header)
                         # print(rows)
@@ -480,6 +567,19 @@ def add_data_from_csv(request):
 
 
 def delete_data(request):
+    """
+    Delete a file from the media folder
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponseRedirect
+        A HttpResponseRedirect object that redirect to the page of edition of a dataset.
+    """
     if request.user.is_authenticated:
         if request.user.is_superuser:
             media_path = settings.MEDIA_ROOT
@@ -488,5 +588,21 @@ def delete_data(request):
 
             return redirect(manage_data)
 
+
 def change_password_success(request):
+    """
+    Allow a user to change his password
+
+    Parameters
+    ----------
+    request : HttpRequest
+        It is the metadata of the request.
+
+    Returns
+    -------
+    HttpResponse
+        A HttpResponse object that is composed of a request object, the name of the template
+        to display the index page and a dictionnary with all the data needed to fulfill
+        the template.
+    """
     return render(request, 'registration/change_password_success.html')

@@ -39,7 +39,7 @@ class SparqlGetInstitutionMethods:
 
     def get_institutions(self):
         """
-        Get basic information of an institution : ark, name,
+        Gets basic information of an institution : ark, name,
         And return a list for each institution
         """
 
@@ -64,7 +64,7 @@ class SparqlGetInstitutionMethods:
 
     def get_top_lvl_institutions(self):
         """
-        Get basic information of an institution : ark, name,
+        Gets basic information of an institution : ark, name,
         And return a list for each institution
         """
 
@@ -103,6 +103,9 @@ class SparqlGetInstitutionMethods:
 
 
     def get_parent_organization_institution(self, pid):
+        """
+        Gets the parent organization of an institution
+        """
 
         sparql_request = """
             {prefix}
@@ -120,7 +123,7 @@ class SparqlGetInstitutionMethods:
 
     def get_dict_institution(self, pid):
         """
-        Get all the sub-institutions of the given pid
+        Gets all the sub-institutions of the given pid
         Return a dictionnary with the organization and its sub-organizations
         """
 
@@ -155,7 +158,7 @@ class SparqlGetInstitutionMethods:
 
     def get_workers_institution(self, pid):
         """
-        Get all the works for who the person is a maintainer
+        Gets all the works for who the person is a maintainer
         Return an array with tuples (identifier, dictionnary)
         """
 
@@ -185,7 +188,7 @@ class SparqlGetInstitutionMethods:
 
     def get_affiliates_institution(self, pid):
         """
-        Get all the affiliations for who the person is a maintainer
+        Gets all the affiliations for who the person is a maintainer
         Return an array with tuples (identifier, dictionnary)
         """
 
@@ -213,7 +216,7 @@ class SparqlGetInstitutionMethods:
 
     def get_articles_institution(self, pid):
         """
-        Get all the articles of the institution for who the authors were working for
+        Gets all the articles of the institution for who the authors were working for
         Return a dictionnary
         """
 
@@ -241,7 +244,7 @@ class SparqlGetInstitutionMethods:
 
     def get_projects_institution(self, pid):
         """
-        Get all the projects of the institution for who the creators were working for
+        Gets all the projects of the institution for who the creators were working for
         Return a dictionnary
         """
 
@@ -268,7 +271,7 @@ class SparqlGetInstitutionMethods:
 
     def get_datasets_institution(self, pid):
         """
-        Get all the datasets of the institution for who the creators were working for
+        Gets all the datasets of the institution for who the creators were working for
         Return a dictionnary
         """
 
@@ -296,7 +299,7 @@ class SparqlGetInstitutionMethods:
 
     def get_data_institution(self, pid):
         """
-        Get all the information of an institution : ark, name, abstract, date of publication, authors, ...
+        Gets all the information of an institution : ark, name, abstract, date of publication, authors, ...
         And return a dictionnary with all elements
         """
 
@@ -356,7 +359,7 @@ class SparqlGetInstitutionMethods:
 
     def get_minimum_data_institution(self, pid):
         """
-        Get all the information of an institution : ark, name, abstract, date of publication, authors, ...
+        Gets all the information of an institution : ark, name, abstract, date of publication, authors, ...
         And return a dictionnary with all elements
         """
 
@@ -386,7 +389,7 @@ class SparqlGetInstitutionMethods:
 
     def check_institution_ark(self, pid):
         """
-        Return a boolean
+        Check if the ark belongs to an institution and return a boolean
         """
 
         sparql_request = """
